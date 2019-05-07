@@ -8,6 +8,8 @@ class Navbar extends Component {
   };
 
   componentDidMount() {
+    document.body.classList.add("has-navbar-fixed-top");
+
     //Navbar burger
     const burger = document.querySelector(".burger");
     const nav = document.querySelector("#" + burger.dataset.target);
@@ -21,12 +23,12 @@ class Navbar extends Component {
     const txtElement = document.querySelector("#logo_typewriter");
     const logo = document.querySelector("#logo");
     const words = [
-      "with your friends.",
-      "with complete strangers.",
-      "with your peers.",
-      "with the locals.",
-      "with your colleagues.",
-      "with other humans."
+      "with friends.",
+      "with strangers.",
+      "with peers.",
+      "with locals.",
+      "with colleagues.",
+      "with humans."
     ];
     const wait = 1000;
     const self = this;
@@ -65,7 +67,22 @@ class Navbar extends Component {
             </span>
           </div>
           <div id="navMenu" className="navbar-menu">
+            <div className="navbar-item navbar-center" />
             <div className="navbar-end">
+              <div className="navbar-item">
+                <div className="field has-addons">
+                  <div className="control">
+                    <input
+                      className="input"
+                      type="text"
+                      placeholder="Enter a Group Code"
+                    />
+                  </div>
+                  <div className="control">
+                    <a className="button is-primary">Join Group</a>
+                  </div>
+                </div>
+              </div>
               <div className="navbar-item">
                 <div className="buttons">
                   <a className="button is-black">Log in</a>

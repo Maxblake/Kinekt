@@ -1,14 +1,22 @@
+// Imports in specific order
 @import "sass/variables.scss";
 
 @import "~bulma/sass/utilities/_all.sass";
 @import "~bulma/sass/base/_all.sass";
 
+@import "sass/marginAndPaddingUtil.scss";
+
 @import "~bulma/sass/elements/button.sass";
 @import "~bulma/sass/elements/container.sass";
+@import "~bulma/sass/elements/form.sass";
+@import "~bulma/sass/elements/box.sass";
 
 @import "~bulma/sass/layout/section.sass";
 
+@import "~bulma/sass/grid/columns.sass";
+
 @import "~bulma/sass/components/navbar.sass";
+@import "~bulma/sass/components/card.sass";
 
 html {
   overflow-y: hidden;
@@ -37,9 +45,7 @@ html {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#87e0fd', endColorstr='#05abe0',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
-.App {
-}
-
+// Navbar
 #logo {
   color: $white;
   transition: color 0.2s;
@@ -48,4 +54,21 @@ html {
     color: $primary;
     background-color: transparent;
   }
+}
+
+.navbar-burger span {
+  height: 2px;
+}
+
+.navbar-item.navbar-center {
+  flex-grow: 1;
+  flex-direction: column;
+  justify-content: center;
+}
+
+//Cards
+.groupTypeCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-gap: 30px;
 }

@@ -3,39 +3,27 @@ import React, { Component } from "react";
 class GroupTypeCard extends Component {
   render() {
     return (
-      <div className="card">
+      <a href="#" className="card groupTypeCard">
         <div className="card-image">
-          <figure className="image is-4by3">
-            <img
-              src="https://bulma.io/images/placeholders/1280x960.png"
-              alt="Placeholder image"
-            />
+          <figure className="image is-2by1">
+            <img src={this.props.imgSrc} alt="Placeholder image" />
           </figure>
         </div>
+        <span className="tag is-light groupTypeTag">
+          {this.props.groupType}
+        </span>
         <div className="card-content">
-          <div className="media">
-            <div className="media-left">
-              <figure className="image is-48x48">
-                <img
-                  src="https://bulma.io/images/placeholders/96x96.png"
-                  alt="Placeholder image"
-                />
-              </figure>
+          <h1 className="title is-size-4">{this.props.title}</h1>
+          <div className="subtitle is-size-6">
+            <div className="onlineStatusContainer">
+              <div className="onlineStatusDot" />
+              <h4 className="onlineStatusText">3 groups</h4>
+              <div className="onlineStatusDot" />
+              <h4 className="onlineStatusText">14 users</h4>
             </div>
-            <div className="media-content">
-              <p className="title is-4">John Smith</p>
-              <p className="subtitle is-6">@johnsmith</p>
-            </div>
-          </div>
-
-          <div className="content">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-            nec iaculis mauris. <a>@bulmaio</a>.<a href="#">#css</a>{" "}
-            <a href="#">#responsive</a>
-            <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
           </div>
         </div>
-      </div>
+      </a>
     );
   }
 }

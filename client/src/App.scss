@@ -10,6 +10,10 @@
 @import "~bulma/sass/elements/container.sass";
 @import "~bulma/sass/elements/form.sass";
 @import "~bulma/sass/elements/box.sass";
+@import "~bulma/sass/elements/title.sass";
+@import "~bulma/sass/elements/image.sass";
+@import "~bulma/sass/elements/tag.sass";
+@import "~bulma/sass/elements/icon.sass";
 
 @import "~bulma/sass/layout/section.sass";
 
@@ -17,10 +21,10 @@
 
 @import "~bulma/sass/components/navbar.sass";
 @import "~bulma/sass/components/card.sass";
+@import "~bulma/sass/components/level.sass";
 
 html {
-  overflow-y: hidden;
-  height: 100%;
+  overflow-y: auto;
 
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#87e0fd+0,53cbf1+40,05abe0+100;Blue+3D+%23+16 */
   background: #87e0fd; /* Old browsers */
@@ -43,11 +47,24 @@ html {
     #05abe0 100%
   ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#87e0fd', endColorstr='#05abe0',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  background-attachment: fixed;
+}
+
+@media (max-width: $desktop) {
+  .container {
+    padding: 0 1em;
+  }
+}
+
+@media (max-width: $tablet) {
+  #logo_typewriter {
+    display: none;
+  }
 }
 
 // Navbar
 #logo {
-  color: $white;
+  color: whitesmoke;
   transition: color 0.2s;
 
   &:hover {
@@ -66,9 +83,97 @@ html {
   justify-content: center;
 }
 
-//Cards
+// General page styles
+.pageTitle {
+  background: black;
+  color: white;
+  padding: 0.5rem 0.75rem;
+}
+
+// Cards
 .groupTypeCards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  grid-gap: 30px;
+  grid-gap: 25px;
+}
+
+.groupTypeCard {
+  position: relative;
+
+  .card-image::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&0.05+1,0.15+50,0.75+100 */
+    background: -moz-linear-gradient(
+      top,
+      rgba(0, 0, 0, 0.05) 0%,
+      rgba(0, 0, 0, 0.05) 1%,
+      rgba(0, 0, 0, 0.15) 50%,
+      rgba(0, 0, 0, 0.75) 100%
+    ); /* FF3.6-15 */
+    background: -webkit-linear-gradient(
+      top,
+      rgba(0, 0, 0, 0.05) 0%,
+      rgba(0, 0, 0, 0.05) 1%,
+      rgba(0, 0, 0, 0.15) 50%,
+      rgba(0, 0, 0, 0.75) 100%
+    ); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.05) 0%,
+      rgba(0, 0, 0, 0.05) 1%,
+      rgba(0, 0, 0, 0.15) 50%,
+      rgba(0, 0, 0, 0.75) 100%
+    ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0d000000', endColorstr='#bf000000',GradientType=0 ); /* IE6-9 */
+  }
+
+  .groupTypeTag {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+  }
+
+  .onlineStatusContainer {
+    display: flex;
+  }
+
+  .onlineStatusDot {
+    background: limegreen;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 4px;
+  }
+
+  .onlineStatusText {
+    padding: 0 10px 0 5px;
+  }
+
+  &:hover {
+    .title {
+      text-decoration: underline;
+    }
+  }
+}
+
+// Discover page
+#levelDiscoverNav {
+  align-items: flex-end;
+  margin: 2.5rem 0 1.5rem 0;
+}
+
+#controlSearchGroupTypes {
+  width: 300px;
+}
+
+@media (max-width: $tablet) {
+  #controlSearchGroupTypes {
+    width: 250px;
+  }
 }

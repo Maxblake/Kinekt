@@ -46,48 +46,46 @@ class Navbar extends Component {
   render() {
     return (
       <nav className="navbar is-black is-fixed-top">
-        <div className="container">
-          <div className="navbar-brand">
-            <div className="navbar-item">
-              <a
-                id="logo"
-                className="is-size-4"
-                href="#"
-                onMouseEnter={this.handleLogoHover}
-                onMouseLeave={this.handleLogoHover}
-              >
-                Kinekt&nbsp;
-              </a>
-              <div id="logo_typewriter" className="is-size-4" />
-            </div>
-            <span className="navbar-burger burger" data-target="navMenu">
-              <span aria-hidden="true" />
-              <span aria-hidden="true" />
-              <span aria-hidden="true" />
-            </span>
+        <div className="navbar-brand">
+          <div className="navbar-item">
+            <a
+              id="logo"
+              className="is-size-4"
+              href="#"
+              onMouseEnter={this.handleLogoHover}
+              onMouseLeave={this.handleLogoHover}
+            >
+              Kinekt&nbsp;
+            </a>
+            <div id="logo_typewriter" className="is-size-4" />
           </div>
-          <div id="navMenu" className="navbar-menu">
-            <div className="navbar-item navbar-center" />
-            <div className="navbar-end">
-              <div className="navbar-item">
-                <div className="field has-addons">
-                  <div className="control">
-                    <input
-                      className="input"
-                      type="text"
-                      placeholder="Enter a Group Code"
-                    />
-                  </div>
-                  <div className="control">
-                    <a className="button is-primary">Join Group</a>
-                  </div>
+          <span className="navbar-burger burger" data-target="navMenu">
+            <span aria-hidden="true" />
+            <span aria-hidden="true" />
+            <span aria-hidden="true" />
+          </span>
+        </div>
+        <div id="navMenu" className="navbar-menu">
+          <div className="navbar-item navbar-center" />
+          <div className="navbar-end">
+            <div className="navbar-item">
+              <div className="field has-addons">
+                <div className="control">
+                  <input
+                    className="input is-small"
+                    type="text"
+                    placeholder="Enter group code"
+                  />
+                </div>
+                <div className="control">
+                  <a className="button is-primary is-small">Join Group</a>
                 </div>
               </div>
-              <div className="navbar-item">
-                <div className="buttons">
-                  <a className="button is-black">Log in</a>
-                  <a className="button is-light">Sign up</a>
-                </div>
+            </div>
+            <div className="navbar-item">
+              <div className="buttons">
+                <a className="button is-black is-small">Log in</a>
+                <a className="button is-light is-small">Sign up</a>
               </div>
             </div>
           </div>

@@ -10,10 +10,12 @@ import store from "./store";
 import PrivateRoute from "./components/common/PrivateRoute";
 
 import Navbar from "./components/layout/Navbar";
+import Footer from "./components/layout/Footer";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import NotFound from "./components/common/NotFound";
 import Home from "./components/home/Home";
+import GroupType from "./components/group-type/GroupType";
 
 import "./App.scss";
 
@@ -45,12 +47,14 @@ class App extends Component {
         <Router>
           <div className="App">
             <Navbar />
-            <div className="container">
+            <div className="container siteContent">
               <Route exact path="/" component={Home} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/not-found" component={NotFound} />
+              <Route exact path="/k/:groupType" component={GroupType} />
             </div>
+            <Footer />
           </div>
         </Router>
       </Provider>

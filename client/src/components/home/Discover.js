@@ -5,17 +5,17 @@ class Discover extends Component {
   render() {
     return (
       <section className="discover">
-        <nav class="level is-mobile" id="levelDiscoverNav">
-          <div class="level-left">
-            <div class="level-item">
-              <h3 class="title is-size-3 pageTitle">Explore</h3>
+        <nav className="level is-mobile" id="pageNav">
+          <div className="level-left">
+            <div className="level-item">
+              <h3 className="title is-size-3 pageTitle">Explore</h3>
             </div>
           </div>
 
-          <div class="level-right">
-            <div class="level-item">
+          <div className="level-right box">
+            <div className="level-item">
               <div className="field">
-                <div class="select">
+                <div className="select">
                   <select>
                     <option>Trending</option>
                     <option>Top</option>
@@ -25,9 +25,9 @@ class Discover extends Component {
                 </div>
               </div>
             </div>
-            <div class="level-item">
+            <div className="level-item">
               <div className="field">
-                <div class="select">
+                <div className="select">
                   <select>
                     <option>All</option>
                     <option>Social</option>
@@ -40,19 +40,19 @@ class Discover extends Component {
                 </div>
               </div>
             </div>
-            <div class="level-item">
-              <div class="field has-addons">
-                <p class="control" id="controlSearchGroupTypes">
+            <div className="level-item">
+              <div className="field has-addons">
+                <p className="control" id="controlSearchGroupTypes">
                   <input
-                    class="input"
+                    className="input"
                     type="text"
                     placeholder="Search group types"
                   />
                 </p>
-                <p class="control">
-                  <button class="button is-black">
-                    <span class="icon is-small">
-                      <i class="fas fa-search" />
+                <p className="control">
+                  <button className="button is-black">
+                    <span className="icon is-small">
+                      <i className="fas fa-search" />
                     </span>
                   </button>
                 </p>

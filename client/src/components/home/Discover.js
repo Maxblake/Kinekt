@@ -50,7 +50,7 @@ class Discover extends Component {
                   />
                 </p>
                 <p className="control">
-                  <button className="button is-black">
+                  <button className="button is-primary">
                     <span className="icon is-small">
                       <i className="fas fa-search" />
                     </span>

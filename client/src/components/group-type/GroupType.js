@@ -27,9 +27,9 @@ class GroupType extends Component {
           <div className="level-right box">
             <div className="level-item">
               <div className="level-item">
-                <a class="button is-primary">
-                  <span class="icon">
-                    <i class="fas fa-plus" />
+                <a className="button is-primary">
+                  <span className="icon">
+                    <i className="fas fa-plus" />
                   </span>
                   <span>New Group</span>
                 </a>
@@ -55,7 +55,7 @@ class GroupType extends Component {
                   />
                 </p>
                 <p className="control">
-                  <button className="button is-black">
+                  <button className="button is-primary">
                     <span className="icon is-small">
                       <i className="fas fa-search" />
                     </span>

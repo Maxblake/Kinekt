@@ -300,14 +300,14 @@ html {
 }
 
 // Group page
-.group #groupPageTitle {
+.groupPage #groupPageTitle {
   margin-top: 0;
 }
 
 #groupMembersContainer {
   background: black;
   position: relative;
-  padding-top: 2.5rem;
+  padding-top: 3rem;
 
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
@@ -336,6 +336,46 @@ html {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    border-width: 2px;
     //flex: 1;
+  }
+
+  // Button classes for member types and statuses
+  .is-online {
+    background-color: transparent;
+    color: whitesmoke;
+    border-color: limegreen;
+  }
+  .is-away {
+    background-color: transparent;
+    color: whitesmoke;
+    border-color: whitesmoke;
+  }
+}
+
+#groupContainer {
+  background: black;
+
+  display: grid;
+  grid-template-areas:
+    "chat details image"
+    "chat notice notice";
+
+  .groupChat {
+    grid-area: chat;
+    background: pink;
+  }
+
+  .groupDetails {
+    grid-area: details;
+    background: aqua;
+  }
+  .groupImage {
+    grid-area: image;
+    background: lightcyan;
+  }
+  .noticeBoard {
+    grid-area: notice;
+    background: tomato;
   }
 }

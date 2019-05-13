@@ -11,13 +11,25 @@ class GroupMembers extends Component {
             <h4 className="onlineStatusText">14/20 users</h4>
           </div>
         </div>
-        <GroupMember memberName="Beemo" />
-        <GroupMember memberName="Choyobin" />
-        <GroupMember memberName="Vegeta" />
-        <GroupMember memberName="Ralph Lauren" />
-        <GroupMember memberName="This is a very long name" />
-        <GroupMember memberName="Shorty Pippin" />
-        <GroupMember memberName="Otto" />
+        <GroupMember memberName="Beemo" status="online" memberType="admin" />
+        <GroupMember memberName="Choyobin" status="away" memberType="admin" />
+        <GroupMember memberName="Vegeta" status="online" memberType="user" />
+        <GroupMember
+          memberName="Ralph Lauren"
+          status="online"
+          memberType="user"
+        />
+        <GroupMember
+          memberName="This is a very long name"
+          status="away"
+          memberType="user"
+        />
+        <GroupMember
+          memberName="Shorty Pippin"
+          status="online"
+          memberType="user"
+        />
+        <GroupMember memberName="Otto" status="away" memberType="user" />
       </div>
     );
   }

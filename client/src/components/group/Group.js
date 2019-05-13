@@ -4,23 +4,32 @@ import GroupMembers from "./GroupMembers";
 class Group extends Component {
   render() {
     return (
-      <section className="group">
-        <nav className="level is-mobile" id="pageNav">
-          <div className="level-left">
-            <div className="level-item">
-              <div className="groupTypeTitleContainer">
-                <div className="subtitle is-size-6 onlineStatusContainer">
-                  {this.props.match.params.groupType}
-                </div>
-                <h3 className="title is-size-3 pageTitle" id="groupPageTitle">
-                  Breakfast Taco Party at my Place
-                </h3>
-              </div>
+      <div className="box" id="groupContainer">
+        <div className="groupChat">chat</div>
+        <div className="groupDetails">
+          <div className="groupMeetTime">
+            <div className="content is-flex">
+              <span class="icon">
+                <i class="fas fa-clock" />
+              </span>
+              <h3>Thu, May 17, 2:00 PM</h3>
             </div>
           </div>
-        </nav>
-        <GroupMembers />
-      </section>
+          <div className="groupMeetPlace">
+            <div className="content is-flex">
+              <span class="icon">
+                <i class="fas fa-map-marker-alt" />
+              </span>
+              <h3>Crooked river Brewery, Prineville OR</h3>
+            </div>
+          </div>
+        </div>
+
+        <div className="groupImage">
+          <img src={this.props.imgSrc} alt="Placeholder image" />
+        </div>
+        <div className="noticeBoard">notice</div>
+      </div>
     );
   }
 }

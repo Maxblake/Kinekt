@@ -1,20 +1,16 @@
 import React, { Component } from "react";
+import Chat from "../chat/Chat";
+import NoticeBoard from "../noticeBoard/NoticeBoard";
 
-class GroupCard extends Component {
+class GroupConsole extends Component {
   render() {
     return (
-      <a href="#" className="columns is-gapless groupCardContainer">
-        <div className="column is-8 card groupCard">
-          <div className="card-content">
-            <div className="groupName">
-              <h1 className="title is-size-4">{this.props.groupName}</h1>
-              <div className="subtitle is-size-6">
-                <div className="onlineStatusContainer">
-                  <div className="onlineStatusDot" />
-                  <h4 className="onlineStatusText">14/20 users</h4>
-                </div>
-              </div>
-            </div>
+      <div className="box flex-row-wrap" id="groupConsole">
+        <div className="groupChat">
+          <Chat />
+        </div>
+        <div className="flex-row-wrap">
+          <div className="groupDetailsContainer">
             <div className="groupDescription">
               <p>
                 Here is a brief but informative description of the event. BYOB,
@@ -40,13 +36,18 @@ class GroupCard extends Component {
               </div>
             </div>
           </div>
+
+          <div className="groupImage">
+            <img
+              src="https://source.unsplash.com/random/640x320"
+              alt="Placeholder image"
+            />
+          </div>
+          <NoticeBoard />
         </div>
-        <div className="column is-4 groupImage">
-          <img src={this.props.imgSrc} alt="Placeholder image" />
-        </div>
-      </a>
+      </div>
     );
   }
 }
 
-export default GroupCard;
+export default GroupConsole;

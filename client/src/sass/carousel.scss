@@ -1,0 +1,74 @@
+#carousel {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.arrow {
+  position: absolute;
+  margin: 0 10px;
+  z-index: 1;
+  border-radius: 50%;
+  background: white;
+
+  i {
+    color: $primary;
+    cursor: pointer;
+  }
+}
+
+.arrow-left {
+  left: 0;
+}
+.arrow-right {
+  right: 0;
+}
+
+.item {
+  height: 80%;
+  width: 70%;
+  padding: 1rem;
+
+  color: $off-black;
+  box-shadow: $box-shadow;
+
+  transition: margin-bottom 0.5s, background-color 0.5s;
+}
+
+$level1-height: 180px;
+$level1-width: 130px;
+$level0-height: 200px;
+$level0-width: 150px;
+
+$level-1-left: 500px;
+$level0-left: 330px;
+$level1-left: 180px;
+
+.level-1 {
+  background-color: whitesmoke;
+  position: absolute;
+  left: 0;
+}
+
+.level0 {
+  background-color: white;
+  z-index: 1;
+  height: 100%;
+}
+
+.level1 {
+  background-color: whitesmoke;
+  position: absolute;
+  right: 0;
+}
+
+.noselect {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

@@ -23,6 +23,9 @@
 @import "~bulma/sass/components/navbar.sass";
 @import "~bulma/sass/components/card.sass";
 @import "~bulma/sass/components/level.sass";
+@import "~bulma/sass/components/media.sass"; //Probably can delete later, just using for the notice board rn
+
+@import "sass/carousel.scss";
 
 html {
   overflow-y: auto;
@@ -338,18 +341,16 @@ html {
     overflow: hidden;
     text-overflow: ellipsis;
     border-width: 2px;
+    background-color: transparent;
+    color: whitesmoke;
     //flex: 1;
   }
 
   // Button classes for member types and statuses
   .is-online {
-    background-color: transparent;
-    color: whitesmoke;
     border-color: limegreen;
   }
   .is-away {
-    background-color: transparent;
-    color: whitesmoke;
     border-color: whitesmoke;
   }
 }
@@ -387,7 +388,8 @@ html {
 
   .groupDetailsContainer {
     flex: 2;
-    background: whitesmoke;
+    background: $primary;
+    color: white;
     padding: 1rem;
     margin-left: 1.25rem;
   }
@@ -533,7 +535,7 @@ html {
   min-height: 100px;
   background: #404040;
   color: white;
-  padding: 1.25rem;
+  padding: 3rem 1.25rem 1.25rem 1.25rem;
   position: relative;
 
   border-radius: 0 0 20px 20px;

@@ -87,6 +87,9 @@ class GroupType extends Component {
             imgSrc="https://source.unsplash.com/random/640x320"
             groupName="OCC Chess club"
           />
+          <div className="content has-text-centered">
+            <h3>- End of List -</h3>
+          </div>
         </div>
       </section>
     );

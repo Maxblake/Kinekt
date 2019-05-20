@@ -315,14 +315,17 @@ html {
   }
 }
 
+//clean this shit up
+
 // Group type page
-.groupTypeTitleContainer .onlineStatusContainer {
+.groupTypeTitleContainer .onlineStatusContainer,
+.groupTypeSubtitleContainer {
   background: whitesmoke;
   padding: 0.1rem 0.75rem;
 }
 
 // Group page
-.group #groupPageTitle {
+#groupPageTitle {
   margin-top: 0;
 }
 
@@ -554,4 +557,9 @@ html {
       color: silver;
     }
   }
+}
+
+// New group page
+.timeInput {
+  width: 100px;
 }

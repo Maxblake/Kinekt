@@ -10,7 +10,7 @@ class Group extends Component {
           <div className="level-left">
             <div className="level-item">
               <div className="groupTypeTitleContainer">
-                <div className="subtitle is-size-6 onlineStatusContainer">
+                <div className="subtitle is-size-6 groupTypeSubtitleContainer">
                   {this.props.match.params.groupType}
                 </div>
                 <h3 className="title is-size-3 pageTitle" id="groupPageTitle">

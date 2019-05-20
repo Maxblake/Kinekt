@@ -16,6 +16,7 @@ import Login from "./components/auth/Login";
 import NotFound from "./components/common/NotFound";
 import Home from "./components/home/Home";
 import GroupType from "./components/group-type/GroupType";
+import NewGroup from "./components/group-type/new-group/NewGroup";
 import Group from "./components/group/Group";
 
 import "./App.scss";
@@ -54,6 +55,7 @@ class App extends Component {
               <Route exact path="/login" component={Login} />
               <Route exact path="/not-found" component={NotFound} />
               <Route exact path="/k/:groupType" component={GroupType} />
+              <Route exact path="/k/:groupType/create" component={NewGroup} />
               <Route
                 exact
                 path="/k/:groupType/group/:groupCode"

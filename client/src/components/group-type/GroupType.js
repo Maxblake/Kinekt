@@ -88,7 +88,7 @@ class GroupType extends Component {
             groupName="OCC Chess club"
           />
           <div className="content has-text-centered">
-            <h3>- End of List -</h3>
+            <h3>- This is the end. -</h3>
           </div>
         </div>
       </section>

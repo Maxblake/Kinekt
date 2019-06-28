@@ -24,6 +24,7 @@
 @import "~bulma/sass/components/card.sass";
 @import "~bulma/sass/components/level.sass";
 @import "~bulma/sass/components/media.sass"; //Probably can delete later, just using for the notice board rn
+@import "~bulma/sass/components/modal.sass";
 
 @import "sass/carousel.scss";
 
@@ -85,6 +86,11 @@ html {
 .flex-row-wrap {
   display: flex;
   flex-flow: row wrap;
+}
+
+.centeredVertically {
+  display: flex;
+  align-items: center;
 }
 
 // Navbar
@@ -210,7 +216,6 @@ html {
 .card-content {
   display: flex;
   flex-direction: column;
-  height: 100%;
 
   .groupDescription {
     flex: 1;
@@ -560,6 +565,15 @@ html {
 }
 
 // New group page
+.newGroupForm {
+  max-width: 700px;
+}
+
 .timeInput {
   width: 100px;
+}
+
+.timeKeeperModalContent {
+  width: 270px;
+  text-align: center;
 }

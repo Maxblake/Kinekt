@@ -1,14 +1,24 @@
 import React, { Component } from "react";
+import RadioButton from "../../common/RadioButton";
 import TimeKeeper from "react-timekeeper";
+import { getCurrentTimeString } from "../../../utils/utils";
 
 class NewGroup extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      time: "3:15 PM",
+      timeContext: "Now",
+      time: getCurrentTimeString(),
       displayTimepicker: false
     };
     this.handleTimeChange = this.handleTimeChange.bind(this); //TODO don't do this
+    this.handleTimeContextChange = this.handleTimeContextChange.bind(this);
+  }
+  handleTimeContextChange(timeContext) {
+    if (timeContext === "Now") {
+      this.setState({ time: getCurrentTimeString() });
+    }
+    this.setState({ timeContext });
   }
   handleTimeChange(newTime) {
     this.setState({ time: newTime.formatted });
@@ -35,15 +45,13 @@ class NewGroup extends Component {
           </div>
         </nav>
 
-        <div className="NewGroupForm box">
-          <div class="field">
-            <div class="control">
-              <input class="input" type="text" placeholder="E.g. Taco Party" />
-            </div>
-          </div>
-
-          <div>
-            {this.state.displayTimepicker ? (
+        {this.state.displayTimepicker ? (
+          <div class="modal is-active">
+            <div
+              class="modal-background"
+              onClick={() => this.toggleTimekeeper(false)}
+            />
+            <div class="modal-content timeKeeperModalContent">
               <TimeKeeper
                 time={this.state.time}
                 onChange={this.handleTimeChange}
@@ -52,11 +60,34 @@ class NewGroup extends Component {
                 }}
                 switchToMinuteOnHourSelect={true}
               />
-            ) : (
-              false
-            )}
+            </div>
           </div>
+        ) : (
+          false
+        )}
+
+        <div className="newGroupForm box">
+          <label class="label">Group Name</label>
+
+          <div class="field">
+            <div class="control">
+              <input class="input" type="text" placeholder="E.g. Taco Party" />
+            </div>
+          </div>
+
+          <label class="label">Meeting Time</label>
           <div class="field is-grouped">
+            <div class="control">
+              {/* <button class="button">Now</button> */}
+              <RadioButton
+                selectedValue={this.state.timeContext}
+                value="Now"
+                handleClick={this.handleTimeContextChange}
+              />
+            </div>
+            <div class="control centeredVertically">
+              <h3>-or-</h3>
+            </div>
             <div class="control">
               <input
                 class="input timeInput"
@@ -66,13 +97,18 @@ class NewGroup extends Component {
               />
             </div>
             <div class="control">
-              <button class="button">Now</button>
+              <RadioButton
+                selectedValue={this.state.timeContext}
+                value="Today"
+                handleClick={this.handleTimeContextChange}
+              />
             </div>
             <div class="control">
-              <button class="button">Today</button>
-            </div>
-            <div class="control">
-              <button class="button">Tomorrow</button>
+              <RadioButton
+                selectedValue={this.state.timeContext}
+                value="Tomorrow"
+                handleClick={this.handleTimeContextChange}
+              />
             </div>
           </div>
 

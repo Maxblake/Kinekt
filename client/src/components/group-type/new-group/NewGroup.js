@@ -8,12 +8,23 @@ class NewGroup extends Component {
     super(props);
     this.state = {
       timeContext: "Now",
+      accessLevel: "Public",
       time: getCurrentTimeString(),
-      displayTimepicker: false
+      displayTimepicker: false,
+      minGroupSize: "",
+      maxGroupSize: ""
     };
     this.handleTimeChange = this.handleTimeChange.bind(this); //TODO don't do this
     this.handleTimeContextChange = this.handleTimeContextChange.bind(this);
+    this.handleAccessLevelChange = this.handleAccessLevelChange.bind(this);
   }
+  //TODO maybe refactor this to general use file
+  handleFormChange = e => {
+    const { name, value } = e.target;
+    this.setState({
+      [name]: value
+    });
+  };
   handleTimeContextChange(timeContext) {
     if (timeContext === "Now") {
       this.setState({ time: getCurrentTimeString() });
@@ -21,10 +32,16 @@ class NewGroup extends Component {
     this.setState({ timeContext });
   }
   handleTimeChange(newTime) {
+    if (this.state.timeContext === "Now") {
+      this.setState({ timeContext: "Today" });
+    }
     this.setState({ time: newTime.formatted });
   }
   toggleTimekeeper(val) {
     this.setState({ displayTimepicker: val });
+  }
+  handleAccessLevelChange(accessLevel) {
+    this.setState({ accessLevel });
   }
 
   render() {
@@ -67,18 +84,27 @@ class NewGroup extends Component {
         )}
 
         <div className="newGroupForm box">
-          <label class="label">Group Name</label>
-
+          <label class="label">Group Name*</label>
           <div class="field">
             <div class="control">
               <input class="input" type="text" placeholder="E.g. Taco Party" />
             </div>
           </div>
 
-          <label class="label">Meeting Time</label>
+          <label class="label">Group Description</label>
+          <div class="field">
+            <div class="control">
+              <textarea
+                class="textarea"
+                rows="2"
+                placeholder="E.g. Let's hang out and argue about flour and corn tortillas at my place."
+              />
+            </div>
+          </div>
+
+          <label class="label">Meeting Time*</label>
           <div class="field is-grouped">
             <div class="control">
-              {/* <button class="button">Now</button> */}
               <RadioButton
                 selectedValue={this.state.timeContext}
                 value="Now"
@@ -90,7 +116,7 @@ class NewGroup extends Component {
             </div>
             <div class="control">
               <input
-                class="input timeInput"
+                class="input smallInput"
                 type="text"
                 value={this.state.time}
                 onClick={() => this.toggleTimekeeper(true)}
@@ -112,62 +138,76 @@ class NewGroup extends Component {
             </div>
           </div>
 
+          <label class="label">Meeting Place*</label>
           <div class="field">
-            <label class="label">Email</label>
-            <div class="control has-icons-left has-icons-right">
+            <div class="control">
               <input
-                class="input is-danger"
-                type="email"
-                placeholder="Email input"
-                value="hello@"
+                class="input"
+                type="text"
+                placeholder="E.g. 555 My House, Newport RI"
               />
-              <span class="icon is-small is-left">
-                <i class="fas fa-envelope" />
-              </span>
-              <span class="icon is-small is-right">
-                <i class="fas fa-exclamation-triangle" />
-              </span>
-            </div>
-            <p class="help is-danger">This email is invalid</p>
-          </div>
-
-          <div class="field">
-            <label class="label">Subject</label>
-            <div class="control">
-              <div class="select">
-                <select>
-                  <option>Select dropdown</option>
-                  <option>With options</option>
-                </select>
-              </div>
             </div>
           </div>
 
-          <div class="field">
-            <label class="label">Message</label>
+          <label class="label">Group Size</label>
+          <div class="field is-grouped">
             <div class="control">
-              <textarea class="textarea" placeholder="Textarea" />
+              <input
+                class="input smallInput"
+                type="text"
+                placeholder="Any"
+                name="minGroupSize"
+                value={this.state.minGroupSize}
+                onChange={this.handleFormChange}
+              />
+            </div>
+            <div class="control centeredVertically">
+              <h3>-to-</h3>
+            </div>
+            <div class="control">
+              <input
+                class="input smallInput"
+                type="text"
+                placeholder="Any"
+                name="maxGroupSize"
+                value={this.state.maxGroupSize}
+                onChange={this.handleFormChange}
+              />
             </div>
           </div>
 
-          <div class="field">
+          <label class="label">Access Level</label>
+          <div class="field is-grouped">
             <div class="control">
-              <label class="checkbox">
-                <input type="checkbox" />I agree to the{" "}
-                <a href="#">terms and conditions</a>
-              </label>
+              <RadioButton
+                selectedValue={this.state.accessLevel}
+                value="Public"
+                handleClick={this.handleAccessLevelChange}
+              />
+            </div>
+            <div class="control">
+              <RadioButton
+                selectedValue={this.state.accessLevel}
+                value="Private"
+                handleClick={this.handleAccessLevelChange}
+              />
             </div>
           </div>
 
+          <label class="label">Group Image</label>
           <div class="field">
-            <div class="control">
-              <label class="radio">
-                <input type="radio" name="question" />
-                Yes
-              </label>
-              <label class="radio">
-                <input type="radio" name="question" />
-                No
+            <div class="file has-name is-primary">
+              <label class="file-label">
+                <input class="file-input" type="file" name="resume" />
+                <span class="file-cta">
+                  <span class="file-icon">
+                    <i class="fas fa-upload" />
+                  </span>
+                  <span class="file-label">Choose a file…</span>
+                </span>
+                <span class="file-name">
+                  Screen Shot 2017-07-29 at 15.54.25.png
+                </span>
               </label>
             </div>
           </div>
@@ -177,7 +217,7 @@ class NewGroup extends Component {
               <button class="button is-text">Cancel</button>
             </div>
             <div class="control">
-              <button class="button is-link">Submit</button>
+              <button class="button is-primary">Submit</button>
             </div>
           </div>
         </div>

@@ -12,7 +12,7 @@ class Discover extends Component {
             </div>
           </div>
 
-          <div className="level-right box">
+          <div className="level-right">
             <div className="level-item">
               <div className="field">
                 <div className="select">

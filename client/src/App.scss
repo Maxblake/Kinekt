@@ -337,26 +337,33 @@ html {
 #groupMembersContainer {
   background: $off-black;
   position: relative;
-  padding-top: 3rem;
+  padding: 3rem 10px 1.25rem 10px;
 
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
-  grid-gap: 10px;
+  #groupMembers {
+    max-height: 35vh;
+    overflow-y: auto;
 
-  .groupMember {
-    display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    border-width: 2px;
-    background-color: transparent;
-    color: whitesmoke;
-    //flex: 1;
+    padding: 0 1.25rem;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+    grid-gap: 10px;
+
+    .groupMember {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border-width: 2px;
+      background-color: transparent;
+      color: whitesmoke;
+      //flex: 1;
+    }
   }
 
   // Button classes for member types and statuses
   .is-online {
-    border-color: limegreen;
+    border-color: $primary;
   }
   .is-away {
     border-color: whitesmoke;
@@ -396,8 +403,7 @@ html {
 
   .groupDetailsContainer {
     flex: 2;
-    background: $primary;
-    color: white;
+    background: whitesmoke;
     padding: 1rem;
     margin-left: 1.25rem;
   }
@@ -524,17 +530,17 @@ html {
   }
 }
 
-#chatScroll::-webkit-scrollbar-track {
+.kScroll::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
   background-color: #404040;
 }
 
-#chatScroll::-webkit-scrollbar {
+.kScroll::-webkit-scrollbar {
   width: 12px;
   background-color: $off-black;
 }
 
-#chatScroll::-webkit-scrollbar-thumb {
+.kScroll::-webkit-scrollbar-thumb {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: $primary;
 }
@@ -569,7 +575,7 @@ html {
   max-width: 700px;
 }
 
-.timeInput {
+.smallInput {
   width: 100px;
 }
 

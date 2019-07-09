@@ -6,7 +6,7 @@ class Chat extends Component {
   render() {
     return (
       <div className="chat">
-        <div className="messages" id="chatScroll">
+        <div className="messages kScroll">
           <Message
             body="Lorem ipsum dolor sit amet"
             user="Beemo"

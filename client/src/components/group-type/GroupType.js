@@ -24,7 +24,7 @@ class GroupType extends Component {
             </div>
           </div>
 
-          <div className="level-right box">
+          <div className="level-right">
             <div className="level-item">
               <div className="level-item">
                 <a className="button is-primary">

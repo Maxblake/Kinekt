@@ -11,25 +11,27 @@ class GroupMembers extends Component {
             <h4 className="onlineStatusText">14/20 users</h4>
           </div>
         </div>
-        <GroupMember memberName="Beemo" status="online" memberType="admin" />
-        <GroupMember memberName="Choyobin" status="away" memberType="admin" />
-        <GroupMember memberName="Vegeta" status="online" memberType="user" />
-        <GroupMember
-          memberName="Ralph Lauren"
-          status="online"
-          memberType="user"
-        />
-        <GroupMember
-          memberName="This is a very long name"
-          status="away"
-          memberType="user"
-        />
-        <GroupMember
-          memberName="Shorty Pippin"
-          status="online"
-          memberType="user"
-        />
-        <GroupMember memberName="Otto" status="away" memberType="user" />
+        <div id="groupMembers" className="kScroll">
+          <GroupMember memberName="Beemo" status="online" memberType="admin" />
+          <GroupMember memberName="Choyobin" status="away" memberType="admin" />
+          <GroupMember memberName="Vegeta" status="online" memberType="user" />
+          <GroupMember
+            memberName="Ralph Lauren"
+            status="online"
+            memberType="user"
+          />
+          <GroupMember
+            memberName="This is a very long name"
+            status="away"
+            memberType="user"
+          />
+          <GroupMember
+            memberName="Shorty Pippin"
+            status="online"
+            memberType="user"
+          />
+          <GroupMember memberName="Otto" status="away" memberType="user" />
+        </div>
       </div>
     );
   }

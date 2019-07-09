@@ -20,8 +20,8 @@ class Group extends Component {
             </div>
           </div>
         </nav>
-        <GroupMembers />
         <GroupConsole />
+        <GroupMembers />
       </section>
     );
   }

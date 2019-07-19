@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 import TypeWriter from "../../js/typewriter";
 
@@ -48,7 +49,8 @@ class Navbar extends Component {
       <nav className="navbar is-black is-fixed-top">
         <div className="navbar-brand">
           <div className="navbar-item">
-            <a
+            <Link
+              to="/"
               id="logo"
               className="is-size-4"
               href="#"
@@ -56,7 +58,7 @@ class Navbar extends Component {
               onMouseLeave={this.handleLogoHover}
             >
               Kinekt&nbsp;
-            </a>
+            </Link>
             <div id="logo_typewriter" className="is-size-4" />
           </div>
           <span className="navbar-burger burger" data-target="navMenu">
@@ -78,14 +80,23 @@ class Navbar extends Component {
                   />
                 </div>
                 <div className="control">
-                  <a className="button is-primary is-small">Join Group</a>
+                  <Link
+                    className="button is-primary is-small"
+                    to="/k/Chess_Club/group/yo"
+                  >
+                    Join Group
+                  </Link>
                 </div>
               </div>
             </div>
             <div className="navbar-item">
               <div className="buttons">
-                <a className="button is-black is-small">Log in</a>
-                <a className="button is-light is-small">Sign up</a>
+                <Link to="/login" className="button is-black is-small">
+                  Log in
+                </Link>
+                <Link to="/register" className="button is-light is-small">
+                  Sign up
+                </Link>
               </div>
             </div>
           </div>

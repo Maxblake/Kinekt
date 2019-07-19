@@ -44,9 +44,13 @@ class NewGroup extends Component {
     this.setState({ accessLevel });
   }
 
+  onSubmit = e => {
+    e.preventDefault();
+  };
+
   render() {
     return (
-      <section className="Newgroup">
+      <section className="Newgroup centeredForm">
         <nav className="level" id="pageNav">
           <div className="level-left">
             <div className="level-item">
@@ -83,11 +87,16 @@ class NewGroup extends Component {
           false
         )}
 
-        <div className="newGroupForm box">
-          <label class="label">Group Name*</label>
+        <form className="box" onSubmit={e => this.onSubmit(e)}>
+          <label class="label">Group Name *</label>
           <div class="field">
             <div class="control">
-              <input class="input" type="text" placeholder="E.g. Taco Party" />
+              <input
+                class="input"
+                type="text"
+                placeholder="E.g. Taco Party"
+                required
+              />
             </div>
           </div>
 
@@ -102,7 +111,7 @@ class NewGroup extends Component {
             </div>
           </div>
 
-          <label class="label">Meeting Time*</label>
+          <label class="label">Meeting Time *</label>
           <div class="field is-grouped">
             <div class="control">
               <RadioButton
@@ -138,13 +147,14 @@ class NewGroup extends Component {
             </div>
           </div>
 
-          <label class="label">Meeting Place*</label>
+          <label class="label">Meeting Place *</label>
           <div class="field">
             <div class="control">
               <input
                 class="input"
                 type="text"
                 placeholder="E.g. 555 My House, Newport RI"
+                required
               />
             </div>
           </div>
@@ -214,13 +224,17 @@ class NewGroup extends Component {
 
           <div class="field is-grouped is-grouped-right">
             <div class="control">
-              <button class="button is-text">Cancel</button>
+              <button class="button is-text" type="button">
+                Cancel
+              </button>
             </div>
             <div class="control">
-              <button class="button is-primary">Submit</button>
+              <button class="button is-primary" type="submit">
+                Submit
+              </button>
             </div>
           </div>
-        </div>
+        </form>
       </section>
     );
   }

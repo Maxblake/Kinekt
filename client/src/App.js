@@ -42,14 +42,14 @@ if (localStorage.jwtToken) {
   }
 }
 
-class App extends Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <Router>
-          <div className="App">
-            <Navbar />
-            <div className="container siteContent">
+const App = () => {
+  return (
+    <Provider store={store}>
+      <Router>
+        <div className="App">
+          <Navbar />
+          <div className="container siteContent">
+            <Switch>
               <Route exact path="/" component={Home} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
@@ -61,13 +61,16 @@ class App extends Component {
                 path="/k/:groupType/group/:groupCode"
                 component={Group}
               />
-            </div>
-            <Footer />
+              {/* TODO create 404 page */}
+              {/* <Route component={NoMatch} /> */}
+            </Switch>
           </div>
-        </Router>
-      </Provider>
-    );
-  }
-}
+
+          <Footer />
+        </div>
+      </Router>
+    </Provider>
+  );
+};
 
 export default App;

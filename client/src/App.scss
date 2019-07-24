@@ -14,6 +14,8 @@
 @import "~bulma/sass/elements/image.sass";
 @import "~bulma/sass/elements/tag.sass";
 @import "~bulma/sass/elements/icon.sass";
+@import "~bulma/sass/elements/notification.sass";
+@import "~bulma/sass/elements/other.sass";
 
 @import "~bulma/sass/layout/section.sass";
 @import "~bulma/sass/layout/footer.sass";
@@ -152,6 +154,11 @@ html {
 .onlineStatusText,
 .headerText {
   padding: 0 10px 0 5px;
+}
+
+// Notifications / Alerts
+.notification {
+  margin-top: 1.5rem;
 }
 
 // Cards

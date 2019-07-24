@@ -72,8 +72,15 @@ export default connect(
 )(withRouter(Register)); */
 
 import React, { useState } from "react";
+import { connect } from "react-redux";
+import { setAlert } from "../../actions/alert";
+import { register } from "../../actions/auth";
+import PropTypes from "prop-types";
 
-const Register = () => {
+const Filter = require("bad-words-relaxed");
+const filter = new Filter();
+
+const Register = ({ setAlert, register }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -88,7 +95,21 @@ const Register = () => {
 
   const onSubmit = async e => {
     e.preventDefault();
-    //TODO validate
+
+    //TODO validate each field with errors instead of adding alerts to page
+
+    /* if (filter.isProfane(name)) {
+      //TODO move profanity checking to back end
+      setAlert("Please choose a different display name", "is-danger");
+    }
+    if (filter.isProfaneLike(about)) {
+      setAlert(
+        "Please remove any offensive language from the 'About You' section",
+        "is-danger"
+      );
+    } */
+
+    register({ name, email, password, about });
   };
 
   return (
@@ -194,4 +215,12 @@ const Register = () => {
   );
 };
 
-export default Register;
+Register.propTypes = {
+  setAlert: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired
+};
+
+export default connect(
+  null,
+  { setAlert, register }
+)(Register);

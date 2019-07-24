@@ -1,8 +1,11 @@
 import { combineReducers } from "redux";
 import authReducer from "./authReducer";
 import errorReducer from "./errorReducer";
+import alert from "./alert";
+import auth from "./auth";
 
 export default combineReducers({
-  auth: authReducer,
+  alert,
+  auth,
   errors: errorReducer
 });

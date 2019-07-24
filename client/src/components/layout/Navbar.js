@@ -68,7 +68,6 @@ class Navbar extends Component {
           </span>
         </div>
         <div id="navMenu" className="navbar-menu">
-          <div className="navbar-item navbar-center" />
           <div className="navbar-end">
             <div className="navbar-item">
               <div className="field has-addons">

@@ -115,10 +115,39 @@ html {
   height: 2px;
 }
 
-.navbar-item.navbar-center {
-  flex-grow: 1;
-  flex-direction: column;
-  justify-content: center;
+@media (max-width: $desktop - 1) {
+  .navbar.is-fixed-top {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: transparent;
+  }
+  .navbar-brand {
+    min-width: 100%;
+    background-color: $black;
+  }
+  .navbar-menu {
+    margin-left: auto;
+    padding: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    // border-left: 1px solid whitesmoke;
+    // border-bottom: 1px solid whitesmoke;
+    border-bottom-left-radius: 6px;
+
+    .navbar-end {
+      padding: 0 1.25rem;
+    }
+
+    .navbar-item {
+      padding: 0.75rem 0;
+      &:not(:last-child) {
+        border-bottom: 1px solid whitesmoke;
+      }
+    }
+
+    .buttons .button {
+      flex-grow: 1;
+    }
+  }
 }
 
 // Footer

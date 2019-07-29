@@ -128,10 +128,10 @@ html {
   .navbar-menu {
     margin-left: auto;
     padding: 0;
-    background-color: rgba(0, 0, 0, 0.6);
-    // border-left: 1px solid whitesmoke;
-    // border-bottom: 1px solid whitesmoke;
-    border-bottom-left-radius: 6px;
+    background-color: whitesmoke; // rgba(0, 0, 0, 0.6);
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+    //border-bottom-left-radius: 6px;
 
     .navbar-end {
       padding: 0 1.25rem;
@@ -140,7 +140,7 @@ html {
     .navbar-item {
       padding: 0.75rem 0;
       &:not(:last-child) {
-        border-bottom: 1px solid whitesmoke;
+        border-bottom: 1px solid black;
       }
     }
 

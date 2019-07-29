@@ -1,5 +1,8 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { logout } from "../../actions/auth";
 
 import TypeWriter from "../../js/typewriter";
 
@@ -45,6 +48,28 @@ class Navbar extends Component {
   }
 
   render() {
+    const { isAuthenticated, loading } = this.props.auth;
+    const { logout } = this.props;
+
+    const authLinks = (
+      <div className="buttons">
+        <a onClick={logout} href="#!" className="button is-black is-small">
+          Log out &nbsp;
+          <i className="fas fa-sign-out-alt" />
+        </a>
+      </div>
+    );
+    const guestLinks = (
+      <div className="buttons">
+        <Link to="/login" className="button is-black is-small">
+          Log in
+        </Link>
+        <Link to="/register" className="button is-primary is-small">
+          Sign up
+        </Link>
+      </div>
+    );
+
     return (
       <nav className="navbar is-black is-fixed-top">
         <div className="navbar-brand">
@@ -53,7 +78,6 @@ class Navbar extends Component {
               to="/"
               id="logo"
               className="is-size-4"
-              href="#"
               onMouseEnter={this.handleLogoHover}
               onMouseLeave={this.handleLogoHover}
             >
@@ -89,14 +113,9 @@ class Navbar extends Component {
               </div>
             </div>
             <div className="navbar-item">
-              <div className="buttons">
-                <Link to="/login" className="button is-black is-small">
-                  Log in
-                </Link>
-                <Link to="/register" className="button is-light is-small">
-                  Sign up
-                </Link>
-              </div>
+              {!loading && (
+                <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
+              )}
             </div>
           </div>
         </div>
@@ -105,4 +124,16 @@ class Navbar extends Component {
   }
 }
 
-export default Navbar;
+Navbar.propTypes = {
+  logout: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  { logout }
+)(Navbar);

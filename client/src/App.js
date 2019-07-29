@@ -67,8 +67,12 @@ const App = () => {
               <Route exact path="/login" component={Login} />
               <Route exact path="/not-found" component={NotFound} />
               <Route exact path="/k/:groupType" component={GroupType} />
-              <Route exact path="/k/:groupType/create" component={NewGroup} />
-              <Route
+              <PrivateRoute
+                exact
+                path="/k/:groupType/create"
+                component={NewGroup}
+              />
+              <PrivateRoute
                 exact
                 path="/k/:groupType/group/:groupCode"
                 component={Group}

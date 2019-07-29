@@ -6,7 +6,10 @@ import {
   USER_LOADED,
   AUTH_ERROR,
   LOGIN_SUCCESS,
-  LOGIN_FAIL
+  LOGIN_FAIL,
+  SET_ERRORS,
+  CLEAR_ERRORS,
+  LOGOUT
 } from "./types";
 
 import setAuthToken from "../utils/setAuthToken";
@@ -24,7 +27,19 @@ export const loadUser = () => async dispatch => {
       type: USER_LOADED,
       payload: res.data
     });
+
+    // Maybe just keep this call if it's called everywhere
+    dispatch(clearErrors());
   } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      dispatch({
+        type: SET_ERRORS,
+        payload: errors
+      });
+    }
+
     dispatch({
       type: AUTH_ERROR
     });
@@ -54,14 +69,17 @@ export const register = ({
       payload: res.data
     });
 
+    dispatch(clearErrors());
+
     dispatch(loadUser());
   } catch (err) {
-    console.log(err);
     const errors = err.response.data.errors;
 
     if (errors) {
-      //TODO pass errors to redux state and handle form ui
-      console.log(errors);
+      dispatch({
+        type: SET_ERRORS,
+        payload: errors
+      });
     }
 
     dispatch({
@@ -88,18 +106,35 @@ export const login = (email, password) => async dispatch => {
       payload: res.data
     });
 
+    dispatch(clearErrors());
+
     dispatch(loadUser());
   } catch (err) {
-    console.log(err);
     const errors = err.response.data.errors;
 
     if (errors) {
-      //TODO pass errors to redux state and handle form ui
-      console.log(errors);
+      dispatch({
+        type: SET_ERRORS,
+        payload: errors
+      });
     }
 
     dispatch({
       type: LOGIN_FAIL
     });
   }
+};
+
+// Clear errors
+export const clearErrors = () => dispatch => {
+  dispatch({
+    type: CLEAR_ERRORS
+  });
+};
+
+// Logout
+export const logout = () => dispatch => {
+  dispatch({
+    type: LOGOUT
+  });
 };

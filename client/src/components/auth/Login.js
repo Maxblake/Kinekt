@@ -70,18 +70,26 @@
 //   { loginUser }
 // )(Login);
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { login } from "../../actions/auth";
+import { login, clearErrors } from "../../actions/auth";
 
-const Login = ({ login }) => {
+const Login = ({ login, clearErrors, errors, isAuthenticated, location }) => {
+  // TODO Maybe get rid of this eventually
+  useEffect(() => {
+    clearErrors();
+  }, []);
+
   const [formData, setFormData] = useState({
     email: "",
     password: ""
   });
 
   const { email, password } = formData;
+
+  const errEmail = errors.find(error => error.param === "email");
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -91,6 +99,15 @@ const Login = ({ login }) => {
     //TODO validate
     login(email, password);
   };
+
+  if (isAuthenticated) {
+    const from = location && location.state ? location.state.from : undefined;
+
+    if (from !== undefined) {
+      return <Redirect to={from} />;
+    }
+    return <Redirect to="/" />;
+  }
 
   return (
     <section className="Login centeredForm">
@@ -108,13 +125,12 @@ const Login = ({ login }) => {
           <div class="control">
             <input
               class="input"
-              type="email"
               name="email"
               value={email}
               onChange={e => onChange(e)}
-              required
             />
           </div>
+          {errEmail && <p class="help is-danger">{errEmail.msg}</p>}
         </div>
         <label class="label">Password</label>
         <div class="field">
@@ -149,10 +165,19 @@ const Login = ({ login }) => {
 };
 
 Login.propTypes = {
-  login: PropTypes.func.isRequired
+  login: PropTypes.func.isRequired,
+  clearErrors: PropTypes.func.isRequired,
+  errors: PropTypes.array.isRequired,
+  isAuthenticated: PropTypes.bool,
+  location: PropTypes.object
 };
 
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  errors: state.error
+});
+
 export default connect(
-  null,
-  { login }
-)(Login);
+  mapStateToProps,
+  { login, clearErrors }
+)(withRouter(Login));

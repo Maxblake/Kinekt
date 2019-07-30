@@ -14,3 +14,5 @@ export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAIL = "LOGIN_FAIL";
 export const SET_ERRORS = "SET_ERRORS";
 export const LOGOUT = "LOGOUT";
+export const GET_GROUP = "GET_GROUP";
+export const GROUP_ERROR = "GROUP_ERROR";

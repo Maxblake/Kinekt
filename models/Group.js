@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const GroupSchema = new mongoose.Schema({
+  HRID: {
+    type: String,
+    required: true
+  },
   creator: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",

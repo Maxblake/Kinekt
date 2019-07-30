@@ -16,6 +16,7 @@
 @import "~bulma/sass/elements/icon.sass";
 @import "~bulma/sass/elements/notification.sass";
 @import "~bulma/sass/elements/other.sass";
+@import "~bulma/sass/elements/icon.sass";
 
 @import "~bulma/sass/layout/section.sass";
 @import "~bulma/sass/layout/footer.sass";
@@ -111,11 +112,19 @@ html {
   }
 }
 
+#currentGroupBtn {
+  color: whitesmoke;
+}
+
 .navbar-burger span {
   height: 2px;
 }
 
 @media (max-width: $desktop - 1) {
+  #currentGroupBtn {
+    background-color: $primary;
+  }
+
   .navbar.is-fixed-top {
     display: flex;
     flex-wrap: wrap;

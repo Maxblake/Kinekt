@@ -5,11 +5,16 @@ import PropTypes from "prop-types";
 import { logout } from "../../actions/auth";
 
 import TypeWriter from "../../js/typewriter";
+import group from "../../reducers/group";
 
 class Navbar extends Component {
-  state = {
-    typewriter: null
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      typewriter: null,
+      groupCode: ""
+    };
+  }
 
   componentDidMount() {
     document.body.classList.add("has-navbar-fixed-top");
@@ -35,9 +40,11 @@ class Navbar extends Component {
       "with humans."
     ];
     const wait = 1000;
-    const self = this;
 
     this.setState({ typewriter: new TypeWriter(txtElement, words, wait) });
+
+    // Reference to 'this' that obeys lexical scope in callbacks
+    var self = this;
 
     logo.addEventListener("mouseover", function() {
       self.state.typewriter.start();
@@ -47,28 +54,72 @@ class Navbar extends Component {
     });
   }
 
+  handleFormChange = e => {
+    const { name, value } = e.target;
+    this.setState({
+      [name]: value
+    });
+  };
+
   render() {
     const { isAuthenticated, loading } = this.props.auth;
-    const { logout } = this.props;
+    const { logout, group } = this.props;
 
     const authLinks = (
-      <div className="buttons">
-        <a onClick={logout} href="#!" className="button is-black is-small">
-          Log out &nbsp;
-          <i className="fas fa-sign-out-alt" />
-        </a>
-      </div>
+      <Fragment>
+        {group && (
+          <div className="navbar-item">
+            <div className="buttons">
+              <Link
+                to={`/k/Chess_Club/group/${group.HRID}`}
+                className="button is-primary is-outlined is-small"
+                id="currentGroupBtn"
+              >
+                <span>{group.name}</span>
+                <span class="icon is-small">
+                  <i class="fas fa-chalkboard-teacher" />
+                </span>
+              </Link>
+            </div>
+          </div>
+        )}
+        <div className="navbar-item">
+          <div className="buttons">
+            <a onClick={logout} href="#!" className="button is-black is-small">
+              Log out &nbsp;
+              <i className="fas fa-sign-out-alt" />
+            </a>
+          </div>
+        </div>
+      </Fragment>
     );
     const guestLinks = (
-      <div className="buttons">
-        <Link to="/login" className="button is-black is-small">
-          Log in
-        </Link>
-        <Link to="/register" className="button is-primary is-small">
-          Sign up
-        </Link>
+      <div className="navbar-item">
+        <div className="buttons">
+          <Link to="/login" className="button is-black is-small">
+            Log in
+          </Link>
+          <Link to="/register" className="button is-primary is-small">
+            Sign up
+          </Link>
+        </div>
       </div>
     );
+
+    // TODO handle group type in link path
+    const groupCodeLink =
+      this.state.groupCode !== "" ? (
+        <Link
+          className="button is-primary is-small"
+          to={`/k/Chess_Club/group/${this.state.groupCode}`}
+        >
+          Join Group
+        </Link>
+      ) : (
+        <button className="button is-primary is-small" disabled>
+          Join Group
+        </button>
+      );
 
     return (
       <nav className="navbar is-black is-fixed-top">
@@ -100,23 +151,18 @@ class Navbar extends Component {
                     className="input is-small"
                     type="text"
                     placeholder="Enter group code"
+                    name="groupCode"
+                    value={this.state.groupCode}
+                    onChange={this.handleFormChange}
                   />
                 </div>
-                <div className="control">
-                  <Link
-                    className="button is-primary is-small"
-                    to="/k/Chess_Club/group/yo"
-                  >
-                    Join Group
-                  </Link>
-                </div>
+                <div className="control">{groupCodeLink}</div>
               </div>
             </div>
-            <div className="navbar-item">
-              {!loading && (
-                <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
-              )}
-            </div>
+
+            {!loading && (
+              <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
+            )}
           </div>
         </div>
       </nav>
@@ -126,11 +172,13 @@ class Navbar extends Component {
 
 Navbar.propTypes = {
   logout: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  group: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  group: state.group.group
 });
 
 export default connect(

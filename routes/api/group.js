@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/auth");
 const { check, validationResult } = require("express-validator");
+const { hri } = require("human-readable-ids");
 
 const Group = require("../../models/Group");
 const User = require("../../models/User");
@@ -20,12 +21,12 @@ router.get("/list", async (req, res) => {
   }
 });
 
-// @route   GET api/group/:id
-// @desc    Get group by id
+// @route   GET api/group/:HRID
+// @desc    Get group by HRID (human readable id)
 // @access  Private
-router.get("/:id", auth, async (req, res) => {
+router.get("/:HRID", auth, async (req, res) => {
   try {
-    const group = await Group.findById(req.params.id);
+    const group = await Group.findOne({ HRID: req.params.HRID });
 
     if (!group) {
       return res.status(400).json({ msg: "Group does not exist" });
@@ -105,6 +106,7 @@ router.post(
 
     try {
       // TODO make sure user only has one group at a time
+      // TODO make sure update doesn't remove HRID field
       let group = await Group.findOne({ creator: req.user.id });
 
       if (group) {
@@ -115,7 +117,25 @@ router.post(
           { new: true }
         );
       } else {
-        // create
+        // assign human readable id and create
+        var i = 0;
+        var uniqueHRIDFound = false;
+
+        while (i < 50 && !uniqueHRIDFound) {
+          groupFields.HRID = hri.random();
+          if (await Group.findOne({ HRID: groupFields.HRID })) {
+            i += 1;
+            continue;
+          }
+          uniqueHRIDFound = true;
+        }
+
+        if (!uniqueHRIDFound) {
+          return res.status(400).json({
+            msg: "Unable to create group: Failed to generate unique HRID"
+          });
+        }
+
         group = new Group(groupFields);
         await group.save();
       }

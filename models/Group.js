@@ -19,7 +19,8 @@ const GroupSchema = new mongoose.Schema({
     ref: "user"
   },
   groupType: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "groupType",
     required: true
   },
   name: {

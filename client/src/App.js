@@ -22,7 +22,7 @@ import GroupType from "./components/group-type/GroupType";
 import NewGroup from "./components/group-type/new-group/NewGroup";
 import Group from "./components/group/Group";
 
-import "./App.scss";
+import "./styling/App.scss";
 
 // Check for token
 if (localStorage.jwtToken) {

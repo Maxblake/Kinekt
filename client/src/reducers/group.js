@@ -1,4 +1,4 @@
-import { GET_GROUP, GROUP_ERROR } from "../actions/types";
+import { GET_GROUP, GROUP_ERROR, CLEAR_GROUP } from "../actions/types";
 
 const initialState = {
   group: null,
@@ -19,8 +19,15 @@ export default function(state = initialState, action) {
     }
     case GROUP_ERROR: {
       return {
-        ...state,
+        group: null,
         error: payload,
+        loading: false
+      };
+    }
+    case CLEAR_GROUP: {
+      return {
+        group: null,
+        error: {},
         loading: false
       };
     }

@@ -1,10 +1,10 @@
 // Imports in specific order
-@import "sass/variables.scss";
+@import "utils/variables.scss";
 
 @import "~bulma/sass/utilities/_all.sass";
 @import "~bulma/sass/base/_all.sass";
 
-@import "sass/marginAndPaddingUtil.scss";
+@import "utils/marginAndPaddingUtil.scss";
 
 @import "~bulma/sass/elements/button.sass";
 @import "~bulma/sass/elements/container.sass";
@@ -29,7 +29,8 @@
 @import "~bulma/sass/components/media.sass"; //Probably can delete later, just using for the notice board rn
 @import "~bulma/sass/components/modal.sass";
 
-@import "sass/carousel.scss";
+@import "utils/carousel.scss";
+@import "utils/hexdots.scss";
 
 html {
   overflow-y: auto;
@@ -164,6 +165,19 @@ html {
   margin-top: 5em;
   color: silver;
   background: $off-black;
+}
+
+// Spinner
+.spinnerContainer {
+  background-color: white;
+  border-radius: 6px;
+  width: 100px;
+  height: 100px;
+  margin: 20vh auto 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 // General page styles

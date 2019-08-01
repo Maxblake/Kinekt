@@ -9,7 +9,8 @@ import {
   LOGIN_FAIL,
   SET_ERRORS,
   CLEAR_ERRORS,
-  LOGOUT
+  LOGOUT,
+  CLEAR_GROUP
 } from "./types";
 
 import setAuthToken from "../utils/setAuthToken";
@@ -134,6 +135,9 @@ export const clearErrors = () => dispatch => {
 
 // Logout
 export const logout = () => dispatch => {
+  dispatch({
+    type: CLEAR_GROUP
+  });
   dispatch({
     type: LOGOUT
   });

@@ -16,6 +16,7 @@ app.use("/api/user", require("./routes/api/user"));
 app.use("/api/auth", require("./routes/api/auth"));
 app.use("/api/profile", require("./routes/api/profile"));
 app.use("/api/group", require("./routes/api/group"));
+app.use("/api/group-type", require("./routes/api/groupType"));
 
 const PORT = process.env.PORT || 5000;
 

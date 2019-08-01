@@ -4,6 +4,7 @@ import NoticeBoard from "../noticeBoard/NoticeBoard";
 
 class GroupConsole extends Component {
   render() {
+    const { group } = this.props;
     return (
       <div className="box flex-row-wrap" id="groupConsole">
         <div className="groupChat">
@@ -13,8 +14,9 @@ class GroupConsole extends Component {
           <div className="groupDetailsContainer">
             <div className="groupDescription">
               <p>
-                Here is a brief but informative description of the event. BYOB,
-                no squares.
+                {group && group.description
+                  ? group.description
+                  : "There is no description available for this group."}
               </p>
             </div>
             <div className="groupDetails">

@@ -63,7 +63,8 @@ class Navbar extends Component {
 
   render() {
     const { isAuthenticated, loading } = this.props.auth;
-    const { logout, group } = this.props;
+    const { logout } = this.props;
+    const { group } = this.props.group;
 
     const authLinks = (
       <Fragment>
@@ -178,7 +179,7 @@ Navbar.propTypes = {
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  group: state.group.group
+  group: state.group
 });
 
 export default connect(

@@ -5,6 +5,7 @@ const { check, validationResult } = require("express-validator");
 const { hri } = require("human-readable-ids");
 
 const Group = require("../../models/Group");
+const GroupType = require("../../models/GroupType");
 const User = require("../../models/User");
 
 // @route   GET api/group/list
@@ -46,9 +47,8 @@ router.get("/:HRID", auth, async (req, res) => {
 });
 
 // @route   POST api/group
-// @desc    Create or update a group
+// @desc    Create a group
 // @access  Private
-
 // TODO fill in other required fields
 router.post(
   "/",
@@ -56,9 +56,6 @@ router.post(
     auth,
     [
       check("name", "Name is required")
-        .not()
-        .isEmpty(),
-      check("groupType", "Group Type is required")
         .not()
         .isEmpty(),
       check("meetingPlace", "Meeting place is required")
@@ -69,90 +66,138 @@ router.post(
         .isEmpty()
     ]
   ],
-  async (req, res) => {
+  (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const {
-      groupType,
-      name,
-      description,
-      meetingPlace,
-      imageURL,
-      meetingTimeContext,
-      meetingTime,
-      minSize,
-      maxSize
-    } = req.body;
+    createOrUpdateGroup(req, res, false);
+  }
+);
+
+// @route   POST api/group
+// @desc    Update a group
+// @access  Private
+router.post("/:id", (req, res) => {
+  createOrUpdateGroup(req, res, true);
+});
+
+const createOrUpdateGroup = async (req, res, updating) => {
+  const {
+    name,
+    description,
+    meetingPlace,
+    imageURL,
+    meetingTimeContext,
+    meetingTime,
+    minSize,
+    maxSize
+  } = req.body;
+  const groupTypeId = req.body.groupType;
+
+  try {
+    if (!(await GroupType.findById(groupTypeId))) {
+      return res.status(400).json({
+        msg: "Group Type ID is invalid"
+      });
+    }
 
     // build group object
     const groupFields = {};
 
-    groupFields.creator = req.user.id;
-
-    groupFields.name = name;
-    groupFields.groupType = groupType;
-    groupFields.meetingPlace = meetingPlace;
-    groupFields.meetingTimeContext = meetingTimeContext;
-
+    if (name) groupFields.name = name;
+    if (groupTypeId) groupFields.groupType = groupTypeId;
+    if (meetingPlace) groupFields.meetingPlace = meetingPlace;
+    if (meetingTimeContext) groupFields.meetingTimeContext = meetingTimeContext;
+    if (!updating) groupFields.creator = req.user.id;
     if (description) groupFields.description = description;
     if (imageURL) groupFields.imageURL = imageURL;
     if (meetingTime) groupFields.meetingTime = meetingTime;
     if (minSize) groupFields.minSize = minSize;
     if (maxSize) groupFields.maxSize = maxSize;
 
-    try {
-      // TODO make sure user only has one group at a time
-      // TODO make sure update doesn't remove HRID field
-      let group = await Group.findOne({ creator: req.user.id });
+    // TODO make sure only creator and admins can update
+    let group = undefined;
+
+    if (updating) {
+      // update
+      group = await Group.findByIdAndUpdate(
+        req.params.id,
+        { $set: groupFields },
+        { new: true }
+      );
+    } else {
+      // create
+      group = await Group.findOne({ creator: req.user.id });
 
       if (group) {
-        // update
-        group = await Group.findOneAndUpdate(
-          { creator: req.user.id },
-          { $set: groupFields },
-          { new: true }
-        );
-      } else {
-        // assign human readable id and create
-        var i = 0;
-        var uniqueHRIDFound = false;
-
-        while (i < 50 && !uniqueHRIDFound) {
-          groupFields.HRID = hri.random();
-          if (await Group.findOne({ HRID: groupFields.HRID })) {
-            i += 1;
-            continue;
-          }
-          uniqueHRIDFound = true;
-        }
-
-        if (!uniqueHRIDFound) {
-          return res.status(400).json({
-            msg: "Unable to create group: Failed to generate unique HRID"
-          });
-        }
-
-        group = new Group(groupFields);
-        await group.save();
+        return res.status(400).json({
+          msg: "Unable to create group: User already has an active group"
+        });
       }
 
-      return res.json(group);
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send("Server error");
+      // assign human readable id
+      var i = 0;
+      var uniqueHRIDFound = false;
+
+      while (i < 50 && !uniqueHRIDFound) {
+        groupFields.HRID = hri.random();
+        if (await Group.findOne({ HRID: groupFields.HRID })) {
+          i += 1;
+          continue;
+        }
+        uniqueHRIDFound = true;
+      }
+
+      if (!uniqueHRIDFound) {
+        return res.status(400).json({
+          msg: "Unable to create group: Failed to generate unique HRID"
+        });
+      }
+
+      group = new Group(groupFields);
+      await group.save();
+
+      const groupType = await GroupType.findById(groupTypeId);
+      groupType.groups.push(group.id);
+
+      await groupType.save();
     }
+
+    return res.json(group);
+  } catch (err) {
+    if (err.kind == "ObjectId") {
+      return res.status(400).json({ msg: "ID does not exist" });
+    }
+
+    console.error(err.message);
+    res.status(500).send("Server error");
   }
-);
+};
 
 // @route   DELETE api/group
 // @desc    Delete a group
 // @access  Private
 router.delete("/", auth, async (req, res) => {
   try {
+    const group = await Group.findOne({ creator: req.user.id });
+    const groupType = await GroupType.findById(group.groupType);
+
+    // Get group index and splice it out from group type list
+    const groupIndex = groupType.groups.indexOf(group.id);
+
+    if (groupIndex === -1) {
+      // TODO correct error code?
+      return res
+        .status(400)
+        .json({ msg: "Unable to remove group from group type list" });
+    }
+
+    groupType.groups.splice(groupIndex, 1);
+    await groupType.save();
+
     await Group.findOneAndDelete({ creator: req.user.id });
     res.json({ msg: "Group deleted" });
   } catch (err) {

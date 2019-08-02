@@ -17,3 +17,4 @@ export const LOGOUT = "LOGOUT";
 export const GET_GROUP = "GET_GROUP";
 export const GROUP_ERROR = "GROUP_ERROR";
 export const CLEAR_GROUP = "CLEAR_GROUP";
+export const EDIT_USER = "EDIT_USER";

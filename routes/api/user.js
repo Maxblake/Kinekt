@@ -75,6 +75,40 @@ router.post(
   }
 );
 
+// @route   PUT api/user
+// @desc    Update a user
+// @access  Private
+//TODO change all updating routes to put, not post
+router.put("/", auth, async (req, res) => {
+  const { name, about } = req.body;
+
+  if (!User.findById(req.user.id)) {
+    return res.status(400).json({
+      msg: "Invalid User ID"
+    });
+  }
+
+  // build group type object
+  const userFields = {};
+
+  if (name) userFields.name = name;
+  if (about) userFields.about = about;
+
+  try {
+    // update
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      { $set: userFields },
+      { new: true }
+    ).select("-password");
+
+    return res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
 // @route   DELETE api/user
 // @desc    Delete a user
 // @access  Private

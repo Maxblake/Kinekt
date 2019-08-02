@@ -86,6 +86,10 @@ class Navbar extends Component {
         )}
         <div className="navbar-item">
           <div className="buttons">
+            <Link to="/account" className="button is-primary is-small">
+              My Account &nbsp;
+              <i className="fas fa-user-circle" />
+            </Link>
             <a onClick={logout} href="#!" className="button is-black is-small">
               Log out &nbsp;
               <i className="fas fa-sign-out-alt" />

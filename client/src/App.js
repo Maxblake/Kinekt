@@ -16,6 +16,7 @@ import Footer from "./components/layout/Footer";
 import Alert from "./components/layout/Alert";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
+import EditUser from "./components/user/EditUser";
 import NotFound from "./components/common/NotFound";
 import Home from "./components/home/Home";
 import GroupType from "./components/group-type/GroupType";
@@ -65,6 +66,7 @@ const App = () => {
               <Route exact path="/" component={Home} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
+              <Route exact path="/account" component={EditUser} />
               <Route exact path="/not-found" component={NotFound} />
               <Route exact path="/k/:groupType" component={GroupType} />
               <PrivateRoute

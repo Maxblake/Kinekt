@@ -8,7 +8,7 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   SET_ERRORS,
-  CLEAR_ERRORS,
+  CLEAR_ERRORS_AND_ALERTS,
   LOGOUT,
   CLEAR_GROUP
 } from "./types";
@@ -30,7 +30,7 @@ export const loadUser = () => async dispatch => {
     });
 
     // Maybe just keep this call if it's called everywhere
-    dispatch(clearErrors());
+    dispatch(clearErrorsAndAlerts());
   } catch (err) {
     const errors = err.response.data.errors;
 
@@ -70,7 +70,7 @@ export const register = ({
       payload: res.data
     });
 
-    dispatch(clearErrors());
+    dispatch(clearErrorsAndAlerts());
 
     dispatch(loadUser());
   } catch (err) {
@@ -107,7 +107,7 @@ export const login = (email, password) => async dispatch => {
       payload: res.data
     });
 
-    dispatch(clearErrors());
+    dispatch(clearErrorsAndAlerts());
 
     dispatch(loadUser());
   } catch (err) {
@@ -127,9 +127,9 @@ export const login = (email, password) => async dispatch => {
 };
 
 // Clear errors
-export const clearErrors = () => dispatch => {
+export const clearErrorsAndAlerts = () => dispatch => {
   dispatch({
-    type: CLEAR_ERRORS
+    type: CLEAR_ERRORS_AND_ALERTS
   });
 };
 

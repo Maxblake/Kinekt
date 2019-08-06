@@ -74,12 +74,18 @@ import React, { useState, useEffect } from "react";
 import { Link, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { login, clearErrors } from "../../actions/auth";
+import { login, clearErrorsAndAlerts } from "../../actions/auth";
 
-const Login = ({ login, clearErrors, errors, isAuthenticated, location }) => {
+const Login = ({
+  login,
+  clearErrorsAndAlerts,
+  errors,
+  isAuthenticated,
+  location
+}) => {
   // TODO Maybe get rid of this eventually
   useEffect(() => {
-    clearErrors();
+    clearErrorsAndAlerts();
   }, []);
 
   const [formData, setFormData] = useState({
@@ -96,7 +102,7 @@ const Login = ({ login, clearErrors, errors, isAuthenticated, location }) => {
 
   const onSubmit = async e => {
     e.preventDefault();
-    //TODO validate
+    //TODO validate, why is this async?
     login(email, password);
   };
 
@@ -166,7 +172,7 @@ const Login = ({ login, clearErrors, errors, isAuthenticated, location }) => {
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
-  clearErrors: PropTypes.func.isRequired,
+  clearErrorsAndAlerts: PropTypes.func.isRequired,
   errors: PropTypes.array.isRequired,
   isAuthenticated: PropTypes.bool,
   location: PropTypes.object
@@ -179,5 +185,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { login, clearErrors }
+  { login, clearErrorsAndAlerts }
 )(withRouter(Login));

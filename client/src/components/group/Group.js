@@ -4,18 +4,51 @@ import { connect } from "react-redux";
 import Spinner from "../common/Spinner";
 import GroupMembers from "./GroupMembers";
 import GroupConsole from "./GroupConsole";
-import { getGroup } from "../../actions/group";
+import { getGroup, deleteGroup } from "../../actions/group";
 
 const Group = props => {
   const {
     getGroup,
+    deleteGroup,
     auth,
     group: { group, loading }
   } = props;
 
+  var grpSettingsBtn, grpSettingsDropDown;
+
   useEffect(() => {
-    getGroup(props.match.params.groupCode);
-  }, []);
+    if (!group || (group && group.HRID !== props.match.params.groupCode)) {
+      getGroup(props.match.params.groupCode);
+    } else {
+      grpSettingsBtn = document.querySelector("#grpSettingsBtn");
+      grpSettingsDropDown = document.querySelector(".dropdown");
+
+      //TODO  Move this elsewhere if useEffect ever gets called more than once
+      document.addEventListener("click", handleToggleGrpSettings);
+    }
+
+    return () => {
+      // Remove on unmount
+      document.removeEventListener("click", handleToggleGrpSettings);
+    };
+  }, [group, props.match.params.groupCode]);
+
+  const handleToggleGrpSettings = e => {
+    const clickedGrpSettingsBtn = grpSettingsBtn.contains(e.target);
+    const grpSettingsDropDownActive = grpSettingsDropDown.classList.contains(
+      "is-active"
+    );
+
+    if (grpSettingsDropDownActive) {
+      grpSettingsDropDown.classList.remove("is-active");
+    } else if (clickedGrpSettingsBtn) {
+      grpSettingsDropDown.classList.add("is-active");
+    }
+  };
+
+  const onClickDelete = e => {
+    deleteGroup();
+  };
 
   if (loading) {
     return <Spinner />;
@@ -40,6 +73,43 @@ const Group = props => {
             </div>
           </div>
         </div>
+        <div className="level-right">
+          <div className="level-item">
+            <div class="dropdown is-right">
+              <div class="dropdown-trigger">
+                <button
+                  class="button is-black"
+                  id="grpSettingsBtn"
+                  aria-haspopup="true"
+                  aria-controls="dropdown-menu"
+                >
+                  <span>Settings</span>
+                  <span class="icon is-small">
+                    <i class="fas fa-cog" aria-hidden="true" />
+                  </span>
+                </button>
+              </div>
+              <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                <div class="dropdown-content">
+                  <a href="#" class="dropdown-item">
+                    Edit Details
+                  </a>
+                  <a href="#" class="dropdown-item">
+                    Manage Admins
+                  </a>
+                  <hr class="dropdown-divider" />
+                  <a
+                    href="#"
+                    class="dropdown-item"
+                    onClick={e => onClickDelete(e)}
+                  >
+                    Delete Group
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </nav>
       <GroupConsole group={group} />
       <GroupMembers />
@@ -49,6 +119,7 @@ const Group = props => {
 
 Group.propTypes = {
   getGroup: PropTypes.func.isRequired,
+  deleteGroup: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   group: PropTypes.object.isRequired
 };
@@ -60,5 +131,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getGroup }
+  { getGroup, deleteGroup }
 )(Group);

@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import GroupCard from "../cards/GroupCard";
 
+//TODO convert to functional
+//TODO format date/times with moment
 class GroupType extends Component {
   render() {
     return (

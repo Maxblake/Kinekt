@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { logout } from "../../actions/auth";
@@ -14,19 +14,18 @@ class Navbar extends Component {
       typewriter: null,
       groupCode: ""
     };
+
+    document.body.classList.add("has-navbar-fixed-top");
+    this.navMenu = React.createRef();
+    this.navBurger = React.createRef();
   }
 
   componentDidMount() {
-    document.body.classList.add("has-navbar-fixed-top");
-
     //Navbar burger
-    const burger = document.querySelector(".burger");
-    const nav = document.querySelector("#" + burger.dataset.target);
+    this.burger = document.querySelector(".burger");
+    this.nav = document.querySelector("#" + this.burger.dataset.target);
 
-    burger.addEventListener("click", function() {
-      burger.classList.toggle("is-active");
-      nav.classList.toggle("is-active");
-    });
+    document.addEventListener("click", this.handleToggleNavMenu);
 
     //Typewriter effect on logo
     const txtElement = document.querySelector("#logo_typewriter");
@@ -54,11 +53,39 @@ class Navbar extends Component {
     });
   }
 
+  componentWillUnmount() {
+    document.removeEventListener("click", this.handleToggleNavMenu, false);
+  }
+
   handleFormChange = e => {
     const { name, value } = e.target;
     this.setState({
       [name]: value
     });
+  };
+
+  handleToggleNavMenu = e => {
+    const clickInsideMenu = this.navMenu.current.contains(e.target);
+    const clickOnBurger = this.navBurger.current.contains(e.target);
+    const navMenuActive = this.burger.classList.contains("is-active");
+    const clickOnMenuButton =
+      clickInsideMenu && e.target.classList.contains("button");
+
+    if (navMenuActive) {
+      if (!clickInsideMenu || clickOnMenuButton) {
+        this.burger.classList.remove("is-active");
+        this.nav.classList.remove("is-active");
+      }
+    } else if (clickOnBurger) {
+      this.burger.classList.add("is-active");
+      this.nav.classList.add("is-active");
+    }
+  };
+
+  onSubmitGroupCode = e => {
+    e.preventDefault();
+
+    this.props.history.push(`/k/Chess_Club/group/${this.state.groupCode}`);
   };
 
   render() {
@@ -111,21 +138,6 @@ class Navbar extends Component {
       </div>
     );
 
-    // TODO handle group type in link path
-    const groupCodeLink =
-      this.state.groupCode !== "" ? (
-        <Link
-          className="button is-primary is-small"
-          to={`/k/Chess_Club/group/${this.state.groupCode}`}
-        >
-          Join Group
-        </Link>
-      ) : (
-        <button className="button is-primary is-small" disabled>
-          Join Group
-        </button>
-      );
-
     return (
       <nav className="navbar is-black is-fixed-top">
         <div className="navbar-brand">
@@ -141,28 +153,51 @@ class Navbar extends Component {
             </Link>
             <div id="logo_typewriter" className="is-size-4" />
           </div>
-          <span className="navbar-burger burger" data-target="navMenu">
+          <span
+            className="navbar-burger burger"
+            data-target="navMenu"
+            ref={this.navBurger}
+          >
             <span aria-hidden="true" />
             <span aria-hidden="true" />
             <span aria-hidden="true" />
           </span>
         </div>
-        <div id="navMenu" className="navbar-menu">
+        <div id="navMenu" className="navbar-menu" ref={this.navMenu}>
           <div className="navbar-end">
             <div className="navbar-item">
-              <div className="field has-addons">
-                <div className="control">
-                  <input
-                    className="input is-small"
-                    type="text"
-                    placeholder="Enter group code"
-                    name="groupCode"
-                    value={this.state.groupCode}
-                    onChange={this.handleFormChange}
-                  />
+              <form onSubmit={this.onSubmitGroupCode}>
+                <div className="field has-addons">
+                  <div className="control">
+                    <input
+                      className="input is-small"
+                      type="text"
+                      placeholder="Enter group code"
+                      name="groupCode"
+                      value={this.state.groupCode}
+                      onChange={this.handleFormChange}
+                    />
+                  </div>
+                  <div className="control">
+                    {this.state.groupCode !== "" ? (
+                      <button
+                        className="button is-primary is-small"
+                        type="submit"
+                      >
+                        Join Group
+                      </button>
+                    ) : (
+                      <button
+                        className="button is-primary is-small"
+                        type="submit"
+                        disabled
+                      >
+                        Join Group
+                      </button>
+                    )}
+                  </div>
                 </div>
-                <div className="control">{groupCodeLink}</div>
-              </div>
+              </form>
             </div>
 
             {!loading && (
@@ -189,4 +224,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   { logout }
-)(Navbar);
+)(withRouter(Navbar));

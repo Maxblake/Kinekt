@@ -6,13 +6,35 @@ const { check, validationResult } = require("express-validator");
 const Group = require("../../models/Group");
 const GroupType = require("../../models/GroupType");
 
-// @route   GET api/group-type/list
-// @desc    Get a list of all group types
+// @route   POST api/group-type/list
+// @desc    Get a list of group types ordered and filtered by passed criteria
 // @access  Public
 //TODO maybe don't return groups, abstract user and group numbers in group type object
-router.get("/list", async (req, res) => {
+router.post("/list", async (req, res) => {
+  const { sortBy, category, searchTerms } = req.body;
+  const query = {};
+
+  if (category && category !== "All") query.category = category;
+  if (searchTerms) {
+    query.$text = { $search: searchTerms };
+  }
+
   try {
-    const groupTypes = await GroupType.find();
+    let groupTypes = await GroupType.find(query, {
+      score: { $meta: "textScore" }
+    })
+      .select("-groups")
+      .sort({
+        score: { $meta: "textScore" }
+      })
+      .lean();
+
+    if (searchTerms) {
+      groupTypes = groupTypes.filter(groupType => {
+        return groupType.score > 1;
+      });
+    }
+
     res.json(groupTypes);
   } catch (err) {
     console.error(err.message);
@@ -43,6 +65,9 @@ router.post(
     [
       check("name", "Name is required")
         .not()
+        .isEmpty(),
+      check("category", "Category is required")
+        .not()
         .isEmpty()
     ]
   ],
@@ -53,7 +78,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, description } = req.body;
+    const { name, description, category } = req.body;
 
     if (await GroupType.findOne({ name })) {
       return res.status(400).json({
@@ -65,6 +90,7 @@ router.post(
     const groupTypeFields = {};
 
     groupTypeFields.name = name;
+    groupTypeFields.category = category;
     if (description) groupTypeFields.description = description;
 
     try {
@@ -84,7 +110,7 @@ router.post(
 // @desc    Update a group type
 // @access  Private
 router.post("/:id", async (req, res) => {
-  const { name, description } = req.body;
+  const { name, description, category } = req.body;
 
   if (!GroupType.findById(req.params.id)) {
     return res.status(400).json({
@@ -97,6 +123,7 @@ router.post("/:id", async (req, res) => {
 
   if (name) groupTypeFields.name = name;
   if (description) groupTypeFields.description = description;
+  if (category) groupTypeFields.category = category;
 
   try {
     // update

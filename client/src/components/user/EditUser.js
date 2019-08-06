@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { setAlert } from "../../actions/alert";
-import { editUser } from "../../actions/user";
+import { editUser, deleteUser } from "../../actions/user";
 import { loadUser } from "../../actions/auth";
 import PropTypes from "prop-types";
 import Spinner from "../common/Spinner";
@@ -12,6 +12,7 @@ const filter = new Filter();
 const EditUser = ({
   setAlert,
   editUser,
+  deleteUser,
   loadUser,
   auth: { user, loading }
 }) => {
@@ -23,10 +24,12 @@ const EditUser = ({
   const { name, about } = formData;
 
   useEffect(() => {
-    if (user === null && !loading) {
-      loadUser();
-    } else if (user !== null && !loading) {
-      setFormData({ ...formData, name: user.name, about: user.about });
+    if (!loading) {
+      if (user === null) {
+        loadUser();
+      } else {
+        setFormData({ ...formData, name: user.name, about: user.about });
+      }
     }
   }, [user]);
 
@@ -36,9 +39,13 @@ const EditUser = ({
   const onSubmit = async e => {
     e.preventDefault();
 
-    //TODO filter profane fields
+    //TODO filter profane fields, also why async?
 
     editUser(name, about);
+  };
+
+  const onClickDelete = e => {
+    deleteUser();
   };
 
   if (loading) {
@@ -109,6 +116,15 @@ const EditUser = ({
 
         <div class="field is-grouped is-grouped-right">
           <div class="control">
+            <button
+              class="button is-text"
+              type="button"
+              onClick={e => onClickDelete(e)}
+            >
+              Delete Account
+            </button>
+          </div>
+          <div class="control">
             <button class="button is-primary" type="submit">
               Save
             </button>
@@ -122,6 +138,7 @@ const EditUser = ({
 EditUser.propTypes = {
   setAlert: PropTypes.func.isRequired,
   editUser: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
   loadUser: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool
 };
@@ -132,5 +149,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { setAlert, editUser, loadUser }
+  { setAlert, editUser, deleteUser, loadUser }
 )(EditUser);

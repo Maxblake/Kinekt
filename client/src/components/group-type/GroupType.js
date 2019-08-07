@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Spinner from "../common/Spinner";
@@ -55,12 +56,15 @@ const GroupType = ({
         <div className="level-right">
           <div className="level-item">
             <div className="level-item">
-              <a className="button is-primary">
+              <Link
+                to={`/k/${match.params.groupType}/create`}
+                className="button is-primary"
+              >
                 <span className="icon">
                   <i className="fas fa-plus" />
                 </span>
                 <span>New Group</span>
-              </a>
+              </Link>
             </div>
             <div className="field">
               <div className="select">
@@ -95,29 +99,18 @@ const GroupType = ({
       </nav>
 
       <div className="groupCards">
-        <GroupCard
-          imgSrc="https://source.unsplash.com/random/640x320"
-          groupName="Grant HS Chess club"
-        />
-        <GroupCard
-          imgSrc="https://source.unsplash.com/random/640x320"
-          groupName="Chess in the park"
-        />
-        <GroupCard
-          imgSrc="https://source.unsplash.com/random/640x320"
-          groupName="Online chess"
-        />
-        <GroupCard
-          imgSrc="https://source.unsplash.com/random/640x320"
-          groupName="Chess tutoring and whatever I don't care I'm just lonely and bored"
-        />
-        <GroupCard
-          imgSrc="https://source.unsplash.com/random/640x320"
-          groupName="OCC Chess club"
-        />
-        <div className="content has-text-centered">
-          <h3>- This is the end. -</h3>
-        </div>
+        {groups.map(group => (
+          <GroupCard
+            key={group._id}
+            imgSrc="https://source.unsplash.com/random/640x320"
+            name={group.name}
+          />
+        ))}
+        {groups && (
+          <div className="content has-text-centered">
+            <h3>- This is the end. -</h3>
+          </div>
+        )}
       </div>
     </section>
   );

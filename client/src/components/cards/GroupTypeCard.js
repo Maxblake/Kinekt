@@ -1,11 +1,15 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 class GroupTypeCard extends Component {
   render() {
     return (
-      <a href="#" className="card groupTypeCard">
+      <Link
+        to={`/k/${this.props.name.split(" ").join("_")}`}
+        className="card groupTypeCard"
+      >
         <div className="card-image">
-          <figure className="image is-2by1">
+          <figure className="imageContainer image is-2by1">
             <img src={this.props.imgSrc} alt="Placeholder image" />
           </figure>
         </div>
@@ -13,7 +17,7 @@ class GroupTypeCard extends Component {
           {this.props.groupType}
         </span>
         <div className="card-content">
-          <h1 className="title is-size-4">{this.props.title}</h1>
+          <h1 className="title is-size-4">{this.props.name}</h1>
           <div className="subtitle is-size-6">
             <div className="onlineStatusContainer">
               <div className="onlineStatusDot" />
@@ -23,7 +27,7 @@ class GroupTypeCard extends Component {
             </div>
           </div>
         </div>
-      </a>
+      </Link>
     );
   }
 }

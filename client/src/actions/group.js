@@ -2,10 +2,17 @@ import axios from "axios";
 import { setAlert } from "./alert";
 import { clearErrorsAndAlerts } from "./auth";
 
-import { GET_GROUP, GET_GROUPS, GROUP_ERROR, CLEAR_GROUP } from "./types";
+import {
+  SET_ERRORS,
+  GET_GROUP,
+  GET_GROUPS,
+  GROUP_ERROR,
+  CLEAR_GROUP,
+  CLEAR_GROUPTYPES
+} from "./types";
 
-// Get group by HRID (human readable id)
-export const getGroup = HRID => async dispatch => {
+// Get group by HRID (human readable id), optionally redirect to group's url
+export const getGroup = (HRID, history = null) => async dispatch => {
   try {
     const res = await axios.get(`/api/group/${HRID}`);
 
@@ -13,8 +20,15 @@ export const getGroup = HRID => async dispatch => {
 
     dispatch({
       type: GET_GROUP,
-      payload: res.data
+      payload: res.data.group
     });
+
+    if (history) {
+      console.log(res.data);
+      history.push(
+        `/k/${res.data.groupTypeName.split(" ").join("_")}/group/${HRID}`
+      );
+    }
   } catch (err) {
     dispatch({
       type: GROUP_ERROR,
@@ -45,6 +59,47 @@ export const getGroups = groupTypeName => async dispatch => {
       type: GROUP_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status }
     });
+    dispatch({
+      type: CLEAR_GROUPTYPES
+    });
+  }
+};
+
+// Create a group
+export const createGroup = (groupFields, history) => async dispatch => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  const body = JSON.stringify(groupFields);
+
+  try {
+    const res = await axios.post("/api/group", body, config);
+
+    dispatch(clearErrorsAndAlerts());
+
+    dispatch({
+      type: GET_GROUP,
+      payload: res.data.group
+    });
+
+    history.push(
+      `/k/${res.data.groupTypeName.split(" ").join("_")}/group/${
+        res.data.group.HRID
+      }`
+    );
+  } catch (err) {
+    const errors =
+      err.response && err.response.data ? err.response.data.errors : undefined;
+
+    if (errors) {
+      dispatch({
+        type: SET_ERRORS,
+        payload: errors
+      });
+    }
   }
 };
 

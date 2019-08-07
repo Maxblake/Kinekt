@@ -3,6 +3,7 @@ import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { logout } from "../../actions/auth";
+import { getGroup } from "../../actions/group";
 
 import TypeWriter from "../../js/typewriter";
 import group from "../../reducers/group";
@@ -85,7 +86,7 @@ class Navbar extends Component {
   onSubmitGroupCode = e => {
     e.preventDefault();
 
-    this.props.history.push(`/k/Chess_Club/group/${this.state.groupCode}`);
+    this.props.getGroup(this.state.groupCode, this.props.history);
   };
 
   render() {
@@ -99,7 +100,7 @@ class Navbar extends Component {
           <div className="navbar-item">
             <div className="buttons">
               <Link
-                to={`/k/Chess_Club/group/${group.HRID}`}
+                to={`/k/${group.g}/group/${group.HRID}`}
                 className="button is-primary is-outlined is-small"
                 id="currentGroupBtn"
               >
@@ -212,6 +213,7 @@ class Navbar extends Component {
 
 Navbar.propTypes = {
   logout: PropTypes.func.isRequired,
+  getGroup: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   group: PropTypes.object.isRequired
 };
@@ -223,5 +225,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { logout }
+  { logout, getGroup }
 )(withRouter(Navbar));

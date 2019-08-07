@@ -30,7 +30,7 @@ const GroupSchema = new mongoose.Schema({
   description: {
     type: String
   },
-  meetingPlace: {
+  place: {
     type: String,
     required: true
   },
@@ -42,12 +42,12 @@ const GroupSchema = new mongoose.Schema({
       type: String
     }
   },
-  meetingTimeContext: {
+  accessLevel: {
     type: String,
     required: true
   },
   // new Date(Date.now()).toISOString()
-  meetingTime: {
+  time: {
     type: Date
   },
   minSize: {

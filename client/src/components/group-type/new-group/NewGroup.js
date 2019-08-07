@@ -1,19 +1,29 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import PropTypes from "prop-types";
+import { createGroup } from "../../../actions/group";
 import RadioButton from "../../common/RadioButton";
 import TimeKeeper from "react-timekeeper";
+//TODO use moment for this
 import { getCurrentTimeString } from "../../../utils/utils";
+import moment from "moment";
 
+//TODO convert to functional, make sure groupType is always in state
 class NewGroup extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      name: "",
+      description: "",
+      place: "",
       timeContext: "Now",
       accessLevel: "Public",
-      time: getCurrentTimeString(),
+      time: { formatted: getCurrentTimeString() },
       displayTimepicker: false,
-      minGroupSize: "",
-      maxGroupSize: "",
-      image: { name: "", formData: {} }
+      minSize: "",
+      maxSize: "",
+      image: { name: "", formData: undefined }
     };
     this.handleTimeChange = this.handleTimeChange.bind(this); //TODO don't do this
     this.handleTimeContextChange = this.handleTimeContextChange.bind(this);
@@ -36,7 +46,7 @@ class NewGroup extends Component {
     if (this.state.timeContext === "Now") {
       this.setState({ timeContext: "Today" });
     }
-    this.setState({ time: newTime.formatted });
+    this.setState({ time: newTime });
   }
   toggleTimekeeper(val) {
     this.setState({ displayTimepicker: val });
@@ -64,6 +74,43 @@ class NewGroup extends Component {
 
   onSubmit = e => {
     e.preventDefault();
+
+    const {
+      name,
+      description,
+      place,
+      timeContext,
+      accessLevel,
+      time,
+      minSize,
+      maxSize
+    } = this.state;
+
+    const groupFields = {
+      name,
+      description,
+      place,
+      accessLevel,
+      minSize,
+      maxSize
+    };
+
+    const ISODate = moment();
+    if (timeContext !== "Now") {
+      ISODate.set({
+        hour: time.hour24,
+        minute: time.minute
+      });
+    }
+    if (timeContext === "Tomorrow") {
+      ISODate.add(1, "day");
+    }
+
+    groupFields.time = ISODate.toISOString();
+    groupFields.imageFormData = this.state.image.formData;
+    groupFields.groupType = this.props.groupType._id;
+
+    this.props.createGroup(groupFields, this.props.history);
   };
 
   render() {
@@ -74,7 +121,7 @@ class NewGroup extends Component {
             <div className="level-item">
               <div className="groupTypeTitleContainer">
                 <div className="subtitle is-size-6 onlineStatusContainer">
-                  {this.props.match.params.groupType}
+                  {this.props.match.params.groupType.split("_").join(" ")}
                 </div>
                 <h3 className="title is-size-3 pageTitle" id="groupPageTitle">
                   Create a group
@@ -92,7 +139,7 @@ class NewGroup extends Component {
             />
             <div class="modal-content timeKeeperModalContent">
               <TimeKeeper
-                time={this.state.time}
+                time={this.state.time.formatted}
                 onChange={this.handleTimeChange}
                 onDoneClick={() => {
                   this.toggleTimekeeper(false);
@@ -105,13 +152,16 @@ class NewGroup extends Component {
           false
         )}
 
-        <form className="box" onSubmit={e => this.onSubmit(e)}>
+        <form className="box" onSubmit={this.onSubmit}>
           <label class="label">Group Name *</label>
           <div class="field">
             <div class="control">
               <input
                 class="input"
                 type="text"
+                name="name"
+                value={this.state.name}
+                onChange={this.handleFormChange}
                 placeholder="E.g. Taco Party"
                 required
               />
@@ -124,6 +174,9 @@ class NewGroup extends Component {
               <textarea
                 class="textarea"
                 rows="2"
+                name="description"
+                value={this.state.description}
+                onChange={this.handleFormChange}
                 placeholder="E.g. Let's hang out and argue about flour and corn tortillas at my place."
               />
             </div>
@@ -145,8 +198,9 @@ class NewGroup extends Component {
               <input
                 class="input smallInput"
                 type="text"
-                value={this.state.time}
+                value={this.state.time.formatted}
                 onClick={() => this.toggleTimekeeper(true)}
+                onChange={() => console.log("TODO fix this")}
               />
             </div>
             <div class="control">
@@ -171,6 +225,9 @@ class NewGroup extends Component {
               <input
                 class="input"
                 type="text"
+                name="place"
+                value={this.state.place}
+                onChange={this.handleFormChange}
                 placeholder="E.g. 555 My House, Newport RI"
                 required
               />
@@ -184,8 +241,8 @@ class NewGroup extends Component {
                 class="input smallInput"
                 type="text"
                 placeholder="Any"
-                name="minGroupSize"
-                value={this.state.minGroupSize}
+                name="minSize"
+                value={this.state.minSize}
                 onChange={this.handleFormChange}
               />
             </div>
@@ -197,8 +254,8 @@ class NewGroup extends Component {
                 class="input smallInput"
                 type="text"
                 placeholder="Any"
-                name="maxGroupSize"
-                value={this.state.maxGroupSize}
+                name="maxSize"
+                value={this.state.maxSize}
                 onChange={this.handleFormChange}
               />
             </div>
@@ -267,4 +324,16 @@ class NewGroup extends Component {
   }
 }
 
-export default NewGroup;
+NewGroup.propTypes = {
+  createGroup: PropTypes.func.isRequired,
+  groupType: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  groupType: state.groupType.groupType
+});
+
+export default connect(
+  mapStateToProps,
+  { createGroup }
+)(withRouter(NewGroup));

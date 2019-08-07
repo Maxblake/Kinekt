@@ -36,7 +36,6 @@ router.post("/list", async (req, res) => {
     const response = { groupType, groups };
     res.json(response);
   } catch (err) {
-    console.error(err.message);
     res.status(500).send("Server error");
   }
 });
@@ -51,8 +50,12 @@ router.get("/:HRID", auth, async (req, res) => {
     if (!group) {
       return res.status(400).json({ msg: "Group does not exist" });
     }
+    const groupTypeName = await GroupType.findById(group.groupType).select(
+      "name"
+    );
+    const response = { group, groupTypeName: groupTypeName.name };
 
-    res.json(group);
+    res.json(response);
   } catch (err) {
     console.error(err.message);
 
@@ -77,10 +80,10 @@ router.post(
       check("name", "Name is required")
         .not()
         .isEmpty(),
-      check("meetingPlace", "Meeting place is required")
+      check("place", "Meeting place is required")
         .not()
         .isEmpty(),
-      check("meetingTimeContext", "Meeting time context is required")
+      check("time", "Meeting time is required")
         .not()
         .isEmpty()
     ]
@@ -107,9 +110,9 @@ const createOrUpdateGroup = async (req, res, updating) => {
   const {
     name,
     description,
-    meetingPlace,
-    meetingTimeContext,
-    meetingTime,
+    place,
+    accessLevel,
+    time,
     minSize,
     maxSize,
     imageFormData
@@ -118,7 +121,7 @@ const createOrUpdateGroup = async (req, res, updating) => {
 
   try {
     if (!(await GroupType.findById(groupTypeId))) {
-      return res.status(400).json({
+      return res.status(401).json({
         msg: "Group Type ID is invalid"
       });
     }
@@ -128,16 +131,17 @@ const createOrUpdateGroup = async (req, res, updating) => {
 
     if (name) groupFields.name = name;
     if (groupTypeId) groupFields.groupType = groupTypeId;
-    if (meetingPlace) groupFields.meetingPlace = meetingPlace;
-    if (meetingTimeContext) groupFields.meetingTimeContext = meetingTimeContext;
+    if (place) groupFields.place = place;
+    if (accessLevel) groupFields.accessLevel = accessLevel;
     if (!updating) groupFields.creator = req.user.id;
     if (description) groupFields.description = description;
-    if (meetingTime) groupFields.meetingTime = meetingTime;
+    if (time) groupFields.time = time;
     if (minSize) groupFields.minSize = minSize;
     if (maxSize) groupFields.maxSize = maxSize;
 
     // TODO make sure only creator and admins can update
     let group = undefined;
+    const response = {};
 
     if (updating) {
       // update
@@ -157,12 +161,15 @@ const createOrUpdateGroup = async (req, res, updating) => {
       }
 
       await group.save();
+
+      response.group = group;
+      response.groupTypeName = "TODO: return group type name";
     } else {
       // create
       group = await Group.findOne({ creator: req.user.id });
 
       if (group) {
-        return res.status(400).json({
+        return res.status(402).json({
           msg: "Unable to create group: User already has an active group"
         });
       }
@@ -181,7 +188,7 @@ const createOrUpdateGroup = async (req, res, updating) => {
       }
 
       if (!uniqueHRIDFound) {
-        return res.status(400).json({
+        return res.status(403).json({
           msg: "Unable to create group: Failed to generate unique HRID"
         });
       }
@@ -199,7 +206,7 @@ const createOrUpdateGroup = async (req, res, updating) => {
       const creator = await User.findById(req.user.id);
 
       if (!creator) {
-        return res.status(400).json({
+        return res.status(404).json({
           msg: "User ID is invalid"
         });
       }
@@ -210,12 +217,15 @@ const createOrUpdateGroup = async (req, res, updating) => {
       await group.save();
       await groupType.save();
       await creator.save();
+
+      response.group = group;
+      response.groupTypeName = groupType.name;
     }
 
-    return res.json(group);
+    return res.json(response);
   } catch (err) {
     if (err.kind == "ObjectId") {
-      return res.status(400).json({ msg: "ID does not exist" });
+      return res.status(405).json({ msg: "ID does not exist" });
     }
 
     console.error(err.message);

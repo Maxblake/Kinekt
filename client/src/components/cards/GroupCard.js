@@ -7,7 +7,7 @@ class GroupCard extends Component {
         <div className="column is-8 card groupCard">
           <div className="card-content">
             <div className="groupName">
-              <h1 className="title is-size-4">{this.props.groupName}</h1>
+              <h1 className="title is-size-4">{this.props.name}</h1>
               <div className="subtitle is-size-6">
                 <div className="onlineStatusContainer">
                   <div className="onlineStatusDot" />
@@ -41,7 +41,7 @@ class GroupCard extends Component {
             </div>
           </div>
         </div>
-        <div className="column is-4 groupImage">
+        <div className="column is-4 groupImage imageContainer">
           <img src={this.props.imgSrc} alt="Placeholder image" />
         </div>
       </a>

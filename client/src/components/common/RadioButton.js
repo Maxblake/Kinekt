@@ -13,6 +13,7 @@ const getClassList = isSelected => {
 export default function RadioButton(props) {
   return (
     <button
+      type="button"
       className={getClassList(props.selectedValue === props.value)}
       onClick={() => props.handleClick(props.value)}
     >

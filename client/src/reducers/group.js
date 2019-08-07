@@ -1,6 +1,12 @@
-import { GET_GROUP, GROUP_ERROR, CLEAR_GROUP } from "../actions/types";
+import {
+  GET_GROUP,
+  GET_GROUPS,
+  GROUP_ERROR,
+  CLEAR_GROUP
+} from "../actions/types";
 
 const initialState = {
+  groups: [],
   group: null,
   loading: true,
   error: {}
@@ -10,6 +16,13 @@ export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
+    case GET_GROUPS: {
+      return {
+        ...state,
+        groups: payload.groups,
+        loading: false
+      };
+    }
     case GET_GROUP: {
       return {
         ...state,
@@ -19,6 +32,7 @@ export default function(state = initialState, action) {
     }
     case GROUP_ERROR: {
       return {
+        groups: [],
         group: null,
         error: payload,
         loading: false
@@ -26,6 +40,7 @@ export default function(state = initialState, action) {
     }
     case CLEAR_GROUP: {
       return {
+        groups: [],
         group: null,
         error: {},
         loading: false

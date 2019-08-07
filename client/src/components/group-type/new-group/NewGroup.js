@@ -12,7 +12,8 @@ class NewGroup extends Component {
       time: getCurrentTimeString(),
       displayTimepicker: false,
       minGroupSize: "",
-      maxGroupSize: ""
+      maxGroupSize: "",
+      image: { name: "", formData: {} }
     };
     this.handleTimeChange = this.handleTimeChange.bind(this); //TODO don't do this
     this.handleTimeContextChange = this.handleTimeContextChange.bind(this);
@@ -43,6 +44,23 @@ class NewGroup extends Component {
   handleAccessLevelChange(accessLevel) {
     this.setState({ accessLevel });
   }
+  handleImageUpload = e => {
+    const imageFile = e.target.files[0];
+    const formData = new FormData();
+
+    if (!imageFile) return;
+
+    if (
+      imageFile.size > e.target.attributes.getNamedItem("data-max-size").value
+    ) {
+      console.log("too big");
+      //TODO set error on field
+      return;
+    }
+
+    formData.append("imageFile", imageFile);
+    this.setState({ image: { name: imageFile.name, formData: formData } });
+  };
 
   onSubmit = e => {
     e.preventDefault();
@@ -208,15 +226,24 @@ class NewGroup extends Component {
           <div class="field">
             <div class="file has-name is-primary">
               <label class="file-label">
-                <input class="file-input" type="file" name="resume" />
+                <input
+                  class="file-input"
+                  type="file"
+                  name="groupImage"
+                  accept="image/*"
+                  data-max-size="10485760"
+                  onChange={this.handleImageUpload}
+                />
                 <span class="file-cta">
                   <span class="file-icon">
                     <i class="fas fa-upload" />
                   </span>
-                  <span class="file-label">Choose a file…</span>
+                  <span class="file-label">Upload</span>
                 </span>
                 <span class="file-name">
-                  Screen Shot 2017-07-29 at 15.54.25.png
+                  {this.state.image.name
+                    ? this.state.image.name
+                    : "No image selected.."}
                 </span>
               </label>
             </div>

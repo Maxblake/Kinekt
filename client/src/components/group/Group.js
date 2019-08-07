@@ -6,19 +6,12 @@ import GroupMembers from "./GroupMembers";
 import GroupConsole from "./GroupConsole";
 import { getGroup, deleteGroup } from "../../actions/group";
 
-const Group = props => {
-  const {
-    getGroup,
-    deleteGroup,
-    auth,
-    group: { group, loading }
-  } = props;
-
+const Group = ({ getGroup, deleteGroup, group: { group, loading }, match }) => {
   var grpSettingsBtn, grpSettingsDropDown;
 
   useEffect(() => {
-    if (!group || (group && group.HRID !== props.match.params.groupCode)) {
-      getGroup(props.match.params.groupCode);
+    if (!group || (group && group.HRID !== match.params.groupCode)) {
+      getGroup(match.params.groupCode);
     } else {
       grpSettingsBtn = document.querySelector("#grpSettingsBtn");
       grpSettingsDropDown = document.querySelector(".dropdown");
@@ -31,7 +24,7 @@ const Group = props => {
       // Remove on unmount
       document.removeEventListener("click", handleToggleGrpSettings);
     };
-  }, [group, props.match.params.groupCode]);
+  }, [group, match.params.groupCode]);
 
   const handleToggleGrpSettings = e => {
     const clickedGrpSettingsBtn = grpSettingsBtn.contains(e.target);
@@ -65,7 +58,7 @@ const Group = props => {
           <div className="level-item">
             <div className="groupTypeTitleContainer">
               <div className="subtitle is-size-6 groupTypeSubtitleContainer">
-                {props.match.params.groupType}
+                {match.params.groupType}
               </div>
               <h3 className="title is-size-3 pageTitle" id="groupPageTitle">
                 {group.name}

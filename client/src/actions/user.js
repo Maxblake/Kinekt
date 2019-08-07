@@ -3,6 +3,7 @@ import axios from "axios";
 import { EDIT_USER, SET_ERRORS } from "./types";
 import { clearErrorsAndAlerts, logout } from "./auth";
 import { setAlert } from "./alert";
+import { deleteGroup } from "./group";
 
 // Edit user profile
 export const editUser = (name, about) => async dispatch => {
@@ -36,16 +37,17 @@ export const editUser = (name, about) => async dispatch => {
   }
 };
 
-// Delete user profile
+// Delete user account
 export const deleteUser = () => async dispatch => {
   if (
     window.confirm(
-      "Are you sure you would like to delete your profile? This cannot be undone."
+      "Are you sure you would like to delete your account? This cannot be undone."
     )
   ) {
     try {
       const res = await axios.delete("/api/user");
 
+      dispatch(deleteGroup(true));
       dispatch(logout());
       dispatch(setAlert(`User deleted`, "is-warning"));
     } catch (err) {

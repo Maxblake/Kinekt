@@ -1,4 +1,5 @@
 import {
+  GET_GROUPS,
   GET_GROUPTYPES,
   GROUPTYPE_ERROR,
   CLEAR_GROUPTYPES
@@ -6,6 +7,7 @@ import {
 
 const initialState = {
   groupTypes: [],
+  groupType: null,
   loading: true,
   error: {}
 };
@@ -21,9 +23,17 @@ export default function(state = initialState, action) {
         loading: false
       };
     }
+    case GET_GROUPS: {
+      return {
+        ...state,
+        groupType: payload.groupType,
+        loading: false
+      };
+    }
     case GROUPTYPE_ERROR: {
       return {
-        groupTypes: null,
+        groupTypes: [],
+        groupType: null,
         error: payload,
         loading: false
       };
@@ -31,6 +41,7 @@ export default function(state = initialState, action) {
     case CLEAR_GROUPTYPES: {
       return {
         groupTypes: [],
+        groupTypes: null,
         loading: false,
         error: {}
       };

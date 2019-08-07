@@ -9,7 +9,7 @@ const GroupType = require("../../models/GroupType");
 // @route   POST api/group-type/list
 // @desc    Get a list of group types ordered and filtered by passed criteria
 // @access  Public
-//TODO maybe don't return groups, abstract user and group numbers in group type object
+//TODO abstract user and group numbers in group type object
 router.post("/list", async (req, res) => {
   const { sortBy, category, searchTerms } = req.body;
   const query = {};

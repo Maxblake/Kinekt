@@ -34,8 +34,13 @@ const GroupSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  imageURL: {
-    type: String
+  image: {
+    link: {
+      type: String
+    },
+    deleteHash: {
+      type: String
+    }
   },
   meetingTimeContext: {
     type: String,

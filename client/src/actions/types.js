@@ -20,6 +20,7 @@ export const SET_ERRORS = "SET_ERRORS";
 
 export const LOGOUT = "LOGOUT";
 
+export const GET_GROUPS = "GET_GROUPS";
 export const GET_GROUP = "GET_GROUP";
 export const GROUP_ERROR = "GROUP_ERROR";
 export const CLEAR_GROUP = "CLEAR_GROUP";

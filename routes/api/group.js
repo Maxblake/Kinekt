@@ -3,19 +3,38 @@ const router = express.Router();
 const auth = require("../../middleware/auth");
 const { check, validationResult } = require("express-validator");
 const { hri } = require("human-readable-ids");
+const Imgur = require("./external/imgur");
 
 const Group = require("../../models/Group");
 const GroupType = require("../../models/GroupType");
 const User = require("../../models/User");
 
-// @route   GET api/group/list
+// @route   POST api/group/list
 // @desc    Get a list of groups matching certain criteria
 // @access  Public
 //TODO return list by criteria, only return limited fields
-router.get("/list", async (req, res) => {
+router.post("/list", async (req, res) => {
+  const { groupTypeName } = req.body;
+  if (!groupTypeName) {
+    return res.status(400).json({
+      msg: "Invalid Group Type Name"
+    });
+  }
+
   try {
-    const groups = await Group.find();
-    res.json(groups);
+    const groupType = await GroupType.findOne({
+      nameLower: groupTypeName
+    }).lean();
+
+    if (!groupType) {
+      return res.status(400).json({
+        msg: "Invalid Group Type Name"
+      });
+    }
+
+    const groups = await Group.find({ _id: { $in: groupType.groups } });
+    const response = { groupType, groups };
+    res.json(response);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
@@ -89,11 +108,11 @@ const createOrUpdateGroup = async (req, res, updating) => {
     name,
     description,
     meetingPlace,
-    imageURL,
     meetingTimeContext,
     meetingTime,
     minSize,
-    maxSize
+    maxSize,
+    imageFormData
   } = req.body;
   const groupTypeId = req.body.groupType;
 
@@ -113,7 +132,6 @@ const createOrUpdateGroup = async (req, res, updating) => {
     if (meetingTimeContext) groupFields.meetingTimeContext = meetingTimeContext;
     if (!updating) groupFields.creator = req.user.id;
     if (description) groupFields.description = description;
-    if (imageURL) groupFields.imageURL = imageURL;
     if (meetingTime) groupFields.meetingTime = meetingTime;
     if (minSize) groupFields.minSize = minSize;
     if (maxSize) groupFields.maxSize = maxSize;
@@ -123,11 +141,22 @@ const createOrUpdateGroup = async (req, res, updating) => {
 
     if (updating) {
       // update
-      group = await Group.findByIdAndUpdate(
+      /* group = await Group.findByIdAndUpdate(
         req.params.id,
         { $set: groupFields },
         { new: true }
-      );
+      ); */
+      group = await Group.findById(req.params.id);
+
+      for (const key of Object.keys(groupFields)) {
+        group[key] = groupFields[key];
+      }
+
+      if (imageFormData) {
+        group.image = await Imgur.updateImage(imageFormData);
+      }
+
+      await group.save();
     } else {
       // create
       group = await Group.findOne({ creator: req.user.id });
@@ -158,12 +187,29 @@ const createOrUpdateGroup = async (req, res, updating) => {
       }
 
       group = new Group(groupFields);
-      await group.save();
+
+      if (imageFormData) {
+        console.log(await Imgur.uploadImage(imageFormData));
+        //group.image = await Imgur.uploadImage(imageFormData);
+      }
 
       const groupType = await GroupType.findById(groupTypeId);
       groupType.groups.push(group.id);
 
+      const creator = await User.findById(req.user.id);
+
+      if (!creator) {
+        return res.status(400).json({
+          msg: "User ID is invalid"
+        });
+      }
+
+      creator.currentGroup = group.id;
+
+      // save at the end of all API's, like this
+      await group.save();
       await groupType.save();
+      await creator.save();
     }
 
     return res.json(group);

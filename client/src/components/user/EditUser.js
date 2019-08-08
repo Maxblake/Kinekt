@@ -5,6 +5,7 @@ import { editUser, deleteUser } from "../../actions/user";
 import { loadUser } from "../../actions/auth";
 import PropTypes from "prop-types";
 import Spinner from "../common/Spinner";
+import NotFound from "../common/NotFound";
 
 const Filter = require("bad-words-relaxed");
 const filter = new Filter();
@@ -53,7 +54,7 @@ const EditUser = ({
   }
 
   if (user === null) {
-    return <div>Page not found</div>;
+    return <NotFound />;
   }
 
   return (

@@ -3,6 +3,8 @@ const router = express.Router();
 const auth = require("../../middleware/auth");
 const { check, validationResult } = require("express-validator");
 const { hri } = require("human-readable-ids");
+const multer = require("multer");
+const upload = multer({ storage: multer.memoryStorage() });
 const Imgur = require("./external/imgur");
 
 const Group = require("../../models/Group");
@@ -75,6 +77,7 @@ router.get("/:HRID", auth, async (req, res) => {
 router.post(
   "/",
   [
+    upload.single("image"),
     auth,
     [
       check("name", "Name is required")
@@ -114,8 +117,7 @@ const createOrUpdateGroup = async (req, res, updating) => {
     accessLevel,
     time,
     minSize,
-    maxSize,
-    imageFormData
+    maxSize
   } = req.body;
   const groupTypeId = req.body.groupType;
 
@@ -156,14 +158,20 @@ const createOrUpdateGroup = async (req, res, updating) => {
         group[key] = groupFields[key];
       }
 
-      if (imageFormData) {
-        group.image = await Imgur.updateImage(imageFormData);
+      if (req.file) {
+        const updateResponse = await Imgur.updateImage(
+          req.file,
+          group.image.deleteHash
+        );
+        group.image = updateResponse.uploadResponse;
       }
 
-      await group.save();
+      const groupTypeName = await GroupType.findById(group.groupType).select(
+        "name"
+      );
+      response = { group, groupTypeName: groupTypeName.name };
 
-      response.group = group;
-      response.groupTypeName = "TODO: return group type name";
+      await group.save();
     } else {
       // create
       group = await Group.findOne({ creator: req.user.id });
@@ -195,9 +203,8 @@ const createOrUpdateGroup = async (req, res, updating) => {
 
       group = new Group(groupFields);
 
-      if (imageFormData) {
-        console.log(await Imgur.uploadImage(imageFormData));
-        //group.image = await Imgur.uploadImage(imageFormData);
+      if (req.file) {
+        group.image = await Imgur.uploadImage(req.file);
       }
 
       const groupType = await GroupType.findById(groupTypeId);

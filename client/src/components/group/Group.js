@@ -1,9 +1,11 @@
 import React, { useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import Spinner from "../common/Spinner";
 import GroupMembers from "./GroupMembers";
 import GroupConsole from "./GroupConsole";
+import NotFound from "../common/NotFound";
 import { getGroup, deleteGroup } from "../../actions/group";
 
 const Group = ({ getGroup, deleteGroup, group: { group, loading }, match }) => {
@@ -48,7 +50,7 @@ const Group = ({ getGroup, deleteGroup, group: { group, loading }, match }) => {
   }
 
   if (group === null) {
-    return <div>Page not found</div>;
+    return <NotFound />;
   }
 
   return (
@@ -57,9 +59,12 @@ const Group = ({ getGroup, deleteGroup, group: { group, loading }, match }) => {
         <div className="level-left">
           <div className="level-item">
             <div className="groupTypeTitleContainer">
-              <div className="subtitle is-size-6 groupTypeSubtitleContainer">
-                {match.params.groupType}
-              </div>
+              <Link
+                to={`/k/${match.params.groupType}`}
+                className="subtitle is-size-6 groupTypeSubtitleContainer"
+              >
+                {match.params.groupType.split("_").join(" ")}
+              </Link>
               <h3 className="title is-size-3 pageTitle" id="groupPageTitle">
                 {group.name}
               </h3>

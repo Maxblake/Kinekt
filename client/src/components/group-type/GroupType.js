@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Spinner from "../common/Spinner";
 import GroupCard from "../cards/GroupCard";
+import NotFound from "../common/NotFound";
 import { getGroups } from "../../actions/group";
 
 //TODO format date/times with moment
@@ -29,7 +30,7 @@ const GroupType = ({
   }
 
   if (!groupType) {
-    return <div>Page not found</div>;
+    return <NotFound />;
   }
 
   return (
@@ -39,7 +40,7 @@ const GroupType = ({
           <div className="level-item">
             <div className="groupTypeTitleContainer">
               <h3 className="title is-size-3 pageTitle">
-                {match.params.groupType}
+                {match.params.groupType.split("_").join(" ")}
               </h3>
               <div>
                 <div className="subtitle is-size-6 onlineStatusContainer">
@@ -102,8 +103,8 @@ const GroupType = ({
         {groups.map(group => (
           <GroupCard
             key={group._id}
-            imgSrc="https://source.unsplash.com/random/640x320"
-            name={group.name}
+            group={group}
+            groupTypeName={match.params.groupType}
           />
         ))}
         {groups && (

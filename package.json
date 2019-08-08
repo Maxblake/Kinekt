@@ -20,6 +20,7 @@
     "human-readable-ids": "^1.0.4",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.6.4",
+    "multer": "^1.4.2",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "request": "^2.88.0",

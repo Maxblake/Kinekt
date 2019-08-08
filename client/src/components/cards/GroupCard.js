@@ -1,13 +1,18 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 class GroupCard extends Component {
   render() {
+    const group = this.props.group;
     return (
-      <a href="#" className="columns is-gapless groupCardContainer">
+      <Link
+        to={`/k/${this.props.groupTypeName}/group/${group.HRID}`}
+        className="columns is-gapless groupCardContainer"
+      >
         <div className="column is-8 card groupCard">
           <div className="card-content">
             <div className="groupName">
-              <h1 className="title is-size-4">{this.props.name}</h1>
+              <h1 className="title is-size-4">{group.name}</h1>
               <div className="subtitle is-size-6">
                 <div className="onlineStatusContainer">
                   <div className="onlineStatusDot" />
@@ -16,10 +21,7 @@ class GroupCard extends Component {
               </div>
             </div>
             <div className="groupDescription">
-              <p>
-                Here is a brief but informative description of the event. BYOB,
-                no squares.
-              </p>
+              <p>{group.description}</p>
             </div>
             <div className="groupDetails">
               <div className="groupMeetTime">
@@ -42,9 +44,12 @@ class GroupCard extends Component {
           </div>
         </div>
         <div className="column is-4 groupImage imageContainer">
-          <img src={this.props.imgSrc} alt="Placeholder image" />
+          <img
+            src={group.image ? group.image.link : ""}
+            alt="Placeholder image"
+          />
         </div>
-      </a>
+      </Link>
     );
   }
 }

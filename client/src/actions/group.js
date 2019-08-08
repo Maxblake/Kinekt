@@ -69,14 +69,22 @@ export const getGroups = groupTypeName => async dispatch => {
 export const createGroup = (groupFields, history) => async dispatch => {
   const config = {
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "multipart/form-data"
     }
   };
 
-  const body = JSON.stringify(groupFields);
+  const formData = new FormData();
+
+  for (const key of Object.keys(groupFields)) {
+    formData.append(key, groupFields[key]);
+  }
+
+  //if (groupFields.image) formData.append("image", groupFields.image);
+
+  //const body = JSON.stringify(groupFields);
 
   try {
-    const res = await axios.post("/api/group", body, config);
+    const res = await axios.post("/api/group", formData);
 
     dispatch(clearErrorsAndAlerts());
 

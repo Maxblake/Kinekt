@@ -41,7 +41,7 @@ class GroupConsole extends Component {
 
           <div className="groupImage">
             <img
-              src="https://source.unsplash.com/random/640x320"
+              src={group.image ? group.image.link : ""}
               alt="Placeholder image"
             />
           </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Spinner from "../common/Spinner";
+import NotFound from "../common/NotFound";
 import { getGroupTypes } from "../../actions/groupType";
 
 import GroupTypeCard from "../cards/GroupTypeCard";
@@ -53,7 +54,7 @@ const Discover = ({ getGroupTypes, groupType: { groupTypes, loading } }) => {
   }
 
   if (groupTypes === null) {
-    return <div>Page not found</div>;
+    return <NotFound />;
   }
 
   return (

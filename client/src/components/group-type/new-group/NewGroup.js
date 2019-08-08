@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { createGroup } from "../../../actions/group";
 import RadioButton from "../../common/RadioButton";
@@ -23,7 +23,7 @@ class NewGroup extends Component {
       displayTimepicker: false,
       minSize: "",
       maxSize: "",
-      image: { name: "", formData: undefined }
+      image: { name: "" }
     };
     this.handleTimeChange = this.handleTimeChange.bind(this); //TODO don't do this
     this.handleTimeContextChange = this.handleTimeContextChange.bind(this);
@@ -56,10 +56,8 @@ class NewGroup extends Component {
   }
   handleImageUpload = e => {
     const imageFile = e.target.files[0];
-    const formData = new FormData();
 
     if (!imageFile) return;
-
     if (
       imageFile.size > e.target.attributes.getNamedItem("data-max-size").value
     ) {
@@ -68,8 +66,7 @@ class NewGroup extends Component {
       return;
     }
 
-    formData.append("imageFile", imageFile);
-    this.setState({ image: { name: imageFile.name, formData: formData } });
+    this.setState({ image: { name: imageFile.name, file: imageFile } });
   };
 
   onSubmit = e => {
@@ -107,7 +104,7 @@ class NewGroup extends Component {
     }
 
     groupFields.time = ISODate.toISOString();
-    groupFields.imageFormData = this.state.image.formData;
+    groupFields.image = this.state.image.file;
     groupFields.groupType = this.props.groupType._id;
 
     this.props.createGroup(groupFields, this.props.history);
@@ -120,9 +117,12 @@ class NewGroup extends Component {
           <div className="level-left">
             <div className="level-item">
               <div className="groupTypeTitleContainer">
-                <div className="subtitle is-size-6 onlineStatusContainer">
+                <Link
+                  to={`/k/${this.props.match.params.groupType}`}
+                  className="subtitle is-size-6 groupTypeSubtitleContainer"
+                >
                   {this.props.match.params.groupType.split("_").join(" ")}
-                </div>
+                </Link>
                 <h3 className="title is-size-3 pageTitle" id="groupPageTitle">
                   Create a group
                 </h3>
@@ -200,7 +200,7 @@ class NewGroup extends Component {
                 type="text"
                 value={this.state.time.formatted}
                 onClick={() => this.toggleTimekeeper(true)}
-                onChange={() => console.log("TODO fix this")}
+                readOnly
               />
             </div>
             <div class="control">

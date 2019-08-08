@@ -1,26 +1,64 @@
 const request = require("request");
 
-const updateImage = async imageFormData => {};
+const updateImage = async (imageFile, deleteHash) => {
+  const deletePromise = deleteImage(deleteHash);
+  const uploadPromise = uploadImage(imageFile);
+  const [deleteResponse, uploadResponse] = await Promise.all([
+    deletePromise,
+    uploadPromise
+  ]);
 
-const uploadImage = async imageFormData => {
+  return { deleteResponse, uploadResponse };
+};
+
+const deleteImage = async deleteHash => {
   return new Promise(resolve => {
-    const imageResponse = {};
+    const deleteResponse = {};
     const options = {
-      uri: "https://api.imgur.com/3/upload",
-      method: "POST",
-      headers: { Authorization: `Client-ID dddc665117c1988` },
-      formData: imageFormData
+      url: `https://api.imgur.com/3/${deleteHash}`,
+      method: "DELETE",
+      headers: { Authorization: `Client-ID dddc665117c1988` }
     };
 
     request(options, (error, response, body) => {
       if (error) {
-        imageResponse.error = error;
+        deleteResponse.error = error;
       } else if (response.statusCode !== 200) {
-        imageResponse.error = "Imgur Image upload unsuccessful";
+        deleteResponse.error = "Imgur Image deletion unsuccessful";
       } else {
-        console.log(body);
+        deleteResponse.msg = "Imgur image successfully deleted";
       }
-      return resolve(imageResponse);
+      return resolve(deleteResponse);
+    });
+  });
+};
+
+const uploadImage = async imageFile => {
+  return new Promise(resolve => {
+    const uploadResponse = {};
+    const options = {
+      url: "https://api.imgur.com/3/upload",
+      method: "POST",
+      headers: { Authorization: `Client-ID dddc665117c1988` },
+      formData: {
+        image: imageFile.buffer
+      },
+      json: true
+    };
+
+    request(options, (error, response, body) => {
+      if (error) {
+        uploadResponse.error = error;
+      } else if (response.statusCode !== 200) {
+        uploadResponse.error = "Imgur Image upload unsuccessful";
+      } else {
+        console.log(typeof body);
+        console.log(typeof response);
+        console.log(body);
+        uploadResponse.link = body.data.link;
+        uploadResponse.deleteHash = body.data.deletehash;
+      }
+      return resolve(uploadResponse);
     });
   });
 };

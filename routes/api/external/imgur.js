@@ -52,8 +52,6 @@ const uploadImage = async imageFile => {
       } else if (response.statusCode !== 200) {
         uploadResponse.error = "Imgur Image upload unsuccessful";
       } else {
-        console.log(typeof body);
-        console.log(typeof response);
         console.log(body);
         uploadResponse.link = body.data.link;
         uploadResponse.deleteHash = body.data.deletehash;

@@ -5,10 +5,10 @@ const { check, validationResult } = require("express-validator");
 const { hri } = require("human-readable-ids");
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
-const Imgur = require("./external/imgur");
+const { updateImage, uploadImage } = require("./external/imgur");
 
 const Group = require("../../models/Group");
-const GroupType = require("../../models/GroupType");
+const { GroupType } = require("../../models/GroupType");
 const User = require("../../models/User");
 
 // @route   POST api/group/list
@@ -159,7 +159,7 @@ const createOrUpdateGroup = async (req, res, updating) => {
       }
 
       if (req.file) {
-        const updateResponse = await Imgur.updateImage(
+        const updateResponse = await updateImage(
           req.file,
           group.image.deleteHash
         );
@@ -204,7 +204,7 @@ const createOrUpdateGroup = async (req, res, updating) => {
       group = new Group(groupFields);
 
       if (req.file) {
-        group.image = await Imgur.uploadImage(req.file);
+        group.image = await uploadImage(req.file);
       }
 
       const groupType = await GroupType.findById(groupTypeId);

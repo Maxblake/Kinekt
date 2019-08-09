@@ -5,6 +5,11 @@ const GroupTypeSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectId],
     ref: "group"
   },
+  creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+    required: true
+  },
   name: {
     type: String,
     required: true
@@ -39,4 +44,10 @@ GroupTypeSchema.pre("save", function(next) {
   next();
 });
 
-module.exports = Group = mongoose.model("groupType", GroupTypeSchema);
+const GroupType = mongoose.model("groupType", GroupTypeSchema);
+const RequestedGroupType = mongoose.model(
+  "requestedGroupType",
+  GroupTypeSchema
+);
+
+module.exports = { GroupType, RequestedGroupType };

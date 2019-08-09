@@ -2,9 +2,12 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/auth");
 const { check, validationResult } = require("express-validator");
+const multer = require("multer");
+const upload = multer({ storage: multer.memoryStorage() });
+const { updateImage, uploadImage } = require("./external/imgur");
 
 const Group = require("../../models/Group");
-const GroupType = require("../../models/GroupType");
+const { GroupType, RequestedGroupType } = require("../../models/GroupType");
 
 // @route   POST api/group-type/list
 // @desc    Get a list of group types ordered and filtered by passed criteria
@@ -55,6 +58,79 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// @route   POST api/group-type/request
+// @desc    Request a group type
+// @access  Private
+// TODO fill in other required fields
+router.post(
+  "/request",
+  [
+    upload.single("image"),
+    auth,
+    [
+      check("name", "Name is required")
+        .not()
+        .isEmpty(),
+      check("category", "Category is required")
+        .not()
+        .isEmpty()
+    ]
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { name, description, category } = req.body;
+
+    try {
+      if (await GroupType.findOne({ nameLower: name.toLowerCase() })) {
+        return res.status(400).json({
+          msg: "Unable to create group type: Name is unavailable"
+        });
+      }
+
+      if (await RequestedGroupType.findOne({ creator: req.user.id })) {
+        return res.status(400).json({
+          msg: "Unable to create group type: User already has pending request"
+        });
+      }
+
+      // build group type object
+      const groupTypeFields = {};
+
+      groupTypeFields.name = name;
+      groupTypeFields.category = category;
+      groupTypeFields.creator = req.user.id;
+      if (description) groupTypeFields.description = description;
+
+      requestedGroupType = new RequestedGroupType(groupTypeFields);
+
+      if (req.file) {
+        const imageResponse = await uploadImage(req.file);
+
+        if (imageResponse.error) {
+          return res.status(400).json({
+            msg: `Unable to create group type: Image upload failed with error [${
+              imageResponse.error
+            }]`
+          });
+        }
+
+        requestedGroupType.image = imageResponse;
+      }
+
+      await requestedGroupType.save();
+      res.status(200).send("OK");
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server error");
+    }
+  }
+);
+
 // @route   POST api/group-type
 // @desc    Create a group type
 // @access  Private
@@ -80,7 +156,7 @@ router.post(
 
     const { name, description, category } = req.body;
 
-    if (await GroupType.findOne({ name })) {
+    if (await GroupType.findOne({ nameLower: name.toLowerCase() })) {
       return res.status(400).json({
         msg: "Unable to create group type: Name is unavailable"
       });

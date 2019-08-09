@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Spinner from "../common/Spinner";
@@ -7,7 +8,11 @@ import { getGroupTypes } from "../../actions/groupType";
 
 import GroupTypeCard from "../cards/GroupTypeCard";
 
-const Discover = ({ getGroupTypes, groupType: { groupTypes, loading } }) => {
+const Discover = ({
+  getGroupTypes,
+  groupType: { groupTypes, loading },
+  isAuthenticated
+}) => {
   const [groupTypeData, setgroupTypeData] = useState({
     sortBy: "Trending",
     category: "All",
@@ -67,6 +72,16 @@ const Discover = ({ getGroupTypes, groupType: { groupTypes, loading } }) => {
         </div>
 
         <div className="level-right">
+          {isAuthenticated && (
+            <div className="level-item">
+              <Link to="/request-grouptype" className="button is-primary">
+                <span className="icon">
+                  <i className="fas fa-plus" />
+                </span>
+                <span>New Group Type</span>
+              </Link>
+            </div>
+          )}
           <div className="level-item">
             <div className="field">
               <div className="select">
@@ -143,11 +158,13 @@ const Discover = ({ getGroupTypes, groupType: { groupTypes, loading } }) => {
 
 Discover.propTypes = {
   getGroupTypes: PropTypes.func.isRequired,
-  groupType: PropTypes.object.isRequired
+  groupType: PropTypes.object.isRequired,
+  isAuthenticated: PropTypes.bool
 };
 
 const mapStateToProps = state => ({
-  groupType: state.groupType
+  groupType: state.groupType,
+  isAuthenticated: state.auth.isAuthenticated
 });
 
 export default connect(

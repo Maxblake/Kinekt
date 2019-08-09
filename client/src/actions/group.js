@@ -67,12 +67,6 @@ export const getGroups = groupTypeName => async dispatch => {
 
 // Create a group
 export const createGroup = (groupFields, history) => async dispatch => {
-  const config = {
-    headers: {
-      "Content-Type": "multipart/form-data"
-    }
-  };
-
   const formData = new FormData();
 
   for (const key of Object.keys(groupFields)) {

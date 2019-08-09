@@ -112,7 +112,7 @@ class NewGroup extends Component {
 
   render() {
     return (
-      <section className="Newgroup centeredForm">
+      <section className="NewGroup centeredForm">
         <nav className="level" id="pageNav">
           <div className="level-left">
             <div className="level-item">
@@ -153,7 +153,7 @@ class NewGroup extends Component {
         )}
 
         <form className="box" onSubmit={this.onSubmit}>
-          <label class="label">Group Name *</label>
+          <label class="label">Name *</label>
           <div class="field">
             <div class="control">
               <input
@@ -168,7 +168,7 @@ class NewGroup extends Component {
             </div>
           </div>
 
-          <label class="label">Group Description</label>
+          <label class="label">Description</label>
           <div class="field">
             <div class="control">
               <textarea

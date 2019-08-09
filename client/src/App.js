@@ -19,6 +19,7 @@ import Login from "./components/auth/Login";
 import EditUser from "./components/user/EditUser";
 import NotFound from "./components/common/NotFound";
 import Home from "./components/home/Home";
+import NewGroupType from "./components/group-type/NewGroupType";
 import GroupType from "./components/group-type/GroupType";
 import NewGroup from "./components/group-type/new-group/NewGroup";
 import Group from "./components/group/Group";
@@ -79,8 +80,12 @@ const App = () => {
                 path="/k/:groupType/group/:groupCode"
                 component={Group}
               />
-              {/* TODO create 404 page */}
-              {/* <Route component={NoMatch} /> */}
+              <PrivateRoute
+                exact
+                path="/request-grouptype"
+                component={NewGroupType}
+              />
+              <Route component={NotFound} />
             </Switch>
           </div>
 

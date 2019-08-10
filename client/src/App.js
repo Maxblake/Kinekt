@@ -23,6 +23,7 @@ import NewGroupType from "./components/group-type/NewGroupType";
 import GroupType from "./components/group-type/GroupType";
 import NewGroup from "./components/group-type/new-group/NewGroup";
 import Group from "./components/group/Group";
+import Admin from "./components/auth/Admin";
 
 import "./styling/App.scss";
 
@@ -85,6 +86,7 @@ const App = () => {
                 path="/request-grouptype"
                 component={NewGroupType}
               />
+              <PrivateRoute exact path="/admin" component={Admin} />
               <Route component={NotFound} />
             </Switch>
           </div>

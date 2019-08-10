@@ -16,21 +16,25 @@ import {
 import setAuthToken from "../utils/setAuthToken";
 
 // Load User
-export const loadUser = () => async dispatch => {
+export const loadUser = (checkIfAdmin = false) => async dispatch => {
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
 
   try {
-    const res = await axios.get("/api/auth");
+    const res = await axios.get(`/api/auth/${checkIfAdmin}`);
 
     dispatch({
       type: USER_LOADED,
-      payload: res.data
+      payload: res.data.user
     });
 
     // Maybe just keep this call if it's called everywhere
     dispatch(clearErrorsAndAlerts());
+
+    if (checkIfAdmin) {
+      return res.data.isAdmin;
+    }
   } catch (err) {
     const errors = err.response.data.errors;
 

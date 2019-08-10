@@ -430,6 +430,37 @@ html {
 
 //TODO clean this shit up
 
+// Admin portal
+.adminPortal {
+  background: $off-black;
+  color: $white;
+  padding: 1em;
+
+  .imageCell {
+    height: 175px;
+
+    img {
+      height: 100%;
+    }
+  }
+
+  table {
+    border-collapse: separate;
+    border-spacing: 0 0.5em;
+
+    tr {
+      td {
+        &:nth-child(even) {
+          background: white;
+        }
+        color: black;
+        background: whitesmoke;
+        padding: 0.5em 1em;
+      }
+    }
+  }
+}
+
 // Group type page
 .groupTypeTitleContainer .onlineStatusContainer,
 .groupTypeSubtitleContainer {

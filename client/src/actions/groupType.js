@@ -33,7 +33,7 @@ export const getGroupTypes = ({
   }
 };
 
-// Get a list of group types ordered and filtered by passed criteria
+// Request that a new group type get created
 export const requestGroupType = groupTypeFields => async dispatch => {
   const formData = new FormData();
 

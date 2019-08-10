@@ -1,4 +1,6 @@
 const request = require("request");
+const config = require("config");
+const imgurClientId = config.get("imgurClientId");
 
 const updateImage = async (imageFile, deleteHash) => {
   const deletePromise = deleteImage(deleteHash);
@@ -17,7 +19,7 @@ const deleteImage = async deleteHash => {
     const options = {
       url: `https://api.imgur.com/3/${deleteHash}`,
       method: "DELETE",
-      headers: { Authorization: `Client-ID dddc665117c1988` }
+      headers: { Authorization: `Client-ID ${imgurClientId}` }
     };
 
     request(options, (error, response, body) => {
@@ -39,7 +41,7 @@ const uploadImage = async imageFile => {
     const options = {
       url: "https://api.imgur.com/3/upload",
       method: "POST",
-      headers: { Authorization: `Client-ID dddc665117c1988` },
+      headers: { Authorization: `Client-ID ${imgurClientId}` },
       formData: {
         image: imageFile.buffer
       },

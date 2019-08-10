@@ -8,13 +8,23 @@ const bcrypt = require("bcryptjs");
 
 const User = require("../../models/User");
 
-// @route   GET api/auth
+// @route   GET api/auth/:checkIfAdmin
 // @desc    Given JSON Web Token, return user object
 // @access  Public
-router.get("/", auth, async (req, res) => {
+router.get("/:checkIfAdmin", auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password");
-    res.json(user);
+    const user = await User.findById(req.user.id)
+      .select("-password")
+      .lean();
+
+    const authResponse = { user };
+
+    if (req.params.checkIfAdmin === "true") {
+      let admins = config.get("admins");
+      authResponse.isAdmin = admins.includes(req.user.id);
+    }
+
+    res.json(authResponse);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");

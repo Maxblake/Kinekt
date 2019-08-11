@@ -1,13 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Spinner from "../common/Spinner";
-import { getRequestedGroupTypes } from "../../actions/admin";
+import {
+  getRequestedGroupTypes,
+  processRequestedGroupTypes
+} from "../../actions/admin";
 import { loadUser } from "../../actions/auth";
 import NotFound from "../common/NotFound";
 import RadioButton from "../common/RadioButton";
 
-const Admin = ({ loadUser, getRequestedGroupTypes }) => {
+const Admin = ({
+  loadUser,
+  getRequestedGroupTypes,
+  processRequestedGroupTypes
+}) => {
   const [adminState, setAdminState] = useState({
     isAuthenticated: false,
     requestedGroupTypes: [],
@@ -29,7 +36,7 @@ const Admin = ({ loadUser, getRequestedGroupTypes }) => {
       };
 
       fetchData();
-    } else if (requestedGroupTypes) {
+    } else if (requestedGroupTypes.length < 1) {
       let fetchData = async () => {
         const getRequestedGroupTypesResponse = await getRequestedGroupTypes();
 
@@ -52,15 +59,36 @@ const Admin = ({ loadUser, getRequestedGroupTypes }) => {
         groupTypeDecisions: groupTypeDecisionsBuilder
       });
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, requestedGroupTypes]);
 
   const handleGroupTypeDecided = (decision, key) => {
+    console.log(groupTypeDecisions);
     setAdminState({
       ...adminState,
       groupTypeDecisions: { ...groupTypeDecisions, [key]: decision }
     });
+  };
 
-    console.log(groupTypeDecisions);
+  const onSubmitGroupTypes = () => {
+    if (window.confirm("You sure, dude?")) {
+      const requestDecisions = {};
+
+      for (const key of Object.keys(groupTypeDecisions)) {
+        if (groupTypeDecisions[key] !== "") {
+          requestDecisions[key] = groupTypeDecisions[key];
+        }
+      }
+
+      processRequestedGroupTypes(requestDecisions);
+
+      setAdminState({
+        ...adminState,
+        requestedGroupTypes: requestedGroupTypes.filter(
+          requestedGroupType =>
+            groupTypeDecisions[requestedGroupType._id] === ""
+        )
+      });
+    }
   };
 
   if (!isAuthenticated) {
@@ -90,60 +118,74 @@ const Admin = ({ loadUser, getRequestedGroupTypes }) => {
       </nav>
 
       <div className="adminPortal">
-        <h2 className="is-size-4">Requested Group Types</h2>
-        <table className="requestedGroupTypeList">
-          <tbody>
-            {requestedGroupTypes.map(requestedGroupType => (
-              <tr key={requestedGroupType._id}>
-                <td className="imageCell">
-                  <img
-                    src={
-                      requestedGroupType.image
-                        ? requestedGroupType.image.link
-                        : ""
-                    }
-                    alt="No image"
-                  />
-                </td>
-                <td>
-                  <h5 className="is-size-5">{requestedGroupType.name}</h5>
-                  <h6 className="is-size-6">
-                    {requestedGroupType.description}
-                  </h6>
-                </td>
-                <td>{requestedGroupType.category}</td>
-                <td>
-                  <div class="field is-grouped">
-                    <div class="control">
-                      <RadioButton
-                        selectedValue={
-                          groupTypeDecisions[requestedGroupType._id]
+        {requestedGroupTypes.length > 0 ? (
+          <Fragment>
+            <h2 className="is-size-4">Requested Group Types</h2>
+            <table className="requestedGroupTypeList">
+              <tbody>
+                {requestedGroupTypes.map(requestedGroupType => (
+                  <tr key={requestedGroupType._id}>
+                    <td className="imageCell">
+                      <img
+                        src={
+                          requestedGroupType.image
+                            ? requestedGroupType.image.link
+                            : ""
                         }
-                        valueKey={requestedGroupType._id}
-                        value="Accept"
-                        handleClick={handleGroupTypeDecided}
+                        alt="No image"
                       />
-                    </div>
-                    <div class="control">
-                      <RadioButton
-                        selectedValue={
-                          groupTypeDecisions[requestedGroupType._id]
-                        }
-                        valueKey={requestedGroupType._id}
-                        value="Reject"
-                        handleClick={handleGroupTypeDecided}
-                      />
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {requestedGroupTypes && (
-          <div className="content has-text-centered">
-            <h3>- This is the end. -</h3>
-          </div>
+                    </td>
+                    <td className="col-stretch">
+                      <h5 className="is-size-5">{requestedGroupType.name}</h5>
+                      <h6 className="is-size-6">
+                        {requestedGroupType.description}
+                      </h6>
+                    </td>
+                    <td>{requestedGroupType.category}</td>
+                    <td>
+                      <div class="field is-grouped">
+                        <div class="control">
+                          <RadioButton
+                            selectedValue={
+                              groupTypeDecisions[requestedGroupType._id]
+                            }
+                            valueKey={requestedGroupType._id}
+                            value="Accept"
+                            handleClick={handleGroupTypeDecided}
+                          />
+                        </div>
+                        <div class="control">
+                          <RadioButton
+                            selectedValue={
+                              groupTypeDecisions[requestedGroupType._id]
+                            }
+                            valueKey={requestedGroupType._id}
+                            value="Reject"
+                            handleClick={handleGroupTypeDecided}
+                          />
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <div className="content has-text-centered">
+              <h3>- This is the end. -</h3>
+            </div>
+
+            <div
+              class="control has-text-centered has-margin-top-4"
+              onClick={() => onSubmitGroupTypes()}
+            >
+              <button class="button is-primary" type="button">
+                Submit
+              </button>
+            </div>
+          </Fragment>
+        ) : (
+          <h2 className="is-size-4">No new Requested Group Types</h2>
         )}
       </div>
     </section>
@@ -152,10 +194,11 @@ const Admin = ({ loadUser, getRequestedGroupTypes }) => {
 
 Admin.propTypes = {
   loadUser: PropTypes.func.isRequired,
-  getRequestedGroupTypes: PropTypes.func.isRequired
+  getRequestedGroupTypes: PropTypes.func.isRequired,
+  processRequestedGroupTypes: PropTypes.func.isRequired
 };
 
 export default connect(
   null,
-  { getRequestedGroupTypes, loadUser }
+  { getRequestedGroupTypes, processRequestedGroupTypes, loadUser }
 )(Admin);

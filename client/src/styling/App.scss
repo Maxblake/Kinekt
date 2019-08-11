@@ -252,6 +252,10 @@ html {
   }
 }
 
+.col-stretch {
+  width: 99%;
+}
+
 // Notifications / Alerts
 .notification {
   margin-top: 1.5rem;
@@ -436,12 +440,8 @@ html {
   color: $white;
   padding: 1em;
 
-  .imageCell {
-    height: 175px;
-
-    img {
-      height: 100%;
-    }
+  img {
+    max-width: 350px;
   }
 
   table {

@@ -29,10 +29,8 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, email, password, about } = req.body;
-
-    try {
-      let user = await User.findOne({ email });
+    runAPISafely(async () => {
+      let user = await User.findOne({ email: req.body.email });
 
       if (user) {
         return res
@@ -40,24 +38,16 @@ router.post(
           .json({ errors: [{ param: "email", msg: "User already exists" }] });
       }
 
-      user = new User({
-        name,
-        email,
-        password,
-        about: about === undefined ? "" : about
-      });
+      const userFields = buildUserFields(req, false);
+      user = new User(userFields);
 
       const salt = await bcrypt.genSalt(10);
-
-      user.password = await bcrypt.hash(password, salt);
+      user.password = await bcrypt.hash(req.body.password, salt);
 
       await user.save();
 
       signUserToken(res, user.id);
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send("Server error");
-    }
+    });
   }
 );
 
@@ -66,22 +56,14 @@ router.post(
 // @access  Private
 //TODO change all updating routes to put, not post
 router.put("/", auth, async (req, res) => {
-  const { name, about } = req.body;
-
   if (!User.findById(req.user.id)) {
     return res.status(400).json({
       msg: "Invalid User ID"
     });
   }
 
-  // build group type object
-  const userFields = {};
-
-  if (name) userFields.name = name;
-  if (about) userFields.about = about;
-
-  try {
-    // update
+  runAPISafely(async () => {
+    const userFields = buildUserFields(req, true);
     const user = await User.findByIdAndUpdate(
       req.user.id,
       { $set: userFields },
@@ -89,23 +71,30 @@ router.put("/", auth, async (req, res) => {
     ).select("-password");
 
     return res.json(user);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
-  }
+  });
 });
+
+const buildUserFields = (req, updating = false) => {
+  const { name, email, about } = req.body;
+  let userFields = {};
+
+  if (!updating && email) userFields.email = email;
+  if (name) userFields.name = name;
+  if (about) userFields.about = about;
+
+  return userFields;
+};
 
 // @route   DELETE api/user
 // @desc    Delete a user
 // @access  Private
 router.delete("/", auth, async (req, res) => {
-  try {
-    await User.findOneAndDelete({ _id: req.user.id });
-    res.json({ msg: "User deleted" });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
-  }
+  runAPISafely(async () => {
+    if (!(await User.findOneAndDelete({ _id: req.user.id }))) {
+      return res.status(400).json({ msg: "Unable to find user" });
+    }
+    res.status(200).json({ msg: "User deleted" });
+  });
 });
 
 module.exports = router;

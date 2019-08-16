@@ -17,7 +17,7 @@ const deleteImage = async deleteHash => {
   return new Promise(resolve => {
     const deleteResponse = {};
     const options = {
-      url: `https://api.imgur.com/3/${deleteHash}`,
+      url: `https://api.imgur.com/3/image/${deleteHash}`,
       method: "DELETE",
       headers: { Authorization: `Client-ID ${imgurClientId}` }
     };
@@ -27,6 +27,7 @@ const deleteImage = async deleteHash => {
         deleteResponse.error = error;
       } else if (response.statusCode !== 200) {
         deleteResponse.error = "Imgur Image deletion unsuccessful";
+        console.log(response);
       } else {
         deleteResponse.msg = "Imgur image successfully deleted";
       }

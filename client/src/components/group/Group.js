@@ -7,9 +7,16 @@ import GroupMembers from "./GroupMembers";
 import GroupConsole from "./GroupConsole";
 import NotFound from "../common/NotFound";
 import { getGroup, deleteGroup } from "../../actions/group";
+import defaultGroupTypeImage from "../../resources/defaultGroupTypeImage.jpg";
 
-const Group = ({ getGroup, deleteGroup, group: { group, loading }, match }) => {
-  var grpSettingsBtn, grpSettingsDropDown;
+const Group = ({
+  getGroup,
+  deleteGroup,
+  group: { group, loading },
+  groupType: { groupType },
+  match
+}) => {
+  let grpSettingsBtn, grpSettingsDropDown;
 
   useEffect(() => {
     if (!group || (group && group.HRID !== match.params.groupCode)) {
@@ -43,6 +50,12 @@ const Group = ({ getGroup, deleteGroup, group: { group, loading }, match }) => {
 
   const onClickDelete = e => {
     deleteGroup();
+  };
+
+  const getDefaultGroupImage = () => {
+    if (group.image) return "";
+    if (groupType && groupType.image) return groupType.image.link;
+    return defaultGroupTypeImage;
   };
 
   if (loading) {
@@ -109,7 +122,7 @@ const Group = ({ getGroup, deleteGroup, group: { group, loading }, match }) => {
           </div>
         </div>
       </nav>
-      <GroupConsole group={group} />
+      <GroupConsole group={group} defaultImg={getDefaultGroupImage()} />
       <GroupMembers />
     </section>
   );
@@ -119,12 +132,14 @@ Group.propTypes = {
   getGroup: PropTypes.func.isRequired,
   deleteGroup: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
-  group: PropTypes.object.isRequired
+  group: PropTypes.object.isRequired,
+  groupType: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  group: state.group
+  group: state.group,
+  groupType: state.groupType
 });
 
 export default connect(

@@ -5,25 +5,25 @@ const { check, validationResult } = require("express-validator");
 const { hri } = require("human-readable-ids");
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
-const { updateImage, uploadImage } = require("./external/imgur");
+const { updateImage, uploadImage, deleteImage } = require("./external/imgur");
+const { runAPISafely } = require("./helpers/helpers");
 
 const Group = require("../../models/Group");
 const { GroupType } = require("../../models/GroupType");
 const User = require("../../models/User");
 
 // @route   POST api/group/list
-// @desc    Get a list of groups matching certain criteria
+// @desc    Get a given group type's list of groups
 // @access  Public
-//TODO return list by criteria, only return limited fields
-router.post("/list", async (req, res) => {
-  const { groupTypeName } = req.body;
-  if (!groupTypeName) {
-    return res.status(400).json({
-      msg: "Invalid Group Type Name"
-    });
-  }
+router.post("/list", (req, res) => {
+  runAPISafely(async () => {
+    const { groupTypeName } = req.body;
+    if (!groupTypeName) {
+      return res.status(400).json({
+        msg: "Invalid Group Type Name"
+      });
+    }
 
-  try {
     const groupType = await GroupType.findOne({
       nameLower: groupTypeName
     }).lean();
@@ -37,43 +37,30 @@ router.post("/list", async (req, res) => {
     const groups = await Group.find({ _id: { $in: groupType.groups } });
     const response = { groupType, groups };
     res.json(response);
-  } catch (err) {
-    res.status(500).send("Server error");
-  }
+  });
 });
 
 // @route   GET api/group/:HRID
 // @desc    Get group by HRID (human readable id)
 // @access  Private
-router.get("/:HRID", auth, async (req, res) => {
-  try {
+router.get("/:HRID", auth, (req, res) => {
+  runAPISafely(async () => {
     const group = await Group.findOne({ HRID: req.params.HRID });
 
     if (!group) {
       return res.status(400).json({ msg: "Group does not exist" });
     }
-    const groupTypeName = await GroupType.findById(group.groupType).select(
-      "name"
-    );
-    const response = { group, groupTypeName: groupTypeName.name };
+
+    const groupType = await GroupType.findById(group.groupType).select("name");
+    const response = { group, groupTypeName: groupType.name };
 
     res.json(response);
-  } catch (err) {
-    console.error(err.message);
-
-    //TODO maybe add this elsewhere
-    if (err.kind == "ObjectId") {
-      return res.status(400).json({ msg: "Group does not exist" });
-    }
-
-    res.status(500).send("Server Error");
-  }
+  });
 });
 
 // @route   POST api/group
 // @desc    Create a group
 // @access  Private
-// TODO fill in other required fields
 router.post(
   "/",
   [
@@ -110,6 +97,35 @@ router.post("/:id", (req, res) => {
 });
 
 const createOrUpdateGroup = async (req, res, updating) => {
+  runAPISafely(async () => {
+    const groupFields = buildGroupFields(req, updating);
+    const groupType = await GroupType.findById(groupFields.groupType);
+
+    if (!groupType) {
+      return res.status(401).json({
+        msg: "Group Type ID is invalid"
+      });
+    }
+
+    // TODO make sure only creator and admins can update
+    let response = { groupTypeName: groupType.name };
+    const error = {};
+
+    if (updating) {
+      response.group = await updateGroup(req, groupFields, error);
+    } else {
+      response.group = await createGroup(req, groupFields, error);
+    }
+
+    if (!!error.msg) {
+      return res.status(400).json(error);
+    }
+
+    return res.json(response);
+  });
+};
+
+const buildGroupFields = (req, updating) => {
   const {
     name,
     description,
@@ -121,153 +137,157 @@ const createOrUpdateGroup = async (req, res, updating) => {
   } = req.body;
   const groupTypeId = req.body.groupType;
 
-  try {
-    if (!(await GroupType.findById(groupTypeId))) {
-      return res.status(401).json({
-        msg: "Group Type ID is invalid"
-      });
-    }
+  const groupFields = {};
 
-    // build group object
-    const groupFields = {};
+  if (name) groupFields.name = name;
+  if (!updating && groupTypeId) groupFields.groupType = groupTypeId;
+  if (place) groupFields.place = place;
+  if (accessLevel) groupFields.accessLevel = accessLevel;
+  if (!updating) groupFields.creator = req.user.id;
+  if (description) groupFields.description = description;
+  if (time) groupFields.time = time;
+  if (minSize) groupFields.minSize = minSize;
+  if (maxSize) groupFields.maxSize = maxSize;
 
-    if (name) groupFields.name = name;
-    if (groupTypeId) groupFields.groupType = groupTypeId;
-    if (place) groupFields.place = place;
-    if (accessLevel) groupFields.accessLevel = accessLevel;
-    if (!updating) groupFields.creator = req.user.id;
-    if (description) groupFields.description = description;
-    if (time) groupFields.time = time;
-    if (minSize) groupFields.minSize = minSize;
-    if (maxSize) groupFields.maxSize = maxSize;
+  return groupFields;
+};
 
-    // TODO make sure only creator and admins can update
-    let group = undefined;
-    const response = {};
+const updateGroup = async (req, groupFields, error) => {
+  const group = await Group.findById(req.params.id);
 
-    if (updating) {
-      // update
-      /* group = await Group.findByIdAndUpdate(
-        req.params.id,
-        { $set: groupFields },
-        { new: true }
-      ); */
-      group = await Group.findById(req.params.id);
-
-      for (const key of Object.keys(groupFields)) {
-        group[key] = groupFields[key];
-      }
-
-      if (req.file) {
-        const updateResponse = await updateImage(
-          req.file,
-          group.image.deleteHash
-        );
-        group.image = updateResponse.uploadResponse;
-      }
-
-      const groupTypeName = await GroupType.findById(group.groupType).select(
-        "name"
-      );
-      response = { group, groupTypeName: groupTypeName.name };
-
-      await group.save();
-    } else {
-      // create
-      group = await Group.findOne({ creator: req.user.id });
-
-      if (group) {
-        return res.status(402).json({
-          msg: "Unable to create group: User already has an active group"
-        });
-      }
-
-      // assign human readable id
-      var i = 0;
-      var uniqueHRIDFound = false;
-
-      while (i < 50 && !uniqueHRIDFound) {
-        groupFields.HRID = hri.random();
-        if (await Group.findOne({ HRID: groupFields.HRID })) {
-          i += 1;
-          continue;
-        }
-        uniqueHRIDFound = true;
-      }
-
-      if (!uniqueHRIDFound) {
-        return res.status(403).json({
-          msg: "Unable to create group: Failed to generate unique HRID"
-        });
-      }
-
-      group = new Group(groupFields);
-
-      if (req.file) {
-        group.image = await uploadImage(req.file);
-      }
-
-      const groupType = await GroupType.findById(groupTypeId);
-      groupType.groups.push(group.id);
-
-      const creator = await User.findById(req.user.id);
-
-      if (!creator) {
-        return res.status(404).json({
-          msg: "User ID is invalid"
-        });
-      }
-
-      creator.currentGroup = group.id;
-
-      // save at the end of all API's, like this
-      await group.save();
-      await groupType.save();
-      await creator.save();
-
-      response.group = group;
-      response.groupTypeName = groupType.name;
-    }
-
-    return res.json(response);
-  } catch (err) {
-    if (err.kind == "ObjectId") {
-      return res.status(405).json({ msg: "ID does not exist" });
-    }
-
-    console.error(err.message);
-    res.status(500).send("Server error");
+  for (const key of Object.keys(groupFields)) {
+    group[key] = groupFields[key];
   }
+
+  if (req.file) {
+    const updateImageResponse = await updateImage(
+      req.file,
+      group.image.deleteHash
+    );
+    const uploadResponse = updateImageResponse.uploadResponse;
+    if (uploadResponse.error) {
+      error.msg = uploadResponse.error;
+      return;
+    }
+    group.image = uploadResponse;
+
+    await group.save();
+
+    return group;
+  }
+};
+
+const createGroup = async (req, groupFields, error) => {
+  if (!!(await Group.findOne({ creator: req.user.id }))) {
+    error.msg = "Unable to create group: User already has an active group";
+    return;
+  }
+
+  const group = new Group(groupFields);
+
+  await assignUniqueHRID(group, error);
+  await handleGroupCreationSideEffects(group, req, groupFields, error);
+
+  if (!!error.msg) return;
+
+  await group.save();
+
+  return group;
+};
+
+const assignUniqueHRID = async (group, error) => {
+  let i = 0;
+  let uniqueHRIDFound = false;
+  let HRID = "";
+
+  while (i < 50 && !uniqueHRIDFound) {
+    HRID = hri.random();
+    if (await Group.findOne({ HRID })) {
+      i += 1;
+      continue;
+    }
+    uniqueHRIDFound = true;
+  }
+
+  if (!uniqueHRIDFound) {
+    error.msg = "Unable to generate unique HRID";
+  }
+
+  group.HRID = HRID;
+};
+
+const handleGroupCreationSideEffects = async (
+  group,
+  req,
+  groupFields,
+  error
+) => {
+  if (req.file) {
+    const uploadResponse = await uploadImage(req.file);
+    if (uploadResponse.error) {
+      error.msg = uploadResponse.error;
+      return;
+    }
+    group.image = uploadResponse;
+  }
+
+  const groupType = await GroupType.findById(groupFields.groupType);
+  if (!groupType) {
+    error.msg = "Unable to find group type";
+    return;
+  }
+  groupType.groups.push(group.id);
+  await groupType.save();
+
+  const creator = await User.findById(req.user.id);
+  if (!creator) {
+    error.msg = "Unable to find user";
+    return;
+  }
+  creator.currentGroup = group.id;
+  await creator.save();
 };
 
 // @route   DELETE api/group
 // @desc    Delete a group
 // @access  Private
 router.delete("/", auth, async (req, res) => {
-  try {
+  runAPISafely(async () => {
     const group = await Group.findOne({ creator: req.user.id });
-    const groupType = await GroupType.findById(group.groupType);
+    const error = {};
 
-    // Get group index and splice it out from group type list
-    const groupIndex = groupType.groups.indexOf(group.id);
+    await handleGroupDeletionSideEffects(group, error);
 
-    if (groupIndex === -1) {
-      // TODO correct error code?
-      return res
-        .status(400)
-        .json({ msg: "Unable to remove group from group type list" });
+    if (!!error.msg) {
+      return res.status(400).json(error);
     }
 
-    groupType.groups.splice(groupIndex, 1);
-    await groupType.save();
-
-    await Group.findOneAndDelete({ creator: req.user.id });
+    await group.remove();
     res.json({ msg: "Group deleted" });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
-  }
+  });
 });
+
+const handleGroupDeletionSideEffects = async (group, error) => {
+  const groupType = await GroupType.findById(group.groupType);
+
+  // Get group index and splice it out from group type list
+  const groupIndex = groupType.groups.indexOf(group.id);
+
+  if (groupIndex === -1) {
+    error.msg = "Unable to remove group from group type list";
+    return;
+  }
+
+  groupType.groups.splice(groupIndex, 1);
+  await groupType.save();
+
+  if (group.image) {
+    const deleteResponse = await deleteImage(group.image.deleteHash);
+    if (deleteResponse.error) {
+      error.msg = deleteResponse.error;
+    }
+  }
+};
 
 // @route   PUT api/group/notification/:groupId
 // @desc    Add a notification to a group

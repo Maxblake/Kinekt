@@ -146,9 +146,11 @@ const Discover = ({
         {groupTypes.map(groupType => (
           <GroupTypeCard
             key={groupType._id}
-            imgSrc="https://source.unsplash.com/random/640x320"
+            imgSrc={groupType.image ? groupType.image.link : ""}
             name={groupType.name}
-            groupType={groupType.category ? groupType.category : "Other"}
+            groupTypeCategory={
+              groupType.category ? groupType.category : "Other"
+            }
           />
         ))}
       </div>

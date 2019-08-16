@@ -41,7 +41,7 @@ class GroupConsole extends Component {
 
           <div className="groupImage">
             <img
-              src={group.image ? group.image.link : ""}
+              src={group.image ? group.image.link : this.props.defaultImg}
               alt="Placeholder image"
             />
           </div>

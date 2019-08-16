@@ -6,6 +6,7 @@ import Spinner from "../common/Spinner";
 import GroupCard from "../cards/GroupCard";
 import NotFound from "../common/NotFound";
 import { getGroups } from "../../actions/group";
+import defaultGroupTypeImage from "../../resources/defaultGroupTypeImage.jpg";
 
 //TODO format date/times with moment
 const GroupType = ({
@@ -104,6 +105,9 @@ const GroupType = ({
           <GroupCard
             key={group._id}
             group={group}
+            defaultImg={
+              groupType.image ? groupType.image.link : defaultGroupTypeImage
+            }
             groupTypeName={match.params.groupType}
           />
         ))}

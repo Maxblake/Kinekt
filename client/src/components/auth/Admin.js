@@ -62,7 +62,6 @@ const Admin = ({
   }, [isAuthenticated, requestedGroupTypes]);
 
   const handleGroupTypeDecided = (decision, key) => {
-    console.log(groupTypeDecisions);
     setAdminState({
       ...adminState,
       groupTypeDecisions: { ...groupTypeDecisions, [key]: decision }
@@ -81,6 +80,7 @@ const Admin = ({
 
       processRequestedGroupTypes(requestDecisions);
 
+      //TODO make sure this works
       setAdminState({
         ...adminState,
         requestedGroupTypes: requestedGroupTypes.filter(

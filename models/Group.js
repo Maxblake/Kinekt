@@ -5,9 +5,26 @@ const GroupSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  name: {
+    type: String,
+    required: true
+  },
   creator: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
+    required: true
+  },
+  groupType: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "groupType",
+    required: true
+  },
+  accessLevel: {
+    type: String,
+    required: true
+  },
+  place: {
+    type: String,
     required: true
   },
   admins: {
@@ -18,35 +35,9 @@ const GroupSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectId],
     ref: "user"
   },
-  groupType: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "groupType",
-    required: true
-  },
-  name: {
-    type: String,
-    required: true
-  },
   description: {
     type: String
   },
-  place: {
-    type: String,
-    required: true
-  },
-  image: {
-    link: {
-      type: String
-    },
-    deleteHash: {
-      type: String
-    }
-  },
-  accessLevel: {
-    type: String,
-    required: true
-  },
-  // new Date(Date.now()).toISOString()
   time: {
     type: Date
   },
@@ -55,6 +46,14 @@ const GroupSchema = new mongoose.Schema({
   },
   maxSize: {
     type: Number
+  },
+  image: {
+    link: {
+      type: String
+    },
+    deleteHash: {
+      type: String
+    }
   },
   notifications: [
     {

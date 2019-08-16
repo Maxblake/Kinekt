@@ -256,6 +256,38 @@ html {
   width: 99%;
 }
 
+// Group type categories
+.tag.category-social,
+.category-social {
+  background-color: hsl(322, 100%, 75%);
+  color: whitesmoke;
+}
+.tag.category-gaming,
+.category-gaming {
+  background-color: #ffdc00;
+  color: hsla(52, 100%, 20%, 1);
+}
+.tag.category-educational,
+.category-educational {
+  background-color: #7fdbff;
+  color: hsla(197, 100%, 20%, 1);
+}
+.tag.category-professional,
+.category-professional {
+  background-color: #001f3f;
+  color: lightgray;
+}
+.tag.category-hobby,
+.category-hobby {
+  background-color: #ff4136;
+  color: lightgray;
+}
+.tag.category-other,
+.category-other {
+  background-color: #aaaaaa;
+  color: whitesmoke;
+}
+
 // Notifications / Alerts
 .notification {
   margin-top: 1.5rem;
@@ -304,17 +336,18 @@ html {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0d000000', endColorstr='#bf000000',GradientType=0 ); /* IE6-9 */
   }
 
-  .groupTypeTag {
-    position: absolute;
-    top: 8px;
-    right: 10px;
-  }
-
   &:hover {
     .title {
       text-decoration: underline;
     }
   }
+}
+
+.tag.groupTypeTag,
+.groupTypeTag {
+  position: absolute;
+  top: 8px;
+  right: 10px;
 }
 
 .groupCardContainer {
@@ -345,7 +378,8 @@ html {
   }
 }
 
-.groupImage img {
+.groupImage img,
+.imageContainer {
   object-fit: cover;
   width: 100%;
   height: 100%;

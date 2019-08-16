@@ -43,11 +43,13 @@ class GroupCard extends Component {
             </div>
           </div>
         </div>
-        <div className="column is-4 groupImage imageContainer">
-          <img
-            src={group.image ? group.image.link : ""}
-            alt="Placeholder image"
-          />
+        <div className="column is-4 groupImage card">
+          <figure className="imageContainer image is-2by1">
+            <img
+              src={group.image ? group.image.link : this.props.defaultImg}
+              alt="Placeholder image"
+            />
+          </figure>
         </div>
       </Link>
     );

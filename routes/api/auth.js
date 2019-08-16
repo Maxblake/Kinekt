@@ -2,17 +2,17 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/auth");
 const { check, validationResult } = require("express-validator");
-const jwt = require("jsonwebtoken");
 const config = require("config");
 const bcrypt = require("bcryptjs");
+const { runAPISafely, signUserToken } = require("./helpers/helpers");
 
 const User = require("../../models/User");
 
 // @route   GET api/auth/:checkIfAdmin
 // @desc    Given JSON Web Token, return user object
 // @access  Public
-router.get("/:checkIfAdmin", auth, async (req, res) => {
-  try {
+router.get("/:checkIfAdmin", auth, (req, res) => {
+  runAPISafely(async () => {
     const user = await User.findById(req.user.id)
       .select("-password")
       .lean();
@@ -25,32 +25,27 @@ router.get("/:checkIfAdmin", auth, async (req, res) => {
     }
 
     res.json(authResponse);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
-  }
+  });
 });
 
 // @route   POST api/auth
-// @desc    Authenticate user & get token
+// @desc    Authenticate user & get token, AKA Login
 // @access  Public
-// TODO move this to user API
 router.post(
   "/",
   [
-    check("email", "Please include a valid email address").isEmail(),
+    check("email", "Email address is invalid").isEmail(),
     check("password", "Password is required").exists()
   ],
-  async (req, res) => {
+  (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { email, password } = req.body;
-
-    try {
-      let user = await User.findOne({ email });
+    runAPISafely(async () => {
+      const { email, password } = req.body;
+      const user = await User.findOne({ email });
 
       if (!user) {
         return res
@@ -66,25 +61,8 @@ router.post(
           .json({ errors: [{ param: "alert", msg: "Invalid Credentials" }] });
       }
 
-      const payload = {
-        user: {
-          id: user.id
-        }
-      };
-      // TODO change expire to 1 hour
-      jwt.sign(
-        payload,
-        config.get("jwtSecret"),
-        { expiresIn: 3600000 },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token });
-        }
-      );
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send("Server error");
-    }
+      signUserToken(res, user.id);
+    });
   }
 );
 

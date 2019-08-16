@@ -22,7 +22,7 @@ const deleteImage = async deleteHash => {
       headers: { Authorization: `Client-ID ${imgurClientId}` }
     };
 
-    request(options, (error, response, body) => {
+    request(options, (error, response) => {
       if (error) {
         deleteResponse.error = error;
       } else if (response.statusCode !== 200) {
@@ -63,4 +63,4 @@ const uploadImage = async imageFile => {
   });
 };
 
-module.exports = { updateImage, uploadImage };
+module.exports = { updateImage, uploadImage, deleteImage };

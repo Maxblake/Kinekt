@@ -4,7 +4,7 @@ const auth = require("../../middleware/auth");
 const { check, validationResult } = require("express-validator");
 const config = require("config");
 const bcrypt = require("bcryptjs");
-const { runAPISafely, signUserToken } = require("./helpers/helpers");
+const { runAPISafely, signUserToken, APIerrors } = require("./helpers/helpers");
 
 const User = require("../../models/User");
 
@@ -24,18 +24,20 @@ router.post(
     })
   ],
   async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+    const errors = new APIerrors();
+
+    if (errors.addExpressValidationResult(req))
+      return errors.sendErrorResponse(res);
 
     runAPISafely(async () => {
       let user = await User.findOne({ email: req.body.email });
 
       if (user) {
-        return res
-          .status(400)
-          .json({ errors: [{ param: "email", msg: "User already exists" }] });
+        return errors.addErrAndSendResponse(
+          res,
+          "User already exists",
+          "email"
+        );
       }
 
       const userFields = buildUserFields(req, false);
@@ -56,13 +58,13 @@ router.post(
 // @access  Private
 //TODO change all updating routes to put, not post
 router.put("/", auth, async (req, res) => {
-  if (!User.findById(req.user.id)) {
-    return res.status(400).json({
-      msg: "Invalid User ID"
-    });
-  }
+  const errors = new APIerrors();
 
   runAPISafely(async () => {
+    if (!User.findById(req.user.id)) {
+      return errors.addErrAndSendResponse(res, "Invalid User ID");
+    }
+
     const userFields = buildUserFields(req, true);
     const user = await User.findByIdAndUpdate(
       req.user.id,
@@ -89,10 +91,13 @@ const buildUserFields = (req, updating = false) => {
 // @desc    Delete a user
 // @access  Private
 router.delete("/", auth, async (req, res) => {
+  const errors = new APIerrors();
+
   runAPISafely(async () => {
     if (!(await User.findOneAndDelete({ _id: req.user.id }))) {
-      return res.status(400).json({ msg: "Unable to find user" });
+      return errors.addErrAndSendResponse(res, "Invalid User ID");
     }
+
     res.status(200).json({ msg: "User deleted" });
   });
 });

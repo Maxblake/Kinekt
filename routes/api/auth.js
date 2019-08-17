@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/auth");
-const { check, validationResult } = require("express-validator");
+const { check } = require("express-validator");
 const config = require("config");
 const bcrypt = require("bcryptjs");
-const { runAPISafely, signUserToken } = require("./helpers/helpers");
+const { runAPISafely, signUserToken, APIerrors } = require("./helpers/helpers");
 
 const User = require("../../models/User");
 
@@ -35,30 +35,37 @@ router.post(
   "/",
   [
     check("email", "Email address is invalid").isEmail(),
-    check("password", "Password is required").exists()
+    check("password", "Password must be between 6 and 32 characters").isLength({
+      min: 6,
+      max: 32
+    })
   ],
   (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+    const errors = new APIerrors();
+
+    if (errors.addExpressValidationResult(req))
+      return errors.sendErrorResponse(res);
 
     runAPISafely(async () => {
       const { email, password } = req.body;
       const user = await User.findOne({ email });
 
       if (!user) {
-        return res
-          .status(400)
-          .json({ errors: [{ param: "alert", msg: "Invalid Credentials" }] });
+        return errors.addErrAndSendResponse(
+          res,
+          "Invalid Credentials",
+          "alert"
+        );
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
-        return res
-          .status(400)
-          .json({ errors: [{ param: "alert", msg: "Invalid Credentials" }] });
+        return errors.addErrAndSendResponse(
+          res,
+          "Invalid Credentials",
+          "alert"
+        );
       }
 
       signUserToken(res, user.id);

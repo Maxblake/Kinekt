@@ -6,7 +6,7 @@ const { hri } = require("human-readable-ids");
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
 const { updateImage, uploadImage, deleteImage } = require("./external/imgur");
-const { runAPISafely } = require("./helpers/helpers");
+const { runAPISafely, APIerrors } = require("./helpers/helpers");
 
 const Group = require("../../models/Group");
 const { GroupType } = require("../../models/GroupType");
@@ -16,22 +16,17 @@ const User = require("../../models/User");
 // @desc    Get a given group type's list of groups
 // @access  Public
 router.post("/list", (req, res) => {
+  const errors = new APIerrors();
+
   runAPISafely(async () => {
     const { groupTypeName } = req.body;
-    if (!groupTypeName) {
-      return res.status(400).json({
-        msg: "Invalid Group Type Name"
-      });
-    }
 
     const groupType = await GroupType.findOne({
       nameLower: groupTypeName
     }).lean();
 
     if (!groupType) {
-      return res.status(400).json({
-        msg: "Invalid Group Type Name"
-      });
+      return errors.addErrAndSendResponse(res, "Invalid Group Type Name");
     }
 
     const groups = await Group.find({ _id: { $in: groupType.groups } });
@@ -44,11 +39,13 @@ router.post("/list", (req, res) => {
 // @desc    Get group by HRID (human readable id)
 // @access  Private
 router.get("/:HRID", auth, (req, res) => {
+  const errors = new APIerrors();
+
   runAPISafely(async () => {
     const group = await Group.findOne({ HRID: req.params.HRID });
 
     if (!group) {
-      return res.status(400).json({ msg: "Group does not exist" });
+      return errors.addErrAndSendResponse(res, "Group does not exist");
     }
 
     const groupType = await GroupType.findById(group.groupType).select("name");
@@ -79,11 +76,10 @@ router.post(
     ]
   ],
   (req, res) => {
-    const errors = validationResult(req);
+    const errors = new APIerrors();
 
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+    if (errors.addExpressValidationResult(req))
+      return errors.sendErrorResponse(res);
 
     createOrUpdateGroup(req, res, false);
   }
@@ -97,26 +93,27 @@ router.post("/:id", (req, res) => {
 });
 
 const createOrUpdateGroup = async (req, res, updating) => {
+  const errors = new APIerrors();
+
   runAPISafely(async () => {
     const groupFields = buildGroupFields(req, updating);
     const groupType = await GroupType.findById(groupFields.groupType);
-    const error = {};
     let response = {};
 
     if (!groupType) {
-      error.msg = "Group Type ID is invalid";
-    } else {
-      // TODO make sure only creator and admins can update
-      response = { groupTypeName: groupType.name };
-
-      if (updating) {
-        response.group = await updateGroup(req, groupFields, error);
-      } else {
-        response.group = await createGroup(req, groupFields, error);
-      }
+      return errors.addErrAndSendResponse(res, "Invalid Group Type ID");
     }
-    if (!!error.msg) {
-      return res.status(400).json(error);
+    // TODO make sure only creator and admins can update
+    response = { groupTypeName: groupType.name };
+
+    if (updating) {
+      response.group = await updateGroup(req, groupFields, errors);
+    } else {
+      response.group = await createGroup(req, groupFields, errors);
+    }
+
+    if (errors.isNotEmpty()) {
+      return errors.sendErrorResponse(res);
     }
 
     return res.json(response);
@@ -150,7 +147,7 @@ const buildGroupFields = (req, updating) => {
   return groupFields;
 };
 
-const updateGroup = async (req, groupFields, error) => {
+const updateGroup = async (req, groupFields, errors) => {
   //TODO delete this after confirming other update method works ok
   // for (const key of Object.keys(groupFields)) {
   //   group[key] = groupFields[key];
@@ -163,36 +160,36 @@ const updateGroup = async (req, groupFields, error) => {
   );
 
   if (!group) {
-    error.msg = "Unable to find group";
+    errors.addError("Invalid Group ID");
     return;
   }
 
-  if (await handleImageUpload(group, req, error, true)) {
-    await group.save();
-  }
-
-  return group;
-};
-
-const createGroup = async (req, groupFields, error) => {
-  if (!!(await Group.findOne({ creator: req.user.id }))) {
-    error.msg = "Unable to create group: User already has an active group";
-    return;
-  }
-
-  const group = new Group(groupFields);
-
-  await assignUniqueHRID(group, error);
-  await handleGroupCreationSideEffects(group, req, groupFields, error);
-  await handleImageUpload(group, req, error, false);
-
-  if (!!error.msg) return;
+  await handleImageUpload(group, req, errors, true);
+  if (errors.isNotEmpty()) return;
 
   await group.save();
   return group;
 };
 
-const assignUniqueHRID = async (group, error) => {
+const createGroup = async (req, groupFields, errors) => {
+  if (!!(await Group.findOne({ creator: req.user.id }))) {
+    errors.addError("Unable to create group: User already has an active group");
+    return;
+  }
+
+  const group = new Group(groupFields);
+
+  await assignUniqueHRID(group, errors);
+  await handleGroupCreationSideEffects(group, req, groupFields, errors);
+  await handleImageUpload(group, req, errors, false);
+
+  if (errors.isNotEmpty()) return;
+
+  await group.save();
+  return group;
+};
+
+const assignUniqueHRID = async (group, errors) => {
   let i = 0;
   let uniqueHRIDFound = false;
   let HRID = "";
@@ -207,7 +204,7 @@ const assignUniqueHRID = async (group, error) => {
   }
 
   if (!uniqueHRIDFound) {
-    error.msg = "Unable to generate unique HRID";
+    errors.addError("Unable to generate unique HRID");
   }
 
   group.HRID = HRID;
@@ -217,11 +214,11 @@ const handleGroupCreationSideEffects = async (
   group,
   req,
   groupFields,
-  error
+  errors
 ) => {
   const groupType = await GroupType.findById(groupFields.groupType);
   if (!groupType) {
-    error.msg = "Unable to find group type";
+    errors.addError("Unable to find group type");
     return;
   }
   groupType.groups.push(group.id);
@@ -229,70 +226,70 @@ const handleGroupCreationSideEffects = async (
 
   const creator = await User.findById(req.user.id);
   if (!creator) {
-    error.msg = "Unable to find user";
+    errors.addError("Unable to find user");
     return;
   }
   creator.currentGroup = group.id;
   await creator.save();
 };
 
-const handleImageUpload = async (group, req, error, updating = false) => {
+const handleImageUpload = async (group, req, errors, updating = false) => {
   if (req.file) {
-    let imageResponse = {};
+    let uploadResponse = {};
 
     if (updating && group.image) {
       const updateImageResponse = await updateImage(
         req.file,
         group.image.deleteHash
       );
-      imageResponse = updateImageResponse.uploadResponse;
+      uploadResponse = updateImageResponse.uploadResponse;
     } else {
-      imageResponse = await uploadImage(req.file);
+      uploadResponse = await uploadImage(req.file);
     }
 
-    if (imageResponse.error) {
-      error.msg = `Unable to create group type: Image upload failed with error [${
-        imageResponse.error
-      }]`;
-      return false;
+    if (uploadResponse.error) {
+      errors.addError(
+        `Unable to create group: Image upload failed with error [${
+          uploadResponse.error
+        }]`
+      );
+    } else {
+      group.image = uploadResponse;
     }
-
-    group.image = imageResponse;
   }
-  return true;
 };
 
 // @route   DELETE api/group
 // @desc    Delete a group
 // @access  Private
 router.delete("/", auth, async (req, res) => {
+  const errors = new APIerrors();
+
   runAPISafely(async () => {
     const group = await Group.findOne({ creator: req.user.id });
-    const error = {};
 
     if (!group) {
-      error.msg = "Unable to find group";
-    } else {
-      await handleGroupDeletionSideEffects(group, error);
-      await group.remove();
+      return errors.addErrAndSendResponse(res, "Unable to find group");
+    }
+    await handleGroupDeletionSideEffects(group, errors);
+    await group.remove();
+
+    if (errors.isNotEmpty()) {
+      return errors.sendErrorResponse(res);
     }
 
-    if (!!error.msg) {
-      return res.status(400).json(error);
-    }
-
-    res.json({ msg: "Group deleted" });
+    res.status(200).json({ msg: "Group deleted" });
   });
 });
 
-const handleGroupDeletionSideEffects = async (group, error) => {
+const handleGroupDeletionSideEffects = async (group, errors) => {
   const groupType = await GroupType.findById(group.groupType);
 
   // Get group index and splice it out from group type list
   const groupIndex = groupType.groups.indexOf(group.id);
 
   if (groupIndex === -1) {
-    error.msg = "Unable to remove group from group type list";
+    errors.addError("Unable to remove group from group type list");
     return;
   }
 
@@ -302,7 +299,7 @@ const handleGroupDeletionSideEffects = async (group, error) => {
   if (group.image) {
     const deleteResponse = await deleteImage(group.image.deleteHash);
     if (deleteResponse.error) {
-      error.msg = deleteResponse.error;
+      errors.addError(deleteResponse.error);
     }
   }
 };
@@ -325,25 +322,24 @@ router.put(
     ]
   ],
   async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+    const errors = new APIerrors();
+
+    if (errors.addExpressValidationResult(req))
+      return errors.sendErrorResponse(res);
 
     runAPISafely(async () => {
       const { groupId } = req.params;
-      const error = {};
-      const notification = await buildNotification(req, error);
+      const notification = await buildNotification(req, errors);
       const group = await Group.findById(groupId);
 
       if (!group) {
-        error.msg = "Unable to find group";
+        return errors.addErrAndSendResponse(res, "Unable to find group");
       }
 
       group.notifications.push(notification);
 
-      if (!!error.msg) {
-        return res.status(400).json(error);
+      if (errors.isNotEmpty()) {
+        return errors.sendErrorResponse(res);
       }
 
       await group.save();
@@ -353,7 +349,7 @@ router.put(
   }
 );
 
-const buildNotification = async (req, error) => {
+const buildNotification = async (req, errors) => {
   const { authorId, body } = req.body;
   let { authorName } = req.body;
 
@@ -361,8 +357,8 @@ const buildNotification = async (req, error) => {
     let user = await User.findById(authorId).select("name");
 
     if (!user) {
-      error.msg = "Unable to find user from given author ID";
-      return {};
+      errors.addError("Unable to find user from given author ID");
+      return;
     }
     authorName = user.name;
   }
@@ -376,27 +372,26 @@ const buildNotification = async (req, error) => {
 // @access  Private
 //TODO make sure only group admins or author can delete notifications
 router.delete("/notification/:groupId/:notifId", auth, async (req, res) => {
+  const errors = new APIerrors();
+
   runAPISafely(async () => {
     const { groupId, notifId } = req.params;
-    const error = {};
     const group = await Group.findById(groupId);
 
     if (!group) {
-      error.msg = "Unable to find group";
-    } else {
-      const notifIndex = getNotifIndex(group, notifId, error);
-
-      if (notifIndex !== -1) {
-        group.notifications.splice(notifIndex, 1);
-
-        await group.save();
-        res.json(group);
-      }
+      return errors.addErrAndSendResponse(res, "Unable to find group");
     }
 
-    if (!!error.msg) {
-      return res.status(400).json(error);
+    const notifIndex = getNotifIndex(group, notifId, errors);
+
+    if (errors.isNotEmpty()) {
+      return errors.sendErrorResponse(res);
     }
+    group.notifications.splice(notifIndex, 1);
+
+    await group.save();
+
+    res.json(group);
   });
 });
 
@@ -405,36 +400,31 @@ router.delete("/notification/:groupId/:notifId", auth, async (req, res) => {
 // @access  Private
 //TODO make sure only group members can like notifications
 router.put("/notification/:groupId/like/:notifId", auth, async (req, res) => {
+  const errors = new APIerrors();
+
   runAPISafely(async () => {
     const { groupId, notifId } = req.params;
-    const error = {};
     const group = await Group.findById(groupId);
 
     if (!group) {
-      error.msg = "Unable to find group";
-    } else {
-      const notifIndex = getNotifIndex(group, notifId, error);
+      return errors.addErrAndSendResponse(res, "Unable to find group");
+    }
+    const notifIndex = getNotifIndex(group, notifId, errors);
 
-      if (notifIndex !== -1) {
-        const notification = group.notifications[notifIndex];
+    if (errors.isNotEmpty()) {
+      return errors.sendErrorResponse(res);
+    }
+    const notification = group.notifications[notifIndex];
 
-        // Check if notification has already been liked
-        if (notification.likes.includes(req.user.id)) {
-          error.msg = "Notification already liked";
-          return res.status(400).json(error);
-        }
-
-        notification.likes.unshift(req.user.id);
-
-        await group.save();
-
-        res.json(notification.likes);
-      }
+    if (notification.likes.includes(req.user.id)) {
+      return errors.addErrAndSendResponse(res, "Notification already liked");
     }
 
-    if (!!error.msg) {
-      return res.status(400).json(error);
-    }
+    notification.likes.unshift(req.user.id);
+
+    await group.save();
+
+    res.json(notification.likes);
   });
 });
 
@@ -443,46 +433,46 @@ router.put("/notification/:groupId/like/:notifId", auth, async (req, res) => {
 // @access  Private
 //TODO make sure only group members can unlike notifications
 router.put("/notification/:groupId/unlike/:notifId", auth, async (req, res) => {
+  const errors = new APIerrors();
+
   runAPISafely(async () => {
     const { groupId, notifId } = req.params;
-    const error = {};
     const group = await Group.findById(groupId);
 
     if (!group) {
-      error.msg = "Unable to find group";
-    } else {
-      const notifIndex = getNotifIndex(group, notifId, error);
+      return errors.addErrAndSendResponse(res, "Unable to find group");
+    }
+    const notifIndex = getNotifIndex(group, notifId, errors);
 
-      if (notifIndex !== -1) {
-        const notification = group.notifications[notifIndex];
-        const likeIndex = notification.likes.indexOf(req.user.id);
-
-        if (likeIndex === -1) {
-          error.msg = "Notification has not yet been liked";
-          return res.status(400).json(error);
-        }
-
-        notification.likes.splice(likeIndex, 1);
-
-        await group.save();
-
-        res.json(notification.likes);
-      }
+    if (errors.isNotEmpty()) {
+      return errors.sendErrorResponse(res);
     }
 
-    if (!!error.msg) {
-      return res.status(400).json(error);
+    const notification = group.notifications[notifIndex];
+    const likeIndex = notification.likes.indexOf(req.user.id);
+
+    if (likeIndex === -1) {
+      return errors.addErrAndSendResponse(
+        res,
+        "Notification has not yet been liked"
+      );
     }
+
+    notification.likes.splice(likeIndex, 1);
+
+    await group.save();
+
+    res.json(notification.likes);
   });
 });
 
-const getNotifIndex = (group, notifId, error) => {
+const getNotifIndex = (group, notifId, errors) => {
   const notifIndex = group.notifications
     .map(notif => notif.id)
     .indexOf(notifId);
 
   if (notifIndex === -1) {
-    error.msg = "Invalid notification id";
+    errors.addError("Invalid notification id");
   }
 
   return notifIndex;

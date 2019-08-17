@@ -5,7 +5,7 @@ const { check, validationResult } = require("express-validator");
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
 const { updateImage, uploadImage } = require("./external/imgur");
-const { runAPISafely } = require("./helpers/helpers");
+const { runAPISafely, APIerrors } = require("./helpers/helpers");
 
 const { GroupType, RequestedGroupType } = require("../../models/GroupType");
 
@@ -79,34 +79,37 @@ router.post(
     ]
   ],
   async (req, res) => {
-    const errors = validationResult(req);
+    const errors = new APIerrors();
 
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+    if (errors.addExpressValidationResult(req))
+      return errors.sendErrorResponse(res);
 
     runAPISafely(async () => {
-      const error = {};
-
       if (await GroupType.findOne({ nameLower: req.body.name.toLowerCase() })) {
-        error.msg = "Unable to create group type: Name is unavailable";
+        return errors.addErrAndSendResponse(
+          res,
+          "Unable to create group type: Name is unavailable",
+          "name"
+        );
       } else if (await RequestedGroupType.findOne({ creator: req.user.id })) {
-        error.msg =
-          "Unable to create group type: User already has pending request";
-      } else {
-        const groupTypeFields = buildGroupTypeFields(req);
+        return errors.addErrAndSendResponse(
+          res,
+          "Unable to create group type: User already has pending request",
+          "alert"
+        );
+      }
+      const groupTypeFields = buildGroupTypeFields(req);
 
-        requestedGroupType = new RequestedGroupType(groupTypeFields);
+      requestedGroupType = new RequestedGroupType(groupTypeFields);
 
-        if (await handleImageUpload(requestedGroupType, req, error, false)) {
-          await requestedGroupType.save();
-          res.status(200).send("OK");
-        }
+      await handleImageUpload(requestedGroupType, req, errors, false);
+
+      if (errors.isNotEmpty()) {
+        return errors.sendErrorResponse(res);
       }
 
-      if (!!error.msg) {
-        return res.status(400).json(error);
-      }
+      await requestedGroupType.save();
+      res.status(200).send("OK");
     });
   }
 );
@@ -167,9 +170,10 @@ router.post(
 // @desc    Update a group type
 // @access  Private
 router.post("/:id", async (req, res) => {
+  const errors = new APIerrors();
+
   runAPISafely(async () => {
     const groupTypeFields = buildGroupTypeFields(req, true);
-    const error = {};
 
     const groupType = await GroupType.findByIdAndUpdate(
       req.params.id,
@@ -178,16 +182,17 @@ router.post("/:id", async (req, res) => {
     );
 
     if (!groupType) {
-      error.msg = "Unable to find group type";
-    } else if (await handleImageUpload(groupType, req, error, true)) {
-      await groupType.save();
-
-      return res.json(groupType);
+      return errors.addErrAndSendResponse(res, "Unable to find group type");
     }
 
-    if (!!error.msg) {
-      return res.status(400).json(error);
+    await handleImageUpload(groupType, req, errors, true);
+
+    if (errors.isNotEmpty()) {
+      return errors.sendErrorResponse(res);
     }
+
+    await groupType.save();
+    return res.json(groupType);
   });
 });
 
@@ -203,30 +208,30 @@ const buildGroupTypeFields = (req, updating = false) => {
   return groupTypeFields;
 };
 
-const handleImageUpload = async (groupType, req, error, updating = false) => {
+const handleImageUpload = async (groupType, req, errors, updating = false) => {
   if (req.file) {
-    let imageResponse = {};
+    let uploadResponse = {};
 
     if (updating && groupType.image) {
       const updateImageResponse = await updateImage(
         req.file,
         groupType.image.deleteHash
       );
-      imageResponse = updateImageResponse.uploadResponse;
+      uploadResponse = updateImageResponse.uploadResponse;
     } else {
-      imageResponse = await uploadImage(req.file);
+      uploadResponse = await uploadImage(req.file);
     }
 
-    if (imageResponse.error) {
-      error.msg = `Unable to create group type: Image upload failed with error [${
-        imageResponse.error
-      }]`;
-      return false;
+    if (uploadResponse.error) {
+      errors.addError(
+        `Unable to create group type: Image upload failed with error [${
+          uploadResponse.error
+        }]`
+      );
+    } else {
+      groupType.image = uploadResponse;
     }
-
-    groupType.image = imageResponse;
   }
-  return true;
 };
 
 // @route   DELETE api/group-type/:id
@@ -234,11 +239,14 @@ const handleImageUpload = async (groupType, req, error, updating = false) => {
 // @access  Private
 // TODO make sure only creator or super admins can delete these
 router.delete("/:id", auth, async (req, res) => {
+  const errors = new APIerrors();
+
   runAPISafely(async () => {
     if (!!(await GroupType.findByIdAndDelete(req.params.id))) {
-      return res.json({ msg: "Group type deleted" });
+      return res.status(200).json({ msg: "Group type deleted" });
     }
-    res.status(400).json({ msg: "Unable to find group type" });
+
+    errors.addErrAndSendResponse(res, "Unable to find group type");
   });
 });
 

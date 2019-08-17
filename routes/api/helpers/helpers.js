@@ -1,3 +1,4 @@
+const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
@@ -6,12 +7,13 @@ const runAPISafely = coreFunction => {
     coreFunction();
   } catch (err) {
     console.error(err.message); //DEV DEBUG ONLY
+    const errors = new APIerrors();
 
     if (err.kind == "ObjectId") {
-      return res.status(400).json({ msg: "Invalid Object ID" });
+      return errors.addErrAndSendResponse(res, "Invalid Object ID");
     }
 
-    res.status(500).send("Server error");
+    return errors.addErrAndSendResponse(res, "Server error", "console", 500);
   }
 };
 
@@ -34,4 +36,43 @@ const signUserToken = (res, userId) => {
   );
 };
 
-module.exports = { runAPISafely, signUserToken };
+class APIerrors {
+  constructor() {
+    this.errors = [];
+  }
+
+  isNotEmpty() {
+    return this.errors.length > 0;
+  }
+
+  addError(msg, param = "console") {
+    if (!msg) return false;
+
+    let error = { param, msg };
+    this.errors.push(error);
+
+    return true;
+  }
+
+  sendErrorResponse(res, status = 400) {
+    return res.status(status).json(this.errors);
+  }
+
+  addErrAndSendResponse(res, msg, param = "console", status = 400) {
+    this.addError(msg, param);
+    return this.sendErrorResponse(res, status);
+  }
+
+  addExpressValidationResult(req) {
+    const errors = validationResult(req).array();
+    errors.forEach(error => {
+      this.addError(error.msg, error.param);
+    });
+
+    if (this.isNotEmpty()) return true;
+
+    return false;
+  }
+}
+
+module.exports = { runAPISafely, signUserToken, APIerrors };

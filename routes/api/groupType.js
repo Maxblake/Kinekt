@@ -5,7 +5,11 @@ const { check, validationResult } = require("express-validator");
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
 const { updateImage, uploadImage } = require("./external/imgur");
-const { runAPISafely, APIerrors } = require("./helpers/helpers");
+const {
+  runAPISafely,
+  APIerrors,
+  validateRequest
+} = require("./helpers/helpers");
 
 const { GroupType, RequestedGroupType } = require("../../models/GroupType");
 
@@ -63,21 +67,9 @@ router.get("/:id", async (req, res) => {
 // @route   POST api/group-type/request
 // @desc    Request a group type
 // @access  Private
-// TODO fill in other required fields
 router.post(
   "/request",
-  [
-    upload.single("image"),
-    auth,
-    [
-      check("name", "Name is required")
-        .not()
-        .isEmpty(),
-      check("category", "Category is required")
-        .not()
-        .isEmpty()
-    ]
-  ],
+  [upload.single("image"), auth, validateRequest("requestGroupType")],
   async (req, res) => {
     const errors = new APIerrors();
 
@@ -166,10 +158,10 @@ router.post(
   }
 );
 
-// @route   POST api/group-type/:id
+// @route   PUT api/group-type/:id
 // @desc    Update a group type
 // @access  Private
-router.post("/:id", async (req, res) => {
+router.put("/:id", validateRequest("updateGroupType"), async (req, res) => {
   const errors = new APIerrors();
 
   runAPISafely(async () => {
@@ -237,11 +229,17 @@ const handleImageUpload = async (groupType, req, errors, updating = false) => {
 // @route   DELETE api/group-type/:id
 // @desc    Delete a group type
 // @access  Private
-// TODO make sure only creator or super admins can delete these
 router.delete("/:id", auth, async (req, res) => {
   const errors = new APIerrors();
 
   runAPISafely(async () => {
+    if (!req.isAdmin) {
+      return errors.addErrAndSendResponse(
+        res,
+        "You do not have permission to delete this group type"
+      );
+    }
+
     if (!!(await GroupType.findByIdAndDelete(req.params.id))) {
       return res.status(200).json({ msg: "Group type deleted" });
     }

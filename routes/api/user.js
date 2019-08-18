@@ -4,60 +4,47 @@ const auth = require("../../middleware/auth");
 const { check, validationResult } = require("express-validator");
 const config = require("config");
 const bcrypt = require("bcryptjs");
-const { runAPISafely, signUserToken, APIerrors } = require("./helpers/helpers");
+const {
+  runAPISafely,
+  signUserToken,
+  APIerrors,
+  validateRequest
+} = require("./helpers/helpers");
 
 const User = require("../../models/User");
 
 // @route   POST api/user
 // @desc    Register user
 // @access  Public
-router.post(
-  "/",
-  [
-    check("name", "Name is required")
-      .not()
-      .isEmpty(),
-    check("email", "Please include a valid email address").isEmail(),
-    check("password", "Password must be between 6 and 32 characters").isLength({
-      min: 6,
-      max: 32
-    })
-  ],
-  async (req, res) => {
-    const errors = new APIerrors();
+router.post("/", validateRequest("createUser"), async (req, res) => {
+  const errors = new APIerrors();
 
-    if (errors.addExpressValidationResult(req))
-      return errors.sendErrorResponse(res);
+  if (errors.addExpressValidationResult(req))
+    return errors.sendErrorResponse(res);
 
-    runAPISafely(async () => {
-      let user = await User.findOne({ email: req.body.email });
+  runAPISafely(async () => {
+    let user = await User.findOne({ email: req.body.email });
 
-      if (user) {
-        return errors.addErrAndSendResponse(
-          res,
-          "User already exists",
-          "email"
-        );
-      }
+    if (user) {
+      return errors.addErrAndSendResponse(res, "User already exists", "email");
+    }
 
-      const userFields = buildUserFields(req, false);
-      user = new User(userFields);
+    const userFields = buildUserFields(req, false);
+    user = new User(userFields);
 
-      const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(req.body.password, salt);
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(req.body.password, salt);
 
-      await user.save();
+    await user.save();
 
-      signUserToken(res, user.id);
-    });
-  }
-);
+    signUserToken(res, user.id);
+  });
+});
 
 // @route   PUT api/user
 // @desc    Update a user
 // @access  Private
-//TODO change all updating routes to put, not post
-router.put("/", auth, async (req, res) => {
+router.put("/", [auth, validateRequest("updateUser")], async (req, res) => {
   const errors = new APIerrors();
 
   runAPISafely(async () => {

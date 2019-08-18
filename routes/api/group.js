@@ -1,12 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/auth");
-const { check, validationResult } = require("express-validator");
+const { check } = require("express-validator");
 const { hri } = require("human-readable-ids");
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
 const { updateImage, uploadImage, deleteImage } = require("./external/imgur");
-const { runAPISafely, APIerrors } = require("./helpers/helpers");
+const {
+  runAPISafely,
+  APIerrors,
+  validateRequest
+} = require("./helpers/helpers");
 
 const Group = require("../../models/Group");
 const { GroupType } = require("../../models/GroupType");
@@ -60,21 +64,7 @@ router.get("/:HRID", auth, (req, res) => {
 // @access  Private
 router.post(
   "/",
-  [
-    upload.single("image"),
-    auth,
-    [
-      check("name", "Name is required")
-        .not()
-        .isEmpty(),
-      check("place", "Meeting place is required")
-        .not()
-        .isEmpty(),
-      check("time", "Meeting time is required")
-        .not()
-        .isEmpty()
-    ]
-  ],
+  [upload.single("image"), auth, validateRequest("createGroup")],
   (req, res) => {
     const errors = new APIerrors();
 
@@ -85,10 +75,10 @@ router.post(
   }
 );
 
-// @route   POST api/group
+// @route   PUT api/group
 // @desc    Update a group
 // @access  Private
-router.post("/:id", (req, res) => {
+router.put("/:id", [auth, validateRequest("updateGroup")], (req, res) => {
   createOrUpdateGroup(req, res, true);
 });
 
@@ -103,7 +93,7 @@ const createOrUpdateGroup = async (req, res, updating) => {
     if (!groupType) {
       return errors.addErrAndSendResponse(res, "Invalid Group Type ID");
     }
-    // TODO make sure only creator and admins can update
+
     response = { groupTypeName: groupType.name };
 
     if (updating) {
@@ -153,15 +143,26 @@ const updateGroup = async (req, groupFields, errors) => {
   //   group[key] = groupFields[key];
   // }
 
-  const group = await Group.findByIdAndUpdate(
-    req.params.id,
-    { $set: groupFields },
-    { new: true }
-  );
+  // const group = await Group.findByIdAndUpdate(
+  //   req.params.id,
+  //   { $set: groupFields },
+  //   { new: true }
+  // );
+
+  const group = await Group.findById(req.params.id);
 
   if (!group) {
     errors.addError("Invalid Group ID");
     return;
+  }
+
+  if (req.user.id !== group.creator && !group.admins.includes(req.user.id)) {
+    errors.addError("You do not have permission to update this group");
+    return;
+  }
+
+  for (const key of Object.keys(groupFields)) {
+    group[key] = groupFields[key];
   }
 
   await handleImageUpload(group, req, errors, true);
@@ -178,6 +179,7 @@ const createGroup = async (req, groupFields, errors) => {
   }
 
   const group = new Group(groupFields);
+  group.users.push(req.user.id);
 
   await assignUniqueHRID(group, errors);
   await handleGroupCreationSideEffects(group, req, groupFields, errors);
@@ -307,20 +309,9 @@ const handleGroupDeletionSideEffects = async (group, errors) => {
 // @route   PUT api/group/notification/:groupId
 // @desc    Add a notification to a group
 // @access  Private
-//TODO make sure only group admins can add notifications
 router.put(
   "/notification/:groupId",
-  [
-    auth,
-    [
-      check("authorId", "Author id is required")
-        .not()
-        .isEmpty(),
-      check("body", "Body is required")
-        .not()
-        .isEmpty()
-    ]
-  ],
+  [auth, validateRequest("addNotification")],
   async (req, res) => {
     const errors = new APIerrors();
 
@@ -334,6 +325,16 @@ router.put(
 
       if (!group) {
         return errors.addErrAndSendResponse(res, "Unable to find group");
+      }
+
+      if (
+        req.user.id !== group.creator &&
+        !group.admins.includes(req.user.id)
+      ) {
+        return errors.addErrAndSendResponse(
+          res,
+          "You do not have permission to add a notification to this group"
+        );
       }
 
       group.notifications.push(notification);
@@ -370,7 +371,6 @@ const buildNotification = async (req, errors) => {
 // @route   DELETE api/group/notification/:groupId/:notifId
 // @desc    Remove a notification from a group
 // @access  Private
-//TODO make sure only group admins or author can delete notifications
 router.delete("/notification/:groupId/:notifId", auth, async (req, res) => {
   const errors = new APIerrors();
 
@@ -380,6 +380,13 @@ router.delete("/notification/:groupId/:notifId", auth, async (req, res) => {
 
     if (!group) {
       return errors.addErrAndSendResponse(res, "Unable to find group");
+    }
+
+    if (req.user.id !== group.creator && !group.admins.includes(req.user.id)) {
+      return errors.addErrAndSendResponse(
+        res,
+        "You do not have permission to remove a notification from this group"
+      );
     }
 
     const notifIndex = getNotifIndex(group, notifId, errors);
@@ -398,7 +405,6 @@ router.delete("/notification/:groupId/:notifId", auth, async (req, res) => {
 // @route   PUT api/group/notification/:groupId/like/:notifId
 // @desc    Like a notification
 // @access  Private
-//TODO make sure only group members can like notifications
 router.put("/notification/:groupId/like/:notifId", auth, async (req, res) => {
   const errors = new APIerrors();
 
@@ -409,6 +415,14 @@ router.put("/notification/:groupId/like/:notifId", auth, async (req, res) => {
     if (!group) {
       return errors.addErrAndSendResponse(res, "Unable to find group");
     }
+
+    if (!group.users.includes(req.user.id)) {
+      return errors.addErrAndSendResponse(
+        res,
+        "You must be a group member to like this notification"
+      );
+    }
+
     const notifIndex = getNotifIndex(group, notifId, errors);
 
     if (errors.isNotEmpty()) {
@@ -431,7 +445,6 @@ router.put("/notification/:groupId/like/:notifId", auth, async (req, res) => {
 // @route   PUT api/group/notification/:groupId/unlike/:notifId
 // @desc    Unlike a notification
 // @access  Private
-//TODO make sure only group members can unlike notifications
 router.put("/notification/:groupId/unlike/:notifId", auth, async (req, res) => {
   const errors = new APIerrors();
 
@@ -442,6 +455,14 @@ router.put("/notification/:groupId/unlike/:notifId", auth, async (req, res) => {
     if (!group) {
       return errors.addErrAndSendResponse(res, "Unable to find group");
     }
+
+    if (!group.users.includes(req.user.id)) {
+      return errors.addErrAndSendResponse(
+        res,
+        "You must be a group member to unlike this notification"
+      );
+    }
+
     const notifIndex = getNotifIndex(group, notifId, errors);
 
     if (errors.isNotEmpty()) {

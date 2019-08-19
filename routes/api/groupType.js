@@ -11,6 +11,7 @@ const {
   validateRequest
 } = require("./helpers/helpers");
 
+const Group = require("../../models/Group");
 const { GroupType, RequestedGroupType } = require("../../models/GroupType");
 
 // @route   POST api/group-type/list
@@ -240,12 +241,40 @@ router.delete("/:id", auth, async (req, res) => {
       );
     }
 
-    if (!!(await GroupType.findByIdAndDelete(req.params.id))) {
-      return res.status(200).json({ msg: "Group type deleted" });
+    const groupType = GroupType.findById(req.params.id);
+
+    if (!groupType) {
+      return errors.addErrAndSendResponse(res, "Unable to find group type");
     }
 
-    errors.addErrAndSendResponse(res, "Unable to find group type");
+    await handleGroupTypeDeletionSideEffects(groupType, errors);
+    await groupType.remove();
+
+    return res.status(200).json({ msg: "Group type deleted" });
   });
 });
+
+const handleGroupTypeDeletionSideEffects = async (groupType, errors) => {
+  if (groupType.image) {
+    const deleteResponse = await deleteImage(groupType.image.deleteHash);
+    if (deleteResponse.error) {
+      errors.addError(deleteResponse.error);
+    }
+  }
+
+  for (const groupId of groupType.groups) {
+    const group = await Group.findById(groupId);
+    if (!group) continue;
+
+    if (group.image) {
+      const deleteResponse = await deleteImage(group.image.deleteHash);
+      if (deleteResponse.error) {
+        errors.addError(deleteResponse.error);
+      }
+    }
+
+    await group.remove();
+  }
+};
 
 module.exports = router;

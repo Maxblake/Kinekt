@@ -1,6 +1,8 @@
 const { check, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const config = require("config");
+const Filter = require("bad-words-relaxed");
+const filter = new Filter();
 
 const runAPISafely = coreFunction => {
   try {
@@ -66,7 +68,7 @@ class APIerrors {
   }
 
   addExpressValidationResult(req) {
-    const errors = validationResult(req).array();
+    const errors = validationResult(req).array({ onlyFirstError: true });
     errors.forEach(error => {
       this.addError(error.msg, error.param);
     });
@@ -88,37 +90,36 @@ const validateRequest = APImethod => {
           .exists({ checkFalsy: true })
           .isAlphanumeric()
           .isLength({ max: 256 })
-          .withMessage("Name is too long"),
-        check(
-          "place",
-          "Meeting place is required, and must consist of alphanumeric characters"
-        )
+          .withMessage("Name is too long")
+          .custom(name => !filter.isProfane(name))
+          .withMessage(
+            "Name may contain profanity, please remove it to proceed"
+          ),
+        check("place", "Meeting place is required")
           .exists({ checkFalsy: true })
-          .isAlphanumeric()
           .isLength({ max: 256 })
-          .withMessage("Meeting place is too long"),
+          .withMessage("Meeting place is too long")
+          .custom(place => !filter.isProfane(place))
+          .withMessage(
+            "Meeting place may contain profanity, please remove it to proceed"
+          ),
         check("time", "Meeting time is required").exists({ checkFalsy: true }),
         check("description", "Description is too long")
-          .optional()
-          .isAlphanumeric()
+          .optional({ checkFalsy: true })
           .isLength({ max: 512 }),
         check("accessLevel", "Invalid access level option")
-          .optional()
+          .optional({ checkFalsy: true })
           .isIn(["Public", "Private"]),
         check("minSize", "Minimum size must be between 1 and 999")
-          .optional()
-          .isInt()
-          .isLength({ min: 0, max: 999 })
-          .custom((value, { req }) =>
-            req.body.maxSize ? value < req.body.maxSize : true
-          )
-          .withMessage("Minimum size must be lesser than maximum size"),
+          .optional({ checkFalsy: true })
+          .isInt({ min: 0, max: 999 }),
         check("maxSize", "Maximum size must be between 1 and 999")
-          .optional()
-          .isInt()
-          .isLength({ min: 0, max: 999 })
-          .custom((value, { req }) =>
-            req.body.minSize ? value > req.body.minSize : true
+          .optional({ checkFalsy: true })
+          .isInt({ min: 0, max: 999 })
+          .custom((maxSize, { req }) =>
+            req.body.minSize
+              ? parseInt(maxSize) > parseInt(req.body.minSize)
+              : true
           )
           .withMessage("Maximum size must be greater than minimum size")
       ];
@@ -126,48 +127,37 @@ const validateRequest = APImethod => {
     case "updateGroup": {
       return [
         check("name", "Name must consist of alphanumeric characters")
-          .optional()
+          .optional({ checkFalsy: true })
           .isAlphanumeric()
           .isLength({ max: 256 })
           .withMessage("Name is too long"),
-        check("place", "Meeting place must consist of alphanumeric characters")
-          .optional()
-          .isAlphanumeric()
-          .isLength({ max: 256 })
-          .withMessage("Meeting place is too long"),
+        check("place", "Meeting place is too long")
+          .optional({ checkFalsy: true })
+          .isLength({ max: 256 }),
         check("description", "Description is too long")
-          .optional()
-          .isAlphanumeric()
+          .optional({ checkFalsy: true })
           .isLength({ max: 512 }),
         check("accessLevel", "Invalid access level option")
-          .optional()
+          .optional({ checkFalsy: true })
           .isIn(["Public", "Private"]),
         check("minSize", "Minimum size must be between 1 and 999")
-          .optional()
-          .isInt()
-          .isLength({ min: 0, max: 999 })
-          .custom((value, { req }) =>
-            req.body.maxSize ? value < req.body.maxSize : true
-          )
-          .withMessage("Minimum size must be lesser than maximum size"),
+          .optional({ checkFalsy: true })
+          .isInt({ min: 0, max: 999 }),
         check("maxSize", "Maximum size must be between 1 and 999")
-          .optional()
-          .isInt()
-          .isLength({ min: 0, max: 999 })
-          .custom((value, { req }) =>
-            req.body.minSize ? value > req.body.minSize : true
+          .optional({ checkFalsy: true })
+          .isInt({ min: 0, max: 999 })
+          .custom((maxSize, { req }) =>
+            req.body.minSize
+              ? parseInt(maxSize) > parseInt(req.body.minSize)
+              : true
           )
           .withMessage("Maximum size must be greater than minimum size")
       ];
     }
     case "addNotification": {
       return [
-        check(
-          "body",
-          "Notification body is required, and must consist of alphanumeric characters"
-        )
+        check("body", "Notification body is required")
           .exists({ checkFalsy: true })
-          .isAlphanumeric()
           .isLength({ max: 1024 })
           .withMessage("Notification body is too long")
       ];
@@ -198,8 +188,7 @@ const validateRequest = APImethod => {
           .isLength({ max: 256 })
           .withMessage("Name is too long"),
         check("description", "Description is too long")
-          .optional()
-          .isAlphanumeric()
+          .optional({ checkFalsy: true })
           .isLength({ max: 512 }),
         check("category", "Invalid category")
           .exists({ checkFalsy: true })
@@ -217,16 +206,15 @@ const validateRequest = APImethod => {
     case "updateGroupType": {
       return [
         check("name", "Name must consist of alphanumeric characters")
-          .optional()
+          .optional({ checkFalsy: true })
           .isAlphanumeric()
           .isLength({ max: 256 })
           .withMessage("Name is too long"),
         check("description", "Description is too long")
-          .optional()
-          .isAlphanumeric()
+          .optional({ checkFalsy: true })
           .isLength({ max: 512 }),
         check("category", "Invalid category")
-          .optional()
+          .optional({ checkFalsy: true })
           .isIn([
             "Social",
             "Gaming",
@@ -260,21 +248,19 @@ const validateRequest = APImethod => {
             max: 32
           }),
         check("about", "About field is too long")
-          .optional()
-          .isAlphanumeric()
+          .optional({ checkFalsy: true })
           .isLength({ max: 512 })
       ];
     }
     case "updateUser": {
       return [
         check("name", "Name must consist of alphanumeric characters")
-          .optional()
+          .optional({ checkFalsy: true })
           .isAlphanumeric()
           .isLength({ max: 256 })
           .withMessage("Name is too long"),
         check("about", "About field is too long")
-          .optional()
-          .isAlphanumeric()
+          .optional({ checkFalsy: true })
           .isLength({ max: 512 })
       ];
     }

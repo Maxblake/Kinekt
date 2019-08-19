@@ -163,7 +163,6 @@ class NewGroup extends Component {
                 value={this.state.name}
                 onChange={this.handleFormChange}
                 placeholder="E.g. Taco Party"
-                required
               />
             </div>
           </div>
@@ -229,7 +228,6 @@ class NewGroup extends Component {
                 value={this.state.place}
                 onChange={this.handleFormChange}
                 placeholder="E.g. 555 My House, Newport RI"
-                required
               />
             </div>
           </div>

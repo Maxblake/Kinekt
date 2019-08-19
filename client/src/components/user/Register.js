@@ -1,85 +1,9 @@
-/* import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import { registerUser } from "../../actions/authActions";
-
-class Register extends Component {
-  constructor() {
-    super();
-    this.state = {
-      name: "",
-      email: "",
-      password: "",
-      password2: "",
-      errors: {}
-    };
-
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-  }
-
-  componentDidMount() {
-    if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.errors) {
-      this.setState({ errors: nextProps.errors });
-    }
-  }
-
-  onChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
-  }
-
-  onSubmit(e) {
-    e.preventDefault();
-
-    const newUser = {
-      name: this.state.name,
-      email: this.state.email,
-      password: this.state.password,
-      password2: this.state.password2
-    };
-
-    this.props.registerUser(newUser, this.props.history);
-  }
-
-  render() {
-    const { errors } = this.state;
-
-    return <div> /register</div>;
-  }
-}
-
-Register.propTypes = {
-  registerUser: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired
-};
-
-const mapStateToProps = state => ({
-  auth: state.auth,
-  errors: state.errors
-});
-
-export default connect(
-  mapStateToProps,
-  { registerUser }
-)(withRouter(Register)); */
-
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
 import { setAlert } from "../../actions/alert";
-import { register } from "../../actions/auth";
+import { register } from "../../actions/user";
 import PropTypes from "prop-types";
-
-const Filter = require("bad-words-relaxed");
-const filter = new Filter();
 
 const Register = ({ setAlert, register, isAuthenticated }) => {
   const [formData, setFormData] = useState({
@@ -96,19 +20,6 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 
   const onSubmit = async e => {
     e.preventDefault();
-
-    //TODO validate each field with errors instead of adding alerts to page
-
-    /* if (filter.isProfane(name)) {
-      //TODO move profanity checking to back end
-      setAlert("Please choose a different display name", "is-danger");
-    }
-    if (filter.isProfaneLike(about)) {
-      setAlert(
-        "Please remove any offensive language from the 'About You' section",
-        "is-danger"
-      );
-    } */
 
     register({ name, email, password, about });
   };

@@ -1,9 +1,51 @@
 import axios from "axios";
 
-import { EDIT_USER, SET_ERRORS } from "./types";
-import { clearErrorsAndAlerts, logout } from "./auth";
+import {
+  EDIT_USER,
+  SET_ERRORS,
+  REGISTER_SUCCESS,
+  REGISTER_FAIL
+} from "./types";
+import { clearErrorsAndAlerts, logout, loadUser } from "./auth";
 import { setAlert } from "./alert";
 import { deleteGroup } from "./group";
+
+// Register User
+export const register = userFields => async dispatch => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  const body = JSON.stringify(userFields);
+
+  try {
+    const res = await axios.post("/api/user", body, config);
+
+    dispatch({
+      type: REGISTER_SUCCESS,
+      payload: res.data
+    });
+
+    dispatch(clearErrorsAndAlerts());
+
+    dispatch(loadUser());
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      dispatch({
+        type: SET_ERRORS,
+        payload: errors
+      });
+    }
+
+    dispatch({
+      type: REGISTER_FAIL
+    });
+  }
+};
 
 // Edit user profile
 export const editUser = (name, about) => async dispatch => {

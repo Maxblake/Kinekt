@@ -35,9 +35,9 @@ router.post("/process-requested-group-types", auth, (req, res) => {
         delete groupTypeFields._id;
 
         let groupType = new GroupType(groupTypeFields);
-        groupType.save();
+        await groupType.save();
       }
-      requestedGroupType.remove();
+      await requestedGroupType.remove();
     }
 
     res.status(200).send("OK");

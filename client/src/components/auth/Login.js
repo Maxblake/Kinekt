@@ -1,75 +1,3 @@
-// import React, { Component } from "react";
-// import PropTypes from "prop-types";
-// import { connect } from "react-redux";
-// import { loginUser } from "../../actions/authActions";
-
-// class Login extends Component {
-//   constructor() {
-//     super();
-//     this.state = {
-//       email: "",
-//       password: "",
-//       errors: {}
-//     };
-
-//     this.onChange = this.onChange.bind(this);
-//     this.onSubmit = this.onSubmit.bind(this);
-//   }
-
-//   componentDidMount() {
-//     if (this.props.auth.isAuthenticated) {
-//       this.props.history.push("/dashboard");
-//     }
-//   }
-
-//   componentWillReceiveProps(nextProps) {
-//     if (nextProps.auth.isAuthenticated) {
-//       this.props.history.push("./dashboard");
-//     }
-
-//     if (nextProps.errors) {
-//       this.setState({ errors: nextProps.errors });
-//     }
-//   }
-
-//   onChange(e) {
-//     this.setState({ [e.target.name]: e.target.value });
-//   }
-
-//   onSubmit(e) {
-//     e.preventDefault();
-
-//     const userData = {
-//       email: this.state.email,
-//       password: this.state.password
-//     };
-
-//     this.props.loginUser(userData);
-//   }
-
-//   render() {
-//     const { errors } = this.state;
-
-//     return <div className="login" />;
-//   }
-// }
-
-// Login.propTypes = {
-//   loginUser: PropTypes.func.isRequired,
-//   auth: PropTypes.object.isRequired,
-//   errors: PropTypes.object.isRequired
-// };
-
-// const mapStateToProps = state => ({
-//   auth: state.auth,
-//   errors: state.errors
-// });
-
-// export default connect(
-//   mapStateToProps,
-//   { loginUser }
-// )(Login);
-
 import React, { useState, useEffect } from "react";
 import { Link, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
@@ -96,11 +24,12 @@ const Login = ({
   const { email, password } = formData;
 
   const errEmail = errors.find(error => error.param === "email");
+  const errPassword = errors.find(error => error.param === "password");
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const onSubmit = async e => {
+  const onSubmit = e => {
     e.preventDefault();
     //TODO validate, why is this async?
     login(email, password);
@@ -147,18 +76,12 @@ const Login = ({
               name="password"
               value={password}
               onChange={e => onChange(e)}
-              minLength="6"
-              required
             />
           </div>
+          {errPassword && <p class="help is-danger">{errPassword.msg}</p>}
         </div>
 
         <div class="field is-grouped is-grouped-right">
-          <div class="control">
-            <button class="button is-text" type="button">
-              Cancel
-            </button>
-          </div>
           <div class="control">
             <button class="button is-primary" type="submit">
               Log in

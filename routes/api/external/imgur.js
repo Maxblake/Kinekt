@@ -27,7 +27,6 @@ const deleteImage = async deleteHash => {
         deleteResponse.error = error;
       } else if (response.statusCode !== 200) {
         deleteResponse.error = "Imgur Image deletion unsuccessful";
-        console.log(response);
       } else {
         deleteResponse.msg = "Imgur image successfully deleted";
       }

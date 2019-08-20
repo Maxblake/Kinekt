@@ -1,27 +1,27 @@
 import axios from "axios";
 
+import { handleResponseErrors } from "./helpers/helpers";
+import { clearErrorsAndAlerts, logout, loadUser } from "./auth";
+import { setAlert } from "./alert";
+import { deleteGroup } from "./group";
+
 import {
   EDIT_USER,
   SET_ERRORS,
   REGISTER_SUCCESS,
   REGISTER_FAIL
 } from "./types";
-import { clearErrorsAndAlerts, logout, loadUser } from "./auth";
-import { setAlert } from "./alert";
-import { deleteGroup } from "./group";
 
 // Register User
 export const register = userFields => async dispatch => {
-  const config = {
-    headers: {
-      "Content-Type": "application/json"
-    }
-  };
+  const formData = new FormData();
 
-  const body = JSON.stringify(userFields);
+  for (const key of Object.keys(userFields)) {
+    formData.append(key, userFields[key]);
+  }
 
   try {
-    const res = await axios.post("/api/user", body, config);
+    const res = await axios.post("/api/user", formData);
 
     dispatch({
       type: REGISTER_SUCCESS,
@@ -29,17 +29,10 @@ export const register = userFields => async dispatch => {
     });
 
     dispatch(clearErrorsAndAlerts());
-
+    dispatch(setAlert(`Welcome to Kinekt, ${userFields.name}`, "is-success"));
     dispatch(loadUser());
   } catch (err) {
-    const errors = err.response.data.errors;
-
-    if (errors) {
-      dispatch({
-        type: SET_ERRORS,
-        payload: errors
-      });
-    }
+    dispatch(handleResponseErrors(err));
 
     dispatch({
       type: REGISTER_FAIL
@@ -87,7 +80,7 @@ export const deleteUser = () => async dispatch => {
     )
   ) {
     try {
-      const res = await axios.delete("/api/user");
+      await axios.delete("/api/user");
 
       dispatch(deleteGroup(true));
       dispatch(logout());

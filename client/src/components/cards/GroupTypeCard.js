@@ -1,10 +1,10 @@
-import React, { Component } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 import defaultGroupTypeImage from "../../resources/defaultGroupTypeImage.jpg";
 
-class GroupTypeCard extends Component {
-  getClassList = groupTypeCategory => {
+const GroupTypeCard = ({ imgSrc, name, groupTypeCategory }) => {
+  const getClassList = groupTypeCategory => {
     const classList = ["tag", "groupTypeTag"];
 
     switch (groupTypeCategory) {
@@ -33,41 +33,32 @@ class GroupTypeCard extends Component {
     return classList.join(" ");
   };
 
-  render() {
-    return (
-      <Link
-        to={`/k/${this.props.name.split(" ").join("_")}`}
-        className="card groupTypeCard"
-      >
-        <div className="card-image">
-          <figure className="imageContainer image is-2by1">
-            <img
-              src={
-                this.props.imgSrc !== ""
-                  ? this.props.imgSrc
-                  : defaultGroupTypeImage
-              }
-              alt="Placeholder image"
-            />
-          </figure>
-        </div>
-        <span className={this.getClassList(this.props.groupTypeCategory)}>
-          {this.props.groupTypeCategory}
-        </span>
-        <div className="card-content">
-          <h1 className="title is-size-4">{this.props.name}</h1>
-          <div className="subtitle is-size-6">
-            <div className="onlineStatusContainer">
-              <div className="onlineStatusDot" />
-              <h4 className="onlineStatusText">3 groups</h4>
-              <div className="onlineStatusDot" />
-              <h4 className="onlineStatusText">14 users</h4>
-            </div>
+  return (
+    <Link to={`/k/${name.split(" ").join("_")}`} className="card groupTypeCard">
+      <div className="card-image">
+        <figure className="imageContainer image is-2by1">
+          <img
+            src={imgSrc !== "" ? imgSrc : defaultGroupTypeImage}
+            alt="Placeholder image"
+          />
+        </figure>
+      </div>
+      <span className={getClassList(groupTypeCategory)}>
+        {groupTypeCategory}
+      </span>
+      <div className="card-content">
+        <h1 className="title is-size-4">{name}</h1>
+        <div className="subtitle is-size-6">
+          <div className="onlineStatusContainer">
+            <div className="onlineStatusDot" />
+            <h4 className="onlineStatusText">3 groups</h4>
+            <div className="onlineStatusDot" />
+            <h4 className="onlineStatusText">14 users</h4>
           </div>
         </div>
-      </Link>
-    );
-  }
-}
+      </div>
+    </Link>
+  );
+};
 
 export default GroupTypeCard;

@@ -1,27 +1,53 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
-import { setAlert } from "../../actions/alert";
+import { Redirect } from "react-router-dom";
 import { register } from "../../actions/user";
 import PropTypes from "prop-types";
 
-const Register = ({ setAlert, register, isAuthenticated }) => {
+const Register = ({ register, errors, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    about: ""
+    about: "",
+    image: { name: "" }
   });
 
-  const { name, email, password, about } = formData;
+  const { name, email, password, about, image } = formData;
+  const errName = errors.find(error => error.param === "name");
+  const errEmail = errors.find(error => error.param === "email");
+  const errPassword = errors.find(error => error.param === "password");
+  const errAbout = errors.find(error => error.param === "about");
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  const handleImageUpload = e => {
+    const imageFile = e.target.files[0];
+
+    if (!imageFile) return;
+    if (
+      imageFile.size > e.target.attributes.getNamedItem("data-max-size").value
+    ) {
+      setFormData({
+        ...formData,
+        image: {
+          name: imageFile.name,
+          error: "Image file must be smaller than 10MB"
+        }
+      });
+      return;
+    }
+
+    setFormData({
+      ...formData,
+      image: { name: imageFile.name, file: imageFile }
+    });
+  };
+
   const onSubmit = async e => {
     e.preventDefault();
-
-    register({ name, email, password, about });
+    register({ name, email, password, about, image: image.file });
   };
 
   if (isAuthenticated) {
@@ -48,9 +74,9 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
               name="email"
               value={email}
               onChange={e => onChange(e)}
-              required
             />
           </div>
+          {errEmail && <p class="help is-danger">{errEmail.msg}</p>}
         </div>
         <label class="label">Password *</label>
         <div class="field">
@@ -61,10 +87,9 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
               name="password"
               value={password}
               onChange={e => onChange(e)}
-              minLength="6"
-              required
             />
           </div>
+          {errPassword && <p class="help is-danger">{errPassword.msg}</p>}
         </div>
 
         <label class="label">Display Name *</label>
@@ -76,9 +101,9 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
               name="name"
               value={name}
               onChange={e => onChange(e)}
-              required
             />
           </div>
+          {errName && <p class="help is-danger">{errName.msg}</p>}
         </div>
 
         <label class="label">About you</label>
@@ -93,33 +118,36 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
               onChange={e => onChange(e)}
             />
           </div>
+          {errAbout && <p class="help is-danger">{errAbout.msg}</p>}
         </div>
 
-        {/* TODO add image upload */}
         <label class="label">Profile Picture</label>
         <div class="field">
           <div class="file has-name is-primary">
             <label class="file-label">
-              <input class="file-input" type="file" name="resume" />
+              <input
+                class="file-input"
+                type="file"
+                name="userImage"
+                accept="image/*"
+                data-max-size="10485760"
+                onChange={e => handleImageUpload(e)}
+              />
               <span class="file-cta">
                 <span class="file-icon">
                   <i class="fas fa-upload" />
                 </span>
-                <span class="file-label">Choose a file…</span>
+                <span class="file-label">Upload</span>
               </span>
               <span class="file-name">
-                Screen Shot 2017-07-29 at 15.54.25.png
+                {image.name ? image.name : "No image selected.."}
               </span>
             </label>
           </div>
+          {image.error && <p class="help is-danger">{image.error}</p>}
         </div>
 
         <div class="field is-grouped is-grouped-right">
-          <div class="control">
-            <button class="button is-text" type="button">
-              Cancel
-            </button>
-          </div>
           <div class="control">
             <button class="button is-primary" type="submit">
               Sign up
@@ -132,16 +160,17 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 };
 
 Register.propTypes = {
-  setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool
+  isAuthenticated: PropTypes.bool,
+  errors: PropTypes.array.isRequired
 };
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  errors: state.error
 });
 
 export default connect(
   mapStateToProps,
-  { setAlert, register }
+  { register }
 )(Register);

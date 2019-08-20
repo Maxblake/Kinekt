@@ -83,12 +83,8 @@ const validateRequest = APImethod => {
   switch (APImethod) {
     case "createGroup": {
       return [
-        check(
-          "name",
-          "Name is required, and must consist of alphanumeric characters"
-        )
+        check("name", "Name is required")
           .exists({ checkFalsy: true })
-          .isAlphanumeric()
           .isLength({ max: 256 })
           .withMessage("Name is too long")
           .custom(name => !filter.isProfane(name))
@@ -106,7 +102,11 @@ const validateRequest = APImethod => {
         check("time", "Meeting time is required").exists({ checkFalsy: true }),
         check("description", "Description is too long")
           .optional({ checkFalsy: true })
-          .isLength({ max: 512 }),
+          .isLength({ max: 512 })
+          .custom(descr => !filter.isProfane(descr))
+          .withMessage(
+            "Description may contain profanity, please remove it to proceed"
+          ),
         check("accessLevel", "Invalid access level option")
           .optional({ checkFalsy: true })
           .isIn(["Public", "Private"]),
@@ -126,17 +126,29 @@ const validateRequest = APImethod => {
     }
     case "updateGroup": {
       return [
-        check("name", "Name must consist of alphanumeric characters")
+        check("name", "Name is too long")
           .optional({ checkFalsy: true })
-          .isAlphanumeric()
+          .not()
+          .isEmpty({ ignore_whitespace: true })
           .isLength({ max: 256 })
-          .withMessage("Name is too long"),
+          .custom(name => !filter.isProfane(name))
+          .withMessage(
+            "Name may contain profanity, please remove it to proceed"
+          ),
         check("place", "Meeting place is too long")
           .optional({ checkFalsy: true })
-          .isLength({ max: 256 }),
+          .isLength({ max: 256 })
+          .custom(place => !filter.isProfane(place))
+          .withMessage(
+            "Meeting place may contain profanity, please remove it to proceed"
+          ),
         check("description", "Description is too long")
           .optional({ checkFalsy: true })
-          .isLength({ max: 512 }),
+          .isLength({ max: 512 })
+          .custom(descr => !filter.isProfane(descr))
+          .withMessage(
+            "Description may contain profanity, please remove it to proceed"
+          ),
         check("accessLevel", "Invalid access level option")
           .optional({ checkFalsy: true })
           .isIn(["Public", "Private"]),
@@ -160,6 +172,10 @@ const validateRequest = APImethod => {
           .exists({ checkFalsy: true })
           .isLength({ max: 1024 })
           .withMessage("Notification body is too long")
+          .custom(notif => !filter.isProfane(notif))
+          .withMessage(
+            "Notification body may contain profanity, please remove it to proceed"
+          )
       ];
     }
     case "login": {
@@ -179,17 +195,21 @@ const validateRequest = APImethod => {
     }
     case "requestGroupType": {
       return [
-        check(
-          "name",
-          "Name is required, and must consist of alphanumeric characters"
-        )
+        check("name", "Name is required")
           .exists({ checkFalsy: true })
-          .isAlphanumeric()
           .isLength({ max: 256 })
-          .withMessage("Name is too long"),
+          .withMessage("Name is too long")
+          .custom(name => !filter.isProfane(name))
+          .withMessage(
+            "Name may contain profanity, please remove it to proceed"
+          ),
         check("description", "Description is too long")
           .optional({ checkFalsy: true })
-          .isLength({ max: 512 }),
+          .isLength({ max: 512 })
+          .custom(descr => !filter.isProfane(descr))
+          .withMessage(
+            "Description may contain profanity, please remove it to proceed"
+          ),
         check("category", "Invalid category")
           .exists({ checkFalsy: true })
           .isIn([
@@ -205,14 +225,22 @@ const validateRequest = APImethod => {
     }
     case "updateGroupType": {
       return [
-        check("name", "Name must consist of alphanumeric characters")
+        check("name", "Name is too long")
           .optional({ checkFalsy: true })
-          .isAlphanumeric()
+          .not()
+          .isEmpty({ ignore_whitespace: true })
           .isLength({ max: 256 })
-          .withMessage("Name is too long"),
+          .custom(name => !filter.isProfane(name))
+          .withMessage(
+            "Name may contain profanity, please remove it to proceed"
+          ),
         check("description", "Description is too long")
           .optional({ checkFalsy: true })
-          .isLength({ max: 512 }),
+          .isLength({ max: 512 })
+          .custom(descr => !filter.isProfane(descr))
+          .withMessage(
+            "Description may contain profanity, please remove it to proceed"
+          ),
         check("category", "Invalid category")
           .optional({ checkFalsy: true })
           .isIn([
@@ -228,14 +256,14 @@ const validateRequest = APImethod => {
     }
     case "createUser": {
       return [
-        check(
-          "name",
-          "Name is required, and must consist of alphanumeric characters"
-        )
+        check("name", "Name is required")
           .exists({ checkFalsy: true })
-          .isAlphanumeric()
           .isLength({ max: 256 })
-          .withMessage("Name is too long"),
+          .withMessage("Name is too long")
+          .custom(name => !filter.isProfane(name))
+          .withMessage(
+            "Name may contain profanity, please remove it to proceed"
+          ),
         check("email", "Email address is invalid")
           .exists({ checkFalsy: true })
           .isEmail()
@@ -250,18 +278,31 @@ const validateRequest = APImethod => {
         check("about", "About field is too long")
           .optional({ checkFalsy: true })
           .isLength({ max: 512 })
+          .custom(about => !filter.isProfane(about))
+          .withMessage(
+            "About may contain profanity, please remove it to proceed"
+          )
       ];
     }
     case "updateUser": {
       return [
-        check("name", "Name must consist of alphanumeric characters")
+        check("name", "Name is too long")
           .optional({ checkFalsy: true })
-          .isAlphanumeric()
+          .not()
+          .isEmpty({ ignore_whitespace: true })
           .isLength({ max: 256 })
-          .withMessage("Name is too long"),
+          .withMessage("Name is too long")
+          .custom(name => !filter.isProfane(name))
+          .withMessage(
+            "Name may contain profanity, please remove it to proceed"
+          ),
         check("about", "About field is too long")
           .optional({ checkFalsy: true })
           .isLength({ max: 512 })
+          .custom(about => !filter.isProfane(about))
+          .withMessage(
+            "About may contain profanity, please remove it to proceed"
+          )
       ];
     }
   }

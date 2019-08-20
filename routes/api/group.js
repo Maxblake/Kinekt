@@ -239,7 +239,7 @@ const handleImageUpload = async (group, req, errors, updating = false) => {
   if (req.file) {
     let uploadResponse = {};
 
-    if (updating && group.image) {
+    if (updating && group.image && !!group.image.deleteHash) {
       const updateImageResponse = await updateImage(
         req.file,
         group.image.deleteHash
@@ -251,9 +251,9 @@ const handleImageUpload = async (group, req, errors, updating = false) => {
 
     if (uploadResponse.error) {
       errors.addError(
-        `Unable to create group: Image upload failed with error [${
-          uploadResponse.error
-        }]`
+        `Unable to ${
+          updating ? "update" : "create"
+        } group: Image upload failed with error [${uploadResponse.error}]`
       );
     } else {
       group.image = uploadResponse;
@@ -274,11 +274,12 @@ router.delete("/", auth, async (req, res) => {
       return errors.addErrAndSendResponse(res, "Unable to find group");
     }
     await handleGroupDeletionSideEffects(group, errors);
-    await group.remove();
 
     if (errors.isNotEmpty()) {
       return errors.sendErrorResponse(res);
     }
+
+    await group.remove();
 
     res.status(200).json({ msg: "Group deleted" });
   });
@@ -298,7 +299,7 @@ const handleGroupDeletionSideEffects = async (group, errors) => {
   groupType.groups.splice(groupIndex, 1);
   await groupType.save();
 
-  if (group.image) {
+  if (group.image && !!group.image.deleteHash) {
     const deleteResponse = await deleteImage(group.image.deleteHash);
     if (deleteResponse.error) {
       errors.addError(deleteResponse.error);

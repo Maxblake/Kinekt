@@ -1,18 +1,16 @@
 import React from "react";
 
-const getClassList = user => {
-  const messageClasses = ["content", "message"];
+const Message = ({ body, user, time }) => {
+  const getClassList = user => {
+    const messageClasses = ["content", "message"];
 
-  if (user === "Beemo") {
-    messageClasses.push("is-self");
-  }
+    if (user === "Beemo") {
+      messageClasses.push("is-self");
+    }
 
-  return messageClasses.join(" ");
-};
+    return messageClasses.join(" ");
+  };
 
-const getHeader = (user, time) => {};
-
-function Message({ body, user, time }) {
   return (
     <div className={getClassList(user)}>
       <div className="header">
@@ -24,6 +22,6 @@ function Message({ body, user, time }) {
       </div>
     </div>
   );
-}
+};
 
 export default Message;

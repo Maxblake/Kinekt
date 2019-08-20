@@ -1,4 +1,5 @@
 import React from "react";
+
 import lostMoto from "../../resources/lostMoto.png";
 
 export default function NotFound() {

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link, Redirect, withRouter } from "react-router-dom";
-import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { Redirect, withRouter } from "react-router-dom";
+
 import { login, clearErrorsAndAlerts } from "../../actions/auth";
 
 const Login = ({
@@ -22,7 +23,6 @@ const Login = ({
   });
 
   const { email, password } = formData;
-
   const errEmail = errors.find(error => error.param === "email");
   const errPassword = errors.find(error => error.param === "password");
 
@@ -31,7 +31,6 @@ const Login = ({
 
   const onSubmit = e => {
     e.preventDefault();
-    //TODO validate, why is this async?
     login(email, password);
   };
 

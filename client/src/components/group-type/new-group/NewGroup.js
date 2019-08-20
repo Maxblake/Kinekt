@@ -61,8 +61,12 @@ class NewGroup extends Component {
     if (
       imageFile.size > e.target.attributes.getNamedItem("data-max-size").value
     ) {
-      console.log("too big");
-      //TODO set error on field
+      this.setState({
+        image: {
+          name: imageFile.name,
+          error: "Image file must be smaller than 10MB"
+        }
+      });
       return;
     }
 
@@ -302,6 +306,9 @@ class NewGroup extends Component {
                 </span>
               </label>
             </div>
+            {this.state.image.error && (
+              <p class="help is-danger">{this.state.image.error}</p>
+            )}
           </div>
 
           <div class="field is-grouped is-grouped-right">

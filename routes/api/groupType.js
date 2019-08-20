@@ -4,7 +4,7 @@ const auth = require("../../middleware/auth");
 const { check, validationResult } = require("express-validator");
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
-const { updateImage, uploadImage } = require("./external/imgur");
+const { updateImage, uploadImage, deleteImage } = require("./external/imgur");
 const {
   runAPISafely,
   APIerrors,
@@ -205,7 +205,7 @@ const handleImageUpload = async (groupType, req, errors, updating = false) => {
   if (req.file) {
     let uploadResponse = {};
 
-    if (updating && groupType.image) {
+    if (updating && groupType.image && !!groupType.image.deleteHash) {
       const updateImageResponse = await updateImage(
         req.file,
         groupType.image.deleteHash
@@ -217,9 +217,9 @@ const handleImageUpload = async (groupType, req, errors, updating = false) => {
 
     if (uploadResponse.error) {
       errors.addError(
-        `Unable to create group type: Image upload failed with error [${
-          uploadResponse.error
-        }]`
+        `Unable to ${
+          updating ? "update" : "create"
+        } group type: Image upload failed with error [${uploadResponse.error}]`
       );
     } else {
       groupType.image = uploadResponse;
@@ -248,6 +248,11 @@ router.delete("/:id", auth, async (req, res) => {
     }
 
     await handleGroupTypeDeletionSideEffects(groupType, errors);
+
+    if (errors.isNotEmpty()) {
+      return errors.sendErrorResponse(res);
+    }
+
     await groupType.remove();
 
     return res.status(200).json({ msg: "Group type deleted" });
@@ -255,7 +260,7 @@ router.delete("/:id", auth, async (req, res) => {
 });
 
 const handleGroupTypeDeletionSideEffects = async (groupType, errors) => {
-  if (groupType.image) {
+  if (groupType.image && !!groupType.image.deleteHash) {
     const deleteResponse = await deleteImage(groupType.image.deleteHash);
     if (deleteResponse.error) {
       errors.addError(deleteResponse.error);
@@ -266,7 +271,7 @@ const handleGroupTypeDeletionSideEffects = async (groupType, errors) => {
     const group = await Group.findById(groupId);
     if (!group) continue;
 
-    if (group.image) {
+    if (group.image && !!group.image.deleteHash) {
       const deleteResponse = await deleteImage(group.image.deleteHash);
       if (deleteResponse.error) {
         errors.addError(deleteResponse.error);

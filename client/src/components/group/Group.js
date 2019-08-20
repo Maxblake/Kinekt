@@ -2,11 +2,14 @@ import React, { useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+
+import { getGroup, deleteGroup } from "../../actions/group";
+
 import Spinner from "../common/Spinner";
 import GroupMembers from "./GroupMembers";
 import GroupConsole from "./GroupConsole";
 import NotFound from "../common/NotFound";
-import { getGroup, deleteGroup } from "../../actions/group";
+
 import defaultGroupTypeImage from "../../resources/defaultGroupTypeImage.jpg";
 
 const Group = ({

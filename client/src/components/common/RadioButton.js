@@ -1,27 +1,30 @@
 import React from "react";
 
-const getClassList = isSelected => {
-  const classList = ["button"];
+export default function RadioButton({
+  handleClick,
+  valueKey,
+  value,
+  selectedValue
+}) {
+  const getClassList = isSelected => {
+    const classList = ["button"];
 
-  if (isSelected) {
-    classList.push("is-primary");
-  }
+    if (isSelected) {
+      classList.push("is-primary");
+    }
 
-  return classList.join(" ");
-};
+    return classList.join(" ");
+  };
 
-export default function RadioButton(props) {
   return (
     <button
       type="button"
-      className={getClassList(props.selectedValue === props.value)}
+      className={getClassList(selectedValue === value)}
       onClick={() =>
-        props.valueKey
-          ? props.handleClick(props.value, props.valueKey)
-          : props.handleClick(props.value)
+        valueKey ? handleClick(value, valueKey) : handleClick(value)
       }
     >
-      {props.value}
+      {value}
     </button>
   );
 }

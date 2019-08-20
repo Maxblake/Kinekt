@@ -1,12 +1,13 @@
 import React, { useState, useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import Spinner from "../common/Spinner";
+
 import {
   getRequestedGroupTypes,
   processRequestedGroupTypes
 } from "../../actions/admin";
 import { loadUser } from "../../actions/auth";
+
 import NotFound from "../common/NotFound";
 import RadioButton from "../common/RadioButton";
 

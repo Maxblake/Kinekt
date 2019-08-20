@@ -27,8 +27,13 @@ const NewGroupType = ({ requestGroupType, isAuthenticated }) => {
     if (
       imageFile.size > e.target.attributes.getNamedItem("data-max-size").value
     ) {
-      console.log("too big");
-      //TODO set error on field
+      setFormData({
+        ...formData,
+        image: {
+          name: imageFile.name,
+          error: "Image file must be smaller than 10MB"
+        }
+      });
       return;
     }
 
@@ -140,6 +145,7 @@ const NewGroupType = ({ requestGroupType, isAuthenticated }) => {
               </span>
             </label>
           </div>
+          {image.error && <p class="help is-danger">{image.error}</p>}
         </div>
 
         <div class="field is-grouped is-grouped-right">

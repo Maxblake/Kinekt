@@ -24,6 +24,14 @@ const UserSchema = new mongoose.Schema({
   currentGroup: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "group"
+  },
+  image: {
+    link: {
+      type: String
+    },
+    deleteHash: {
+      type: String
+    }
   }
 });
 

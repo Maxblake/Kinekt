@@ -27,6 +27,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         group: payload,
+        error: {},
         loading: false
       };
     }
@@ -40,10 +41,7 @@ export default function(state = initialState, action) {
     }
     case CLEAR_GROUP: {
       return {
-        groups: [],
-        group: null,
-        error: {},
-        loading: false
+        ...initialState
       };
     }
     default:

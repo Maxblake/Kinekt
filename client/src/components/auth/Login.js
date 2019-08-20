@@ -6,11 +6,11 @@ import { Redirect, withRouter } from "react-router-dom";
 import { login, clearErrorsAndAlerts } from "../../actions/auth";
 
 const Login = ({
-  login,
-  clearErrorsAndAlerts,
+  location,
   errors,
   isAuthenticated,
-  location
+  login,
+  clearErrorsAndAlerts
 }) => {
   // TODO Maybe get rid of this eventually
   useEffect(() => {

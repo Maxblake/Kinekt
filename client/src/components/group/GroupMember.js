@@ -1,37 +1,37 @@
-import React, { Component } from "react";
+import React from "react";
 
-class GroupMember extends Component {
-  getStatusClass = status => {
-    switch (status) {
-      case "online":
-        return "is-online";
-      case "away":
-        return "is-away";
-      default:
-        return "is-dark";
-    }
-  };
+const GroupMember = ({ status, memberType, memberName }) => {
+  const getClassList = (status, memberType) => {
+    const classList = ["button", "groupMember"];
 
-  getTypeClass = memberType => {
     switch (memberType) {
       case "admin":
-        return "is-rounded";
+        classList.push("is-rounded");
+        break;
       case "user":
-        return "is-user";
+        classList.push("is-user");
+        break;
       default:
-        return "is-dark";
+        classList.push("is-dark");
     }
+
+    console.log("status", status);
+
+    switch (status) {
+      case "online":
+        classList.push("is-online");
+        break;
+      case "away":
+        classList.push("is-away");
+        break;
+      default:
+        classList.push("is-dark");
+    }
+
+    return classList.join(" ");
   };
 
-  render() {
-    const { status, memberType, memberName } = this.props;
-    const buttonClasses = ["button", "groupMember"];
-
-    buttonClasses.push(this.getStatusClass(status));
-    buttonClasses.push(this.getTypeClass(memberType));
-
-    return <a className={buttonClasses.join(" ")}>{memberName}</a>;
-  }
-}
+  return <a className={getClassList(status, memberType)}>{memberName}</a>;
+};
 
 export default GroupMember;

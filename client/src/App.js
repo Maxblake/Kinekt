@@ -19,7 +19,7 @@ import NotFound from "./components/common/NotFound";
 import Home from "./components/home/Home";
 import NewGroupType from "./components/group-type/NewGroupType";
 import GroupType from "./components/group-type/GroupType";
-import NewGroup from "./components/group-type/new-group/NewGroup";
+import NewGroup from "./components/group/NewGroup";
 import Group from "./components/group/Group";
 import Admin from "./components/auth/Admin";
 

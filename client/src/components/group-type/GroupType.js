@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Spinner from "../common/Spinner";
-import GroupCard from "../cards/GroupCard";
 import NotFound from "../common/NotFound";
+import GroupCard from "../cards/GroupCard";
 import { getGroups } from "../../actions/group";
 import defaultGroupTypeImage from "../../resources/defaultGroupTypeImage.jpg";
 

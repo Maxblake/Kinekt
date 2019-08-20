@@ -1,6 +1,8 @@
 import axios from "axios";
-import { setAlert } from "./alert";
+
+import { handleResponseErrors } from "./helpers/helpers";
 import { clearErrorsAndAlerts } from "./auth";
+import { setAlert } from "./alert";
 
 import {
   SET_ERRORS,
@@ -24,7 +26,6 @@ export const getGroup = (HRID, history = null) => async dispatch => {
     });
 
     if (history) {
-      console.log(res.data);
       history.push(
         `/k/${res.data.groupTypeName.split(" ").join("_")}/group/${HRID}`
       );
@@ -32,7 +33,11 @@ export const getGroup = (HRID, history = null) => async dispatch => {
   } catch (err) {
     dispatch({
       type: GROUP_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: {
+        msg: err.response.statusText,
+        status: err.response.status,
+        HRID
+      }
     });
   }
 };
@@ -77,6 +82,9 @@ export const createGroup = (groupFields, history) => async dispatch => {
     const res = await axios.post("/api/group", formData);
 
     dispatch(clearErrorsAndAlerts());
+    dispatch(
+      setAlert(`Group, ${groupFields.name}, created successfully`, "is-success")
+    );
 
     dispatch({
       type: GET_GROUP,
@@ -89,15 +97,7 @@ export const createGroup = (groupFields, history) => async dispatch => {
       }`
     );
   } catch (err) {
-    const errors =
-      err.response && err.response.data ? err.response.data.errors : undefined;
-
-    if (errors) {
-      dispatch({
-        type: SET_ERRORS,
-        payload: errors
-      });
-    }
+    dispatch(handleResponseErrors(err));
   }
 };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -15,28 +15,30 @@ import defaultGroupTypeImage from "../../resources/defaultGroupTypeImage.jpg";
 const Group = ({
   getGroup,
   deleteGroup,
-  group: { group, loading },
+  group: { group, loading, error },
   groupType: { groupType },
+  isAuthenticated,
   match
 }) => {
   let grpSettingsBtn, grpSettingsDropDown;
 
   useEffect(() => {
-    if (!group || (group && group.HRID !== match.params.groupCode)) {
+    if (
+      isAuthenticated &&
+      (!group || (group && group.HRID !== match.params.groupCode))
+    ) {
       getGroup(match.params.groupCode);
     } else {
       grpSettingsBtn = document.querySelector("#grpSettingsBtn");
       grpSettingsDropDown = document.querySelector(".dropdown");
 
-      //TODO  Move this elsewhere if useEffect ever gets called more than once
       document.addEventListener("click", handleToggleGrpSettings);
     }
 
     return () => {
-      // Remove on unmount
       document.removeEventListener("click", handleToggleGrpSettings);
     };
-  }, [group, match.params.groupCode]);
+  }, [isAuthenticated, group, match.params.groupCode]);
 
   const handleToggleGrpSettings = e => {
     const clickedGrpSettingsBtn = grpSettingsBtn.contains(e.target);
@@ -55,18 +57,18 @@ const Group = ({
     deleteGroup();
   };
 
-  const getDefaultGroupImage = () => {
-    if (group.image) return "";
+  const getGroupImage = () => {
+    if (group.image) return group.image.link;
     if (groupType && groupType.image) return groupType.image.link;
     return defaultGroupTypeImage;
   };
 
-  if (loading) {
-    return <Spinner />;
+  if (!loading && error.HRID === match.params.groupCode) {
+    return <NotFound />;
   }
 
-  if (group === null) {
-    return <NotFound />;
+  if (!group || (group && group.HRID !== match.params.groupCode)) {
+    return <Spinner />;
   }
 
   return (
@@ -125,7 +127,7 @@ const Group = ({
           </div>
         </div>
       </nav>
-      <GroupConsole group={group} defaultImg={getDefaultGroupImage()} />
+      <GroupConsole group={group} imgSrc={getGroupImage()} />
       <GroupMembers />
     </section>
   );
@@ -134,13 +136,13 @@ const Group = ({
 Group.propTypes = {
   getGroup: PropTypes.func.isRequired,
   deleteGroup: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired,
+  isAuthenticated: PropTypes.bool,
   group: PropTypes.object.isRequired,
   groupType: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth,
+  isAuthenticated: state.auth.isAuthenticated,
   group: state.group,
   groupType: state.groupType
 });

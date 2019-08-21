@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import { connect } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
-import { requestGroupType } from "../../actions/groupType";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
-const Filter = require("bad-words-relaxed");
-const filter = new Filter();
+import { requestGroupType } from "../../actions/groupType";
 
-const NewGroupType = ({ requestGroupType, isAuthenticated }) => {
+const NewGroupType = ({ history, requestGroupType, errors }) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -16,6 +14,10 @@ const NewGroupType = ({ requestGroupType, isAuthenticated }) => {
   });
 
   const { name, description, image, category } = formData;
+
+  const errName = errors.find(error => error.param === "name");
+  const errDescription = errors.find(error => error.param === "description");
+  const errCategory = errors.find(error => error.param === "category");
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -53,9 +55,7 @@ const NewGroupType = ({ requestGroupType, isAuthenticated }) => {
       image: image.file
     };
 
-    requestGroupType(groupTypeFields);
-
-    //TODO redirect to discover
+    requestGroupType(groupTypeFields, history);
   };
 
   return (
@@ -81,9 +81,9 @@ const NewGroupType = ({ requestGroupType, isAuthenticated }) => {
               value={name}
               onChange={e => onChange(e)}
               placeholder="E.g. Table-top gaming"
-              required
             />
           </div>
+          {errName && <p class="help is-danger">{errName.msg}</p>}
         </div>
 
         <label class="label">Description</label>
@@ -98,6 +98,7 @@ const NewGroupType = ({ requestGroupType, isAuthenticated }) => {
               placeholder="E.g. Calling board game enthusiasts- hang out and share your favorite games with new friends!"
             />
           </div>
+          {errDescription && <p class="help is-danger">{errDescription.msg}</p>}
         </div>
 
         <label class="label">Category</label>
@@ -105,7 +106,6 @@ const NewGroupType = ({ requestGroupType, isAuthenticated }) => {
           <div class="control">
             <div class="select">
               <select
-                required
                 name="category"
                 value={category}
                 onChange={e => onChange(e)}
@@ -120,6 +120,7 @@ const NewGroupType = ({ requestGroupType, isAuthenticated }) => {
               </select>
             </div>
           </div>
+          {errCategory && <p class="help is-danger">{errCategory.msg}</p>}
         </div>
 
         <label class="label">Group Type Image</label>
@@ -150,11 +151,6 @@ const NewGroupType = ({ requestGroupType, isAuthenticated }) => {
 
         <div class="field is-grouped is-grouped-right">
           <div class="control">
-            <button class="button is-text" type="button">
-              Cancel
-            </button>
-          </div>
-          <div class="control">
             <button class="button is-primary" type="submit">
               Submit
             </button>
@@ -167,14 +163,14 @@ const NewGroupType = ({ requestGroupType, isAuthenticated }) => {
 
 NewGroupType.propTypes = {
   requestGroupType: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool
+  errors: PropTypes.array.isRequired
 };
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  errors: state.error
 });
 
 export default connect(
   mapStateToProps,
   { requestGroupType }
-)(NewGroupType);
+)(withRouter(NewGroupType));

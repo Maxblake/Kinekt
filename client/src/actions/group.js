@@ -5,7 +5,6 @@ import { clearErrorsAndAlerts } from "./auth";
 import { setAlert } from "./alert";
 
 import {
-  SET_ERRORS,
   GET_GROUP,
   GET_GROUPS,
   GROUP_ERROR,
@@ -62,7 +61,11 @@ export const getGroups = groupTypeName => async dispatch => {
   } catch (err) {
     dispatch({
       type: GROUP_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: {
+        msg: err.response.statusText,
+        status: err.response.status,
+        groupTypeName
+      }
     });
     dispatch({
       type: CLEAR_GROUPTYPES
@@ -82,6 +85,7 @@ export const createGroup = (groupFields, history) => async dispatch => {
     const res = await axios.post("/api/group", formData);
 
     dispatch(clearErrorsAndAlerts());
+
     dispatch(
       setAlert(`Group, ${groupFields.name}, created successfully`, "is-success")
     );

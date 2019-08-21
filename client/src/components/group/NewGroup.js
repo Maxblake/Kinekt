@@ -273,33 +273,28 @@ const NewGroup = ({
 
         <label class="label">Group Size</label>
         <div class="field">
-          <div className="field is-grouped">
-            <div class="control">
-              <input
-                class="input smallInput"
-                type="text"
-                placeholder="Any"
-                name="minSize"
-                value={minSize}
-                onChange={e => onChange(e)}
-              />
-            </div>
-            <div class="control centeredVertically">
+          <div class="control is-flex">
+            <input
+              class="input smallInput"
+              type="text"
+              placeholder="Any"
+              name="minSize"
+              value={minSize}
+              onChange={e => onChange(e)}
+            />
+            <div class="centeredVertically grouped-control-margin">
               <h3>-to-</h3>
             </div>
-            <div class="control">
-              <input
-                class="input smallInput"
-                type="text"
-                placeholder="Any"
-                name="maxSize"
-                value={maxSize}
-                onChange={e => onChange(e)}
-              />
-            </div>
+            <input
+              class="input smallInput"
+              type="text"
+              placeholder="Any"
+              name="maxSize"
+              value={maxSize}
+              onChange={e => onChange(e)}
+            />
           </div>
           {errMaxSize && <p class="help is-danger">{errMaxSize.msg}</p>}
-          <p class="help is-danger">asdfasfasdfasfasdfasfasdf</p>
         </div>
 
         <label class="label">Access Level</label>

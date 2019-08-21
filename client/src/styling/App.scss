@@ -229,6 +229,10 @@ html {
   }
 }
 
+.grouped-control-margin {
+  margin: 0 0.75rem;
+}
+
 @media (max-width: $desktop - 1) {
   .pageNotFound {
     padding: 0 1em;
@@ -254,6 +258,30 @@ html {
 
 .col-stretch {
   width: 99%;
+}
+
+// Discover header
+.discoverHeader {
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  display: flex;
+  background: hsl(204, 86%, 53%);
+  border: 9px dotted $black;
+
+  .headerStep {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+
+    .stepDescription {
+      margin-top: 1rem;
+      padding: 0.5rem 0.75rem;
+      color: whitesmoke;
+      background: $black;
+      border-radius: 6px;
+    }
+  }
 }
 
 // Group type categories

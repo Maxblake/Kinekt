@@ -1,11 +1,11 @@
 import React, { useState, useEffect, Fragment } from "react";
-import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import Spinner from "../common/Spinner";
-import NotFound from "../common/NotFound";
+import { Link } from "react-router-dom";
+
 import { getGroupTypes } from "../../actions/groupType";
 
+import Spinner from "../common/Spinner";
 import GroupTypeCard from "../cards/GroupTypeCard";
 
 const Discover = ({
@@ -13,6 +13,17 @@ const Discover = ({
   groupType: { groupTypes, loading },
   isAuthenticated
 }) => {
+  useEffect(() => {
+    if (readyToLoadNewTypes) {
+      getGroupTypes(groupTypeData);
+
+      setgroupTypeData({
+        ...groupTypeData,
+        readyToLoadNewTypes: false
+      });
+    }
+  }, [readyToLoadNewTypes]);
+
   const [groupTypeData, setgroupTypeData] = useState({
     sortBy: "Trending",
     category: "All",
@@ -30,7 +41,7 @@ const Discover = ({
         e.target.name === "searchTerms" ? readyToLoadNewTypes : true
     });
 
-  const onSearchTermsEntered = e => {
+  const onSearchTermsSubmit = e => {
     e.preventDefault();
 
     setgroupTypeData({
@@ -39,27 +50,29 @@ const Discover = ({
     });
   };
 
-  const onSelectChange = e => {
-    onChange(e);
-  };
-
-  useEffect(() => {
-    if (readyToLoadNewTypes) {
-      getGroupTypes(groupTypeData);
-
-      setgroupTypeData({
-        ...groupTypeData,
-        readyToLoadNewTypes: false
-      });
-    }
-  }, [readyToLoadNewTypes]);
-
-  if (loading) {
-    return <Spinner />;
-  }
-
-  if (groupTypes === null) {
-    return <NotFound />;
+  let groupTypeCards = <Spinner />;
+  if (!loading && !groupTypes.length) {
+    groupTypeCards = (
+      <div className="box is-size-5 has-text-centered has-margin-top-2">
+        There are currently no group types here. It may be time to request a new
+        one!
+      </div>
+    );
+  } else if (!!groupTypes.length) {
+    groupTypeCards = (
+      <div className="groupTypeCards">
+        {groupTypes.map(groupType => (
+          <GroupTypeCard
+            key={groupType._id}
+            imgSrc={groupType.image ? groupType.image.link : ""}
+            name={groupType.name}
+            groupTypeCategory={
+              groupType.category ? groupType.category : "Other"
+            }
+          />
+        ))}
+      </div>
+    );
   }
 
   return (
@@ -88,7 +101,7 @@ const Discover = ({
                 <select
                   name="sortBy"
                   value={sortBy}
-                  onChange={e => onSelectChange(e)}
+                  onChange={e => onChange(e)}
                 >
                   <option>Trending</option>
                   <option>Top</option>
@@ -104,7 +117,7 @@ const Discover = ({
                 <select
                   name="category"
                   value={category}
-                  onChange={e => onSelectChange(e)}
+                  onChange={e => onChange(e)}
                 >
                   <option>All</option>
                   <option>Social</option>
@@ -118,7 +131,7 @@ const Discover = ({
             </div>
           </div>
           <div className="level-item">
-            <form onSubmit={e => onSearchTermsEntered(e)}>
+            <form onSubmit={e => onSearchTermsSubmit(e)}>
               <div className="field has-addons">
                 <p className="control" id="controlSearchGroupTypes">
                   <input
@@ -142,18 +155,7 @@ const Discover = ({
           </div>
         </div>
       </nav>
-      <div className="groupTypeCards">
-        {groupTypes.map(groupType => (
-          <GroupTypeCard
-            key={groupType._id}
-            imgSrc={groupType.image ? groupType.image.link : ""}
-            name={groupType.name}
-            groupTypeCategory={
-              groupType.category ? groupType.category : "Other"
-            }
-          />
-        ))}
-      </div>
+      {groupTypeCards}
     </section>
   );
 };

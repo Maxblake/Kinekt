@@ -1,8 +1,10 @@
 import axios from "axios";
-import { setAlert } from "./alert";
-import { clearErrorsAndAlerts } from "./auth";
 
-import { GET_GROUPTYPES, GROUPTYPE_ERROR, SET_ERRORS } from "./types";
+import { handleResponseErrors } from "./helpers/helpers";
+import { clearErrorsAndAlerts } from "./auth";
+import { setAlert } from "./alert";
+
+import { GET_GROUPTYPES, GROUPTYPE_ERROR } from "./types";
 
 // Get a list of group types ordered and filtered by passed criteria
 export const getGroupTypes = ({
@@ -34,7 +36,10 @@ export const getGroupTypes = ({
 };
 
 // Request that a new group type get created
-export const requestGroupType = groupTypeFields => async dispatch => {
+export const requestGroupType = (
+  groupTypeFields,
+  history
+) => async dispatch => {
   const formData = new FormData();
 
   for (const key of Object.keys(groupTypeFields)) {
@@ -52,17 +57,11 @@ export const requestGroupType = groupTypeFields => async dispatch => {
         "is-success"
       )
     );
+
+    history.push("/");
   } catch (err) {
     //TODO receive response error message for.. every api call :)
-    const errors =
-      err.response && err.response.data ? err.response.data.errors : undefined;
-
-    if (errors) {
-      dispatch({
-        type: SET_ERRORS,
-        payload: errors
-      });
-    }
+    dispatch(handleResponseErrors(err));
 
     dispatch({
       type: GROUPTYPE_ERROR,

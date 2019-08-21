@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+
 import { removeAlert } from "../../actions/alert";
 
 const Alert = ({ alerts, errors, removeAlert }) => {
@@ -24,9 +25,12 @@ const Alert = ({ alerts, errors, removeAlert }) => {
     }
   });
 
-  if (alertsAndErrors !== null && alertsAndErrors.length > 0) {
+  if (!!alertsAndErrors.length) {
     return alertsAndErrors.map(alert => (
-      <div key={alert.id} className={`notification ${alert.alertType}`}>
+      <div
+        key={alert.id}
+        className={`notification has-text-centered ${alert.alertType}`}
+      >
         <button className="delete" onClick={() => removeAlert(alert.id)} />
         {alert.msg}
       </div>

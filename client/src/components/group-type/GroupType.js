@@ -1,17 +1,20 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+
+import { getGroups } from "../../actions/group";
+
 import Spinner from "../common/Spinner";
 import NotFound from "../common/NotFound";
 import GroupCard from "../cards/GroupCard";
-import { getGroups } from "../../actions/group";
+
 import defaultGroupTypeImage from "../../resources/defaultGroupTypeImage.jpg";
 
 //TODO format date/times with moment
 const GroupType = ({
   getGroups,
-  group: { groups, loading },
+  group: { groups, loading, error },
   groupType: { groupType },
   match
 }) => {
@@ -21,17 +24,22 @@ const GroupType = ({
       groupType && groupType.name !== groupTypeParamSpaced;
     if (!groupType || groupTypeParamChanged) {
       getGroups(groupTypeParamSpaced);
-    } else {
-      //mounted
     }
-  }, [loading, match.params.groupType]);
+  }, [match.params.groupType]);
 
-  if (loading) {
-    return <Spinner />;
+  if (
+    !loading &&
+    error.groupTypeName === match.params.groupType.split("_").join(" ")
+  ) {
+    return <NotFound />;
   }
 
-  if (!groupType) {
-    return <NotFound />;
+  if (
+    !groupType ||
+    (groupType &&
+      groupType.name !== match.params.groupType.split("_").join(" "))
+  ) {
+    return <Spinner />;
   }
 
   return (
@@ -111,9 +119,14 @@ const GroupType = ({
             groupTypeName={match.params.groupType}
           />
         ))}
-        {groups && (
+        {!!groups.length ? (
           <div className="content has-text-centered">
             <h3>- This is the end. -</h3>
+          </div>
+        ) : (
+          <div className="box is-size-5 has-text-centered has-margin-top-2">
+            There are currently no groups here. It may be time to make a new
+            one!
           </div>
         )}
       </div>

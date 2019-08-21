@@ -7,14 +7,23 @@ import { setAlert } from "./alert";
 import {
   GET_GROUP,
   GET_GROUPS,
+  GET_GROUPTYPE,
   GROUP_ERROR,
   CLEAR_GROUP,
   CLEAR_GROUPTYPES
 } from "./types";
 
-// Get group by HRID (human readable id), optionally redirect to group's url
+// Get group by HRID (human readable id)
 export const getGroup = (HRID, history = null) => async dispatch => {
   try {
+    // If history is passed in, this is being called from outside of the group component, so the user may not be logged in or have the group type in state
+    if (!!history) {
+      const res = await axios.get(`/api/group/${HRID}/grouptype`);
+
+      history.push(`/k/${res.data.name.split(" ").join("_")}/group/${HRID}`);
+      return;
+    }
+
     const res = await axios.get(`/api/group/${HRID}`);
 
     dispatch(clearErrorsAndAlerts());
@@ -24,12 +33,15 @@ export const getGroup = (HRID, history = null) => async dispatch => {
       payload: res.data.group
     });
 
-    if (history) {
-      history.push(
-        `/k/${res.data.groupTypeName.split(" ").join("_")}/group/${HRID}`
-      );
-    }
+    dispatch({
+      type: GET_GROUPTYPE,
+      payload: res.data
+    });
   } catch (err) {
+    if (!!history) {
+      dispatch(setAlert("Group does not exist", "is-warning"));
+    }
+
     dispatch({
       type: GROUP_ERROR,
       payload: {
@@ -39,6 +51,21 @@ export const getGroup = (HRID, history = null) => async dispatch => {
       }
     });
   }
+};
+
+export const getGroupGroupType = (HRID, history = null) => async dispatch => {
+  try {
+    return await axios.get(`/api/group/${HRID}/grouptype`);
+  } catch (err) {
+    dispatch({
+      type: GROUP_ERROR,
+      payload: {
+        msg: err.response.statusText,
+        status: err.response.status
+      }
+    });
+  }
+  return null;
 };
 
 // Get a list of groups within a given group type
@@ -96,7 +123,7 @@ export const createGroup = (groupFields, history) => async dispatch => {
     });
 
     history.push(
-      `/k/${res.data.groupTypeName.split(" ").join("_")}/group/${
+      `/k/${res.data.groupType.name.split(" ").join("_")}/group/${
         res.data.group.HRID
       }`
     );

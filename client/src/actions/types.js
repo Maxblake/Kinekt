@@ -28,5 +28,6 @@ export const CLEAR_GROUP = "CLEAR_GROUP";
 export const EDIT_USER = "EDIT_USER";
 
 export const GET_GROUPTYPES = "GET_GROUPTYPES";
+export const GET_GROUPTYPE = "GET_GROUPTYPE";
 export const GROUPTYPE_ERROR = "GROUPTYPE_ERROR";
 export const CLEAR_GROUPTYPES = "CLEAR_GROUPTYPES";

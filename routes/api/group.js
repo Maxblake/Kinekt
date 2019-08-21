@@ -52,10 +52,42 @@ router.get("/:HRID", auth, (req, res) => {
       return errors.addErrAndSendResponse(res, "Group does not exist");
     }
 
-    const groupType = await GroupType.findById(group.groupType).select("name");
-    const response = { group, groupTypeName: groupType.name };
+    const groupType = await GroupType.findById(group.groupType);
+    if (!groupType) {
+      return errors.addErrAndSendResponse(
+        res,
+        "Group is linked to non-existent group type"
+      );
+    }
+
+    const response = { group, groupType };
 
     res.json(response);
+  });
+});
+
+// @route   GET api/group/:HRID/grouptype
+// @desc    Get group's group type by HRID (human readable id)
+// @access  Public
+router.get("/:HRID/grouptype", (req, res) => {
+  const errors = new APIerrors();
+
+  runAPISafely(async () => {
+    const group = await Group.findOne({ HRID: req.params.HRID });
+
+    if (!group) {
+      return errors.addErrAndSendResponse(res, "Group does not exist");
+    }
+
+    const groupType = await GroupType.findById(group.groupType);
+    if (!groupType) {
+      return errors.addErrAndSendResponse(
+        res,
+        "Group is linked to non-existent group type"
+      );
+    }
+
+    res.json(groupType);
   });
 });
 

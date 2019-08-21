@@ -13,13 +13,14 @@ const Navbar = ({
   getGroup,
   logout,
   auth: { isAuthenticated, loading },
-  group
+  group,
+  groupType
 }) => {
   let navBurger, navDropdown;
 
   useEffect(() => {
     document.body.classList.add("has-navbar-fixed-top");
-    document.addEventListener("click", handleToggleNavMenu);
+    document.addEventListener("click", handleToggleNavDropdown);
 
     //Navbar burger
     navBurger = document.querySelector(".burger");
@@ -46,10 +47,6 @@ const Navbar = ({
     logo.addEventListener("mouseout", function() {
       typewriter.stop();
     });
-
-    return () => {
-      document.removeEventListener("click", handleToggleNavMenu);
-    };
   }, []);
 
   const [navData, setNavData] = useState({
@@ -61,15 +58,15 @@ const Navbar = ({
   const onChange = e =>
     setNavData({ ...navData, [e.target.name]: e.target.value });
 
-  const handleToggleNavMenu = e => {
-    const clickInsideMenu = navDropdown.contains(e.target);
+  const handleToggleNavDropdown = e => {
+    const clickInsideDropdown = navDropdown.contains(e.target);
     const clickOnBurger = navBurger.contains(e.target);
-    const navMenuActive = navBurger.classList.contains("is-active");
-    const clickOnMenuButton =
-      clickInsideMenu && e.target.classList.contains("button");
+    const navDropdownActive = navBurger.classList.contains("is-active");
+    const clickOnDropdownButton =
+      clickInsideDropdown && e.target.classList.contains("button");
 
-    if (navMenuActive) {
-      if (!clickInsideMenu || clickOnMenuButton) {
+    if (navDropdownActive) {
+      if (!clickInsideDropdown || clickOnDropdownButton) {
         navBurger.classList.remove("is-active");
         navDropdown.classList.remove("is-active");
       }
@@ -79,19 +76,23 @@ const Navbar = ({
     }
   };
 
-  const onSubmitGroupCode = e => {
+  const onSubmitGroupCode = async e => {
     e.preventDefault();
+
+    console.log(groupType);
 
     getGroup(groupCode, history);
   };
 
   const authLinks = (
     <Fragment>
-      {group && (
+      {group && groupType && (
         <div className="navbar-item">
           <div className="buttons">
             <Link
-              to={`/k/${group.g}/group/${group.HRID}`}
+              to={`/k/${groupType.name.split(" ").join("_")}/group/${
+                group.HRID
+              }`}
               className="button is-primary is-outlined is-small"
               id="currentGroupBtn"
             >
@@ -199,12 +200,14 @@ Navbar.propTypes = {
   logout: PropTypes.func.isRequired,
   getGroup: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
-  group: PropTypes.object.isRequired
+  group: PropTypes.object,
+  groupTypeName: PropTypes.string
 };
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  group: state.group.group
+  group: state.group.group,
+  groupType: state.groupType.groupType
 });
 
 export default connect(

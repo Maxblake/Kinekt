@@ -1,5 +1,6 @@
 import {
   GET_GROUPS,
+  GET_GROUPTYPE,
   GET_GROUPTYPES,
   GROUPTYPE_ERROR,
   CLEAR_GROUPTYPES
@@ -23,6 +24,7 @@ export default function(state = initialState, action) {
         loading: false
       };
     }
+    case GET_GROUPTYPE:
     case GET_GROUPS: {
       return {
         ...state,
@@ -41,7 +43,7 @@ export default function(state = initialState, action) {
     case CLEAR_GROUPTYPES: {
       return {
         groupTypes: [],
-        groupTypes: null,
+        groupType: null,
         loading: false,
         error: {}
       };

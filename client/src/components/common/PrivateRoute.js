@@ -9,11 +9,13 @@ const PrivateRoute = ({
   location,
   ...rest
 }) => {
+  const shouldLoginFirst = !isAuthenticated && !loading;
+
   return (
     <Route
       {...rest}
       render={props =>
-        !isAuthenticated && !loading ? (
+        shouldLoginFirst ? (
           <Redirect
             to={{
               pathname: "/login",

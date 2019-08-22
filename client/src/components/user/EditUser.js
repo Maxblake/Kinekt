@@ -1,60 +1,70 @@
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
-import { setAlert } from "../../actions/alert";
-import { editUser, deleteUser } from "../../actions/user";
-import { loadUser } from "../../actions/auth";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+
+import { editUser, deleteUser } from "../../actions/user";
+
 import Spinner from "../common/Spinner";
-import NotFound from "../common/NotFound";
 
-const Filter = require("bad-words-relaxed");
-const filter = new Filter();
-
-const EditUser = ({
-  setAlert,
-  editUser,
-  deleteUser,
-  loadUser,
-  auth: { user, loading }
-}) => {
+const EditUser = ({ editUser, deleteUser, errors, auth: { user } }) => {
   const [formData, setFormData] = useState({
     name: "",
-    about: ""
+    about: "",
+    image: { name: "" }
   });
 
-  const { name, about } = formData;
+  const { name, about, image } = formData;
+
+  const errName = errors.find(error => error.param === "name");
+  const errAbout = errors.find(error => error.param === "about");
 
   useEffect(() => {
-    if (!loading) {
-      if (user === null) {
-        loadUser();
-      } else {
-        setFormData({ ...formData, name: user.name, about: user.about });
-      }
+    if (user) {
+      setFormData({
+        ...formData,
+        name: user.name,
+        about: user.about
+      });
     }
   }, [user]);
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const onSubmit = async e => {
-    e.preventDefault();
+  const handleImageUpload = e => {
+    const imageFile = e.target.files[0];
 
-    //TODO filter profane fields, also why async?
-
-    editUser(name, about);
+    if (!imageFile) return;
+    if (
+      imageFile.size > e.target.attributes.getNamedItem("data-max-size").value
+    ) {
+      setFormData({
+        ...formData,
+        image: {
+          name: imageFile.name,
+          error: "Image file must be smaller than 10MB"
+        }
+      });
+      return;
+    }
+    setFormData({
+      ...formData,
+      image: { name: imageFile.name, file: imageFile }
+    });
   };
 
-  const onClickDelete = e => {
+  const onSubmit = e => {
+    e.preventDefault();
+
+    editUser({ name, about, image: image.file });
+  };
+
+  const onClickDelete = () => {
     deleteUser();
   };
 
-  if (loading) {
+  if (!user) {
     return <Spinner />;
-  }
-
-  if (user === null) {
-    return <NotFound />;
   }
 
   return (
@@ -77,9 +87,9 @@ const EditUser = ({
               name="name"
               value={name}
               onChange={e => onChange(e)}
-              required
             />
           </div>
+          {errName && <p class="help is-danger">{errName.msg}</p>}
         </div>
 
         <label class="label">About you</label>
@@ -94,37 +104,36 @@ const EditUser = ({
               onChange={e => onChange(e)}
             />
           </div>
+          {errAbout && <p class="help is-danger">{errAbout.msg}</p>}
         </div>
 
-        {/* TODO add image upload */}
         <label class="label">Profile Picture</label>
         <div class="field">
           <div class="file has-name is-primary">
             <label class="file-label">
-              <input class="file-input" type="file" name="resume" />
+              <input
+                class="file-input"
+                type="file"
+                name="userImage"
+                accept="image/*"
+                data-max-size="10485760"
+                onChange={e => handleImageUpload(e)}
+              />
               <span class="file-cta">
                 <span class="file-icon">
                   <i class="fas fa-upload" />
                 </span>
-                <span class="file-label">Choose a file…</span>
+                <span class="file-label">Upload</span>
               </span>
               <span class="file-name">
-                Screen Shot 2017-07-29 at 15.54.25.png
+                {image.name ? image.name : "No image selected.."}
               </span>
             </label>
           </div>
+          {image.error && <p class="help is-danger">{image.error}</p>}
         </div>
 
         <div class="field is-grouped is-grouped-right">
-          <div class="control">
-            <button
-              class="button is-text"
-              type="button"
-              onClick={e => onClickDelete(e)}
-            >
-              Delete Account
-            </button>
-          </div>
           <div class="control">
             <button class="button is-primary" type="submit">
               Save
@@ -132,23 +141,28 @@ const EditUser = ({
           </div>
         </div>
       </form>
+      <div className="content has-text-centered">
+        <p className="">
+          Looking to <a onClick={() => onClickDelete()}>delete</a> your account?
+        </p>
+      </div>
     </section>
   );
 };
 
 EditUser.propTypes = {
-  setAlert: PropTypes.func.isRequired,
   editUser: PropTypes.func.isRequired,
   deleteUser: PropTypes.func.isRequired,
-  loadUser: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool
+  isAuthenticated: PropTypes.bool,
+  errors: PropTypes.array.isRequired
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  errors: state.error
 });
 
 export default connect(
   mapStateToProps,
-  { setAlert, editUser, deleteUser, loadUser }
+  { editUser, deleteUser }
 )(EditUser);

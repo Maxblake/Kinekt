@@ -65,6 +65,9 @@ router.put(
   async (req, res) => {
     const errors = new APIerrors();
 
+    if (errors.addExpressValidationResult(req))
+      return errors.sendErrorResponse(res);
+
     runAPISafely(async () => {
       if (!User.findById(req.user.id)) {
         return errors.addErrAndSendResponse(res, "Invalid User ID");
@@ -86,6 +89,8 @@ router.put(
       if (errors.isNotEmpty()) {
         return errors.sendErrorResponse(res);
       }
+
+      await user.save();
 
       return res.json(user);
     });

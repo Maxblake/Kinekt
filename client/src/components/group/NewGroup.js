@@ -21,12 +21,6 @@ const NewGroup = ({
   createGroup,
   getGroups
 }) => {
-  useEffect(() => {
-    if (!groupType) {
-      getGroups(match.params.groupType.split("_").join(" "));
-    }
-  }, []);
-
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -57,6 +51,12 @@ const NewGroup = ({
   const errDescription = errors.find(error => error.param === "description");
   const errPlace = errors.find(error => error.param === "place");
   const errMaxSize = errors.find(error => error.param === "maxSize");
+
+  useEffect(() => {
+    if (!groupType) {
+      getGroups(match.params.groupType.split("_").join(" "));
+    }
+  }, []);
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });

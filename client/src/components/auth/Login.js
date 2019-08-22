@@ -12,11 +12,6 @@ const Login = ({
   login,
   clearErrorsAndAlerts
 }) => {
-  // TODO Maybe get rid of this eventually
-  useEffect(() => {
-    clearErrorsAndAlerts();
-  }, []);
-
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -25,6 +20,11 @@ const Login = ({
   const { email, password } = formData;
   const errEmail = errors.find(error => error.param === "email");
   const errPassword = errors.find(error => error.param === "password");
+
+  // TODO Maybe get rid of this eventually
+  useEffect(() => {
+    clearErrorsAndAlerts();
+  }, []);
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });

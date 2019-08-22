@@ -41,17 +41,15 @@ export const register = userFields => async dispatch => {
 };
 
 // Edit user profile
-export const editUser = (name, about) => async dispatch => {
-  const config = {
-    headers: {
-      "Content-Type": "application/json"
-    }
-  };
+export const editUser = userFields => async dispatch => {
+  const formData = new FormData();
 
-  const body = JSON.stringify({ name, about });
+  for (const key of Object.keys(userFields)) {
+    formData.append(key, userFields[key]);
+  }
 
   try {
-    const res = await axios.put("/api/user", body, config);
+    const res = await axios.put("/api/user", formData);
 
     dispatch({
       type: EDIT_USER,
@@ -61,14 +59,7 @@ export const editUser = (name, about) => async dispatch => {
     dispatch(clearErrorsAndAlerts());
     dispatch(setAlert("Account settings saved", "is-success"));
   } catch (err) {
-    const errors = err.response.data.errors;
-
-    if (errors) {
-      dispatch({
-        type: SET_ERRORS,
-        payload: errors
-      });
-    }
+    dispatch(handleResponseErrors(err));
   }
 };
 

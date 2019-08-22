@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -13,40 +13,41 @@ const Discover = ({
   groupType: { groupTypes, loading },
   isAuthenticated
 }) => {
+  const [groupTypeData, setgroupTypeData] = useState({
+    sortBy: "Trending",
+    category: "All",
+    searchTerms: "",
+    readyToLoadNewTypes: "true"
+  });
+
+  const { sortBy, category, searchTerms, readyToLoadNewTypes } = groupTypeData;
+
   useEffect(() => {
     if (readyToLoadNewTypes) {
       getGroupTypes(groupTypeData);
 
       setgroupTypeData({
         ...groupTypeData,
-        readyToLoadNewTypes: false
+        readyToLoadNewTypes: "false"
       });
     }
   }, [readyToLoadNewTypes]);
 
-  const [groupTypeData, setgroupTypeData] = useState({
-    sortBy: "Trending",
-    category: "All",
-    searchTerms: "",
-    readyToLoadNewTypes: true
-  });
-
-  const { sortBy, category, searchTerms, readyToLoadNewTypes } = groupTypeData;
-
-  const onChange = e =>
+  const onChange = e => {
     setgroupTypeData({
       ...groupTypeData,
       [e.target.name]: e.target.value,
       readyToLoadNewTypes:
-        e.target.name === "searchTerms" ? readyToLoadNewTypes : true
+        e.target.name === "searchTerms" ? readyToLoadNewTypes : "true"
     });
+  };
 
   const onSearchTermsSubmit = e => {
     e.preventDefault();
 
     setgroupTypeData({
       ...groupTypeData,
-      readyToLoadNewTypes: true
+      readyToLoadNewTypes: "true"
     });
   };
 

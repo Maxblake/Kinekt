@@ -1,71 +1,72 @@
-import { CSSTransitionGroup } from "react-transition-group";
-import React, { Component } from "react";
+import React, { useState } from "react";
 
-class Carousel extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: this.props.items,
-      active: this.props.active,
-      direction: ""
-    };
-    this.rightClick = this.moveRight.bind(this);
-    this.leftClick = this.moveLeft.bind(this);
-  }
+const Carousel = ({ items }) => {
+  const [carouselData, setCarouselData] = useState({
+    active: 0,
+    direction: ""
+  });
 
-  generateItems() {
-    var items = [];
-    var level;
-    for (var i = this.state.active - 1; i < this.state.active + 2; i++) {
-      var index = i;
+  const { active, direction } = carouselData;
+
+  const generateItems = () => {
+    console.log("gen");
+    const generatedItems = [];
+
+    for (let i = active - 1; i < active + 2; i++) {
+      let index = i;
       if (i < 0) {
-        index = this.state.items.length + i;
-      } else if (i >= this.state.items.length) {
-        index = i % this.state.items.length;
+        index = items.length + i;
+      } else if (i >= items.length) {
+        index = i % items.length;
       }
-      level = this.state.active - i;
-      items.push(
-        <Item key={index} id={this.state.items[index]} level={level} />
-      );
+      const level = active - i;
+      generatedItems.push(<Item key={index} id={items[index]} level={level} />);
     }
-    return items;
-  }
 
-  moveLeft() {
-    var newActive = this.state.active;
-    newActive--;
-    this.setState({
-      active: newActive < 0 ? this.state.items.length - 1 : newActive,
-      direction: "left"
-    });
-  }
+    return generatedItems;
+  };
 
-  moveRight() {
-    var newActive = this.state.active;
-    this.setState({
-      active: (newActive + 1) % this.state.items.length,
-      direction: "right"
-    });
-  }
+  const moveCarousel = direction => {
+    switch (direction) {
+      case "left":
+        setCarouselData({
+          active: active < 1 ? items.length - 1 : active - 1,
+          direction: "left"
+        });
+        break;
+      case "right":
+        setCarouselData({
+          active: (active + 1) % items.length,
+          direction: "right"
+        });
+        break;
+    }
+  };
 
-  render() {
-    return (
-      <div id="carousel" className="noselect">
-        <div className="arrow arrow-left" onClick={this.leftClick}>
-          <span class="icon is-medium">
-            <i className="fas fa-lg fa-chevron-circle-left" />
-          </span>
-        </div>
-        {this.generateItems()}
-        <div className="arrow arrow-right" onClick={this.rightClick}>
-          <span class="icon is-medium">
-            <i className="fas fa-lg fa-chevron-circle-right" />
-          </span>
-        </div>
+  return (
+    <div id="carousel" className="noselect">
+      <div
+        name="left"
+        className="arrow arrow-left"
+        onClick={() => moveCarousel("left")}
+      >
+        <span class="icon is-medium">
+          <i className="fas fa-lg fa-chevron-circle-left" />
+        </span>
       </div>
-    );
-  }
-}
+      {generateItems()}
+      <div
+        name="right"
+        className="arrow arrow-right"
+        onClick={() => moveCarousel("right")}
+      >
+        <span class="icon is-medium">
+          <i className="fas fa-lg fa-chevron-circle-right" />
+        </span>
+      </div>
+    </div>
+  );
+};
 
 class Item extends React.Component {
   constructor(props) {

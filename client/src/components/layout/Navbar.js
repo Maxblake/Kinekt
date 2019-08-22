@@ -16,6 +16,11 @@ const Navbar = ({
   group,
   groupType
 }) => {
+  const [navData, setNavData] = useState({
+    groupCode: ""
+  });
+
+  const { groupCode } = navData;
   let navBurger, navDropdown;
 
   useEffect(() => {
@@ -48,12 +53,6 @@ const Navbar = ({
       typewriter.stop();
     });
   }, []);
-
-  const [navData, setNavData] = useState({
-    groupCode: ""
-  });
-
-  const { groupCode } = navData;
 
   const onChange = e =>
     setNavData({ ...navData, [e.target.name]: e.target.value });

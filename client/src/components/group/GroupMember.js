@@ -15,8 +15,6 @@ const GroupMember = ({ status, memberType, memberName }) => {
         classList.push("is-dark");
     }
 
-    console.log("status", status);
-
     switch (status) {
       case "online":
         classList.push("is-online");

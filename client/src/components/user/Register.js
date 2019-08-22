@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
+
 import { register } from "../../actions/user";
-import PropTypes from "prop-types";
 
 const Register = ({ register, errors, isAuthenticated }) => {
   const [formData, setFormData] = useState({
@@ -14,6 +15,7 @@ const Register = ({ register, errors, isAuthenticated }) => {
   });
 
   const { name, email, password, about, image } = formData;
+
   const errName = errors.find(error => error.param === "name");
   const errEmail = errors.find(error => error.param === "email");
   const errPassword = errors.find(error => error.param === "password");

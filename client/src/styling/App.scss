@@ -104,6 +104,10 @@ html {
 .centeredForm {
   max-width: 700px;
   margin: auto;
+
+  .box {
+    margin-bottom: 0.5rem;
+  }
 }
 
 // Navbar
@@ -265,8 +269,8 @@ html {
   padding: 1.5rem;
   margin: 1.5rem 0;
   display: flex;
-  background: hsl(204, 86%, 53%);
-  border: 9px dotted $black;
+  background: dimgray;
+  border: 9px dashed $black;
 
   .headerStep {
     display: flex;

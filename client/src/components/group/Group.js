@@ -11,6 +11,7 @@ import GroupConsole from "./GroupConsole";
 import NotFound from "../common/NotFound";
 
 import defaultGroupTypeImage from "../../resources/defaultGroupTypeImage.jpg";
+import PageTitle from "../layout/page/PageTitle";
 
 const Group = ({
   getGroup,
@@ -74,21 +75,15 @@ const Group = ({
   return (
     <section className="group">
       <nav className="level is-mobile" id="pageNav">
-        <div className="level-left">
-          <div className="level-item">
-            <div className="groupTypeTitleContainer">
-              <Link
-                to={`/k/${match.params.groupType}`}
-                className="subtitle is-size-6 groupTypeSubtitleContainer"
-              >
-                {match.params.groupType.split("_").join(" ")}
-              </Link>
-              <h3 className="title is-size-3 pageTitle" id="groupPageTitle">
-                {group.name}
-              </h3>
-            </div>
-          </div>
-        </div>
+        <PageTitle
+          title={group.name}
+          subtitle={
+            <Link to={`/k/${match.params.groupType}`}>
+              {match.params.groupType.split("_").join(" ")}
+            </Link>
+          }
+        />
+
         <div className="level-right">
           <div className="level-item">
             <div class="dropdown is-right">

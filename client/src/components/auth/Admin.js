@@ -9,7 +9,7 @@ import {
 import { loadUser } from "../../actions/auth";
 
 import NotFound from "../common/NotFound";
-import RadioButton from "../common/RadioButton";
+import RadioButton from "../form/RadioButton";
 
 const Admin = ({
   loadUser,
@@ -17,23 +17,19 @@ const Admin = ({
   processRequestedGroupTypes
 }) => {
   const [adminState, setAdminState] = useState({
-    isAuthenticated: false,
+    isAdmin: false,
     requestedGroupTypes: [],
     groupTypeDecisions: {}
   });
 
-  const {
-    requestedGroupTypes,
-    isAuthenticated,
-    groupTypeDecisions
-  } = adminState;
+  const { requestedGroupTypes, isAdmin, groupTypeDecisions } = adminState;
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAdmin) {
       let fetchData = async () => {
         const loadUserResponse = await loadUser(true);
 
-        setAdminState({ ...adminState, isAuthenticated: loadUserResponse });
+        setAdminState({ ...adminState, isAdmin: loadUserResponse });
       };
 
       fetchData();
@@ -60,7 +56,7 @@ const Admin = ({
         groupTypeDecisions: groupTypeDecisionsBuilder
       });
     }
-  }, [isAuthenticated, requestedGroupTypes]);
+  }, [isAdmin, requestedGroupTypes]);
 
   const handleGroupTypeDecided = (decision, key) => {
     setAdminState({
@@ -92,7 +88,7 @@ const Admin = ({
     }
   };
 
-  if (!isAuthenticated) {
+  if (!isAdmin) {
     return <NotFound />;
   }
 

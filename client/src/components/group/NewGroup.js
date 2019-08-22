@@ -8,10 +8,14 @@ import { createGroup, getGroups } from "../../actions/group";
 
 import Spinner from "../common/Spinner";
 import NotFound from "../common/NotFound";
-import RadioButton from "../common/RadioButton";
+import RadioButton from "../form/RadioButton";
 import TimeKeeper from "react-timekeeper";
+import PageTitle from "../layout/page/PageTitle";
+import Form from "../form/Form";
+import FormControl from "../form/FormControl";
+import SubmitButton from "../form/SubmitButton";
+import CustomField from "../form/CustomField";
 
-//TODO convert to functional, make sure groupType is always in state
 const NewGroup = ({
   match,
   history,
@@ -152,21 +156,14 @@ const NewGroup = ({
   return (
     <section className="NewGroup centeredForm">
       <nav className="level" id="pageNav">
-        <div className="level-left">
-          <div className="level-item">
-            <div className="groupTypeTitleContainer">
-              <Link
-                to={`/k/${match.params.groupType}`}
-                className="subtitle is-size-6 groupTypeSubtitleContainer"
-              >
-                {match.params.groupType.split("_").join(" ")}
-              </Link>
-              <h3 className="title is-size-3 pageTitle" id="groupPageTitle">
-                Create a group
-              </h3>
-            </div>
-          </div>
-        </div>
+        <PageTitle
+          title="Create a group"
+          subtitle={
+            <Link to={`/k/${match.params.groupType}`}>
+              {match.params.groupType.split("_").join(" ")}
+            </Link>
+          }
+        />
       </nav>
 
       {displayTimepicker ? (
@@ -188,167 +185,168 @@ const NewGroup = ({
         false
       )}
 
-      <form className="box" onSubmit={e => onSubmit(e)}>
-        <label class="label">Name *</label>
-        <div class="field">
-          <div class="control">
-            <input
-              class="input"
-              type="text"
-              name="name"
-              value={name}
-              onChange={e => onChange(e)}
-              placeholder="E.g. Taco Party"
-            />
-          </div>
-          {errName && <p class="help is-danger">{errName.msg}</p>}
-        </div>
+      <Form onSubmit={onSubmit}>
+        <FormControl
+          label="Name"
+          name="name"
+          value={name}
+          onChange={onChange}
+          error={errName ? errName.msg : undefined}
+          required={true}
+        />
 
-        <label class="label">Description</label>
-        <div class="field">
-          <div class="control">
-            <textarea
-              class="textarea"
-              rows="2"
-              name="description"
-              value={description}
-              onChange={e => onChange(e)}
-              placeholder="E.g. Let's hang out and argue about flour and corn tortillas at my place."
-            />
-          </div>
-          {errDescription && <p class="help is-danger">{errDescription.msg}</p>}
-        </div>
-
-        <label class="label">Meeting Time *</label>
-        <div class="field is-grouped">
-          <div class="control">
-            <RadioButton
-              selectedValue={timeContext}
-              value="Now"
-              handleClick={handleTimeContextChange}
-            />
-          </div>
-          <div class="control centeredVertically">
-            <h3>-or-</h3>
-          </div>
-          <div class="control">
-            <input
-              class="input smallInput"
-              type="text"
-              value={time.formatted}
-              onClick={() => toggleTimekeeper(true)}
-              readOnly
-            />
-          </div>
-          <div class="control">
-            <RadioButton
-              selectedValue={timeContext}
-              value="Today"
-              handleClick={handleTimeContextChange}
-            />
-          </div>
-          <div class="control">
-            <RadioButton
-              selectedValue={timeContext}
-              value="Tomorrow"
-              handleClick={handleTimeContextChange}
-            />
-          </div>
-        </div>
-
-        <label class="label">Meeting Place *</label>
-        <div class="field">
-          <div class="control">
-            <input
-              class="input"
-              type="text"
-              name="place"
-              value={place}
-              onChange={e => onChange(e)}
-              placeholder="E.g. 555 My House, Newport RI"
-            />
-          </div>
-          {errPlace && <p class="help is-danger">{errPlace.msg}</p>}
-        </div>
-
-        <label class="label">Group Size</label>
-        <div class="field">
-          <div class="control is-flex">
-            <input
-              class="input smallInput"
-              type="text"
-              placeholder="Any"
-              name="minSize"
-              value={minSize}
-              onChange={e => onChange(e)}
-            />
-            <div class="centeredVertically grouped-control-margin">
-              <h3>-to-</h3>
-            </div>
-            <input
-              class="input smallInput"
-              type="text"
-              placeholder="Any"
-              name="maxSize"
-              value={maxSize}
-              onChange={e => onChange(e)}
-            />
-          </div>
-          {errMaxSize && <p class="help is-danger">{errMaxSize.msg}</p>}
-        </div>
-
-        <label class="label">Access Level</label>
-        <div class="field is-grouped">
-          <div class="control">
-            <RadioButton
-              selectedValue={accessLevel}
-              value="Public"
-              handleClick={handleAccessLevelChange}
-            />
-          </div>
-          <div class="control">
-            <RadioButton
-              selectedValue={accessLevel}
-              value="Private"
-              handleClick={handleAccessLevelChange}
-            />
-          </div>
-        </div>
-
-        <label class="label">Group Image</label>
-        <div class="field">
-          <div class="file has-name is-primary">
-            <label class="file-label">
-              <input
-                class="file-input"
-                type="file"
-                name="groupImage"
-                accept="image/*"
-                data-max-size="10485760"
-                onChange={e => handleImageUpload(e)}
+        <CustomField
+          label="Description"
+          error={errDescription ? errDescription.msg : undefined}
+          children={
+            <div class="control">
+              <textarea
+                class="textarea"
+                rows="2"
+                name="description"
+                value={description}
+                onChange={e => onChange(e)}
+                placeholder="E.g. Let's hang out and argue about flour and corn tortillas at my place."
               />
-              <span class="file-cta">
-                <span class="file-icon">
-                  <i class="fas fa-upload" />
-                </span>
-                <span class="file-label">Upload</span>
-              </span>
-              <span class="file-name">
-                {image.name ? image.name : "No image selected.."}
-              </span>
-            </label>
-          </div>
-          {image.error && <p class="help is-danger">{image.error}</p>}
-        </div>
+            </div>
+          }
+        />
 
-        <div class="field is-grouped is-grouped-right">
-          <div class="control">
-            <button class="button is-primary" type="submit">
-              Submit
-            </button>
-          </div>
-        </div>
-      </form>
+        <CustomField
+          label="Meeting Time"
+          required={true}
+          children={
+            <div class="field is-grouped">
+              <div class="control">
+                <RadioButton
+                  selectedValue={timeContext}
+                  value="Now"
+                  handleClick={handleTimeContextChange}
+                />
+              </div>
+              <div class="control centeredVertically">
+                <h3>-or-</h3>
+              </div>
+              <div class="control">
+                <input
+                  class="input smallInput"
+                  type="text"
+                  value={time.formatted}
+                  onClick={() => toggleTimekeeper(true)}
+                  readOnly
+                />
+              </div>
+              <div class="control">
+                <RadioButton
+                  selectedValue={timeContext}
+                  value="Today"
+                  handleClick={handleTimeContextChange}
+                />
+              </div>
+              <div class="control">
+                <RadioButton
+                  selectedValue={timeContext}
+                  value="Tomorrow"
+                  handleClick={handleTimeContextChange}
+                />
+              </div>
+            </div>
+          }
+        />
+
+        <FormControl
+          label="Meeting Place"
+          name="place"
+          value={place}
+          onChange={onChange}
+          error={errPlace ? errPlace.msg : undefined}
+          required={true}
+        />
+
+        <CustomField
+          label="Group Size"
+          error={errMaxSize ? errMaxSize.msg : undefined}
+          children={
+            <div class="field">
+              <div class="control is-flex">
+                <input
+                  class="input smallInput"
+                  type="text"
+                  placeholder="Any"
+                  name="minSize"
+                  value={minSize}
+                  onChange={e => onChange(e)}
+                />
+                <div class="centeredVertically grouped-control-margin">
+                  <h3>-to-</h3>
+                </div>
+                <input
+                  class="input smallInput"
+                  type="text"
+                  placeholder="Any"
+                  name="maxSize"
+                  value={maxSize}
+                  onChange={e => onChange(e)}
+                />
+              </div>
+            </div>
+          }
+        />
+
+        <CustomField
+          label="Group Size"
+          children={
+            <div class="field is-grouped">
+              <div class="control">
+                <RadioButton
+                  selectedValue={accessLevel}
+                  value="Public"
+                  handleClick={handleAccessLevelChange}
+                />
+              </div>
+              <div class="control">
+                <RadioButton
+                  selectedValue={accessLevel}
+                  value="Private"
+                  handleClick={handleAccessLevelChange}
+                />
+              </div>
+            </div>
+          }
+        />
+
+        <CustomField
+          label="Group Image"
+          error={image.error}
+          children={
+            <div class="field">
+              <div class="file has-name is-primary">
+                <label class="file-label">
+                  <input
+                    class="file-input"
+                    type="file"
+                    name="groupImage"
+                    accept="image/*"
+                    data-max-size="10485760"
+                    onChange={e => handleImageUpload(e)}
+                  />
+                  <span class="file-cta">
+                    <span class="file-icon">
+                      <i class="fas fa-upload" />
+                    </span>
+                    <span class="file-label">Upload</span>
+                  </span>
+                  <span class="file-name">
+                    {image.name ? image.name : "No image selected.."}
+                  </span>
+                </label>
+              </div>
+            </div>
+          }
+        />
+
+        <SubmitButton text="Submit" />
+      </Form>
     </section>
   );
 };

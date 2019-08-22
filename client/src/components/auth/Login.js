@@ -5,6 +5,11 @@ import { Redirect, withRouter } from "react-router-dom";
 
 import { login, clearErrorsAndAlerts } from "../../actions/auth";
 
+import PageTitle from "../layout/page/PageTitle";
+import Form from "../form/Form";
+import FormControl from "../form/FormControl";
+import SubmitButton from "../form/SubmitButton";
+
 const Login = ({
   location,
   errors,
@@ -46,48 +51,27 @@ const Login = ({
   return (
     <section className="Login centeredForm">
       <nav className="level" id="pageNav">
-        <div className="level-left">
-          <div className="level-item">
-            <h3 className="title is-size-3 pageTitle">Log in</h3>
-          </div>
-        </div>
+        <PageTitle title="Log in" />
       </nav>
 
-      <form className="box" onSubmit={e => onSubmit(e)}>
-        <label class="label">Email Address</label>
-        <div class="field">
-          <div class="control">
-            <input
-              class="input"
-              name="email"
-              value={email}
-              onChange={e => onChange(e)}
-            />
-          </div>
-          {errEmail && <p class="help is-danger">{errEmail.msg}</p>}
-        </div>
-        <label class="label">Password</label>
-        <div class="field">
-          <div class="control">
-            <input
-              class="input"
-              type="password"
-              name="password"
-              value={password}
-              onChange={e => onChange(e)}
-            />
-          </div>
-          {errPassword && <p class="help is-danger">{errPassword.msg}</p>}
-        </div>
-
-        <div class="field is-grouped is-grouped-right">
-          <div class="control">
-            <button class="button is-primary" type="submit">
-              Log in
-            </button>
-          </div>
-        </div>
-      </form>
+      <Form onSubmit={onSubmit}>
+        <FormControl
+          label="Email Address"
+          name="email"
+          value={email}
+          onChange={onChange}
+          error={errEmail ? errEmail.msg : undefined}
+        />
+        <FormControl
+          label="Password"
+          name="password"
+          value={password}
+          type="password"
+          onChange={onChange}
+          error={errPassword ? errPassword.msg : undefined}
+        />
+        <SubmitButton text="Log in" />
+      </Form>
     </section>
   );
 };

@@ -1,7 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import Image from "../common/subcomponents/Image";
+
 import defaultGroupTypeImage from "../../resources/defaultGroupTypeImage.jpg";
+import OnlineStatus from "../common/subcomponents/OnlineStatus";
 
 const GroupTypeCard = ({ imgSrc, name, groupTypeCategory }) => {
   const getClassList = groupTypeCategory => {
@@ -36,12 +39,7 @@ const GroupTypeCard = ({ imgSrc, name, groupTypeCategory }) => {
   return (
     <Link to={`/k/${name.split(" ").join("_")}`} className="card groupTypeCard">
       <div className="card-image">
-        <figure className="imageContainer image is-2by1">
-          <img
-            src={imgSrc !== "" ? imgSrc : defaultGroupTypeImage}
-            alt="Placeholder image"
-          />
-        </figure>
+        <Image src={imgSrc !== "" ? imgSrc : defaultGroupTypeImage} />
       </div>
       <span className={getClassList(groupTypeCategory)}>
         {groupTypeCategory}
@@ -49,12 +47,7 @@ const GroupTypeCard = ({ imgSrc, name, groupTypeCategory }) => {
       <div className="card-content">
         <h1 className="title is-size-4">{name}</h1>
         <div className="subtitle is-size-6">
-          <div className="onlineStatusContainer">
-            <div className="onlineStatusDot" />
-            <h4 className="onlineStatusText">3 groups</h4>
-            <div className="onlineStatusDot" />
-            <h4 className="onlineStatusText">14 users</h4>
-          </div>
+          <OnlineStatus users="30 users" groups="3 groups" />
         </div>
       </div>
     </Link>

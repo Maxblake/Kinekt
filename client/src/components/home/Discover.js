@@ -17,7 +17,7 @@ const Discover = ({
     sortBy: "Trending",
     category: "All",
     searchTerms: "",
-    readyToLoadNewTypes: "true"
+    readyToLoadNewTypes: true
   });
 
   const { sortBy, category, searchTerms, readyToLoadNewTypes } = groupTypeData;
@@ -28,7 +28,7 @@ const Discover = ({
 
       setgroupTypeData({
         ...groupTypeData,
-        readyToLoadNewTypes: "false"
+        readyToLoadNewTypes: false
       });
     }
   }, [readyToLoadNewTypes]);
@@ -38,7 +38,7 @@ const Discover = ({
       ...groupTypeData,
       [e.target.name]: e.target.value,
       readyToLoadNewTypes:
-        e.target.name === "searchTerms" ? readyToLoadNewTypes : "true"
+        e.target.name === "searchTerms" ? readyToLoadNewTypes : true
     });
   };
 
@@ -47,19 +47,23 @@ const Discover = ({
 
     setgroupTypeData({
       ...groupTypeData,
-      readyToLoadNewTypes: "true"
+      readyToLoadNewTypes: true
     });
   };
 
-  let groupTypeCards = <Spinner />;
-  if (!loading && !groupTypes.length) {
+  console.log(loading);
+
+  let groupTypeCards;
+  if (loading) {
+    groupTypeCards = <Spinner />;
+  } else if (!groupTypes.length) {
     groupTypeCards = (
       <div className="box is-size-5 has-text-centered has-margin-top-2">
         There are currently no group types here. It may be time to request a new
         one!
       </div>
     );
-  } else if (!!groupTypes.length) {
+  } else {
     groupTypeCards = (
       <div className="groupTypeCards">
         {groupTypes.map(groupType => (

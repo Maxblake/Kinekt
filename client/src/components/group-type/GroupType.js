@@ -22,7 +22,7 @@ const GroupType = ({
     const groupTypeParamSpaced = match.params.groupType.split("_").join(" ");
     const groupTypeParamChanged =
       groupType && groupType.name !== groupTypeParamSpaced;
-    if (!groupType || groupTypeParamChanged) {
+    if (!groupType || groupTypeParamChanged || !groups.length) {
       getGroups(groupTypeParamSpaced);
     }
   }, [match.params.groupType]);
@@ -52,7 +52,7 @@ const GroupType = ({
                 {match.params.groupType.split("_").join(" ")}
               </h3>
               <div>
-                <div className="subtitle is-size-6 onlineStatusContainer">
+                <div className="subtitle is-size-6 pageSubtitle onlineStatusContainer">
                   <div className="onlineStatusDot" />
                   <h4 className="onlineStatusText">3 groups</h4>
                   <div className="onlineStatusDot" />

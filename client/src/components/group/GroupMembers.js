@@ -1,14 +1,13 @@
 import React from "react";
+
 import GroupMember from "./GroupMember";
+import OnlineStatus from "../common/subcomponents/OnlineStatus";
 
 const GroupMembers = () => {
   return (
     <div className="box" id="groupMembersContainer">
-      <div className="onlineStatusTab">
-        <div className="subtitle is-size-6 onlineStatusContainer">
-          <div className="onlineStatusDot" />
-          <h4 className="onlineStatusText">14/20 users</h4>
-        </div>
+      <div className="headerTab">
+        <OnlineStatus users="14/20 users" />
       </div>
       <div id="groupMembers" className="kScroll">
         <GroupMember memberName="Beemo" status="online" memberType="admin" />

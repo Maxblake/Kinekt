@@ -6,8 +6,8 @@ const NoticeBoard = () => {
   return (
     <div className="noticeBoard">
       <div className="headerTab">
-        <div className="subtitle is-size-6">
-          <h4 className="headerText">Notice Board</h4>
+        <div className="subtitle is-size-6 has-text-weight-bold">
+          Notice Board
         </div>
       </div>
       <Carousel items={[1, 2, 3, 4, 5]} active={0} />

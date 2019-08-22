@@ -2,6 +2,8 @@ import React from "react";
 
 import Chat from "../chat/Chat";
 import NoticeBoard from "../noticeBoard/NoticeBoard";
+import GroupDetails from "../common/subcomponents/GroupDetails";
+import Image from "../common/subcomponents/Image";
 
 const GroupConsole = ({ group, imgSrc }) => {
   return (
@@ -10,36 +12,10 @@ const GroupConsole = ({ group, imgSrc }) => {
         <Chat />
       </div>
       <div className="flex-row-wrap">
-        <div className="groupDetailsContainer">
-          <div className="groupDescription">
-            <p>
-              {group && group.description
-                ? group.description
-                : "There is no description available for this group."}
-            </p>
-          </div>
-          <div className="groupDetails">
-            <div className="groupMeetTime">
-              <div className="content is-flex">
-                <span class="icon">
-                  <i class="fas fa-clock" />
-                </span>
-                <h3>Thu, May 17, 2:00 PM</h3>
-              </div>
-            </div>
-            <div className="groupMeetPlace">
-              <div className="content is-flex">
-                <span class="icon">
-                  <i class="fas fa-map-marker-alt" />
-                </span>
-                <h3>Crooked river Brewery, Prineville OR</h3>
-              </div>
-            </div>
-          </div>
-        </div>
+        <GroupDetails group={group} />
 
         <div className="groupImage">
-          <img src={imgSrc} alt="Placeholder image" />
+          <Image src={imgSrc} alt="Placeholder image" />
         </div>
         <NoticeBoard />
       </div>

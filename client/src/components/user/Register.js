@@ -5,13 +5,20 @@ import { Redirect } from "react-router-dom";
 
 import { register } from "../../actions/user";
 
+import PageTitle from "../layout/page/PageTitle";
+import Form from "../form/Form";
+import FormControl from "../form/FormControl";
+import SubmitButton from "../form/SubmitButton";
+import CustomField from "../form/CustomField";
+import ImgUploadControl from "../form/ImgUploadControl";
+
 const Register = ({ register, errors, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     about: "",
-    image: { name: "" }
+    image: undefined
   });
 
   const { name, email, password, about, image } = formData;
@@ -24,32 +31,16 @@ const Register = ({ register, errors, isAuthenticated }) => {
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleImageUpload = e => {
-    const imageFile = e.target.files[0];
-
-    if (!imageFile) return;
-    if (
-      imageFile.size > e.target.attributes.getNamedItem("data-max-size").value
-    ) {
-      setFormData({
-        ...formData,
-        image: {
-          name: imageFile.name,
-          error: "Image file must be smaller than 10MB"
-        }
-      });
-      return;
-    }
-
+  const handleImageUpload = imageFile => {
     setFormData({
       ...formData,
-      image: { name: imageFile.name, file: imageFile }
+      image: imageFile
     });
   };
 
   const onSubmit = async e => {
     e.preventDefault();
-    register({ name, email, password, about, image: image.file });
+    register({ name, email, password, about, image });
   };
 
   if (isAuthenticated) {
@@ -59,104 +50,65 @@ const Register = ({ register, errors, isAuthenticated }) => {
   return (
     <section className="Register centeredForm">
       <nav className="level" id="pageNav">
-        <div className="level-left">
-          <div className="level-item">
-            <h3 className="title is-size-3 pageTitle">Sign up</h3>
-          </div>
-        </div>
+        <PageTitle title="Sign up" />
       </nav>
 
-      <form className="box" onSubmit={e => onSubmit(e)}>
-        <label class="label">Email Address *</label>
-        <div class="field">
-          <div class="control">
-            <input
-              class="input"
-              type="email"
-              name="email"
-              value={email}
-              onChange={e => onChange(e)}
-            />
-          </div>
-          {errEmail && <p class="help is-danger">{errEmail.msg}</p>}
-        </div>
-        <label class="label">Password *</label>
-        <div class="field">
-          <div class="control">
-            <input
-              class="input"
-              type="password"
-              name="password"
-              value={password}
-              onChange={e => onChange(e)}
-            />
-          </div>
-          {errPassword && <p class="help is-danger">{errPassword.msg}</p>}
-        </div>
+      <Form onSubmit={onSubmit}>
+        <FormControl
+          label="Email Address"
+          name="email"
+          value={email}
+          onChange={onChange}
+          error={errEmail ? errEmail.msg : undefined}
+          required={true}
+        />
 
-        <label class="label">Display Name *</label>
-        <div class="field">
-          <div class="control">
-            <input
-              class="input"
-              type="text"
-              name="name"
-              value={name}
-              onChange={e => onChange(e)}
-            />
-          </div>
-          {errName && <p class="help is-danger">{errName.msg}</p>}
-        </div>
+        <FormControl
+          label="Password"
+          name="password"
+          value={password}
+          type="password"
+          onChange={onChange}
+          error={errPassword ? errPassword.msg : undefined}
+          required={true}
+        />
 
-        <label class="label">About you</label>
-        <div class="field">
-          <div class="control">
-            <textarea
-              class="textarea"
-              rows="2"
-              placeholder="What brings you here? (This can be changed later)"
-              name="about"
-              value={about}
-              onChange={e => onChange(e)}
-            />
-          </div>
-          {errAbout && <p class="help is-danger">{errAbout.msg}</p>}
-        </div>
+        <FormControl
+          label="Display Name"
+          name="name"
+          value={name}
+          onChange={onChange}
+          error={errName ? errName.msg : undefined}
+          required={true}
+        />
 
-        <label class="label">Profile Picture</label>
-        <div class="field">
-          <div class="file has-name is-primary">
-            <label class="file-label">
-              <input
-                class="file-input"
-                type="file"
-                name="userImage"
-                accept="image/*"
-                data-max-size="10485760"
-                onChange={e => handleImageUpload(e)}
-              />
-              <span class="file-cta">
-                <span class="file-icon">
-                  <i class="fas fa-upload" />
-                </span>
-                <span class="file-label">Upload</span>
-              </span>
-              <span class="file-name">
-                {image.name ? image.name : "No image selected.."}
-              </span>
-            </label>
-          </div>
-          {image.error && <p class="help is-danger">{image.error}</p>}
-        </div>
+        <CustomField
+          label="About you"
+          error={errAbout ? errAbout.msg : undefined}
+          children={
+            <div class="field">
+              <div class="control">
+                <textarea
+                  class="textarea"
+                  rows="2"
+                  name="about"
+                  value={about}
+                  onChange={e => onChange(e)}
+                  placeholder="What brings you here? (This can be changed later)"
+                />
+              </div>
+            </div>
+          }
+        />
 
-        <div class="field is-grouped is-grouped-right">
-          <div class="control">
-            <button class="button is-primary" type="submit">
-              Sign up
-            </button>
-          </div>
-        </div>
-      </form>
+        <ImgUploadControl
+          label="Profile Picture"
+          onChange={handleImageUpload}
+          type="profile"
+        />
+
+        <SubmitButton text="Submit" />
+      </Form>
     </section>
   );
 };

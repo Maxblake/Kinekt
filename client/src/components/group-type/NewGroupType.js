@@ -10,13 +10,14 @@ import Form from "../form/Form";
 import FormControl from "../form/FormControl";
 import SubmitButton from "../form/SubmitButton";
 import CustomField from "../form/CustomField";
+import ImgUploadControl from "../form/ImgUploadControl";
 
 const NewGroupType = ({ history, requestGroupType, errors }) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     category: "",
-    image: { name: "" }
+    image: undefined
   });
 
   const { name, description, image, category } = formData;
@@ -28,26 +29,10 @@ const NewGroupType = ({ history, requestGroupType, errors }) => {
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleImageUpload = e => {
-    const imageFile = e.target.files[0];
-
-    if (!imageFile) return;
-    if (
-      imageFile.size > e.target.attributes.getNamedItem("data-max-size").value
-    ) {
-      setFormData({
-        ...formData,
-        image: {
-          name: imageFile.name,
-          error: "Image file must be smaller than 10MB"
-        }
-      });
-      return;
-    }
-
+  const handleImageUpload = imageFile => {
     setFormData({
       ...formData,
-      image: { name: imageFile.name, file: imageFile }
+      image: imageFile
     });
   };
 
@@ -58,7 +43,7 @@ const NewGroupType = ({ history, requestGroupType, errors }) => {
       name,
       description,
       category,
-      image: image.file
+      image
     };
 
     requestGroupType(groupTypeFields, history);
@@ -125,34 +110,10 @@ const NewGroupType = ({ history, requestGroupType, errors }) => {
           }
         />
 
-        <CustomField
-          label="Group Image"
-          error={image.error}
-          children={
-            <div class="field">
-              <div class="file has-name is-primary">
-                <label class="file-label">
-                  <input
-                    class="file-input"
-                    type="file"
-                    name="groupImage"
-                    accept="image/*"
-                    data-max-size="10485760"
-                    onChange={e => handleImageUpload(e)}
-                  />
-                  <span class="file-cta">
-                    <span class="file-icon">
-                      <i class="fas fa-upload" />
-                    </span>
-                    <span class="file-label">Upload</span>
-                  </span>
-                  <span class="file-name">
-                    {image.name ? image.name : "No image selected.."}
-                  </span>
-                </label>
-              </div>
-            </div>
-          }
+        <ImgUploadControl
+          label="Group Type Image"
+          onChange={handleImageUpload}
+          type="groupType"
         />
 
         <SubmitButton text="Submit" />

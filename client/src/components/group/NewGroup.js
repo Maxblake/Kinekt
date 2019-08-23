@@ -36,7 +36,7 @@ const NewGroup = ({
     displayTimepicker: false,
     minSize: "",
     maxSize: "",
-    image: { name: "" }
+    image: undefined
   });
 
   const {
@@ -89,26 +89,10 @@ const NewGroup = ({
     setFormData({ ...formData, accessLevel });
   };
 
-  const handleImageUpload = e => {
-    const imageFile = e.target.files[0];
-
-    if (!imageFile) return;
-    if (
-      imageFile.size > e.target.attributes.getNamedItem("data-max-size").value
-    ) {
-      setFormData({
-        ...formData,
-        image: {
-          name: imageFile.name,
-          error: "Image file must be smaller than 10MB"
-        }
-      });
-      return;
-    }
-
+  const handleImageUpload = imageFile => {
     setFormData({
       ...formData,
-      image: { name: imageFile.name, file: imageFile }
+      image: imageFile
     });
   };
 
@@ -125,7 +109,8 @@ const NewGroup = ({
       place,
       accessLevel,
       minSize,
-      maxSize
+      maxSize,
+      image
     };
 
     const ISODate = moment();
@@ -140,7 +125,6 @@ const NewGroup = ({
     }
 
     groupFields.time = ISODate.toISOString();
-    groupFields.image = image.file;
     groupFields.groupType = groupType._id;
 
     createGroup(groupFields, history);
@@ -320,9 +304,8 @@ const NewGroup = ({
 
         <ImgUploadControl
           label="Group Image"
-          name="groupImage"
-          image={image}
           onChange={handleImageUpload}
+          type="group"
         />
 
         <SubmitButton text="Submit" />

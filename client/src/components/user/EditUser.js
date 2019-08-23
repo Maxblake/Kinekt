@@ -10,12 +10,13 @@ import Form from "../form/Form";
 import FormControl from "../form/FormControl";
 import SubmitButton from "../form/SubmitButton";
 import CustomField from "../form/CustomField";
+import ImgUploadControl from "../form/ImgUploadControl";
 
 const EditUser = ({ editUser, deleteUser, errors, auth: { user } }) => {
   const [formData, setFormData] = useState({
     name: "",
     about: "",
-    image: { name: "" }
+    image: undefined
   });
 
   const { name, about, image } = formData;
@@ -36,32 +37,17 @@ const EditUser = ({ editUser, deleteUser, errors, auth: { user } }) => {
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleImageUpload = e => {
-    const imageFile = e.target.files[0];
-
-    if (!imageFile) return;
-    if (
-      imageFile.size > e.target.attributes.getNamedItem("data-max-size").value
-    ) {
-      setFormData({
-        ...formData,
-        image: {
-          name: imageFile.name,
-          error: "Image file must be smaller than 10MB"
-        }
-      });
-      return;
-    }
+  const handleImageUpload = imageFile => {
     setFormData({
       ...formData,
-      image: { name: imageFile.name, file: imageFile }
+      image: imageFile
     });
   };
 
   const onSubmit = e => {
     e.preventDefault();
 
-    editUser({ name, about, image: image.file });
+    editUser({ name, about, image });
   };
 
   const onClickDelete = () => {
@@ -107,34 +93,10 @@ const EditUser = ({ editUser, deleteUser, errors, auth: { user } }) => {
           }
         />
 
-        <CustomField
+        <ImgUploadControl
           label="Profile Picture"
-          error={image.error}
-          children={
-            <div class="field">
-              <div class="file has-name is-primary">
-                <label class="file-label">
-                  <input
-                    class="file-input"
-                    type="file"
-                    name="userImage"
-                    accept="image/*"
-                    data-max-size="10485760"
-                    onChange={e => handleImageUpload(e)}
-                  />
-                  <span class="file-cta">
-                    <span class="file-icon">
-                      <i class="fas fa-upload" />
-                    </span>
-                    <span class="file-label">Upload</span>
-                  </span>
-                  <span class="file-name">
-                    {image.name ? image.name : "No image selected.."}
-                  </span>
-                </label>
-              </div>
-            </div>
-          }
+          onChange={handleImageUpload}
+          type="profile"
         />
 
         <SubmitButton text="Submit" />

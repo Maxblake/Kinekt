@@ -7,6 +7,7 @@ const FormControl = ({
   error,
   onChange,
   type,
+  placeholder,
   required
 }) => {
   return (
@@ -20,6 +21,7 @@ const FormControl = ({
             value={value}
             onChange={e => onChange(e)}
             type={type ? type : "text"}
+            placeholder={placeholder ? placeholder : ""}
           />
         </div>
         {error && <p class="help is-danger">{error.msg}</p>}

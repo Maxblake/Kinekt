@@ -6,7 +6,7 @@ export default function Footer() {
       <div class="content has-text-centered">
         <p>
           Copyright &copy; {new Date().getFullYear()} Kinekt | Current version:
-          pre-alpha | Please do not share this content
+          0.4 (pre-alpha)
         </p>
       </div>
     </footer>

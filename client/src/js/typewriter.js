@@ -10,7 +10,7 @@ class TypeWriter {
   }
 
   start() {
-    if (!this.isOn) {
+    if (!this.isOn && !this.activeThreadExists) {
       this.isOn = true;
       this.type();
     }
@@ -20,8 +20,9 @@ class TypeWriter {
     this.isOn = false;
   }
 
-  type() {
+  type(activeThreadExists = false) {
     if (!this.isOn) this.isDeleting = true;
+    if (activeThreadExists) this.activeThreadExists = false;
 
     // Current index of word
     const current = this.wordIndex % this.words.length;
@@ -63,7 +64,7 @@ class TypeWriter {
 
     if (this.isOn || this.isDeleting) {
       this.activeThreadExists = true;
-      setTimeout(() => this.type(), typeSpeed);
+      setTimeout(() => this.type(true), typeSpeed);
     }
   }
 }

@@ -121,6 +121,7 @@ const Navbar = ({
       </div>
     </Fragment>
   );
+
   const guestLinks = (
     <div className="navbar-item">
       <div className="buttons">

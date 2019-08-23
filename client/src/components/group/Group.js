@@ -75,7 +75,7 @@ const Group = ({
 
   return (
     <section className="group">
-      <nav className="level is-mobile" id="pageNav">
+      <nav className="level" id="pageNav">
         <PageTitle
           title={group.name}
           subtitle={

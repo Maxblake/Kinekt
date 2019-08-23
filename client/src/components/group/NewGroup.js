@@ -15,6 +15,7 @@ import Form from "../form/Form";
 import FormControl from "../form/FormControl";
 import SubmitButton from "../form/SubmitButton";
 import CustomField from "../form/CustomField";
+import ImgUploadControl from "../form/ImgUploadControl";
 
 const NewGroup = ({
   match,
@@ -199,15 +200,17 @@ const NewGroup = ({
           label="Description"
           error={errDescription ? errDescription.msg : undefined}
           children={
-            <div class="control">
-              <textarea
-                class="textarea"
-                rows="2"
-                name="description"
-                value={description}
-                onChange={e => onChange(e)}
-                placeholder="E.g. Let's hang out and argue about flour and corn tortillas at my place."
-              />
+            <div class="field">
+              <div class="control">
+                <textarea
+                  class="textarea"
+                  rows="2"
+                  name="description"
+                  value={description}
+                  onChange={e => onChange(e)}
+                  placeholder="E.g. Let's hang out and argue about flour and corn tortillas at my place."
+                />
+              </div>
             </div>
           }
         />
@@ -315,34 +318,11 @@ const NewGroup = ({
           }
         />
 
-        <CustomField
+        <ImgUploadControl
           label="Group Image"
-          error={image.error}
-          children={
-            <div class="field">
-              <div class="file has-name is-primary">
-                <label class="file-label">
-                  <input
-                    class="file-input"
-                    type="file"
-                    name="groupImage"
-                    accept="image/*"
-                    data-max-size="10485760"
-                    onChange={e => handleImageUpload(e)}
-                  />
-                  <span class="file-cta">
-                    <span class="file-icon">
-                      <i class="fas fa-upload" />
-                    </span>
-                    <span class="file-label">Upload</span>
-                  </span>
-                  <span class="file-name">
-                    {image.name ? image.name : "No image selected.."}
-                  </span>
-                </label>
-              </div>
-            </div>
-          }
+          name="groupImage"
+          image={image}
+          onChange={handleImageUpload}
         />
 
         <SubmitButton text="Submit" />

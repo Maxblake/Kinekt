@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -7,6 +7,8 @@ import { getGroupTypes } from "../../actions/groupType";
 
 import Spinner from "../common/Spinner";
 import GroupTypeCard from "../cards/GroupTypeCard";
+import PageTitle from "../layout/page/PageTitle";
+import PageOptions from "../layout/page/PageOptions";
 
 const Discover = ({
   getGroupTypes,
@@ -51,9 +53,8 @@ const Discover = ({
     });
   };
 
-  console.log(loading);
-
   let groupTypeCards;
+
   if (loading) {
     groupTypeCards = <Spinner />;
   } else if (!groupTypes.length) {
@@ -80,85 +81,92 @@ const Discover = ({
     );
   }
 
+  const options = [
+    <div className="field">
+      <div className="select is-fullwidth-touch">
+        <select
+          className="is-fullwidth-touch"
+          name="sortBy"
+          value={sortBy}
+          onChange={e => onChange(e)}
+        >
+          <option>Trending</option>
+          <option>Top</option>
+          <option>New</option>
+          <option>Nearby</option>
+        </select>
+      </div>
+    </div>,
+    <div className="field">
+      <div className="select is-fullwidth-touch">
+        <select
+          className="is-fullwidth-touch"
+          name="category"
+          value={category}
+          onChange={e => onChange(e)}
+        >
+          <option>All</option>
+          <option>Social</option>
+          <option>Gaming</option>
+          <option>Educational</option>
+          <option>Professional</option>
+          <option>Hobby</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>,
+    <form onSubmit={e => onSearchTermsSubmit(e)}>
+      <div className="field has-addons">
+        <p className="control" id="controlSearchGroupTypes">
+          <input
+            className="input"
+            type="text"
+            placeholder="Search group types"
+            name="searchTerms"
+            value={searchTerms}
+            onChange={e => onChange(e)}
+          />
+        </p>
+        <p className="control">
+          <button className="button is-primary" type="submit">
+            <span className="icon is-small">
+              <i className="fas fa-search" />
+            </span>
+          </button>
+        </p>
+      </div>
+    </form>
+  ];
+
+  if (isAuthenticated) {
+    options.unshift(
+      <Fragment>
+        <Link
+          to="/request-grouptype"
+          className="button is-primary is-hidden-touch is-hidden-widescreen"
+        >
+          <span className="icon">
+            <i className="fas fa-plus" />
+          </span>
+        </Link>
+        <Link
+          to="/request-grouptype"
+          className="button is-primary is-fullwidth-touch is-hidden-desktop-only"
+        >
+          <span className="icon">
+            <i className="fas fa-plus" />
+          </span>
+          <span>New Group Type</span>
+        </Link>
+      </Fragment>
+    );
+  }
+
   return (
     <section className="discover">
       <nav className="level is-mobile" id="pageNav">
-        <div className="level-left">
-          <div className="level-item">
-            <h3 className="title is-size-3 pageTitle">Explore</h3>
-          </div>
-        </div>
-
-        <div className="level-right">
-          {isAuthenticated && (
-            <div className="level-item">
-              <Link to="/request-grouptype" className="button is-primary">
-                <span className="icon">
-                  <i className="fas fa-plus" />
-                </span>
-                <span>New Group Type</span>
-              </Link>
-            </div>
-          )}
-          <div className="level-item">
-            <div className="field">
-              <div className="select">
-                <select
-                  name="sortBy"
-                  value={sortBy}
-                  onChange={e => onChange(e)}
-                >
-                  <option>Trending</option>
-                  <option>Top</option>
-                  <option>New</option>
-                  <option>Nearby</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div className="level-item">
-            <div className="field">
-              <div className="select">
-                <select
-                  name="category"
-                  value={category}
-                  onChange={e => onChange(e)}
-                >
-                  <option>All</option>
-                  <option>Social</option>
-                  <option>Gaming</option>
-                  <option>Educational</option>
-                  <option>Professional</option>
-                  <option>Hobby</option>
-                  <option>Other</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div className="level-item">
-            <form onSubmit={e => onSearchTermsSubmit(e)}>
-              <div className="field has-addons">
-                <p className="control" id="controlSearchGroupTypes">
-                  <input
-                    className="input"
-                    type="text"
-                    placeholder="Search group types"
-                    name="searchTerms"
-                    value={searchTerms}
-                    onChange={e => onChange(e)}
-                  />
-                </p>
-                <p className="control">
-                  <button className="button is-primary" type="submit">
-                    <span className="icon is-small">
-                      <i className="fas fa-search" />
-                    </span>
-                  </button>
-                </p>
-              </div>
-            </form>
-          </div>
-        </div>
+        <PageTitle title="Explore" />
+        <PageOptions options={options} />
       </nav>
       {groupTypeCards}
     </section>

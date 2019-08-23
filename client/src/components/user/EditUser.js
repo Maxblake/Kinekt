@@ -5,6 +5,11 @@ import { connect } from "react-redux";
 import { editUser, deleteUser } from "../../actions/user";
 
 import Spinner from "../common/Spinner";
+import PageTitle from "../layout/page/PageTitle";
+import Form from "../form/Form";
+import FormControl from "../form/FormControl";
+import SubmitButton from "../form/SubmitButton";
+import CustomField from "../form/CustomField";
 
 const EditUser = ({ editUser, deleteUser, errors, auth: { user } }) => {
   const [formData, setFormData] = useState({
@@ -70,77 +75,70 @@ const EditUser = ({ editUser, deleteUser, errors, auth: { user } }) => {
   return (
     <section className="editUser centeredForm">
       <nav className="level" id="pageNav">
-        <div className="level-left">
-          <div className="level-item">
-            <h3 className="title is-size-3 pageTitle">Account Settings</h3>
-          </div>
-        </div>
+        <PageTitle title="Account Settings" />
       </nav>
 
-      <form className="box" onSubmit={e => onSubmit(e)}>
-        <label class="label">Display Name</label>
-        <div class="field">
-          <div class="control">
-            <input
-              class="input"
-              type="text"
-              name="name"
-              value={name}
-              onChange={e => onChange(e)}
-            />
-          </div>
-          {errName && <p class="help is-danger">{errName.msg}</p>}
-        </div>
+      <Form onSubmit={onSubmit}>
+        <FormControl
+          label="Display Name"
+          name="name"
+          value={name}
+          onChange={onChange}
+          error={errName ? errName.msg : undefined}
+          required={true}
+        />
 
-        <label class="label">About you</label>
-        <div class="field">
-          <div class="control">
-            <textarea
-              class="textarea"
-              rows="2"
-              placeholder="What brings you here? (This can be changed later)"
-              name="about"
-              value={about}
-              onChange={e => onChange(e)}
-            />
-          </div>
-          {errAbout && <p class="help is-danger">{errAbout.msg}</p>}
-        </div>
+        <CustomField
+          label="About you"
+          error={errAbout ? errAbout.msg : undefined}
+          children={
+            <div class="field">
+              <div class="control">
+                <textarea
+                  class="textarea"
+                  rows="2"
+                  name="about"
+                  value={about}
+                  onChange={e => onChange(e)}
+                  placeholder="What brings you here? (This can be changed later)"
+                />
+              </div>
+            </div>
+          }
+        />
 
-        <label class="label">Profile Picture</label>
-        <div class="field">
-          <div class="file has-name is-primary">
-            <label class="file-label">
-              <input
-                class="file-input"
-                type="file"
-                name="userImage"
-                accept="image/*"
-                data-max-size="10485760"
-                onChange={e => handleImageUpload(e)}
-              />
-              <span class="file-cta">
-                <span class="file-icon">
-                  <i class="fas fa-upload" />
-                </span>
-                <span class="file-label">Upload</span>
-              </span>
-              <span class="file-name">
-                {image.name ? image.name : "No image selected.."}
-              </span>
-            </label>
-          </div>
-          {image.error && <p class="help is-danger">{image.error}</p>}
-        </div>
+        <CustomField
+          label="Profile Picture"
+          error={image.error}
+          children={
+            <div class="field">
+              <div class="file has-name is-primary">
+                <label class="file-label">
+                  <input
+                    class="file-input"
+                    type="file"
+                    name="userImage"
+                    accept="image/*"
+                    data-max-size="10485760"
+                    onChange={e => handleImageUpload(e)}
+                  />
+                  <span class="file-cta">
+                    <span class="file-icon">
+                      <i class="fas fa-upload" />
+                    </span>
+                    <span class="file-label">Upload</span>
+                  </span>
+                  <span class="file-name">
+                    {image.name ? image.name : "No image selected.."}
+                  </span>
+                </label>
+              </div>
+            </div>
+          }
+        />
 
-        <div class="field is-grouped is-grouped-right">
-          <div class="control">
-            <button class="button is-primary" type="submit">
-              Save
-            </button>
-          </div>
-        </div>
-      </form>
+        <SubmitButton text="Submit" />
+      </Form>
       <div className="content has-text-centered">
         <p className="">
           Looking to <a onClick={() => onClickDelete()}>delete</a> your account?

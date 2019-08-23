@@ -2,7 +2,7 @@ import React from "react";
 
 import Carousel from "./carousel/Carousel";
 
-const NoticeBoard = () => {
+const NoticeBoard = ({ items }) => {
   return (
     <div className="noticeBoard">
       <div className="headerTab">
@@ -10,10 +10,13 @@ const NoticeBoard = () => {
           Notice Board
         </div>
       </div>
-      <Carousel items={[1, 2, 3, 4, 5]} active={0} />
-      {/*<div className="notices">
-          <div className="notice">- Nothing is here yet -</div>
-    </div>*/}
+      {items.length ? (
+        <Carousel items={items} active={0} />
+      ) : (
+        <div className="notices">
+          <div className="notice">- Nothing to see here -</div>
+        </div>
+      )}
     </div>
   );
 };

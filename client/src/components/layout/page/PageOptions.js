@@ -19,10 +19,10 @@ const PageOptions = ({ options }) => {
               aria-haspopup="true"
               aria-controls="dropdown-menu"
             >
-              <span>Filter</span>
               <span class="icon is-small">
-                <i class="fas fa-cog" aria-hidden="true" />
+                <i class="fas fa-search" aria-hidden="true" />
               </span>
+              <span>Options</span>
             </button>
           }
         >

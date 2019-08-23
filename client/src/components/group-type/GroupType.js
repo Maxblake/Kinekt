@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -46,15 +46,25 @@ const GroupType = ({
   }
 
   const options = [
-    <Link
-      to={`/k/${match.params.groupType}/create`}
-      className="button is-primary is-fullwidth-touch"
-    >
-      <span className="icon">
-        <i className="fas fa-plus" />
-      </span>
-      <span>New Group</span>
-    </Link>,
+    <Fragment>
+      <Link
+        to={`/k/${match.params.groupType}/create`}
+        className="button is-primary  is-hidden-touch is-hidden-widescreen"
+      >
+        <span className="icon">
+          <i className="fas fa-plus" />
+        </span>
+      </Link>
+      <Link
+        to={`/k/${match.params.groupType}/create`}
+        className="button is-primary is-fullwidth-touch is-hidden-desktop-only"
+      >
+        <span className="icon">
+          <i className="fas fa-plus" />
+        </span>
+        <span>New Group</span>
+      </Link>
+    </Fragment>,
     <div className="field">
       <div className="select is-fullwidth-touch">
         <select className="is-fullwidth-touch">

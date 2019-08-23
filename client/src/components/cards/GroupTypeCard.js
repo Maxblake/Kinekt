@@ -2,9 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import Image from "../common/subcomponents/Image";
+import OnlineStatus from "../common/subcomponents/OnlineStatus";
 
 import defaultGroupTypeImage from "../../resources/defaultGroupTypeImage.jpg";
-import OnlineStatus from "../common/subcomponents/OnlineStatus";
 
 const GroupTypeCard = ({ imgSrc, name, groupTypeCategory }) => {
   const getClassList = groupTypeCategory => {

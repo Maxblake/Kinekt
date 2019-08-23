@@ -9,9 +9,10 @@ import Spinner from "../common/Spinner";
 import GroupMembers from "./GroupMembers";
 import GroupConsole from "./GroupConsole";
 import NotFound from "../common/NotFound";
+import PageTitle from "../layout/page/PageTitle";
+import Dropdown from "../common/subcomponents/Dropdown";
 
 import defaultGroupTypeImage from "../../resources/defaultGroupTypeImage.jpg";
-import PageTitle from "../layout/page/PageTitle";
 
 const Group = ({
   getGroup,
@@ -86,39 +87,32 @@ const Group = ({
 
         <div className="level-right">
           <div className="level-item">
-            <div class="dropdown is-right">
-              <div class="dropdown-trigger">
+            <Dropdown
+              trigger={
                 <button
                   class="button is-black"
                   id="grpSettingsBtn"
                   aria-haspopup="true"
                   aria-controls="dropdown-menu"
                 >
-                  <span>Settings</span>
+                  <span>Filter</span>
                   <span class="icon is-small">
                     <i class="fas fa-cog" aria-hidden="true" />
                   </span>
                 </button>
-              </div>
-              <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                <div class="dropdown-content">
-                  <a href="#" class="dropdown-item">
-                    Edit Details
-                  </a>
-                  <a href="#" class="dropdown-item">
-                    Manage Admins
-                  </a>
-                  <hr class="dropdown-divider" />
-                  <a
-                    href="#"
-                    class="dropdown-item"
-                    onClick={e => onClickDelete(e)}
-                  >
-                    Delete Group
-                  </a>
-                </div>
-              </div>
-            </div>
+              }
+            >
+              <a href="#" class="dropdown-item">
+                Edit Details
+              </a>
+              <a href="#" class="dropdown-item">
+                Manage Admins
+              </a>
+              <hr class="dropdown-divider" />
+              <a href="#" class="dropdown-item" onClick={e => onClickDelete(e)}>
+                Delete Group
+              </a>
+            </Dropdown>
           </div>
         </div>
       </nav>

@@ -8,6 +8,9 @@ import { getGroups } from "../../actions/group";
 import Spinner from "../common/Spinner";
 import NotFound from "../common/NotFound";
 import GroupCard from "../cards/GroupCard";
+import PageTitle from "../layout/page/PageTitle";
+import OnlineStatus from "../common/subcomponents/OnlineStatus";
+import PageOptions from "../layout/page/PageOptions";
 
 import defaultGroupTypeImage from "../../resources/defaultGroupTypeImage.jpg";
 
@@ -42,70 +45,48 @@ const GroupType = ({
     return <Spinner />;
   }
 
+  const options = [
+    <Link
+      to={`/k/${match.params.groupType}/create`}
+      className="button is-primary is-fullwidth-touch"
+    >
+      <span className="icon">
+        <i className="fas fa-plus" />
+      </span>
+      <span>New Group</span>
+    </Link>,
+    <div className="field">
+      <div className="select is-fullwidth-touch">
+        <select className="is-fullwidth-touch">
+          <option>Trending</option>
+          <option>Top</option>
+          <option>New</option>
+          <option>Nearby</option>
+        </select>
+      </div>
+    </div>,
+    <div className="field has-addons">
+      <p className="control" id="controlSearchGroups">
+        <input className="input" type="text" placeholder="Search groups" />
+      </p>
+      <p className="control">
+        <button className="button is-primary">
+          <span className="icon is-small">
+            <i className="fas fa-search" />
+          </span>
+        </button>
+      </p>
+    </div>
+  ];
+
   return (
     <section className="groupType">
       <nav className="level" id="pageNav">
-        <div className="level-left">
-          <div className="level-item">
-            <div className="groupTypeTitleContainer">
-              <h3 className="title is-size-3 pageTitle">
-                {match.params.groupType.split("_").join(" ")}
-              </h3>
-              <div>
-                <div className="subtitle is-size-6 pageSubtitle onlineStatusContainer">
-                  <div className="onlineStatusDot" />
-                  <h4 className="onlineStatusText">3 groups</h4>
-                  <div className="onlineStatusDot" />
-                  <h4 className="onlineStatusText">14 users</h4>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="level-right">
-          <div className="level-item">
-            <div className="level-item">
-              <Link
-                to={`/k/${match.params.groupType}/create`}
-                className="button is-primary"
-              >
-                <span className="icon">
-                  <i className="fas fa-plus" />
-                </span>
-                <span>New Group</span>
-              </Link>
-            </div>
-            <div className="field">
-              <div className="select">
-                <select>
-                  <option>Trending</option>
-                  <option>Top</option>
-                  <option>New</option>
-                  <option>Nearby</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div className="level-item">
-            <div className="field has-addons">
-              <p className="control" id="controlSearchGroups">
-                <input
-                  className="input"
-                  type="text"
-                  placeholder="Search groups"
-                />
-              </p>
-              <p className="control">
-                <button className="button is-primary">
-                  <span className="icon is-small">
-                    <i className="fas fa-search" />
-                  </span>
-                </button>
-              </p>
-            </div>
-          </div>
-        </div>
+        <PageTitle
+          title={match.params.groupType.split("_").join(" ")}
+          subtitle={<OnlineStatus users="30 users" groups="3 groups" />}
+        />
+        <PageOptions options={options} />
       </nav>
 
       <div className="groupCards">

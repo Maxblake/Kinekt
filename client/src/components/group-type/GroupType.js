@@ -115,7 +115,7 @@ const GroupType = ({
             <h3>- This is the end. -</h3>
           </div>
         ) : (
-          <div className="box is-size-5 has-text-centered has-margin-top-2">
+          <div className="box no-card-notice">
             There are currently no groups here. It may be time to make a new
             one!
           </div>

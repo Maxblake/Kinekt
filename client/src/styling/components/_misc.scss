@@ -1,0 +1,54 @@
+// Footer
+.footer {
+  @extend %is-dark;
+  margin-top: 5em;
+}
+
+// Spinner
+.spinnerContainer {
+  background-color: whitesmoke;
+  border-radius: 6px;
+  width: 100px;
+  height: 100px;
+  margin: 20vh auto 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Notifications / Alerts
+.notification {
+  margin-top: 1.5rem;
+}
+
+// Cards
+.no-card-notice {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+}
+
+// Page nav
+#pageNav {
+  align-items: flex-end;
+  margin: 2.5rem 0 1.5rem 0;
+}
+
+#controlSearchGroupTypes,
+#controlSearchGroups {
+  width: 300px;
+}
+
+@media (max-width: $tablet - 1) {
+  #controlSearchGroupTypes,
+  #controlSearchGroups {
+    width: 250px;
+  }
+}
+
+// New group page
+.timeKeeperModalContent {
+  width: 270px;
+  text-align: center;
+}

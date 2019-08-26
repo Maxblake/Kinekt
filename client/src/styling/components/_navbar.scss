@@ -1,0 +1,64 @@
+@media (max-width: $tablet - 1) {
+  #logo_typewriter {
+    display: none;
+  }
+}
+
+// Navbar
+#logo {
+  color: whitesmoke;
+  transition: color 0.2s;
+
+  &:hover {
+    color: $primary;
+    background-color: transparent;
+  }
+}
+
+#currentGroupBtn {
+  color: whitesmoke;
+}
+
+.navbar-burger span {
+  height: 2px;
+}
+
+@media (max-width: $desktop - 1) {
+  #currentGroupBtn {
+    background-color: $primary;
+  }
+
+  .navbar.is-fixed-top {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: transparent;
+  }
+  .navbar-brand {
+    min-width: 100%;
+    background-color: $off-black;
+  }
+  .navbar-burger {
+    color: whitesmoke;
+  }
+  .navbar-menu {
+    margin-left: auto;
+    padding: 0;
+    background-color: whitesmoke; // rgba(0, 0, 0, 0.6);
+    border-bottom-left-radius: 6px;
+
+    .navbar-end {
+      padding: 0 1.25rem;
+    }
+
+    .navbar-item {
+      padding: 0.75rem 0;
+      &:not(:last-child) {
+        border-bottom: 1px solid #dbdbdb;
+      }
+    }
+
+    .buttons .button {
+      flex-grow: 1;
+    }
+  }
+}

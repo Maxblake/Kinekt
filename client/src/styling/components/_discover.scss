@@ -1,0 +1,23 @@
+// Discover header
+.discover-header {
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  display: flex;
+  background: #404040;
+  border: 9px dashed $off-black;
+
+  .header-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+
+    .step-description {
+      @extend %is-dark;
+
+      margin-top: 1rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+    }
+  }
+}

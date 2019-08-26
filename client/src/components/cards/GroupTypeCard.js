@@ -39,7 +39,10 @@ const GroupTypeCard = ({ imgSrc, name, groupTypeCategory }) => {
   return (
     <Link to={`/k/${name.split(" ").join("_")}`} className="card groupTypeCard">
       <div className="card-image">
-        <Image src={imgSrc !== "" ? imgSrc : defaultGroupTypeImage} />
+        <Image
+          figureClass="is-2by1"
+          src={imgSrc !== "" ? imgSrc : defaultGroupTypeImage}
+        />
       </div>
       <span className={getClassList(groupTypeCategory)}>
         {groupTypeCategory}

@@ -14,8 +14,8 @@ const GroupConsole = ({ group, imgSrc }) => {
       <div className="flex-row-wrap">
         <GroupDetails group={group} />
 
-        <div className="groupImage">
-          <Image src={imgSrc} alt="Placeholder image" />
+        <div className="group-image">
+          <Image figureClass="is-2by1" src={imgSrc} alt="Placeholder image" />
         </div>
         <NoticeBoard items={[1, 2, 3]} />
       </div>

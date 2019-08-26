@@ -59,7 +59,7 @@ const Discover = ({
     groupTypeCards = <Spinner />;
   } else if (!groupTypes.length) {
     groupTypeCards = (
-      <div className="box is-size-5 has-text-centered has-margin-top-2">
+      <div className="box no-card-notice">
         There are currently no group types here. It may be time to request a new
         one!
       </div>

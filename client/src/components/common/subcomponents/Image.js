@@ -1,16 +1,9 @@
 import React from "react";
 
-const Image = ({ src, figureClasses, imageClasses }) => {
+const Image = ({ src, figureClass = "", imageClass = "" }) => {
   return (
-    <figure
-      className={`imageContainer image ${figureClasses &&
-        figureClasses.join(" ")}`}
-    >
-      <img
-        className={`${imageClasses && imageClasses.join(" ")}`}
-        src={src}
-        alt="Placeholder image"
-      />
+    <figure className={`imageContainer image ${figureClass}`}>
+      <img className={`${imageClass}`} src={src} alt="Placeholder image" />
     </figure>
   );
 };

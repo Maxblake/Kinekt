@@ -1,0 +1,26 @@
+// Admin portal
+.admin-portal {
+  @extend %is-dark;
+
+  padding: 1em;
+
+  img {
+    max-width: 350px;
+  }
+
+  table {
+    border-collapse: separate;
+    border-spacing: 0 0.5em;
+
+    tr {
+      td {
+        &:nth-child(even) {
+          background: whitesmoke;
+        }
+        color: $off-black;
+        background: whitesmoke;
+        padding: 0.5em 1em;
+      }
+    }
+  }
+}

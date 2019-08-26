@@ -30,30 +30,8 @@ const Group = ({
       (!group || (group && group.HRID !== match.params.groupCode))
     ) {
       getGroup(match.params.groupCode);
-    } else {
-      grpSettingsBtn = document.querySelector("#grpSettingsBtn");
-      grpSettingsDropDown = document.querySelector(".dropdown");
-
-      document.addEventListener("click", handleToggleGrpSettings);
     }
-
-    return () => {
-      document.removeEventListener("click", handleToggleGrpSettings);
-    };
   }, [isAuthenticated, group, match.params.groupCode]);
-
-  const handleToggleGrpSettings = e => {
-    const clickedGrpSettingsBtn = grpSettingsBtn.contains(e.target);
-    const grpSettingsDropDownActive = grpSettingsDropDown.classList.contains(
-      "is-active"
-    );
-
-    if (grpSettingsDropDownActive) {
-      grpSettingsDropDown.classList.remove("is-active");
-    } else if (clickedGrpSettingsBtn) {
-      grpSettingsDropDown.classList.add("is-active");
-    }
-  };
 
   const onClickDelete = e => {
     deleteGroup();
@@ -90,7 +68,7 @@ const Group = ({
             <Dropdown
               trigger={
                 <button
-                  class="button is-black"
+                  class="button is-dark-theme"
                   id="grpSettingsBtn"
                   aria-haspopup="true"
                   aria-controls="dropdown-menu"

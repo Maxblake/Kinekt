@@ -9,11 +9,11 @@ const GroupCard = ({ group, groupTypeName, defaultImg }) => {
   return (
     <Link
       to={`/k/${groupTypeName}/group/${group.HRID}`}
-      className="columns is-gapless groupCardContainer"
+      className="columns is-gapless group-card-container"
     >
       <div className="column is-8 card groupCard">
         <div className="card-content">
-          <div className="groupName">
+          <div className="group-name">
             <h1 className="title is-size-4">{group.name}</h1>
             <div className="subtitle is-size-6">
               <OnlineStatus users="14/20 users" />
@@ -22,8 +22,11 @@ const GroupCard = ({ group, groupTypeName, defaultImg }) => {
           <GroupDetails group={group} />
         </div>
       </div>
-      <div className="column is-4 groupImage card">
-        <Image src={group.image ? group.image.link : defaultImg} />
+      <div className="column is-4 group-image card">
+        <Image
+          figureClass="is-2by1"
+          src={group.image ? group.image.link : defaultImg}
+        />
       </div>
     </Link>
   );

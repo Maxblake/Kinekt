@@ -1,0 +1,13 @@
+.is-dark-theme {
+  @extend %is-dark;
+
+  &.button {
+    border-color: transparent;
+
+    &:focus,
+    &:hover {
+      background: #404040;
+      color: whitesmoke;
+    }
+  }
+}

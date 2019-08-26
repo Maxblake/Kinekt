@@ -1,0 +1,87 @@
+// Group type categories
+.tag.category-social,
+.category-social {
+  background-color: hsl(322, 100%, 75%);
+  color: whitesmoke;
+}
+.tag.category-gaming,
+.category-gaming {
+  background-color: #ffdc00;
+  color: hsla(52, 100%, 20%, 1);
+}
+.tag.category-educational,
+.category-educational {
+  background-color: #7fdbff;
+  color: hsla(197, 100%, 20%, 1);
+}
+.tag.category-professional,
+.category-professional {
+  background-color: #001f3f;
+  color: lightgray;
+}
+.tag.category-hobby,
+.category-hobby {
+  background-color: #ff4136;
+  color: lightgray;
+}
+.tag.category-other,
+.category-other {
+  background-color: #707070;
+  color: whitesmoke;
+}
+
+.groupTypeCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-gap: 25px;
+}
+
+.groupTypeCard {
+  position: relative;
+
+  .card-image::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&0.05+1,0.15+50,0.75+100 */
+    background: -moz-linear-gradient(
+      top,
+      rgba(0, 0, 0, 0.05) 0%,
+      rgba(0, 0, 0, 0.05) 1%,
+      rgba(0, 0, 0, 0.15) 50%,
+      rgba(0, 0, 0, 0.75) 100%
+    ); /* FF3.6-15 */
+    background: -webkit-linear-gradient(
+      top,
+      rgba(0, 0, 0, 0.05) 0%,
+      rgba(0, 0, 0, 0.05) 1%,
+      rgba(0, 0, 0, 0.15) 50%,
+      rgba(0, 0, 0, 0.75) 100%
+    ); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.05) 0%,
+      rgba(0, 0, 0, 0.05) 1%,
+      rgba(0, 0, 0, 0.15) 50%,
+      rgba(0, 0, 0, 0.75) 100%
+    ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0d000000', endColorstr='#bf000000',GradientType=0 ); /* IE6-9 */
+  }
+
+  &:hover {
+    .title {
+      text-decoration: underline;
+    }
+  }
+}
+
+.tag.groupTypeTag,
+.groupTypeTag {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+}

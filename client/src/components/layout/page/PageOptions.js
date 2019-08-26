@@ -14,8 +14,7 @@ const PageOptions = ({ options }) => {
         <Dropdown
           trigger={
             <button
-              class="button is-black"
-              id="grpSettingsBtn"
+              class="button is-dark-theme"
               aria-haspopup="true"
               aria-controls="dropdown-menu"
             >

@@ -1,0 +1,36 @@
+// 404
+.pageNotFound {
+  justify-content: center;
+  align-items: center;
+  margin-top: 6rem;
+  .box {
+    margin-right: 20%;
+  }
+  .pageNotFoundWarning,
+  #lostMoto {
+    flex: 1;
+  }
+}
+
+@media (max-width: $desktop - 1) {
+  .pageNotFound {
+    padding: 0 1em;
+    margin-top: 3rem;
+
+    .box {
+      margin-right: 0;
+    }
+
+    .pageNotFoundWarning {
+      flex: 1 100%;
+    }
+
+    #lostMoto {
+      text-align: right;
+      flex: 1 100%;
+
+      height: 30vh;
+      margin-top: 5vh;
+    }
+  }
+}

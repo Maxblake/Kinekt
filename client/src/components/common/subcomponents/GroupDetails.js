@@ -2,16 +2,16 @@ import React from "react";
 
 const GroupDetails = ({ group }) => {
   return (
-    <div className="groupDetailsContainer">
-      <div className="groupDescription">
+    <div className="group-details-container">
+      <div className="group-description">
         <p>
           {group && group.description
             ? group.description
             : "There is no description available for this group."}
         </p>
       </div>
-      <div className="groupDetails">
-        <div className="groupMeetTime">
+      <div className="group-details">
+        <div className="group-meet-time">
           <div className="content is-flex">
             <span class="icon">
               <i class="fas fa-clock" />
@@ -19,7 +19,7 @@ const GroupDetails = ({ group }) => {
             <h3>Thu, May 17, 2:00 PM</h3>
           </div>
         </div>
-        <div className="groupMeetPlace">
+        <div className="group-meet-place">
           <div className="content is-flex">
             <span class="icon">
               <i class="fas fa-map-marker-alt" />

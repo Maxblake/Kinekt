@@ -114,7 +114,7 @@ const Admin = ({
         </div>
       </nav>
 
-      <div className="adminPortal">
+      <div className="admin-portal">
         {requestedGroupTypes.length > 0 ? (
           <Fragment>
             <h2 className="is-size-4">Requested Group Types</h2>

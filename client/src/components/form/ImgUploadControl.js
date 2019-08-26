@@ -11,8 +11,8 @@ const ImgUploadControl = ({ label, src, onChange, type }) => {
   });
 
   const { error, fileName, imgSrc } = imgData;
-  const figureClasses = [];
-  const imageClasses = [];
+  const figureClass = "";
+  const imageClass = "";
 
   const handleImageUpload = e => {
     const imageFile = e.target.files[0];
@@ -35,11 +35,11 @@ const ImgUploadControl = ({ label, src, onChange, type }) => {
 
   switch (type) {
     case "profile":
-      figureClasses.push("is-square");
+      figureClass = "is-square";
       break;
     case "groupType":
     case "group":
-      figureClasses.push("is-2by1");
+      figureClass = "is-2by1";
       break;
   }
 
@@ -72,8 +72,8 @@ const ImgUploadControl = ({ label, src, onChange, type }) => {
             <div className="image-preview">
               <Image
                 src={imgSrc}
-                figureClasses={figureClasses}
-                imageClasses={imageClasses}
+                figureClass={figureClass}
+                imageClass={imageClass}
               />
             </div>
           )}

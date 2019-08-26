@@ -112,7 +112,7 @@ const Navbar = ({
           <a
             onClick={() => logout()}
             href="#!"
-            className="button is-black is-small"
+            className="button is-dark-theme is-small"
           >
             Log out &nbsp;
             <i className="fas fa-sign-out-alt" />
@@ -125,7 +125,7 @@ const Navbar = ({
   const guestLinks = (
     <div className="navbar-item">
       <div className="buttons">
-        <Link to="/login" className="button is-black is-small">
+        <Link to="/login" className="button is-dark-theme is-small">
           Log in
         </Link>
         <Link to="/register" className="button is-primary is-small">
@@ -136,7 +136,7 @@ const Navbar = ({
   );
 
   return (
-    <nav className="navbar is-black is-fixed-top">
+    <nav className="navbar is-dark-theme is-fixed-top">
       <div className="navbar-brand">
         <div className="navbar-item">
           <Link to="/" id="logo" className="is-size-4">

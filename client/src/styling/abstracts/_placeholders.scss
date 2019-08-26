@@ -1,0 +1,9 @@
+%is-dark {
+  background: $off-black;
+  color: whitesmoke;
+}
+
+%is-light {
+  background: whitesmoke;
+  color: $off-black;
+}

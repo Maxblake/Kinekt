@@ -12,7 +12,7 @@ const GroupMember = ({ status, memberType, memberName }) => {
         classList.push("is-user");
         break;
       default:
-        classList.push("is-dark");
+        classList.push("is-dark-theme");
     }
 
     switch (status) {
@@ -23,7 +23,7 @@ const GroupMember = ({ status, memberType, memberName }) => {
         classList.push("is-away");
         break;
       default:
-        classList.push("is-dark");
+        classList.push("is-dark-theme");
     }
 
     return classList.join(" ");

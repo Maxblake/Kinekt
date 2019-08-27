@@ -84,7 +84,6 @@ const Register = ({ register, errors, isAuthenticated }) => {
 
         <CustomField
           label="About you"
-          error={errAbout ? errAbout.msg : undefined}
           children={
             <div className="field">
               <div className="control">
@@ -97,6 +96,7 @@ const Register = ({ register, errors, isAuthenticated }) => {
                   placeholder="What brings you here? (This can be changed later)"
                 />
               </div>
+              {errAbout && <p className="help is-danger">{errAbout.msg}</p>}
             </div>
           }
         />

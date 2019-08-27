@@ -25,24 +25,22 @@ const GroupType = ({
     const groupTypeParamSpaced = match.params.groupType.split("_").join(" ");
     const groupTypeParamChanged =
       groupType && groupType.name !== groupTypeParamSpaced;
+
     if (!groupType || groupTypeParamChanged || !groups.length) {
       getGroups(groupTypeParamSpaced);
     }
   }, [match.params.groupType]);
 
-  if (
-    !loading &&
-    error.groupTypeName === match.params.groupType.split("_").join(" ")
-  ) {
-    return <NotFound />;
+  if (loading) {
+    return <Spinner />;
   }
 
   if (
     !groupType ||
-    (groupType &&
-      groupType.name !== match.params.groupType.split("_").join(" "))
+    (error &&
+      error.groupTypeName === match.params.groupType.split("_").join(" "))
   ) {
-    return <Spinner />;
+    return <NotFound />;
   }
 
   const options = [

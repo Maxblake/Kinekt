@@ -1,47 +1,58 @@
 import {
+  FETCH_GROUP,
   GET_GROUP,
   GET_GROUPS,
   GROUP_ERROR,
-  CLEAR_GROUP
+  CLEAR_GROUP,
+  LOGOUT
 } from "../actions/types";
 
 const initialState = {
   groups: [],
   group: null,
-  loading: true,
-  error: {}
+  loading: false,
+  error: null
 };
 
 export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
+    case FETCH_GROUP: {
+      return {
+        ...state,
+        loading: true
+      };
+    }
     case GET_GROUPS: {
       return {
         ...state,
-        groups: payload.groups,
-        loading: false
+        groups: payload,
+        loading: false,
+        error: null
       };
     }
     case GET_GROUP: {
       return {
         ...state,
         group: payload,
-        error: {},
-        loading: false
+        loading: false,
+        error: null
       };
     }
     case GROUP_ERROR: {
       return {
         groups: [],
         group: null,
-        error: payload,
-        loading: false
+        loading: false,
+        error: payload
       };
     }
+    case LOGOUT:
     case CLEAR_GROUP: {
       return {
-        ...initialState
+        ...initialState,
+        loading: false
       };
     }
     default:

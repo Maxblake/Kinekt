@@ -9,52 +9,39 @@ import imgStepThree from "../../resources/discover_step_three.jpg";
 // TODO use a level for this
 const DiscoverHeader = () => {
   return (
-    <div className="discover-header">
-      <div className="header-step">
-        <a
-          target="_blank"
-          href="https://pixabay.com/users/skeeze-272447/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=981188"
-        >
-          <figure className="image is-128x128">
-            <Image
-              src={imgStepOne}
-              figureClass="is-128x128"
-              imageClass="is-rounded"
-            />
-          </figure>
-        </a>
+    <div className="level discover-header">
+      <div className="level-item header-step">
+        <div className="step-image">
+          <Image
+            src={imgStepOne}
+            figureClass="is-square"
+            imageClass="is-rounded"
+          />
+        </div>
         <div className="step-description has-text-centered">
           1. Create a free (forever) account.
         </div>
       </div>
-      <div className="header-step">
-        <a
-          target="_blank"
-          href="https://pixabay.com/users/Susbany-19456/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=100947"
-        >
-          <figure className="image is-128x128">
-            <Image
-              src={imgStepTwo}
-              figureClass="is-128x128"
-              imageClass="is-rounded"
-            />
-          </figure>
-        </a>
+      <div className="level-item header-step">
+        <div className="step-image">
+          <Image
+            src={imgStepTwo}
+            figureClass="is-square"
+            imageClass="is-rounded"
+          />
+        </div>
         <div className="step-description has-text-centered">
           2. Find groups that interest you.
         </div>
       </div>
-      <div className="header-step">
-        <a
-          target="_blank"
-          href="https://pixabay.com/users/mikefoster-424423/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1033155"
-        >
+      <div className="level-item header-step">
+        <div className="step-image">
           <Image
             src={imgStepThree}
-            figureClass="is-128x128"
+            figureClass="is-square"
             imageClass="is-rounded"
           />
-        </a>
+        </div>
         <div className="step-description has-text-centered">
           3. Join and participate on the fly!
         </div>

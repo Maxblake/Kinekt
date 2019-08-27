@@ -90,6 +90,11 @@ html {
   }
 }
 
+.is-175x175 {
+  height: 175px;
+  width: 175px;
+}
+
 @media (max-width: $desktop - 1) {
   .container {
     padding: 0 1em;

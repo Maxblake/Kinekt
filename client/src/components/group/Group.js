@@ -19,16 +19,16 @@ const Group = ({
   deleteGroup,
   group: { group, loading, error },
   groupType: { groupType },
-  isAuthenticated,
+  auth: { user, isAuthenticated },
   match
 }) => {
-  let grpSettingsBtn, grpSettingsDropDown;
-
   useEffect(() => {
-    if (
-      isAuthenticated &&
-      (!group || (group && group.HRID !== match.params.groupCode))
-    ) {
+    if (isAuthenticated && (!group || group.HRID !== match.params.groupCode)) {
+      console.log(1, isAuthenticated);
+      console.log(2, !!group);
+      if (group) {
+        console.log(3, group.HRID !== match.params.groupCode);
+      }
       getGroup(match.params.groupCode);
     }
   }, [isAuthenticated, group, match.params.groupCode]);
@@ -43,12 +43,16 @@ const Group = ({
     return defaultGroupTypeImage;
   };
 
-  if (!loading && error.HRID === match.params.groupCode) {
-    return <NotFound />;
+  if (loading) {
+    return <Spinner />;
   }
 
-  if (!group || (group && group.HRID !== match.params.groupCode)) {
-    return <Spinner />;
+  if (
+    !group ||
+    !groupType ||
+    (error && error.HRID === match.params.groupCode)
+  ) {
+    return <NotFound />;
   }
 
   return (
@@ -57,46 +61,47 @@ const Group = ({
         <PageTitle
           title={group.name}
           subtitle={
-            <Link to={`/k/${match.params.groupType}`}>
-              {match.params.groupType.split("_").join(" ")}
+            <Link to={`/k/${groupType.name.split(" ").join("_")}`}>
+              {groupType.name}
             </Link>
           }
         />
-
-        <div className="level-right">
-          <div className="level-item">
-            <Dropdown
-              trigger={
-                <button
-                  className="button is-dark-theme"
-                  id="grpSettingsBtn"
-                  aria-haspopup="true"
-                  aria-controls="dropdown-menu"
-                >
-                  <span>Filter</span>
-                  <span className="icon is-small">
-                    <i className="fas fa-cog" aria-hidden="true" />
-                  </span>
-                </button>
-              }
-            >
-              <a href="#" className="dropdown-item">
-                Edit Details
-              </a>
-              <a href="#" className="dropdown-item">
-                Manage Admins
-              </a>
-              <hr className="dropdown-divider" />
-              <a
-                href="#"
-                className="dropdown-item"
-                onClick={e => onClickDelete(e)}
+        {user._id === group.creator && (
+          <div className="level-right">
+            <div className="level-item">
+              <Dropdown
+                trigger={
+                  <button
+                    className="button is-dark-theme"
+                    id="grpSettingsBtn"
+                    aria-haspopup="true"
+                    aria-controls="dropdown-menu"
+                  >
+                    <span>Filter</span>
+                    <span className="icon is-small">
+                      <i className="fas fa-cog" aria-hidden="true" />
+                    </span>
+                  </button>
+                }
               >
-                Delete Group
-              </a>
-            </Dropdown>
+                <a href="#" className="dropdown-item">
+                  Edit Details
+                </a>
+                <a href="#" className="dropdown-item">
+                  Manage Admins
+                </a>
+                <hr className="dropdown-divider" />
+                <a
+                  href="#"
+                  className="dropdown-item"
+                  onClick={e => onClickDelete(e)}
+                >
+                  Delete Group
+                </a>
+              </Dropdown>
+            </div>
           </div>
-        </div>
+        )}
       </nav>
       <GroupConsole group={group} imgSrc={getGroupImage()} />
       <GroupMembers />
@@ -107,13 +112,13 @@ const Group = ({
 Group.propTypes = {
   getGroup: PropTypes.func.isRequired,
   deleteGroup: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool,
+  auth: PropTypes.object.isRequired,
   group: PropTypes.object.isRequired,
   groupType: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated,
+  auth: state.auth,
   group: state.group,
   groupType: state.groupType
 });

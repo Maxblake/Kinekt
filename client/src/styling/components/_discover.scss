@@ -1,9 +1,12 @@
 // Discover header
 .discover-header {
+  align-items: flex-start;
   padding: 1.5rem;
-  margin: 2rem 0 3rem 0;
-  display: flex;
-  background: $off-black;
+  margin: 1.5rem auto 3rem auto;
+  background: whitesmoke;
+  border-radius: 6px;
+
+  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.2), 0 0 0 1px rgba(10, 10, 10, 0.2);
 
   .header-step {
     display: flex;
@@ -12,15 +15,46 @@
     flex: 1;
 
     .step-description {
-      @extend %is-light;
+      @extend %is-dark;
 
-      margin: 1rem 0.5rem 0 0.5rem;
+      margin: 1.5rem 0.75rem 0 0.75rem;
       padding: 0.5rem 0.75rem;
       border-radius: 6px;
     }
 
+    .step-image {
+      width: 70%;
+    }
+
     img {
-      border: 5px solid whitesmoke;
+      border: 7px solid white;
+      box-shadow: 0 5px 5px rgba(10, 10, 10, 0.2),
+        0 2px 6px 2px rgba(10, 10, 10, 0.2);
+    }
+  }
+}
+
+@media (max-width: $tablet - 1) {
+  .discover-header {
+    padding: 0.5rem;
+    max-width: 500px;
+
+    .header-step {
+      margin: 1rem 0;
+
+      .step-description {
+        margin: 1rem 0.5rem 0.5rem 0.5rem;
+      }
+
+      .step-image {
+        width: 90%;
+      }
+
+      &:last-child {
+        .step-description {
+          margin-bottom: 0;
+        }
+      }
     }
   }
 }

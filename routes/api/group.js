@@ -126,7 +126,7 @@ const createOrUpdateGroup = async (req, res, updating) => {
       return errors.addErrAndSendResponse(res, "Invalid Group Type ID");
     }
 
-    response = { groupTypeName: groupType.name };
+    response = { groupType };
 
     if (updating) {
       response.group = await updateGroup(req, groupFields, errors);
@@ -206,7 +206,10 @@ const updateGroup = async (req, groupFields, errors) => {
 
 const createGroup = async (req, groupFields, errors) => {
   if (!!(await Group.findOne({ creator: req.user.id }))) {
-    errors.addError("Unable to create group: User already has an active group");
+    errors.addError(
+      "Unable to create group: User already has an active group",
+      "alert"
+    );
     return;
   }
 

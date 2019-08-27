@@ -1,4 +1,5 @@
 import {
+  FETCH_AUTH,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   USER_LOADED,
@@ -12,19 +13,22 @@ import {
 const initialState = {
   token: localStorage.getItem("token"),
   isAuthenticated: null,
-  loading: true,
-  user: null
+  user: null,
+  loading: false
 };
 
 export default function(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
+    case FETCH_AUTH:
+      return {
+        loading: true
+      };
     case USER_LOADED:
       return {
-        ...state,
         isAuthenticated: true,
-        loading: false,
-        user: payload
+        user: payload,
+        loading: false
       };
     case EDIT_USER:
       return {
@@ -36,14 +40,13 @@ export default function(state = initialState, action) {
     case LOGIN_SUCCESS:
       localStorage.setItem("token", payload.token);
       return {
-        ...state,
         ...payload,
         isAuthenticated: true,
         loading: false
       };
     case REGISTER_FAIL:
-    case AUTH_ERROR:
     case LOGIN_FAIL:
+    case AUTH_ERROR:
     case LOGOUT:
       localStorage.removeItem("token");
       return {

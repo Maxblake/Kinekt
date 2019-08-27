@@ -10,6 +10,7 @@ const FormControl = ({
   placeholder,
   required
 }) => {
+  console.log(error);
   return (
     <Fragment>
       <label className="label">{`${label}${required ? " *" : ""}`}</label>
@@ -24,7 +25,7 @@ const FormControl = ({
             placeholder={placeholder ? placeholder : ""}
           />
         </div>
-        {error && <p className="help is-danger">{error.msg}</p>}
+        {error && <p className="help is-danger">{error}</p>}
       </div>
     </Fragment>
   );

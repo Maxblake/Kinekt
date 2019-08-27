@@ -4,7 +4,7 @@ import { handleResponseErrors } from "./helpers/helpers";
 import { clearErrorsAndAlerts } from "./auth";
 import { setAlert } from "./alert";
 
-import { GET_GROUPTYPES, GROUPTYPE_ERROR } from "./types";
+import { FETCH_GROUPTYPE, GET_GROUPTYPES, GROUPTYPE_ERROR } from "./types";
 
 // Get a list of group types ordered and filtered by passed criteria
 export const getGroupTypes = ({
@@ -21,6 +21,10 @@ export const getGroupTypes = ({
   const body = JSON.stringify({ sortBy, category, searchTerms });
 
   try {
+    dispatch({
+      type: FETCH_GROUPTYPE
+    });
+
     const res = await axios.post(`/api/group-type/list`, body, config);
 
     dispatch({
@@ -47,6 +51,10 @@ export const requestGroupType = (
   }
 
   try {
+    dispatch({
+      type: FETCH_GROUPTYPE
+    });
+
     dispatch(clearErrorsAndAlerts());
 
     await axios.post(`/api/group-type/request`, formData);
@@ -60,7 +68,6 @@ export const requestGroupType = (
 
     history.push("/");
   } catch (err) {
-    //TODO receive response error message for.. every api call :)
     dispatch(handleResponseErrors(err));
 
     dispatch({

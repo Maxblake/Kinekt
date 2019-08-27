@@ -20,8 +20,8 @@ import ImgUploadControl from "../form/ImgUploadControl";
 const NewGroup = ({
   match,
   history,
-  groupType: { groupType, loading },
-  isAuthenticated,
+  groupType: { groupType },
+  loading,
   errors,
   createGroup,
   getGroups
@@ -58,7 +58,11 @@ const NewGroup = ({
   const errMaxSize = errors.find(error => error.param === "maxSize");
 
   useEffect(() => {
-    if (!groupType) {
+    const groupTypeParamSpaced = match.params.groupType.split("_").join(" ");
+    const groupTypeParamChanged =
+      groupType && groupType.name !== groupTypeParamSpaced;
+
+    if (!groupType || groupTypeParamChanged) {
       getGroups(match.params.groupType.split("_").join(" "));
     }
   }, []);
@@ -130,12 +134,12 @@ const NewGroup = ({
     createGroup(groupFields, history);
   };
 
-  if (!groupType && isAuthenticated && !loading) {
-    return <NotFound />;
+  if (loading) {
+    return <Spinner />;
   }
 
   if (!groupType) {
-    return <Spinner />;
+    return <NotFound />;
   }
 
   return (
@@ -182,7 +186,6 @@ const NewGroup = ({
 
         <CustomField
           label="Description"
-          error={errDescription ? errDescription.msg : undefined}
           children={
             <div className="field">
               <div className="control">
@@ -195,6 +198,9 @@ const NewGroup = ({
                   placeholder="E.g. Let's hang out and argue about flour and corn tortillas at my place."
                 />
               </div>
+              {errDescription && (
+                <p className="help is-danger">{errDescription.msg}</p>
+              )}
             </div>
           }
         />
@@ -252,7 +258,6 @@ const NewGroup = ({
 
         <CustomField
           label="Group Size"
-          error={errMaxSize ? errMaxSize.msg : undefined}
           children={
             <div className="field">
               <div className="control is-flex">
@@ -276,12 +281,13 @@ const NewGroup = ({
                   onChange={e => onChange(e)}
                 />
               </div>
+              {errMaxSize && <p className="help is-danger">{errMaxSize.msg}</p>}
             </div>
           }
         />
 
         <CustomField
-          label="Group Size"
+          label="Access Level"
           children={
             <div className="field is-grouped">
               <div className="control">
@@ -317,13 +323,13 @@ const NewGroup = ({
 NewGroup.propTypes = {
   createGroup: PropTypes.func.isRequired,
   getGroups: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool,
+  loading: PropTypes.bool.isRequired,
   groupType: PropTypes.object.isRequired,
   errors: PropTypes.array.isRequired
 };
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated,
+  loading: state.group.loading,
   groupType: state.groupType,
   errors: state.error
 });

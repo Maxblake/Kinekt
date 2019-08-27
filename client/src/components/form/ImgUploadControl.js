@@ -11,8 +11,8 @@ const ImgUploadControl = ({ label, src, onChange, type }) => {
   });
 
   const { error, fileName, imgSrc } = imgData;
-  const figureClass = "";
-  const imageClass = "";
+  let figureClass = "";
+  let imageClass = "";
 
   const handleImageUpload = e => {
     const imageFile = e.target.files[0];
@@ -46,7 +46,6 @@ const ImgUploadControl = ({ label, src, onChange, type }) => {
   return (
     <CustomField
       label={label}
-      error={error}
       children={
         <div className="field">
           <div className="file has-name is-primary">
@@ -77,6 +76,7 @@ const ImgUploadControl = ({ label, src, onChange, type }) => {
               />
             </div>
           )}
+          {error && <p className="help is-danger">{error}</p>}
         </div>
       }
     />

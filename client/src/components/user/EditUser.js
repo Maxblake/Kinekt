@@ -12,7 +12,12 @@ import SubmitButton from "../form/SubmitButton";
 import CustomField from "../form/CustomField";
 import ImgUploadControl from "../form/ImgUploadControl";
 
-const EditUser = ({ editUser, deleteUser, errors, auth: { user } }) => {
+const EditUser = ({
+  editUser,
+  deleteUser,
+  errors,
+  auth: { user, loading }
+}) => {
   const [formData, setFormData] = useState({
     name: "",
     about: "",
@@ -54,7 +59,7 @@ const EditUser = ({ editUser, deleteUser, errors, auth: { user } }) => {
     deleteUser();
   };
 
-  if (!user) {
+  if (loading) {
     return <Spinner />;
   }
 
@@ -76,7 +81,6 @@ const EditUser = ({ editUser, deleteUser, errors, auth: { user } }) => {
 
         <CustomField
           label="About you"
-          error={errAbout ? errAbout.msg : undefined}
           children={
             <div className="field">
               <div className="control">
@@ -89,6 +93,7 @@ const EditUser = ({ editUser, deleteUser, errors, auth: { user } }) => {
                   placeholder="What brings you here? (This can be changed later)"
                 />
               </div>
+              {errAbout && <p className="help is-danger">{errAbout.msg}</p>}
             </div>
           }
         />

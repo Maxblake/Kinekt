@@ -6,8 +6,8 @@ import { setAlert } from "./alert";
 import { deleteGroup } from "./group";
 
 import {
+  FETCH_AUTH,
   EDIT_USER,
-  SET_ERRORS,
   REGISTER_SUCCESS,
   REGISTER_FAIL
 } from "./types";
@@ -21,6 +21,10 @@ export const register = userFields => async dispatch => {
   }
 
   try {
+    dispatch({
+      type: FETCH_AUTH
+    });
+
     const res = await axios.post("/api/user", formData);
 
     dispatch({
@@ -49,6 +53,10 @@ export const editUser = userFields => async dispatch => {
   }
 
   try {
+    dispatch({
+      type: FETCH_AUTH
+    });
+
     const res = await axios.put("/api/user", formData);
 
     dispatch({

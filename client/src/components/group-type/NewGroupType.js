@@ -11,8 +11,9 @@ import FormControl from "../form/FormControl";
 import SubmitButton from "../form/SubmitButton";
 import CustomField from "../form/CustomField";
 import ImgUploadControl from "../form/ImgUploadControl";
+import Spinner from "../common/Spinner";
 
-const NewGroupType = ({ history, requestGroupType, errors }) => {
+const NewGroupType = ({ history, requestGroupType, loading, errors }) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -49,6 +50,10 @@ const NewGroupType = ({ history, requestGroupType, errors }) => {
     requestGroupType(groupTypeFields, history);
   };
 
+  if (loading) {
+    return <Spinner />;
+  }
+
   return (
     <section className="centered-form">
       <nav className="level" id="page-nav">
@@ -67,7 +72,6 @@ const NewGroupType = ({ history, requestGroupType, errors }) => {
 
         <CustomField
           label="Description"
-          error={errDescription ? errDescription.msg : undefined}
           children={
             <div className="field">
               <div className="control">
@@ -80,6 +84,9 @@ const NewGroupType = ({ history, requestGroupType, errors }) => {
                   placeholder="E.g. Calling board game enthusiasts- hang out and share your favorite games with new friends!"
                 />
               </div>
+              {errDescription && (
+                <p className="help is-danger">{errDescription.msg}</p>
+              )}
             </div>
           }
         />
@@ -126,11 +133,13 @@ const NewGroupType = ({ history, requestGroupType, errors }) => {
 
 NewGroupType.propTypes = {
   requestGroupType: PropTypes.func.isRequired,
-  errors: PropTypes.array.isRequired
+  errors: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
-  errors: state.error
+  errors: state.error,
+  loading: state.groupType.loading
 });
 
 export default connect(

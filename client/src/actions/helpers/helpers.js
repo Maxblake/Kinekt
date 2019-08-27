@@ -5,6 +5,8 @@ import { SET_ERRORS } from "../types";
 export const handleResponseErrors = err => dispatch => {
   const errors = [];
 
+  if (!err.response) return;
+
   err.response.data.forEach(error => {
     switch (error.param) {
       case "alert": {

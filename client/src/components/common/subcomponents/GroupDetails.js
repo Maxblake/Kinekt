@@ -4,11 +4,15 @@ const GroupDetails = ({ group }) => {
   return (
     <div className="group-details-container">
       <div className="group-description">
-        <p>
-          {group && group.description
-            ? group.description
-            : "There is no description available for this group."}
-        </p>
+        {group && group.description ? (
+          <p>
+            <strong>Description</strong>
+            <br />
+            {group.description}
+          </p>
+        ) : (
+          <p>"There is no description available for this group."</p>
+        )}
       </div>
       <div className="group-details">
         <div className="group-meet-time">

@@ -4,14 +4,14 @@ import setAuthToken from "../utils/setAuthToken";
 import { handleResponseErrors } from "./helpers/helpers";
 
 import {
+  FETCH_AUTH,
   USER_LOADED,
   AUTH_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   SET_ERRORS,
   CLEAR_ERRORS_AND_ALERTS,
-  LOGOUT,
-  CLEAR_GROUP
+  LOGOUT
 } from "./types";
 
 // Load User
@@ -21,6 +21,10 @@ export const loadUser = (checkIfAdmin = false) => async dispatch => {
   }
 
   try {
+    dispatch({
+      type: FETCH_AUTH
+    });
+
     const res = await axios.get(`/api/auth/${checkIfAdmin}`);
 
     dispatch({
@@ -35,15 +39,6 @@ export const loadUser = (checkIfAdmin = false) => async dispatch => {
       return res.data.isAdmin;
     }
   } catch (err) {
-    const errors = err.response.data.errors;
-
-    if (errors) {
-      dispatch({
-        type: SET_ERRORS,
-        payload: errors
-      });
-    }
-
     dispatch({
       type: AUTH_ERROR
     });
@@ -61,6 +56,10 @@ export const login = (email, password) => async dispatch => {
   const body = JSON.stringify({ email, password });
 
   try {
+    dispatch({
+      type: FETCH_AUTH
+    });
+
     const res = await axios.post("/api/auth", body, config);
 
     dispatch({
@@ -89,9 +88,6 @@ export const clearErrorsAndAlerts = () => dispatch => {
 
 // Logout
 export const logout = () => dispatch => {
-  dispatch({
-    type: CLEAR_GROUP
-  });
   dispatch({
     type: LOGOUT
   });

@@ -7,8 +7,8 @@ import Image from "../common/subcomponents/Image";
 
 const GroupConsole = ({ group, imgSrc }) => {
   return (
-    <div className="box flex-row-wrap" id="groupConsole">
-      <div className="groupChat">
+    <div className="box flex-row-wrap" id="group-console">
+      <div className="group-chat">
         <Chat />
       </div>
       <div className="flex-row-wrap">

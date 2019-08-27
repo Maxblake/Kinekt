@@ -14,12 +14,12 @@ const PageOptions = ({ options }) => {
         <Dropdown
           trigger={
             <button
-              class="button is-dark-theme"
+              className="button is-dark-theme"
               aria-haspopup="true"
               aria-controls="dropdown-menu"
             >
-              <span class="icon is-small">
-                <i class="fas fa-search" aria-hidden="true" />
+              <span className="icon is-small">
+                <i className="fas fa-search" aria-hidden="true" />
               </span>
               <span>Options</span>
             </button>

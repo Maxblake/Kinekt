@@ -30,13 +30,13 @@
   color: whitesmoke;
 }
 
-.groupTypeCards {
+.group-type-cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   grid-gap: 25px;
 }
 
-.groupTypeCard {
+.group-type-card {
   position: relative;
 
   .card-image::after {
@@ -79,8 +79,8 @@
   }
 }
 
-.tag.groupTypeTag,
-.groupTypeTag {
+.tag.group-type-tag,
+.group-type-tag {
   position: absolute;
   top: 8px;
   right: 10px;

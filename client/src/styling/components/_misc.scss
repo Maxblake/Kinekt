@@ -5,7 +5,7 @@
 }
 
 // Spinner
-.spinnerContainer {
+.spinner-container {
   background-color: whitesmoke;
   border-radius: 6px;
   width: 100px;
@@ -30,25 +30,23 @@
 }
 
 // Page nav
-#pageNav {
+#page-nav {
   align-items: flex-end;
   margin: 2.5rem 0 1.5rem 0;
 }
 
-#controlSearchGroupTypes,
-#controlSearchGroups {
+.search-control {
   width: 300px;
 }
 
 @media (max-width: $tablet - 1) {
-  #controlSearchGroupTypes,
-  #controlSearchGroups {
+  .search-control {
     width: 250px;
   }
 }
 
 // New group page
-.timeKeeperModalContent {
+.time-keeper-modal-content {
   width: 270px;
   text-align: center;
 }

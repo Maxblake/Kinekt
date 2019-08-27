@@ -4,8 +4,8 @@ import Carousel from "./carousel/Carousel";
 
 const NoticeBoard = ({ items }) => {
   return (
-    <div className="noticeBoard">
-      <div className="headerTab">
+    <div className="noticeboard">
+      <div className="header-tab">
         <div className="subtitle is-size-6 has-text-weight-bold">
           Notice Board
         </div>

@@ -5,9 +5,9 @@ const PageTitle = ({ title, subtitle }) => {
     <div className="level-left">
       <div className="level-item">
         <div>
-          <h3 className="title is-spaced is-size-3 pageTitle">{title}</h3>
+          <h3 className="title is-spaced is-size-3 page-title">{title}</h3>
           {subtitle && (
-            <div className="subtitle is-size-6 pageSubtitle">{subtitle}</div>
+            <div className="subtitle is-size-6 page-subtitle">{subtitle}</div>
           )}
         </div>
       </div>

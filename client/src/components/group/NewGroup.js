@@ -139,8 +139,8 @@ const NewGroup = ({
   }
 
   return (
-    <section className="NewGroup centeredForm">
-      <nav className="level" id="pageNav">
+    <section className="centered-form">
+      <nav className="level" id="page-nav">
         <PageTitle
           title="Create a group"
           subtitle={
@@ -152,12 +152,12 @@ const NewGroup = ({
       </nav>
 
       {displayTimepicker ? (
-        <div class="modal is-active">
+        <div className="modal is-active">
           <div
-            class="modal-background"
+            className="modal-background"
             onClick={() => toggleTimekeeper(false)}
           />
-          <div class="modal-content timeKeeperModalContent">
+          <div className="modal-content time-keeper-modal-content">
             <TimeKeeper
               time={time.formatted}
               onChange={handleTimeChange}
@@ -184,10 +184,10 @@ const NewGroup = ({
           label="Description"
           error={errDescription ? errDescription.msg : undefined}
           children={
-            <div class="field">
-              <div class="control">
+            <div className="field">
+              <div className="control">
                 <textarea
-                  class="textarea"
+                  className="textarea"
                   rows="2"
                   name="description"
                   value={description}
@@ -203,34 +203,34 @@ const NewGroup = ({
           label="Meeting Time"
           required={true}
           children={
-            <div class="field is-grouped">
-              <div class="control">
+            <div className="field is-grouped">
+              <div className="control">
                 <RadioButton
                   selectedValue={timeContext}
                   value="Now"
                   handleClick={handleTimeContextChange}
                 />
               </div>
-              <div class="control centeredVertically">
+              <div className="control centeredVertically">
                 <h3>-or-</h3>
               </div>
-              <div class="control">
+              <div className="control">
                 <input
-                  class="input smallInput"
+                  className="input small-input"
                   type="text"
                   value={time.formatted}
                   onClick={() => toggleTimekeeper(true)}
                   readOnly
                 />
               </div>
-              <div class="control">
+              <div className="control">
                 <RadioButton
                   selectedValue={timeContext}
                   value="Today"
                   handleClick={handleTimeContextChange}
                 />
               </div>
-              <div class="control">
+              <div className="control">
                 <RadioButton
                   selectedValue={timeContext}
                   value="Tomorrow"
@@ -254,21 +254,21 @@ const NewGroup = ({
           label="Group Size"
           error={errMaxSize ? errMaxSize.msg : undefined}
           children={
-            <div class="field">
-              <div class="control is-flex">
+            <div className="field">
+              <div className="control is-flex">
                 <input
-                  class="input smallInput"
+                  className="input small-input"
                   type="text"
                   placeholder="Any"
                   name="minSize"
                   value={minSize}
                   onChange={e => onChange(e)}
                 />
-                <div class="centeredVertically grouped-control-margin">
+                <div className="centeredVertically grouped-control-margin">
                   <h3>-to-</h3>
                 </div>
                 <input
-                  class="input smallInput"
+                  className="input small-input"
                   type="text"
                   placeholder="Any"
                   name="maxSize"
@@ -283,15 +283,15 @@ const NewGroup = ({
         <CustomField
           label="Group Size"
           children={
-            <div class="field is-grouped">
-              <div class="control">
+            <div className="field is-grouped">
+              <div className="control">
                 <RadioButton
                   selectedValue={accessLevel}
                   value="Public"
                   handleClick={handleAccessLevelChange}
                 />
               </div>
-              <div class="control">
+              <div className="control">
                 <RadioButton
                   selectedValue={accessLevel}
                   value="Private"

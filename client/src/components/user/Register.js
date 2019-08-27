@@ -48,8 +48,8 @@ const Register = ({ register, errors, isAuthenticated }) => {
   }
 
   return (
-    <section className="Register centeredForm">
-      <nav className="level" id="pageNav">
+    <section className="centered-form">
+      <nav className="level" id="page-nav">
         <PageTitle title="Sign up" />
       </nav>
 
@@ -86,10 +86,10 @@ const Register = ({ register, errors, isAuthenticated }) => {
           label="About you"
           error={errAbout ? errAbout.msg : undefined}
           children={
-            <div class="field">
-              <div class="control">
+            <div className="field">
+              <div className="control">
                 <textarea
-                  class="textarea"
+                  className="textarea"
                   rows="2"
                   name="about"
                   value={about}

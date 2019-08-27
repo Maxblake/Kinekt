@@ -26,7 +26,7 @@ const Chat = () => {
         />
         <Message body="consectetur bleep" user="Choyobin" time="2:43 PM" />
       </div>
-      <div className="messageInputContainer">
+      <div className="message-input-container">
         <textarea
           className="textarea has-fixed-size"
           placeholder="Enter a message"

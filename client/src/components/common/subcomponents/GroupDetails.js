@@ -13,16 +13,16 @@ const GroupDetails = ({ group }) => {
       <div className="group-details">
         <div className="group-meet-time">
           <div className="content is-flex">
-            <span class="icon">
-              <i class="fas fa-clock" />
+            <span className="icon">
+              <i className="fas fa-clock" />
             </span>
             <h3>Thu, May 17, 2:00 PM</h3>
           </div>
         </div>
         <div className="group-meet-place">
           <div className="content is-flex">
-            <span class="icon">
-              <i class="fas fa-map-marker-alt" />
+            <span className="icon">
+              <i className="fas fa-map-marker-alt" />
             </span>
             <h3>Crooked river Brewery, Prineville OR</h3>
           </div>

@@ -8,7 +8,7 @@ import defaultGroupTypeImage from "../../resources/defaultGroupTypeImage.jpg";
 
 const GroupTypeCard = ({ imgSrc, name, groupTypeCategory }) => {
   const getClassList = groupTypeCategory => {
-    const classList = ["tag", "groupTypeTag"];
+    const classList = ["tag", "group-type-tag"];
 
     switch (groupTypeCategory) {
       case "Social":
@@ -37,7 +37,10 @@ const GroupTypeCard = ({ imgSrc, name, groupTypeCategory }) => {
   };
 
   return (
-    <Link to={`/k/${name.split(" ").join("_")}`} className="card groupTypeCard">
+    <Link
+      to={`/k/${name.split(" ").join("_")}`}
+      className="card group-type-card"
+    >
       <div className="card-image">
         <Image
           figureClass="is-2by1"

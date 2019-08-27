@@ -5,11 +5,11 @@ import OnlineStatus from "../common/subcomponents/OnlineStatus";
 
 const GroupMembers = () => {
   return (
-    <div className="box" id="groupMembersContainer">
-      <div className="headerTab">
+    <div className="box" id="group-members-container">
+      <div className="header-tab">
         <OnlineStatus users="14/20 users" />
       </div>
-      <div id="groupMembers" className="kScroll">
+      <div id="group-members" className="kScroll">
         <GroupMember memberName="Beemo" status="online" memberType="admin" />
         <GroupMember memberName="Choyobin" status="away" memberType="admin" />
         <GroupMember memberName="Vegeta" status="online" memberType="user" />

@@ -94,10 +94,10 @@ const Admin = ({
 
   return (
     <section className="adminPage">
-      <nav className="level" id="pageNav">
+      <nav className="level" id="page-nav">
         <div className="level-left">
           <div className="level-item">
-            <h3 className="title is-size-3 pageTitle">Admin Portal</h3>
+            <h3 className="title is-size-3 page-title">Admin Portal</h3>
           </div>
         </div>
 
@@ -140,8 +140,8 @@ const Admin = ({
                     </td>
                     <td>{requestedGroupType.category}</td>
                     <td>
-                      <div class="field is-grouped">
-                        <div class="control">
+                      <div className="field is-grouped">
+                        <div className="control">
                           <RadioButton
                             selectedValue={
                               groupTypeDecisions[requestedGroupType._id]
@@ -151,7 +151,7 @@ const Admin = ({
                             handleClick={handleGroupTypeDecided}
                           />
                         </div>
-                        <div class="control">
+                        <div className="control">
                           <RadioButton
                             selectedValue={
                               groupTypeDecisions[requestedGroupType._id]
@@ -173,10 +173,10 @@ const Admin = ({
             </div>
 
             <div
-              class="control has-text-centered has-margin-top-4"
+              className="control has-text-centered btn-admin-submit"
               onClick={() => onSubmitGroupTypes()}
             >
-              <button class="button is-primary" type="button">
+              <button className="button is-primary" type="button">
                 Submit
               </button>
             </div>

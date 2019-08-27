@@ -66,7 +66,7 @@ const Discover = ({
     );
   } else {
     groupTypeCards = (
-      <div className="groupTypeCards">
+      <div className="group-type-cards">
         {groupTypes.map(groupType => (
           <GroupTypeCard
             key={groupType._id}
@@ -117,7 +117,7 @@ const Discover = ({
     </div>,
     <form onSubmit={e => onSearchTermsSubmit(e)}>
       <div className="field has-addons">
-        <p className="control" id="controlSearchGroupTypes">
+        <p className="control search-control">
           <input
             className="input"
             type="text"
@@ -164,7 +164,7 @@ const Discover = ({
 
   return (
     <section className="discover">
-      <nav className="level is-mobile" id="pageNav">
+      <nav className="level is-mobile" id="page-nav">
         <PageTitle title="Explore" />
         <PageOptions options={options} />
       </nav>

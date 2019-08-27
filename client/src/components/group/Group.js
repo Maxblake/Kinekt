@@ -53,7 +53,7 @@ const Group = ({
 
   return (
     <section className="group">
-      <nav className="level" id="pageNav">
+      <nav className="level" id="page-nav">
         <PageTitle
           title={group.name}
           subtitle={
@@ -68,26 +68,30 @@ const Group = ({
             <Dropdown
               trigger={
                 <button
-                  class="button is-dark-theme"
+                  className="button is-dark-theme"
                   id="grpSettingsBtn"
                   aria-haspopup="true"
                   aria-controls="dropdown-menu"
                 >
                   <span>Filter</span>
-                  <span class="icon is-small">
-                    <i class="fas fa-cog" aria-hidden="true" />
+                  <span className="icon is-small">
+                    <i className="fas fa-cog" aria-hidden="true" />
                   </span>
                 </button>
               }
             >
-              <a href="#" class="dropdown-item">
+              <a href="#" className="dropdown-item">
                 Edit Details
               </a>
-              <a href="#" class="dropdown-item">
+              <a href="#" className="dropdown-item">
                 Manage Admins
               </a>
-              <hr class="dropdown-divider" />
-              <a href="#" class="dropdown-item" onClick={e => onClickDelete(e)}>
+              <hr className="dropdown-divider" />
+              <a
+                href="#"
+                className="dropdown-item"
+                onClick={e => onClickDelete(e)}
+              >
                 Delete Group
               </a>
             </Dropdown>

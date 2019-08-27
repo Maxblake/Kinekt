@@ -50,8 +50,8 @@ const NewGroupType = ({ history, requestGroupType, errors }) => {
   };
 
   return (
-    <section className="NewGroupType centeredForm">
-      <nav className="level" id="pageNav">
+    <section className="centered-form">
+      <nav className="level" id="page-nav">
         <PageTitle title="Request a New Group Type" />
       </nav>
 
@@ -69,10 +69,10 @@ const NewGroupType = ({ history, requestGroupType, errors }) => {
           label="Description"
           error={errDescription ? errDescription.msg : undefined}
           children={
-            <div class="field">
-              <div class="control">
+            <div className="field">
+              <div className="control">
                 <textarea
-                  class="textarea"
+                  className="textarea"
                   rows="2"
                   name="description"
                   value={description}
@@ -87,9 +87,9 @@ const NewGroupType = ({ history, requestGroupType, errors }) => {
         <CustomField
           label="Category"
           children={
-            <div class="field">
-              <div class="control">
-                <div class="select">
+            <div className="field">
+              <div className="control">
+                <div className="select">
                   <select
                     name="category"
                     value={category}
@@ -105,7 +105,9 @@ const NewGroupType = ({ history, requestGroupType, errors }) => {
                   </select>
                 </div>
               </div>
-              {errCategory && <p class="help is-danger">{errCategory.msg}</p>}
+              {errCategory && (
+                <p className="help is-danger">{errCategory.msg}</p>
+              )}
             </div>
           }
         />

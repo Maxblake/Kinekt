@@ -49,8 +49,8 @@ const Login = ({
   }
 
   return (
-    <section className="Login centeredForm">
-      <nav className="level" id="pageNav">
+    <section className="centered-form">
+      <nav className="level" id="page-nav">
         <PageTitle title="Log in" />
       </nav>
 

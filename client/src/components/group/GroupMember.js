@@ -2,7 +2,7 @@ import React from "react";
 
 const GroupMember = ({ status, memberType, memberName }) => {
   const getClassList = (status, memberType) => {
-    const classList = ["button", "groupMember"];
+    const classList = ["button", "group-member"];
 
     switch (memberType) {
       case "admin":

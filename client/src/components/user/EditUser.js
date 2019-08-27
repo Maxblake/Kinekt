@@ -59,8 +59,8 @@ const EditUser = ({ editUser, deleteUser, errors, auth: { user } }) => {
   }
 
   return (
-    <section className="editUser centeredForm">
-      <nav className="level" id="pageNav">
+    <section className="centered-form">
+      <nav className="level" id="page-nav">
         <PageTitle title="Account Settings" />
       </nav>
 
@@ -78,10 +78,10 @@ const EditUser = ({ editUser, deleteUser, errors, auth: { user } }) => {
           label="About you"
           error={errAbout ? errAbout.msg : undefined}
           children={
-            <div class="field">
-              <div class="control">
+            <div className="field">
+              <div className="control">
                 <textarea
-                  class="textarea"
+                  className="textarea"
                   rows="2"
                   name="about"
                   value={about}

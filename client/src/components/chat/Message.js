@@ -15,7 +15,7 @@ const Message = ({ body, user, time }) => {
     <div className={getClassList(user)}>
       <div className="header">
         {user === "Beemo" ? "You" : user}
-        <span className="headerTime">{time}</span>
+        <span className="header-time">{time}</span>
       </div>
       <div className="body">
         <span>{body}</span>

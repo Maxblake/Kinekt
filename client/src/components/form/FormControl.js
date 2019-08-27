@@ -12,11 +12,11 @@ const FormControl = ({
 }) => {
   return (
     <Fragment>
-      <label class="label">{`${label}${required ? " *" : ""}`}</label>
-      <div class="field">
-        <div class="control">
+      <label className="label">{`${label}${required ? " *" : ""}`}</label>
+      <div className="field">
+        <div className="control">
           <input
-            class="input"
+            className="input"
             name={name}
             value={value}
             onChange={e => onChange(e)}
@@ -24,7 +24,7 @@ const FormControl = ({
             placeholder={placeholder ? placeholder : ""}
           />
         </div>
-        {error && <p class="help is-danger">{error.msg}</p>}
+        {error && <p className="help is-danger">{error.msg}</p>}
       </div>
     </Fragment>
   );

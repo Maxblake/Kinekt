@@ -29,10 +29,10 @@ const Dropdown = ({ trigger, children }) => {
   };
 
   return (
-    <div class="dropdown is-right">
-      <div class="dropdown-trigger">{trigger}</div>
-      <div class="dropdown-menu" role="menu">
-        <div class="dropdown-content">{children}</div>
+    <div className="dropdown is-right">
+      <div className="dropdown-trigger">{trigger}</div>
+      <div className="dropdown-menu" role="menu">
+        <div className="dropdown-content">{children}</div>
       </div>
     </div>
   );

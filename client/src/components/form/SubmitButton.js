@@ -2,9 +2,9 @@ import React from "react";
 
 const SubmitButton = ({ text }) => {
   return (
-    <div class="field is-grouped is-grouped-right">
-      <div class="control">
-        <button class="button is-primary" type="submit">
+    <div className="field is-grouped is-grouped-right">
+      <div className="control">
+        <button className="button is-primary" type="submit">
           {text}
         </button>
       </div>

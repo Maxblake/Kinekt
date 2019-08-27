@@ -93,12 +93,12 @@
 }
 
 // Group page
-#groupMembersContainer {
+#group-members-container {
   background: $off-black;
   position: relative;
   padding: 3rem 10px 1.25rem 10px;
 
-  #groupMembers {
+  #group-members {
     max-height: 35vh;
     overflow-y: auto;
 
@@ -108,7 +108,7 @@
     grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
     grid-gap: 10px;
 
-    .groupMember {
+    .group-member {
       display: block;
       white-space: nowrap;
       overflow: hidden;
@@ -128,7 +128,7 @@
   }
 }
 
-.headerTab {
+.header-tab {
   position: absolute;
   left: 50%; /* position the left edge of the element at the middle of the parent */
 
@@ -142,16 +142,16 @@
 
   white-space: nowrap;
 
-  .onlineStatusText {
+  .online-status-text {
     font-weight: bold;
   }
 }
 
-#groupConsole {
+#group-console {
   background: $off-black;
   align-items: stretch;
 
-  .groupChat {
+  .group-chat {
     flex: 2;
   }
 
@@ -168,7 +168,7 @@
   .group-image {
     flex: 1;
   }
-  .noticeBoard {
+  .noticeboard {
     flex: 1 100%;
     margin-left: 1.25rem;
 
@@ -177,13 +177,13 @@
 }
 
 @media (max-width: $desktop - 1) {
-  #groupConsole {
+  #group-console {
     background: $off-black;
 
     display: flex;
     flex-flow: row wrap;
 
-    .groupChat {
+    .group-chat {
       flex: 1 100%;
       order: 4;
     }
@@ -198,7 +198,7 @@
       flex: 3;
       order: 2;
     }
-    .noticeBoard {
+    .noticeboard {
       flex: 1 100%;
       order: 3;
       margin: 0 0 1.25rem 0;
@@ -207,8 +207,8 @@
 }
 
 @media (max-width: $tablet - 1) {
-  #groupConsole {
-    .groupChat {
+  #group-console {
+    .group-chat {
       flex: 1 100%;
       order: 4;
     }
@@ -218,10 +218,10 @@
       order: 2;
     }
     .group-image {
-      flex: 1 auto;
+      flex: 1 100%;
       order: 1;
     }
-    .noticeBoard {
+    .noticeboard {
       flex: 1 100%;
       order: 3;
     }
@@ -251,7 +251,7 @@
         font-size: 0.8rem;
         color: whitesmoke;
 
-        .headerTime {
+        .header-time {
           color: $primary;
           padding-left: 0.7rem;
         }
@@ -281,7 +281,7 @@
       }
     }
   }
-  .messageInputContainer {
+  .message-input-container {
     padding: 10px 5px;
     background: $primary;
   }
@@ -303,7 +303,7 @@
 }
 
 // Noticeboard
-.noticeBoard {
+.noticeboard {
   min-height: 100px;
   background: #404040;
   color: whitesmoke;
@@ -312,7 +312,7 @@
 
   border-radius: 0 0 20px 20px;
 
-  .headerTab {
+  .header-tab {
     box-shadow: inset 0px 11px 8px -10px $off-black;
   }
 

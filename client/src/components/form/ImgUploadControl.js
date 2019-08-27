@@ -48,22 +48,22 @@ const ImgUploadControl = ({ label, src, onChange, type }) => {
       label={label}
       error={error}
       children={
-        <div class="field">
-          <div class="file has-name is-primary">
-            <label class="file-label">
+        <div className="field">
+          <div className="file has-name is-primary">
+            <label className="file-label">
               <input
-                class="file-input"
+                className="file-input"
                 type="file"
                 accept="image/*"
                 data-max-size="10485760"
                 onChange={e => handleImageUpload(e)}
               />
-              <span class="file-cta">
-                <span class="icon">
-                  <i class="fas fa-upload" />
+              <span className="file-cta">
+                <span className="icon">
+                  <i className="fas fa-upload" />
                 </span>
               </span>
-              <span class="file-name">
+              <span className="file-name">
                 {fileName ? fileName : "No image selected.."}
               </span>
             </label>

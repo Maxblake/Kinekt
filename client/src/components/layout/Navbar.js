@@ -32,7 +32,7 @@ const Navbar = ({
     navDropdown = document.querySelector("#" + navBurger.dataset.target);
 
     //Typewriter effect on logo
-    const txtElement = document.querySelector("#logo_typewriter");
+    const txtElement = document.querySelector("#logo-typewriter");
     const logo = document.querySelector("#logo");
     const words = [
       "with friends.",
@@ -93,11 +93,11 @@ const Navbar = ({
                 group.HRID
               }`}
               className="button is-primary is-outlined is-small"
-              id="currentGroupBtn"
+              id="btn-current-group"
             >
               <span>{group.name}</span>
-              <span class="icon is-small">
-                <i class="fas fa-chalkboard-teacher" />
+              <span className="icon is-small">
+                <i className="fas fa-chalkboard-teacher" />
               </span>
             </Link>
           </div>
@@ -136,13 +136,13 @@ const Navbar = ({
   );
 
   return (
-    <nav className="navbar is-dark-theme is-fixed-top">
+    <nav className="navbar is-black is-fixed-top">
       <div className="navbar-brand">
         <div className="navbar-item">
           <Link to="/" id="logo" className="is-size-4">
             Kinekt&nbsp;
           </Link>
-          <div id="logo_typewriter" className="is-size-4" />
+          <div id="logo-typewriter" className="is-size-4" />
         </div>
         <span className="navbar-burger burger" data-target="navMenu">
           <span aria-hidden="true" />

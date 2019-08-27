@@ -2,17 +2,17 @@ import React, { Fragment } from "react";
 
 const OnlineStatus = ({ users, groups }) => {
   return (
-    <div className="onlineStatusContainer">
+    <div className="online-status-container">
       {groups && (
         <Fragment>
-          <div className="onlineStatusDot" />
-          <h4 className="onlineStatusText">{groups}</h4>
+          <div className="online-status-dot" />
+          <h4 className="online-status-text">{groups}</h4>
         </Fragment>
       )}
       {users && (
         <Fragment>
-          <div className="onlineStatusDot" />
-          <h4 className="onlineStatusText">{users}</h4>
+          <div className="online-status-dot" />
+          <h4 className="online-status-text">{users}</h4>
         </Fragment>
       )}
     </div>

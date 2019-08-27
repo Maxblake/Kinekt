@@ -1,7 +1,7 @@
 import React from "react";
 
 export default () => (
-  <div className="spinnerContainer">
+  <div className="spinner-container">
     <div className="hexdots-loader">Loading...</div>
   </div>
 );

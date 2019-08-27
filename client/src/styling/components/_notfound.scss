@@ -1,19 +1,19 @@
 // 404
-.pageNotFound {
+.page-not-found {
   justify-content: center;
   align-items: center;
   margin-top: 6rem;
   .box {
     margin-right: 20%;
   }
-  .pageNotFoundWarning,
-  #lostMoto {
+  .page-not-found-warning,
+  #lost-moto {
     flex: 1;
   }
 }
 
 @media (max-width: $desktop - 1) {
-  .pageNotFound {
+  .page-not-found {
     padding: 0 1em;
     margin-top: 3rem;
 
@@ -21,11 +21,11 @@
       margin-right: 0;
     }
 
-    .pageNotFoundWarning {
+    .page-not-found-warning {
       flex: 1 100%;
     }
 
-    #lostMoto {
+    #lost-moto {
       text-align: right;
       flex: 1 100%;
 

@@ -76,7 +76,7 @@ const GroupType = ({
       </div>
     </div>,
     <div className="field has-addons">
-      <p className="control" id="controlSearchGroups">
+      <p className="control search-control">
         <input className="input" type="text" placeholder="Search groups" />
       </p>
       <p className="control">
@@ -91,7 +91,7 @@ const GroupType = ({
 
   return (
     <section className="groupType">
-      <nav className="level" id="pageNav">
+      <nav className="level" id="page-nav">
         <PageTitle
           title={match.params.groupType.split("_").join(" ")}
           subtitle={<OnlineStatus users="30 users" groups="3 groups" />}

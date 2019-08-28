@@ -4,7 +4,7 @@ import { handleResponseErrors } from "./helpers/helpers";
 import { clearErrorsAndAlerts } from "./auth";
 import { setAlert } from "./alert";
 
-import { FETCH_GROUPTYPE, GET_GROUPTYPES, GROUPTYPE_ERROR } from "./types";
+import { GROUPTYPE_LOADING, SET_GROUPTYPES, GROUPTYPE_ERROR } from "./types";
 
 // Get a list of group types ordered and filtered by passed criteria
 export const getGroupTypes = ({
@@ -22,13 +22,13 @@ export const getGroupTypes = ({
 
   try {
     dispatch({
-      type: FETCH_GROUPTYPE
+      type: GROUPTYPE_LOADING
     });
 
     const res = await axios.post(`/api/group-type/list`, body, config);
 
     dispatch({
-      type: GET_GROUPTYPES,
+      type: SET_GROUPTYPES,
       payload: res.data
     });
   } catch (err) {
@@ -52,13 +52,12 @@ export const requestGroupType = (
 
   try {
     dispatch({
-      type: FETCH_GROUPTYPE
+      type: GROUPTYPE_LOADING
     });
-
-    dispatch(clearErrorsAndAlerts());
 
     await axios.post(`/api/group-type/request`, formData);
 
+    dispatch(clearErrorsAndAlerts());
     dispatch(
       setAlert(
         "Your request for a new Group Type has been submitted. Please allow up to 48 hours for a response by email",

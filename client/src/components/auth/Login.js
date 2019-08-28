@@ -3,19 +3,20 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Redirect, withRouter } from "react-router-dom";
 
-import { login, clearErrorsAndAlerts } from "../../actions/auth";
+import { login } from "../../actions/auth";
 
 import PageTitle from "../layout/page/PageTitle";
 import Form from "../form/Form";
 import FormControl from "../form/FormControl";
 import SubmitButton from "../form/SubmitButton";
+import Spinner from "../common/Spinner";
 
 const Login = ({
   location,
+  history,
   errors,
-  isAuthenticated,
-  login,
-  clearErrorsAndAlerts
+  auth: { isAuthenticated, loading },
+  login
 }) => {
   const [formData, setFormData] = useState({
     email: "",
@@ -26,17 +27,16 @@ const Login = ({
   const errEmail = errors.find(error => error.param === "email");
   const errPassword = errors.find(error => error.param === "password");
 
-  // TODO Maybe get rid of this eventually
-  useEffect(() => {
-    clearErrorsAndAlerts();
-  }, []);
-
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = e => {
     e.preventDefault();
     login(email, password);
+  };
+
+  const onClickSignup = () => {
+    history.push("/register");
   };
 
   if (isAuthenticated) {
@@ -46,6 +46,10 @@ const Login = ({
       return <Redirect to={from} />;
     }
     return <Redirect to="/" />;
+  }
+
+  if (loading) {
+    return <Spinner />;
   }
 
   return (
@@ -72,6 +76,12 @@ const Login = ({
         />
         <SubmitButton text="Log in" />
       </Form>
+      <div className="content has-text-centered">
+        <p className="">
+          Don't have an account yet? You can sign up{" "}
+          <a onClick={() => onClickSignup()}>here</a>.
+        </p>
+      </div>
     </section>
   );
 };
@@ -80,16 +90,16 @@ Login.propTypes = {
   login: PropTypes.func.isRequired,
   clearErrorsAndAlerts: PropTypes.func.isRequired,
   errors: PropTypes.array.isRequired,
-  isAuthenticated: PropTypes.bool,
+  auth: PropTypes.object.isRequired,
   location: PropTypes.object
 };
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated,
+  auth: state.auth,
   errors: state.error
 });
 
 export default connect(
   mapStateToProps,
-  { login, clearErrorsAndAlerts }
+  { login }
 )(withRouter(Login));

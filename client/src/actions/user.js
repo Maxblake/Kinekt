@@ -6,10 +6,11 @@ import { setAlert } from "./alert";
 import { deleteGroup } from "./group";
 
 import {
-  FETCH_AUTH,
-  EDIT_USER,
-  REGISTER_SUCCESS,
-  REGISTER_FAIL
+  AUTH_LOADING,
+  AUTH_LOADED,
+  UPDATE_USER,
+  AUTH_SUCCESS,
+  AUTH_ERROR
 } from "./types";
 
 // Register User
@@ -22,13 +23,13 @@ export const register = userFields => async dispatch => {
 
   try {
     dispatch({
-      type: FETCH_AUTH
+      type: AUTH_LOADING
     });
 
     const res = await axios.post("/api/user", formData);
 
     dispatch({
-      type: REGISTER_SUCCESS,
+      type: AUTH_SUCCESS,
       payload: res.data
     });
 
@@ -39,7 +40,7 @@ export const register = userFields => async dispatch => {
     dispatch(handleResponseErrors(err));
 
     dispatch({
-      type: REGISTER_FAIL
+      type: AUTH_ERROR
     });
   }
 };
@@ -54,19 +55,22 @@ export const editUser = userFields => async dispatch => {
 
   try {
     dispatch({
-      type: FETCH_AUTH
+      type: AUTH_LOADING
     });
 
     const res = await axios.put("/api/user", formData);
 
     dispatch({
-      type: EDIT_USER,
+      type: UPDATE_USER,
       payload: res.data
     });
 
     dispatch(clearErrorsAndAlerts());
     dispatch(setAlert("Account settings saved", "is-success"));
   } catch (err) {
+    dispatch({
+      type: AUTH_LOADED
+    });
     dispatch(handleResponseErrors(err));
   }
 };
@@ -83,7 +87,7 @@ export const deleteUser = () => async dispatch => {
 
       dispatch(deleteGroup(true));
       dispatch(logout());
-      dispatch(setAlert(`User deleted`, "is-warning"));
+      dispatch(setAlert(`User account deleted`, "is-warning"));
     } catch (err) {
       //TODO should this dispatch a USER_ERROR action?
       dispatch(setAlert(`Unable to delete user`, "is-danger"));

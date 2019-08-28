@@ -1,13 +1,11 @@
 import {
-  FETCH_AUTH,
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
-  USER_LOADED,
+  AUTH_LOADING,
+  AUTH_LOADED,
+  SET_USER,
   AUTH_ERROR,
-  LOGIN_SUCCESS,
-  LOGIN_FAIL,
+  AUTH_SUCCESS,
   LOGOUT,
-  EDIT_USER
+  UPDATE_USER
 } from "../actions/types";
 
 const initialState = {
@@ -20,32 +18,37 @@ const initialState = {
 export default function(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
-    case FETCH_AUTH:
+    case AUTH_LOADING:
       return {
+        ...state,
         loading: true
       };
-    case USER_LOADED:
+    case AUTH_LOADED:
       return {
+        ...state,
+        loading: false
+      };
+    case SET_USER:
+      return {
+        ...state,
         isAuthenticated: true,
         user: payload,
         loading: false
       };
-    case EDIT_USER:
+    case UPDATE_USER:
       return {
         ...state,
         user: payload,
         loading: false
       };
-    case REGISTER_SUCCESS:
-    case LOGIN_SUCCESS:
+    case AUTH_SUCCESS:
       localStorage.setItem("token", payload.token);
       return {
+        ...state,
         ...payload,
         isAuthenticated: true,
         loading: false
       };
-    case REGISTER_FAIL:
-    case LOGIN_FAIL:
     case AUTH_ERROR:
     case LOGOUT:
       localStorage.removeItem("token");

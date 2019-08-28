@@ -155,7 +155,7 @@ router.delete("/", auth, async (req, res) => {
 
     await user.remove();
 
-    res.status(200).json({ msg: "User deleted" });
+    res.status(200).json({ msg: "User account deleted" });
   });
 });
 

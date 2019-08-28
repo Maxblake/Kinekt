@@ -4,12 +4,10 @@ import setAuthToken from "../utils/setAuthToken";
 import { handleResponseErrors } from "./helpers/helpers";
 
 import {
-  FETCH_AUTH,
-  USER_LOADED,
+  AUTH_LOADING,
+  SET_USER,
   AUTH_ERROR,
-  LOGIN_SUCCESS,
-  LOGIN_FAIL,
-  SET_ERRORS,
+  AUTH_SUCCESS,
   CLEAR_ERRORS_AND_ALERTS,
   LOGOUT
 } from "./types";
@@ -22,18 +20,15 @@ export const loadUser = (checkIfAdmin = false) => async dispatch => {
 
   try {
     dispatch({
-      type: FETCH_AUTH
+      type: AUTH_LOADING
     });
 
     const res = await axios.get(`/api/auth/${checkIfAdmin}`);
 
     dispatch({
-      type: USER_LOADED,
+      type: SET_USER,
       payload: res.data.user
     });
-
-    // Maybe just keep this call if it's called everywhere
-    dispatch(clearErrorsAndAlerts());
 
     if (checkIfAdmin) {
       return res.data.isAdmin;
@@ -57,24 +52,22 @@ export const login = (email, password) => async dispatch => {
 
   try {
     dispatch({
-      type: FETCH_AUTH
+      type: AUTH_LOADING
     });
 
     const res = await axios.post("/api/auth", body, config);
 
     dispatch({
-      type: LOGIN_SUCCESS,
+      type: AUTH_SUCCESS,
       payload: res.data
     });
-
     dispatch(clearErrorsAndAlerts());
-
     dispatch(loadUser());
   } catch (err) {
     dispatch(handleResponseErrors(err));
 
     dispatch({
-      type: LOGIN_FAIL
+      type: AUTH_ERROR
     });
   }
 };

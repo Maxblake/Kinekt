@@ -5,10 +5,10 @@ import { clearErrorsAndAlerts } from "./auth";
 import { setAlert } from "./alert";
 
 import {
-  FETCH_GROUP,
-  GET_GROUP,
-  GET_GROUPS,
-  GET_GROUPTYPE,
+  GROUP_LOADING,
+  SET_GROUP,
+  SET_GROUPS,
+  SET_GROUPTYPE,
   GROUP_ERROR,
   CLEAR_GROUP
 } from "./types";
@@ -25,18 +25,18 @@ export const getGroup = (HRID, history = null) => async dispatch => {
     }
 
     dispatch({
-      type: FETCH_GROUP
+      type: GROUP_LOADING
     });
 
     const res = await axios.get(`/api/group/${HRID}`);
 
     dispatch({
-      type: GET_GROUP,
+      type: SET_GROUP,
       payload: res.data.group
     });
 
     dispatch({
-      type: GET_GROUPTYPE,
+      type: SET_GROUPTYPE,
       payload: res.data.groupType
     });
   } catch (err) {
@@ -67,17 +67,17 @@ export const getGroups = groupTypeName => async dispatch => {
 
   try {
     dispatch({
-      type: FETCH_GROUP
+      type: GROUP_LOADING
     });
 
     const res = await axios.post(`/api/group/list`, body, config);
 
     dispatch({
-      type: GET_GROUPS,
+      type: SET_GROUPS,
       payload: res.data.groups
     });
     dispatch({
-      type: GET_GROUPTYPE,
+      type: SET_GROUPTYPE,
       payload: res.data.groupType
     });
   } catch (err) {
@@ -102,19 +102,17 @@ export const createGroup = (groupFields, history) => async dispatch => {
 
   try {
     dispatch({
-      type: FETCH_GROUP
+      type: GROUP_LOADING
     });
 
     const res = await axios.post("/api/group", formData);
 
     dispatch(clearErrorsAndAlerts());
-
     dispatch(
       setAlert(`Group, ${groupFields.name}, created successfully`, "is-success")
     );
-
     dispatch({
-      type: GET_GROUP,
+      type: SET_GROUP,
       payload: res.data.group
     });
 
@@ -140,7 +138,7 @@ export const deleteGroup = (withoutConfirmation = false) => async dispatch => {
   ) {
     try {
       dispatch({
-        type: FETCH_GROUP
+        type: GROUP_LOADING
       });
 
       await axios.delete("/api/group");

@@ -1,7 +1,7 @@
 import {
-  FETCH_GROUPTYPE,
-  GET_GROUPTYPE,
-  GET_GROUPTYPES,
+  GROUPTYPE_LOADING,
+  SET_GROUPTYPE,
+  SET_GROUPTYPES,
   GROUPTYPE_ERROR
 } from "../actions/types";
 
@@ -16,13 +16,13 @@ export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case FETCH_GROUPTYPE: {
+    case GROUPTYPE_LOADING: {
       return {
         ...state,
         loading: true
       };
     }
-    case GET_GROUPTYPES: {
+    case SET_GROUPTYPES: {
       return {
         ...state,
         groupTypes: payload,
@@ -30,7 +30,7 @@ export default function(state = initialState, action) {
         error: null
       };
     }
-    case GET_GROUPTYPE: {
+    case SET_GROUPTYPE: {
       return {
         ...state,
         groupType: payload,

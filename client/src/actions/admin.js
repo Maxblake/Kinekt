@@ -25,10 +25,9 @@ export const processRequestedGroupTypes = groupTypeDecisions => async dispatch =
   const body = JSON.stringify({ groupTypeDecisions });
 
   try {
-    dispatch(clearErrorsAndAlerts());
-
     await axios.post(`/api/admin/process-requested-group-types`, body, config);
 
+    dispatch(clearErrorsAndAlerts());
     dispatch(setAlert("Group types processed", "is-success"));
   } catch (err) {
     dispatch({

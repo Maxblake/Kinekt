@@ -34,7 +34,7 @@ const EditUser = ({
       setFormData({
         ...formData,
         name: user.name,
-        about: user.about
+        about: user.about ? user.about : ""
       });
     }
   }, [user]);
@@ -118,7 +118,7 @@ const EditUser = ({
 EditUser.propTypes = {
   editUser: PropTypes.func.isRequired,
   deleteUser: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool,
+  auth: PropTypes.object.isRequired,
   errors: PropTypes.array.isRequired
 };
 

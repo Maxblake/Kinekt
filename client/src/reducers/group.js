@@ -1,7 +1,7 @@
 import {
-  FETCH_GROUP,
-  GET_GROUP,
-  GET_GROUPS,
+  GROUP_LOADING,
+  SET_GROUP,
+  SET_GROUPS,
   GROUP_ERROR,
   CLEAR_GROUP,
   LOGOUT
@@ -18,13 +18,13 @@ export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case FETCH_GROUP: {
+    case GROUP_LOADING: {
       return {
         ...state,
         loading: true
       };
     }
-    case GET_GROUPS: {
+    case SET_GROUPS: {
       return {
         ...state,
         groups: payload,
@@ -32,7 +32,7 @@ export default function(state = initialState, action) {
         error: null
       };
     }
-    case GET_GROUP: {
+    case SET_GROUP: {
       return {
         ...state,
         group: payload,

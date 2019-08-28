@@ -5,6 +5,7 @@ import { Redirect } from "react-router-dom";
 
 import { register } from "../../actions/user";
 
+import Spinner from "../common/Spinner";
 import PageTitle from "../layout/page/PageTitle";
 import Form from "../form/Form";
 import FormControl from "../form/FormControl";
@@ -12,7 +13,7 @@ import SubmitButton from "../form/SubmitButton";
 import CustomField from "../form/CustomField";
 import ImgUploadControl from "../form/ImgUploadControl";
 
-const Register = ({ register, errors, isAuthenticated }) => {
+const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -45,6 +46,10 @@ const Register = ({ register, errors, isAuthenticated }) => {
 
   if (isAuthenticated) {
     return <Redirect to="/" />;
+  }
+
+  if (loading) {
+    return <Spinner />;
   }
 
   return (
@@ -116,11 +121,12 @@ const Register = ({ register, errors, isAuthenticated }) => {
 Register.propTypes = {
   register: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
+  auth: PropTypes.object.isRequired,
   errors: PropTypes.array.isRequired
 };
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated,
+  auth: state.auth,
   errors: state.error
 });
 

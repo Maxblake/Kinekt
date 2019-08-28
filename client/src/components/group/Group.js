@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 import { getGroup, deleteGroup } from "../../actions/group";
 
@@ -24,11 +24,6 @@ const Group = ({
 }) => {
   useEffect(() => {
     if (isAuthenticated && (!group || group.HRID !== match.params.groupCode)) {
-      console.log(1, isAuthenticated);
-      console.log(2, !!group);
-      if (group) {
-        console.log(3, group.HRID !== match.params.groupCode);
-      }
       getGroup(match.params.groupCode);
     }
   }, [isAuthenticated, group, match.params.groupCode]);
@@ -53,6 +48,11 @@ const Group = ({
     (error && error.HRID === match.params.groupCode)
   ) {
     return <NotFound />;
+  }
+
+  const groupTypeNameSnaked = groupType.name.split(" ").join("_");
+  if (groupTypeNameSnaked !== match.params.groupType) {
+    return <Redirect to={`/k/${groupTypeNameSnaked}/group/${group.HRID}`} />;
   }
 
   return (

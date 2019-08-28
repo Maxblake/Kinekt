@@ -16,7 +16,6 @@ const Dropdown = ({ trigger, children }) => {
   }, []);
 
   const handleToggleDropdown = e => {
-    console.log("yo");
     const clickeddropdownTrigger = dropdownTrigger.contains(e.target);
     const clickeddropdownContent = dropdownContent.contains(e.target);
     const dropdownActive = dropdown.classList.contains("is-active");

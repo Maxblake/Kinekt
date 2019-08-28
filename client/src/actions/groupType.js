@@ -7,18 +7,14 @@ import { setAlert } from "./alert";
 import { GROUPTYPE_LOADING, SET_GROUPTYPES, GROUPTYPE_ERROR } from "./types";
 
 // Get a list of group types ordered and filtered by passed criteria
-export const getGroupTypes = ({
-  sortBy,
-  category,
-  searchTerms
-}) => async dispatch => {
+export const getGroupTypes = ({ category, searchTerms }) => async dispatch => {
   const config = {
     headers: {
       "Content-Type": "application/json"
     }
   };
 
-  const body = JSON.stringify({ sortBy, category, searchTerms });
+  const body = JSON.stringify({ category, searchTerms });
 
   try {
     dispatch({

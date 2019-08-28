@@ -6,8 +6,7 @@ const GroupDetails = ({ group }) => {
       <div className="group-description">
         {group && group.description ? (
           <p>
-            <strong>Description</strong>
-            <br />
+            <label className="label">Description</label>
             {group.description}
           </p>
         ) : (

@@ -10,7 +10,6 @@ const FormControl = ({
   placeholder,
   required
 }) => {
-  console.log(error);
   return (
     <Fragment>
       <label className="label">{`${label}${required ? " *" : ""}`}</label>

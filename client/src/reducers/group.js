@@ -51,7 +51,8 @@ export default function(state = initialState, action) {
     case LOGOUT:
     case CLEAR_GROUP: {
       return {
-        ...initialState,
+        ...state,
+        group: null,
         loading: false
       };
     }

@@ -16,13 +16,12 @@ const Discover = ({
   isAuthenticated
 }) => {
   const [groupTypeData, setgroupTypeData] = useState({
-    sortBy: "Trending",
     category: "All",
     searchTerms: "",
     readyToLoadNewTypes: true
   });
 
-  const { sortBy, category, searchTerms, readyToLoadNewTypes } = groupTypeData;
+  const { category, searchTerms, readyToLoadNewTypes } = groupTypeData;
 
   useEffect(() => {
     if (readyToLoadNewTypes) {
@@ -82,21 +81,6 @@ const Discover = ({
   }
 
   const options = [
-    <div className="field">
-      <div className="select is-fullwidth-touch">
-        <select
-          className="is-fullwidth-touch"
-          name="sortBy"
-          value={sortBy}
-          onChange={e => onChange(e)}
-        >
-          <option>Trending</option>
-          <option>Top</option>
-          <option>New</option>
-          <option>Nearby</option>
-        </select>
-      </div>
-    </div>,
     <div className="field">
       <div className="select is-fullwidth-touch">
         <select
@@ -165,7 +149,7 @@ const Discover = ({
   return (
     <section className="discover">
       <nav className="level is-mobile" id="page-nav">
-        <PageTitle title="Explore" />
+        <PageTitle title="Explore" hasPageOptions />
         <PageOptions options={options} />
       </nav>
       {groupTypeCards}

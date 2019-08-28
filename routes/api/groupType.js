@@ -27,7 +27,7 @@ router.post("/list", async (req, res) => {
 });
 
 const buildQuery = req => {
-  const { sortBy, category, searchTerms } = req.body;
+  const { category, searchTerms } = req.body;
   const query = {};
 
   if (category && category !== "All") query.category = category;
@@ -241,7 +241,7 @@ router.delete("/:id", auth, async (req, res) => {
       );
     }
 
-    const groupType = GroupType.findById(req.params.id);
+    const groupType = await GroupType.findById(req.params.id);
 
     if (!groupType) {
       return errors.addErrAndSendResponse(res, "Unable to find group type");

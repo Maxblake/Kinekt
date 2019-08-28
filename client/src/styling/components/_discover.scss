@@ -1,12 +1,23 @@
 // Discover header
 .discover-header {
-  align-items: flex-start;
-  padding: 1.5rem;
+  padding: 0 1.5rem 1.5rem 1.5rem;
   margin: 1.5rem auto 3rem auto;
   background: whitesmoke;
   border-radius: 6px;
 
   box-shadow: 0 2px 3px rgba(10, 10, 10, 0.2), 0 0 0 1px rgba(10, 10, 10, 0.2);
+
+  .level {
+    align-items: flex-start;
+  }
+
+  .header-welcome {
+    margin: 0 -1.5rem 1.75rem -1.5rem;
+    padding: 0.5rem 0.5rem;
+    font-size: 1.9rem;
+    background: #2a4d69;
+    color: whitesmoke;
+  }
 
   .header-step {
     display: flex;
@@ -15,7 +26,8 @@
     flex: 1;
 
     .step-description {
-      @extend %is-dark;
+      background: #606060;
+      color: whitesmoke;
 
       margin: 1.5rem 0.75rem 0 0.75rem;
       padding: 0.5rem 0.75rem;
@@ -36,8 +48,13 @@
 
 @media (max-width: $tablet - 1) {
   .discover-header {
-    padding: 0.5rem;
+    padding: 0 0.5rem 0.5rem 0.5rem;
     max-width: 500px;
+
+    .header-welcome {
+      margin: 0 -0.5rem 1.75rem -0.5rem;
+      font-size: 1.4rem;
+    }
 
     .header-step {
       margin: 1rem 0;

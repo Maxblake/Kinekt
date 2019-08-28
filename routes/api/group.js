@@ -33,11 +33,64 @@ router.post("/list", (req, res) => {
       return errors.addErrAndSendResponse(res, "Invalid Group Type Name");
     }
 
-    const groups = await Group.find({ _id: { $in: groupType.groups } });
+    const query = buildQuery(req, groupType.groups);
+    let groups = await getGroups(query);
+    sortGroups(req, groups);
+
     const response = { groupType, groups };
+
     res.json(response);
   });
 });
+
+const buildQuery = (req, groupIds) => {
+  const { searchTerms } = req.body;
+  const query = { _id: { $in: groupIds } };
+
+  if (searchTerms) {
+    query.$text = { $search: searchTerms };
+  }
+
+  return query;
+};
+
+const getGroups = async query => {
+  let groups = await Group.find(query, {
+    score: { $meta: "textScore" }
+  })
+    .sort({
+      score: { $meta: "textScore" }
+    })
+    .lean();
+
+  if (!!query.$text) {
+    groups = groups.filter(group => group.score > 1);
+  }
+
+  return groups;
+};
+
+const sortGroups = (req, groups) => {
+  const { sortBy } = req.body;
+
+  switch (sortBy) {
+    case "New": {
+      groups.sort((a, b) => {
+        return 1;
+      });
+      break;
+    }
+    case "Start Time": {
+      groups.sort((a, b) => {
+        return 1;
+      });
+      break;
+    }
+    default: {
+      break;
+    }
+  }
+};
 
 // @route   GET api/group/:HRID
 // @desc    Get group by HRID (human readable id)
@@ -63,31 +116,6 @@ router.get("/:HRID", auth, (req, res) => {
     const response = { group, groupType };
 
     res.json(response);
-  });
-});
-
-// @route   GET api/group/:HRID/grouptype
-// @desc    Get group's group type by HRID (human readable id)
-// @access  Public
-router.get("/:HRID/grouptype", (req, res) => {
-  const errors = new APIerrors();
-
-  runAPISafely(async () => {
-    const group = await Group.findOne({ HRID: req.params.HRID });
-
-    if (!group) {
-      return errors.addErrAndSendResponse(res, "Group does not exist");
-    }
-
-    const groupType = await GroupType.findById(group.groupType);
-    if (!groupType) {
-      return errors.addErrAndSendResponse(
-        res,
-        "Group is linked to non-existent group type"
-      );
-    }
-
-    res.json(groupType);
   });
 });
 
@@ -223,6 +251,7 @@ const createGroup = async (req, groupFields, errors) => {
   if (errors.isNotEmpty()) return;
 
   await group.save();
+
   return group;
 };
 

@@ -9,7 +9,6 @@ const Carousel = ({ items }) => {
   const { active, direction } = carouselData;
 
   const generateItems = () => {
-    console.log("gen");
     const generatedItems = [];
 
     for (let i = active - 1; i < active + 2; i++) {

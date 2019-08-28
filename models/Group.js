@@ -77,7 +77,11 @@ const GroupSchema = new mongoose.Schema({
         ref: "user"
       }
     }
-  ]
+  ],
+  creationTimestamp: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 module.exports = Group = mongoose.model("group", GroupSchema);

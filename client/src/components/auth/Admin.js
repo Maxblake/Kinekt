@@ -4,9 +4,11 @@ import { connect } from "react-redux";
 
 import {
   getRequestedGroupTypes,
-  processRequestedGroupTypes
+  processRequestedGroupTypes,
+  deleteGroupType
 } from "../../actions/admin";
 import { loadUser } from "../../actions/auth";
+import { getGroupTypes } from "../../actions/groupType";
 
 import NotFound from "../common/NotFound";
 import RadioButton from "../form/RadioButton";
@@ -14,20 +16,30 @@ import RadioButton from "../form/RadioButton";
 const Admin = ({
   loadUser,
   getRequestedGroupTypes,
-  processRequestedGroupTypes
+  processRequestedGroupTypes,
+  deleteGroupType,
+  getGroupTypes,
+  groupType: { groupTypes }
 }) => {
   const [adminState, setAdminState] = useState({
     isAdmin: false,
     requestedGroupTypes: [],
-    groupTypeDecisions: {}
+    groupTypeDecisions: {},
+    adminOptions: "Requested Group Types"
   });
 
-  const { requestedGroupTypes, isAdmin, groupTypeDecisions } = adminState;
+  const {
+    requestedGroupTypes,
+    isAdmin,
+    groupTypeDecisions,
+    adminOptions
+  } = adminState;
 
   useEffect(() => {
     if (!isAdmin) {
       let fetchData = async () => {
         const loadUserResponse = await loadUser(true);
+        await getGroupTypes({ category: "All" });
 
         setAdminState({ ...adminState, isAdmin: loadUserResponse });
       };
@@ -57,6 +69,13 @@ const Admin = ({
       });
     }
   }, [isAdmin, requestedGroupTypes]);
+
+  const onChange = e => {
+    setAdminState({
+      ...adminState,
+      [e.target.name]: e.target.value
+    });
+  };
 
   const handleGroupTypeDecided = (decision, key) => {
     setAdminState({
@@ -92,30 +111,12 @@ const Admin = ({
     return <NotFound />;
   }
 
-  return (
-    <section className="adminPage">
-      <nav className="level" id="page-nav">
-        <div className="level-left">
-          <div className="level-item">
-            <h3 className="title is-size-3 page-title">Admin Portal</h3>
-          </div>
-        </div>
+  let portalView = null;
 
-        <div className="level-right">
-          <div className="level-item">
-            <div className="field">
-              <div className="select">
-                <select>
-                  <option>Requested Group Types</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      <div className="admin-portal">
-        {requestedGroupTypes.length > 0 ? (
+  switch (adminOptions) {
+    case "Requested Group Types":
+      portalView =
+        requestedGroupTypes.length > 0 ? (
           <Fragment>
             <h2 className="is-size-4">Requested Group Types</h2>
             <table className="requestedGroupTypeList">
@@ -183,8 +184,83 @@ const Admin = ({
           </Fragment>
         ) : (
           <h2 className="is-size-4">No new Requested Group Types</h2>
-        )}
-      </div>
+        );
+      break;
+    case "Current Group Types":
+      portalView =
+        groupTypes.length > 0 ? (
+          <Fragment>
+            <h2 className="is-size-4">Current Group Types</h2>
+            <table className="requestedGroupTypeList">
+              <tbody>
+                {groupTypes.map(groupType => (
+                  <tr key={groupType._id}>
+                    <td className="imageCell">
+                      <img
+                        src={groupType.image ? groupType.image.link : ""}
+                        alt="No image"
+                      />
+                    </td>
+                    <td className="col-stretch">
+                      <h5 className="is-size-5">{groupType.name}</h5>
+                      <h6 className="is-size-6">{groupType.description}</h6>
+                    </td>
+                    <td>{groupType.category}</td>
+                    <td>
+                      <div className="field is-grouped">
+                        <div className="control">
+                          <button
+                            className="button"
+                            onClick={() => deleteGroupType(groupType._id)}
+                          >
+                            <span>Delete</span>
+                          </button>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <div className="content has-text-centered">
+              <h3>- This is the end. -</h3>
+            </div>
+          </Fragment>
+        ) : (
+          <h2 className="is-size-4">No Group Types in state</h2>
+        );
+      break;
+  }
+
+  return (
+    <section className="adminPage">
+      <nav className="level" id="page-nav">
+        <div className="level-left">
+          <div className="level-item">
+            <h3 className="title is-size-3 page-title">Admin Portal</h3>
+          </div>
+        </div>
+
+        <div className="level-right">
+          <div className="level-item">
+            <div className="field">
+              <div className="select">
+                <select
+                  name="adminOptions"
+                  value={adminOptions}
+                  onChange={e => onChange(e)}
+                >
+                  <option>Requested Group Types</option>
+                  <option>Current Group Types</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <div className="admin-portal">{portalView}</div>
     </section>
   );
 };
@@ -192,10 +268,23 @@ const Admin = ({
 Admin.propTypes = {
   loadUser: PropTypes.func.isRequired,
   getRequestedGroupTypes: PropTypes.func.isRequired,
-  processRequestedGroupTypes: PropTypes.func.isRequired
+  processRequestedGroupTypes: PropTypes.func.isRequired,
+  deleteGroupType: PropTypes.func.isRequired,
+  getGroupTypes: PropTypes.func.isRequired,
+  groupType: PropTypes.object.isRequired
 };
 
+const mapStateToProps = state => ({
+  groupType: state.groupType
+});
+
 export default connect(
-  null,
-  { getRequestedGroupTypes, processRequestedGroupTypes, loadUser }
+  mapStateToProps,
+  {
+    getRequestedGroupTypes,
+    processRequestedGroupTypes,
+    deleteGroupType,
+    getGroupTypes,
+    loadUser
+  }
 )(Admin);

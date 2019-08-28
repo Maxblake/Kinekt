@@ -17,10 +17,6 @@ const UserSchema = new mongoose.Schema({
   about: {
     type: String
   },
-  date: {
-    type: Date,
-    default: Date.now
-  },
   currentGroup: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "group"
@@ -32,6 +28,10 @@ const UserSchema = new mongoose.Schema({
     deleteHash: {
       type: String
     }
+  },
+  creationTimestamp: {
+    type: Date,
+    default: Date.now
   }
 });
 

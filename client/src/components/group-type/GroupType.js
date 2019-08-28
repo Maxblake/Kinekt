@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -21,15 +21,51 @@ const GroupType = ({
   groupType: { groupType },
   match
 }) => {
+  const [groupData, setGroupData] = useState({
+    sortBy: "New",
+    searchTerms: "",
+    readyToLoadNewGroups: false
+  });
+
+  const { sortBy, searchTerms, readyToLoadNewGroups } = groupData;
+
   useEffect(() => {
     const groupTypeParamSpaced = match.params.groupType.split("_").join(" ");
     const groupTypeParamChanged =
       groupType && groupType.name !== groupTypeParamSpaced;
 
-    if (!groupType || groupTypeParamChanged || !groups.length) {
-      getGroups(groupTypeParamSpaced);
+    if (
+      !groupType ||
+      groupTypeParamChanged ||
+      !groups.length ||
+      readyToLoadNewGroups
+    ) {
+      getGroups(groupTypeParamSpaced, groupData);
+
+      setGroupData({
+        ...groupData,
+        readyToLoadNewGroups: false
+      });
     }
-  }, [match.params.groupType]);
+  }, [match.params.groupType, readyToLoadNewGroups]);
+
+  const onChange = e => {
+    setGroupData({
+      ...groupData,
+      [e.target.name]: e.target.value,
+      readyToLoadNewGroups:
+        e.target.name === "searchTerms" ? readyToLoadNewGroups : true
+    });
+  };
+
+  const onSearchTermsSubmit = e => {
+    e.preventDefault();
+
+    setGroupData({
+      ...groupData,
+      readyToLoadNewGroups: true
+    });
+  };
 
   if (loading) {
     return <Spinner />;
@@ -65,26 +101,40 @@ const GroupType = ({
     </Fragment>,
     <div className="field">
       <div className="select is-fullwidth-touch">
-        <select className="is-fullwidth-touch">
-          <option>Trending</option>
-          <option>Top</option>
+        <select
+          className="is-fullwidth-touch"
+          name="sortBy"
+          value={sortBy}
+          onChange={e => onChange(e)}
+        >
           <option>New</option>
+          <option>Start Time</option>
+          <option>Spots left</option>
           <option>Nearby</option>
         </select>
       </div>
     </div>,
-    <div className="field has-addons">
-      <p className="control search-control">
-        <input className="input" type="text" placeholder="Search groups" />
-      </p>
-      <p className="control">
-        <button className="button is-primary">
-          <span className="icon is-small">
-            <i className="fas fa-search" />
-          </span>
-        </button>
-      </p>
-    </div>
+    <form onSubmit={e => onSearchTermsSubmit(e)}>
+      <div className="field has-addons">
+        <p className="control search-control">
+          <input
+            className="input"
+            type="text"
+            placeholder="Search groups"
+            name="searchTerms"
+            value={searchTerms}
+            onChange={e => onChange(e)}
+          />
+        </p>
+        <p className="control">
+          <button className="button is-primary" type="submit">
+            <span className="icon is-small">
+              <i className="fas fa-search" />
+            </span>
+          </button>
+        </p>
+      </div>
+    </form>
   ];
 
   return (
@@ -93,25 +143,28 @@ const GroupType = ({
         <PageTitle
           title={match.params.groupType.split("_").join(" ")}
           subtitle={<OnlineStatus users="30 users" groups="3 groups" />}
+          hasPageOptions
         />
         <PageOptions options={options} />
       </nav>
 
       <div className="groupCards">
-        {groups.map(group => (
-          <GroupCard
-            key={group._id}
-            group={group}
-            defaultImg={
-              groupType.image ? groupType.image.link : defaultGroupTypeImage
-            }
-            groupTypeName={match.params.groupType}
-          />
-        ))}
         {!!groups.length ? (
-          <div className="content has-text-centered">
-            <h3>- This is the end. -</h3>
-          </div>
+          <Fragment>
+            {groups.map(group => (
+              <GroupCard
+                key={group._id}
+                group={group}
+                defaultImg={
+                  groupType.image ? groupType.image.link : defaultGroupTypeImage
+                }
+                groupTypeName={match.params.groupType}
+              />
+            ))}
+            <div className="content has-text-centered">
+              <h3>- This is the end. -</h3>
+            </div>
+          </Fragment>
         ) : (
           <div className="box no-card-notice">
             There are currently no groups here. It may be time to make a new

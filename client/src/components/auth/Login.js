@@ -15,7 +15,7 @@ const Login = ({
   location,
   history,
   errors,
-  auth: { isAuthenticated, loading },
+  auth: { isAuthenticated, loading, user },
   login
 }) => {
   const [formData, setFormData] = useState({
@@ -39,7 +39,7 @@ const Login = ({
     history.push("/register");
   };
 
-  if (isAuthenticated) {
+  if (isAuthenticated && user) {
     const from = location && location.state ? location.state.from : undefined;
 
     if (from !== undefined) {
@@ -88,7 +88,6 @@ const Login = ({
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
-  clearErrorsAndAlerts: PropTypes.func.isRequired,
   errors: PropTypes.array.isRequired,
   auth: PropTypes.object.isRequired,
   location: PropTypes.object

@@ -16,11 +16,8 @@ import {
 // Get group by HRID (human readable id)
 export const getGroup = (HRID, history = null) => async dispatch => {
   try {
-    // If history is passed in, this is being called from outside of the group component, so the user may not be logged in or have the group type in state
     if (!!history) {
-      const res = await axios.get(`/api/group/${HRID}/grouptype`);
-
-      history.push(`/k/${res.data.name.split(" ").join("_")}/group/${HRID}`);
+      history.push(`/k/k/group/${HRID}`);
       return;
     }
 
@@ -56,14 +53,24 @@ export const getGroup = (HRID, history = null) => async dispatch => {
 };
 
 // Get a list of groups within a given group type
-export const getGroups = groupTypeName => async dispatch => {
+export const getGroups = (
+  groupTypeName,
+  queryParams = null
+) => async dispatch => {
   const config = {
     headers: {
       "Content-Type": "application/json"
     }
   };
 
-  const body = JSON.stringify({ groupTypeName: groupTypeName.toLowerCase() });
+  const bodyBuilder = { groupTypeName: groupTypeName.toLowerCase() }; //hehehe
+
+  if (queryParams !== null) {
+    bodyBuilder.sortBy = queryParams.sortBy;
+    bodyBuilder.searchTerms = queryParams.searchTerms;
+  }
+
+  const body = JSON.stringify(bodyBuilder);
 
   try {
     dispatch({

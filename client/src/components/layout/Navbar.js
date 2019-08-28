@@ -78,8 +78,6 @@ const Navbar = ({
   const onSubmitGroupCode = async e => {
     e.preventDefault();
 
-    console.log(groupType);
-
     getGroup(groupCode, history);
   };
 

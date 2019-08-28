@@ -41,11 +41,15 @@ html {
 .page-title {
   @extend %is-dark;
   padding: 0.5rem 0.75rem;
+
+  &.has-page-options {
+    max-width: 400px;
+  }
 }
 
 .page-subtitle {
   background: whitesmoke;
-  padding: 0.1rem 0.75rem;
+  padding: 0.2rem 0.75rem;
   display: flex;
 
   a {
@@ -146,4 +150,8 @@ html {
 
 .small-input {
   width: 100px;
+}
+
+.ws-nowrap {
+  white-space: nowrap;
 }

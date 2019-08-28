@@ -36,3 +36,19 @@ export const processRequestedGroupTypes = groupTypeDecisions => async dispatch =
     });
   }
 };
+
+// Delete group type
+export const deleteGroupType = groupTypeId => async dispatch => {
+  if (
+    window.confirm(
+      "Are you sure you would like to delete this group type? This cannot be undone."
+    )
+  ) {
+    try {
+      await axios.delete(`/api/group-type/${groupTypeId}`);
+      dispatch(setAlert(`Group Type deleted`, "is-warning"));
+    } catch (err) {
+      dispatch(setAlert(`Unable to delete group type`, "is-danger"));
+    }
+  }
+};

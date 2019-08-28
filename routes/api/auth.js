@@ -17,10 +17,16 @@ const User = require("../../models/User");
 // @desc    Given JSON Web Token, return user object
 // @access  Public
 router.get("/:checkIfAdmin", auth, (req, res) => {
+  const errors = new APIerrors();
+
   runAPISafely(async () => {
     const user = await User.findById(req.user.id)
       .select("-password")
       .lean();
+
+    if (!user) {
+      return errors.addErrAndSendResponse(res, "Invalid User ID");
+    }
 
     const authResponse = { user };
 

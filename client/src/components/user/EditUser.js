@@ -102,6 +102,7 @@ const EditUser = ({
           label="Profile Picture"
           onChange={handleImageUpload}
           type="profile"
+          src={user.image.link}
         />
 
         <SubmitButton text="Submit" />

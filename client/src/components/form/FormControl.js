@@ -8,7 +8,8 @@ const FormControl = ({
   onChange,
   type,
   placeholder,
-  required
+  required,
+  readonly
 }) => {
   return (
     <Fragment>
@@ -22,6 +23,7 @@ const FormControl = ({
             onChange={e => onChange(e)}
             type={type ? type : "text"}
             placeholder={placeholder ? placeholder : ""}
+            readOnly={readonly}
           />
         </div>
         {error && <p className="help is-danger">{error}</p>}

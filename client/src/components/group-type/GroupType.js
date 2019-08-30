@@ -11,11 +11,13 @@ import GroupCard from "../cards/GroupCard";
 import PageTitle from "../layout/page/PageTitle";
 import OnlineStatus from "../common/subcomponents/OnlineStatus";
 import PageOptions from "../layout/page/PageOptions";
+import Dropdown from "../common/subcomponents/Dropdown";
 
 import defaultGroupTypeImage from "../../resources/defaultGroupTypeImage.jpg";
 
 //TODO format date/times with moment
 const GroupType = ({
+  user,
   getGroups,
   group: { groups, loading, error },
   groupType: { groupType },
@@ -80,25 +82,6 @@ const GroupType = ({
   }
 
   const options = [
-    <Fragment>
-      <Link
-        to={`/k/${match.params.groupType}/create`}
-        className="button is-primary  is-hidden-touch is-hidden-widescreen"
-      >
-        <span className="icon">
-          <i className="fas fa-plus" />
-        </span>
-      </Link>
-      <Link
-        to={`/k/${match.params.groupType}/create`}
-        className="button is-primary is-fullwidth-touch is-hidden-desktop-only"
-      >
-        <span className="icon">
-          <i className="fas fa-plus" />
-        </span>
-        <span>New Group</span>
-      </Link>
-    </Fragment>,
     <div className="field">
       <div className="select is-fullwidth-touch">
         <select
@@ -136,6 +119,93 @@ const GroupType = ({
       </div>
     </form>
   ];
+
+  if (!!user && user._id === groupType.creator) {
+    options.unshift(
+      <Fragment>
+        <Dropdown
+          additionalClasses="is-hidden-touch"
+          trigger={
+            <Fragment>
+              <button
+                className="button is-dark-theme is-hidden-touch is-hidden-widescreen"
+                aria-haspopup="true"
+                aria-controls="dropdown-menu"
+              >
+                <span className="icon is-small">
+                  <i className="fas fa-cog" aria-hidden="true" />
+                </span>
+              </button>
+
+              <button
+                className="button is-dark-theme is-hidden-desktop-only"
+                aria-haspopup="true"
+                aria-controls="dropdown-menu"
+              >
+                <span>Options</span>
+                <span className="icon is-small">
+                  <i className="fas fa-cog" aria-hidden="true" />
+                </span>
+              </button>
+            </Fragment>
+          }
+        >
+          <Link
+            to={`/k/${match.params.groupType}/create`}
+            className="dropdown-item"
+          >
+            <span>New Group</span>
+          </Link>
+          <Link
+            to={`/k/${match.params.groupType}/edit`}
+            className="dropdown-item"
+          >
+            <span>Edit Group Type</span>
+          </Link>
+        </Dropdown>
+        <Link
+          to={`/k/${match.params.groupType}/create`}
+          className="button is-primary is-fullwidth-touch is-hidden-desktop"
+        >
+          <span className="icon">
+            <i className="fas fa-plus" />
+          </span>
+          <span>New Group</span>
+        </Link>
+      </Fragment>
+    );
+
+    options.unshift(
+      <Link
+        to={`/k/${match.params.groupType}/edit`}
+        className="button is-primary is-fullwidth-touch is-hidden-desktop"
+      >
+        <span>Edit Group Type</span>
+      </Link>
+    );
+  } else {
+    options.unshift(
+      <Fragment>
+        <Link
+          to={`/k/${match.params.groupType}/create`}
+          className="button is-primary  is-hidden-touch is-hidden-widescreen"
+        >
+          <span className="icon">
+            <i className="fas fa-plus" />
+          </span>
+        </Link>
+        <Link
+          to={`/k/${match.params.groupType}/create`}
+          className="button is-primary is-fullwidth-touch is-hidden-desktop-only"
+        >
+          <span className="icon">
+            <i className="fas fa-plus" />
+          </span>
+          <span>New Group</span>
+        </Link>
+      </Fragment>
+    );
+  }
 
   return (
     <section className="groupType">
@@ -179,10 +249,12 @@ const GroupType = ({
 GroupType.propTypes = {
   getGroups: PropTypes.func.isRequired,
   groupType: PropTypes.object.isRequired,
-  group: PropTypes.object.isRequired
+  group: PropTypes.object.isRequired,
+  user: PropTypes.object
 };
 
 const mapStateToProps = state => ({
+  user: state.auth.user,
   groupType: state.groupType,
   group: state.group
 });

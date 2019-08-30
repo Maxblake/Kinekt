@@ -20,6 +20,7 @@ import Home from "./components/home/Home";
 import NewGroupType from "./components/group-type/NewGroupType";
 import GroupType from "./components/group-type/GroupType";
 import NewGroup from "./components/group/NewGroup";
+import EditGroupType from "./components/group-type/EditGroupType";
 import Group from "./components/group/Group";
 import Admin from "./components/auth/Admin";
 
@@ -62,6 +63,11 @@ const App = () => {
                 exact
                 path="/request-grouptype"
                 component={NewGroupType}
+              />
+              <PrivateRoute
+                exact
+                path="/k/:groupType/edit"
+                component={EditGroupType}
               />
               <PrivateRoute exact path="/admin" component={Admin} />
               <Route component={NotFound} />

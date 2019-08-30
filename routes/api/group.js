@@ -76,11 +76,23 @@ const sortGroups = (req, groups) => {
   switch (sortBy) {
     case "New": {
       groups.sort((a, b) => {
-        return 1;
+        return b.creationTimestamp.getTime() - a.creationTimestamp.getTime();
       });
       break;
     }
     case "Start Time": {
+      groups.sort((a, b) => {
+        return a.time.getTime() - b.time.getTime();
+      });
+      break;
+    }
+    case "Size": {
+      groups.sort((a, b) => {
+        return a.users.length - b.users.length;
+      });
+      break;
+    }
+    case "Nearby": {
       groups.sort((a, b) => {
         return 1;
       });

@@ -73,7 +73,6 @@ const Group = ({
                 trigger={
                   <button
                     className="button is-dark-theme"
-                    id="grpSettingsBtn"
                     aria-haspopup="true"
                     aria-controls="dropdown-menu"
                   >

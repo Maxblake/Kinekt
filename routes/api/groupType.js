@@ -162,39 +162,43 @@ router.post(
 // @route   PUT api/group-type/:id
 // @desc    Update a group type
 // @access  Private
-router.put("/:id", validateRequest("updateGroupType"), async (req, res) => {
-  const errors = new APIerrors();
+router.put(
+  "/:id",
+  [upload.single("image"), auth, validateRequest("updateGroupType")],
+  async (req, res) => {
+    const errors = new APIerrors();
 
-  runAPISafely(async () => {
-    const groupTypeFields = buildGroupTypeFields(req, true);
+    runAPISafely(async () => {
+      const groupTypeFields = buildGroupTypeFields(req, true);
 
-    const groupType = await GroupType.findByIdAndUpdate(
-      req.params.id,
-      { $set: groupTypeFields },
-      { new: true }
-    );
+      const groupType = await GroupType.findByIdAndUpdate(
+        req.params.id,
+        { $set: groupTypeFields },
+        { new: true }
+      );
 
-    if (!groupType) {
-      return errors.addErrAndSendResponse(res, "Unable to find group type");
-    }
+      if (!groupType) {
+        return errors.addErrAndSendResponse(res, "Unable to find group type");
+      }
 
-    await handleImageUpload(groupType, req, errors, true);
+      await handleImageUpload(groupType, req, errors, true);
 
-    if (errors.isNotEmpty()) {
-      return errors.sendErrorResponse(res);
-    }
+      if (errors.isNotEmpty()) {
+        return errors.sendErrorResponse(res);
+      }
 
-    await groupType.save();
-    return res.json(groupType);
-  });
-});
+      await groupType.save();
+      return res.json(groupType);
+    });
+  }
+);
 
 const buildGroupTypeFields = (req, updating = false) => {
   const { name, description, category } = req.body;
   let groupTypeFields = {};
 
   if (!updating) groupTypeFields.creator = req.user.id;
-  if (name) groupTypeFields.name = name;
+  if (!updating && name) groupTypeFields.name = name;
   if (description) groupTypeFields.description = description;
   if (category) groupTypeFields.category = category;
 

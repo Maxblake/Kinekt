@@ -1,14 +1,12 @@
 import React, { useEffect } from "react";
 
-const Dropdown = ({ trigger, children }) => {
-  let dropdownTrigger, dropdown, dropdownContent;
+const Dropdown = ({ trigger, children, additionalClasses }) => {
+  let dropdownTrigger = React.useRef(null);
+  let dropdown = React.useRef(null);
+  let dropdownContent = React.useRef(null);
 
   useEffect(() => {
     document.addEventListener("click", handleToggleDropdown);
-
-    dropdownTrigger = document.querySelector(".dropdown-trigger");
-    dropdown = document.querySelector(".dropdown");
-    dropdownContent = document.querySelector(".dropdown-content");
 
     return () => {
       document.removeEventListener("click", handleToggleDropdown);
@@ -16,22 +14,33 @@ const Dropdown = ({ trigger, children }) => {
   }, []);
 
   const handleToggleDropdown = e => {
-    const clickeddropdownTrigger = dropdownTrigger.contains(e.target);
-    const clickeddropdownContent = dropdownContent.contains(e.target);
-    const dropdownActive = dropdown.classList.contains("is-active");
+    if (!dropdown.current) return;
+
+    const clickeddropdownTrigger = dropdownTrigger.current.contains(e.target);
+    const clickeddropdownContent = dropdownContent.current.contains(e.target);
+    const dropdownActive = dropdown.current.classList.contains("is-active");
 
     if (dropdownActive && !clickeddropdownContent) {
-      dropdown.classList.remove("is-active");
+      dropdown.current.classList.remove("is-active");
     } else if (clickeddropdownTrigger) {
-      dropdown.classList.add("is-active");
+      dropdown.current.classList.add("is-active");
     }
   };
 
   return (
-    <div className="dropdown is-right">
-      <div className="dropdown-trigger">{trigger}</div>
+    <div
+      ref={dropdown}
+      className={`dropdown is-right ${
+        additionalClasses ? additionalClasses : ""
+      }`}
+    >
+      <div ref={dropdownTrigger} className="dropdown-trigger">
+        {trigger}
+      </div>
       <div className="dropdown-menu" role="menu">
-        <div className="dropdown-content">{children}</div>
+        <div ref={dropdownContent} className="dropdown-content">
+          {children}
+        </div>
       </div>
     </div>
   );

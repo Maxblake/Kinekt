@@ -51,7 +51,6 @@ const EditUser = ({
 
   const onSubmit = e => {
     e.preventDefault();
-
     editUser({ name, about, image });
   };
 

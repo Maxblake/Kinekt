@@ -1,5 +1,6 @@
 const express = require("express");
 const connectDB = require("./config/db");
+const startIoServer = require("./io-server");
 
 const app = express();
 
@@ -10,6 +11,9 @@ connectDB();
 app.use(express.json({ extended: false }));
 
 app.get("/", (req, res) => res.status(200).send("Kinekt API Running"));
+
+// Start up Socket IO Server
+startIoServer(app);
 
 // Define Routes
 app.use("/api/user", require("./routes/api/user"));

@@ -6,7 +6,7 @@ import { Link, withRouter } from "react-router-dom";
 import { logout } from "../../actions/auth";
 import { getGroup } from "../../actions/group";
 
-import TypeWriter from "../../js/typewriter";
+import TypeWriter from "../../utils/typewriter";
 
 const Navbar = ({
   history,

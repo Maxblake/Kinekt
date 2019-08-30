@@ -1,10 +1,12 @@
 import React from "react";
 
+import moment from "moment";
+
 const GroupDetails = ({ group }) => {
   return (
     <div className="group-details-container">
       <div className="group-description">
-        {group && group.description ? (
+        {group.description ? (
           <p>
             <label className="label">Description</label>
             {group.description}
@@ -19,7 +21,7 @@ const GroupDetails = ({ group }) => {
             <span className="icon">
               <i className="fas fa-clock" />
             </span>
-            <h3>Thu, May 17, 2:00 PM</h3>
+            <h3>{moment(group.time).format("ddd M/D @ h:mm A")}</h3>
           </div>
         </div>
         <div className="group-meet-place">
@@ -27,7 +29,7 @@ const GroupDetails = ({ group }) => {
             <span className="icon">
               <i className="fas fa-map-marker-alt" />
             </span>
-            <h3>Crooked river Brewery, Prineville OR</h3>
+            <h3>{group.place}</h3>
           </div>
         </div>
       </div>

@@ -3,8 +3,6 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
 
-import io from "../../utils/io";
-
 import { getGroup, deleteGroup } from "../../actions/group";
 
 import Spinner from "../common/Spinner";
@@ -25,7 +23,6 @@ const Group = ({
   match
 }) => {
   useEffect(() => {
-    const groupSocket = new io();
     if (isAuthenticated && (!group || group.HRID !== match.params.groupCode)) {
       getGroup(match.params.groupCode);
     }

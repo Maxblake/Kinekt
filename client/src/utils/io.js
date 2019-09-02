@@ -1,11 +1,7 @@
 import socketIOClient from "socket.io-client";
 
-class io {
-  constructor() {
-    this.socket = socketIOClient("http://localhost:5001");
-  }
+const getSocket = () => {
+  return socketIOClient("http://localhost:5000");
+};
 
-  start() {}
-}
-
-export default io;
+export default getSocket;

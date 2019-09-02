@@ -1,6 +1,6 @@
 import React from "react";
 
-import Chat from "../chat/Chat";
+import Chat from "./chat/Chat";
 import NoticeBoard from "../noticeBoard/NoticeBoard";
 import GroupDetails from "../common/subcomponents/GroupDetails";
 import Image from "../common/subcomponents/Image";

@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import setAuthToken from "../utils/setAuthToken";
+import getSocket from "../utils/io";
 import { handleResponseErrors } from "./helpers/helpers";
 
 import {
@@ -27,7 +28,10 @@ export const loadUser = (checkIfAdmin = false) => async dispatch => {
 
     dispatch({
       type: SET_USER,
-      payload: res.data.user
+      payload: {
+        user: res.data.user,
+        socket: getSocket()
+      }
     });
 
     if (checkIfAdmin) {

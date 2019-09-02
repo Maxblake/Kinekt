@@ -12,6 +12,7 @@ const initialState = {
   token: localStorage.getItem("token"),
   isAuthenticated: null,
   user: null,
+  socket: null,
   loading: false
 };
 
@@ -31,8 +32,8 @@ export default function(state = initialState, action) {
     case SET_USER:
       return {
         ...state,
+        ...payload,
         isAuthenticated: true,
-        user: payload,
         loading: false
       };
     case UPDATE_USER:
@@ -52,11 +53,15 @@ export default function(state = initialState, action) {
     case AUTH_ERROR:
     case LOGOUT:
       localStorage.removeItem("token");
+      if (!!state.socket) {
+        state.socket.disconnect();
+      }
       return {
         token: null,
         isAuthenticated: false,
         loading: false,
-        user: null
+        user: null,
+        socket: null
       };
     default:
       return state;

@@ -6,6 +6,7 @@ import {
   AUTH_SUCCESS,
   LOGOUT,
   UPDATE_USER,
+  SET_CURRENT_GROUP,
   SET_GROUP
 } from "../actions/types";
 
@@ -42,6 +43,11 @@ export default function(state = initialState, action) {
         ...state,
         user: payload,
         loading: false
+      };
+    case SET_CURRENT_GROUP:
+      return {
+        ...state,
+        user: { ...state.user, currentGroup: payload }
       };
     case AUTH_SUCCESS:
       localStorage.setItem("token", payload.token);

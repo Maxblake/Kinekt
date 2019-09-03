@@ -111,7 +111,9 @@ router.get("/:HRID", auth, (req, res) => {
   const errors = new APIerrors();
 
   runAPISafely(async () => {
-    const group = await Group.findOne({ HRID: req.params.HRID });
+    const group = await Group.findOne({ HRID: req.params.HRID }).select(
+      "-users -admins"
+    );
 
     if (!group) {
       return errors.addErrAndSendResponse(res, "Group does not exist");
@@ -228,7 +230,11 @@ const updateGroup = async (req, groupFields, errors) => {
     return;
   }
 
-  if (req.user.id !== group.creator && !group.admins.includes(req.user.id)) {
+  if (
+    group.users.filter(user => {
+      user.id === req.user.id;
+    })[0].memberType !== "admin"
+  ) {
     errors.addError("You do not have permission to update this group");
     return;
   }
@@ -254,8 +260,10 @@ const createGroup = async (req, groupFields, errors) => {
   }
 
   const group = new Group(groupFields);
-  group.users.push(req.user.id);
-  group.admins.push(req.user.id);
+  group.users.push({
+    id: req.user.id,
+    memberType: "admin"
+  });
 
   await assignUniqueHRID(group, errors);
   await handleGroupCreationSideEffects(group, req, groupFields, errors);
@@ -412,8 +420,9 @@ router.put(
       }
 
       if (
-        req.user.id !== group.creator &&
-        !group.admins.includes(req.user.id)
+        group.users.filter(user => {
+          user.id === req.user.id;
+        })[0].memberType !== "admin"
       ) {
         return errors.addErrAndSendResponse(
           res,
@@ -466,7 +475,11 @@ router.delete("/notification/:groupId/:notifId", auth, async (req, res) => {
       return errors.addErrAndSendResponse(res, "Unable to find group");
     }
 
-    if (req.user.id !== group.creator && !group.admins.includes(req.user.id)) {
+    if (
+      group.users.filter(user => {
+        user.id === req.user.id;
+      })[0].memberType !== "admin"
+    ) {
       return errors.addErrAndSendResponse(
         res,
         "You do not have permission to remove a notification from this group"
@@ -540,7 +553,11 @@ router.put("/notification/:groupId/unlike/:notifId", auth, async (req, res) => {
       return errors.addErrAndSendResponse(res, "Unable to find group");
     }
 
-    if (!group.users.includes(req.user.id)) {
+    if (
+      group.users.filter(user => {
+        user.id === req.user.id;
+      }).length < 1
+    ) {
       return errors.addErrAndSendResponse(
         res,
         "You must be a group member to unlike this notification"

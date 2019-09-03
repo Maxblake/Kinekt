@@ -1,6 +1,8 @@
 import React from "react";
+import Modal from "../common/subcomponents/Modal";
+import UserInfo from "../user/UserInfo";
 
-const GroupMember = ({ status, memberType, memberName }) => {
+const GroupMember = ({ user }) => {
   const getClassList = (status, memberType) => {
     const classList = ["button", "group-member"];
 
@@ -9,10 +11,9 @@ const GroupMember = ({ status, memberType, memberName }) => {
         classList.push("is-rounded");
         break;
       case "user":
+      default:
         classList.push("is-user");
         break;
-      default:
-        classList.push("is-dark-theme");
     }
 
     switch (status) {
@@ -20,16 +21,25 @@ const GroupMember = ({ status, memberType, memberName }) => {
         classList.push("is-online");
         break;
       case "away":
+      default:
         classList.push("is-away");
         break;
-      default:
-        classList.push("is-dark-theme");
     }
 
     return classList.join(" ");
   };
 
-  return <a className={getClassList(status, memberType)}>{memberName}</a>;
+  return (
+    <Modal
+      trigger={
+        <div className={getClassList(user.status, user.memberType)}>
+          {user.name}
+        </div>
+      }
+    >
+      <UserInfo user={user} />
+    </Modal>
+  );
 };
 
 export default GroupMember;

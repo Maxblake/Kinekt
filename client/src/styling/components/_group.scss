@@ -280,6 +280,17 @@
         color: $off-black;
       }
     }
+
+    .is-server {
+      align-self: center;
+      text-align: center;
+      margin-bottom: 7px;
+
+      .body {
+        background-color: #404040;
+        border: none;
+      }
+    }
   }
   .message-input-container {
     padding: 10px 5px;

@@ -103,7 +103,7 @@ const Group = ({
         )}
       </nav>
       <GroupConsole group={group} imgSrc={getGroupImage()} />
-      <GroupMembers />
+      <GroupMembers users={group.users} maxSize={group.maxSize} />
     </section>
   );
 };

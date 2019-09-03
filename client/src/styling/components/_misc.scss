@@ -45,8 +45,11 @@
   }
 }
 
-// New group page
-.time-keeper-modal-content {
-  width: 270px;
+.modal-content {
   text-align: center;
+  width: fit-content;
+}
+
+.time-keeper {
+  width: 270px;
 }

@@ -27,14 +27,17 @@ const GroupSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  admins: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: "user"
-  },
-  users: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: "user"
-  },
+  users: [
+    {
+      id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user"
+      },
+      memberType: {
+        type: String
+      }
+    }
+  ],
   description: {
     type: String
   },

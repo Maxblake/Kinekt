@@ -16,6 +16,7 @@ import FormControl from "../form/FormControl";
 import SubmitButton from "../form/SubmitButton";
 import CustomField from "../form/CustomField";
 import ImgUploadControl from "../form/ImgUploadControl";
+import Modal from "../common/subcomponents/Modal";
 
 const NewGroup = ({
   match,
@@ -100,8 +101,8 @@ const NewGroup = ({
     });
   };
 
-  const toggleTimekeeper = val => {
-    setFormData({ ...formData, displayTimepicker: val });
+  const toggleTimekeeper = () => {
+    setFormData({ ...formData, displayTimepicker: !displayTimepicker });
   };
 
   const onSubmit = e => {
@@ -155,25 +156,6 @@ const NewGroup = ({
         />
       </nav>
 
-      {displayTimepicker ? (
-        <div className="modal is-active">
-          <div
-            className="modal-background"
-            onClick={() => toggleTimekeeper(false)}
-          />
-          <div className="modal-content time-keeper-modal-content">
-            <TimeKeeper
-              time={time.formatted}
-              onChange={handleTimeChange}
-              onDoneClick={() => toggleTimekeeper(false)}
-              switchToMinuteOnHourSelect={true}
-            />
-          </div>
-        </div>
-      ) : (
-        false
-      )}
-
       <Form onSubmit={onSubmit}>
         <FormControl
           label="Name"
@@ -221,13 +203,26 @@ const NewGroup = ({
                 <h3>-or-</h3>
               </div>
               <div className="control">
-                <input
-                  className="input small-input"
-                  type="text"
-                  value={time.formatted}
-                  onClick={() => toggleTimekeeper(true)}
-                  readOnly
-                />
+                <Modal
+                  additionalClasses="time-keeper"
+                  modalToggleOverride={toggleTimekeeper}
+                  isModalActiveOverride={displayTimepicker}
+                  trigger={
+                    <input
+                      className="input small-input"
+                      type="text"
+                      value={time.formatted}
+                      readOnly
+                    />
+                  }
+                >
+                  <TimeKeeper
+                    time={time.formatted}
+                    onChange={handleTimeChange}
+                    onDoneClick={() => toggleTimekeeper()}
+                    switchToMinuteOnHourSelect={true}
+                  />
+                </Modal>
               </div>
               <div className="control">
                 <RadioButton

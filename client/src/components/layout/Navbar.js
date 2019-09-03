@@ -12,9 +12,7 @@ const Navbar = ({
   history,
   getGroup,
   logout,
-  auth: { isAuthenticated, loading },
-  group,
-  groupType
+  auth: { isAuthenticated, loading, user }
 }) => {
   const [navData, setNavData] = useState({
     groupCode: ""
@@ -83,21 +81,19 @@ const Navbar = ({
 
   const authLinks = (
     <Fragment>
-      {group && groupType && (
+      {user && user.currentGroup && (
         <div className="navbar-item">
           <div className="buttons">
-            <Link
-              to={`/k/${groupType.name.split(" ").join("_")}/group/${
-                group.HRID
-              }`}
+            <button
+              onClick={() => getGroup(user.currentGroup.HRID, history)}
               className="button is-primary is-outlined is-small"
               id="btn-current-group"
             >
-              <span>{group.name}</span>
+              <span>{user.currentGroup.name}</span>
               <span className="icon is-small">
                 <i className="fas fa-chalkboard-teacher" />
               </span>
-            </Link>
+            </button>
           </div>
         </div>
       )}
@@ -197,15 +193,11 @@ const Navbar = ({
 Navbar.propTypes = {
   logout: PropTypes.func.isRequired,
   getGroup: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired,
-  group: PropTypes.object,
-  groupTypeName: PropTypes.string
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth,
-  group: state.group.group,
-  groupType: state.groupType.groupType
+  auth: state.auth
 });
 
 export default connect(

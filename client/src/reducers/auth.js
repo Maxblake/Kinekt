@@ -5,7 +5,8 @@ import {
   AUTH_ERROR,
   AUTH_SUCCESS,
   LOGOUT,
-  UPDATE_USER
+  UPDATE_USER,
+  SET_GROUP
 } from "../actions/types";
 
 const initialState = {
@@ -63,6 +64,11 @@ export default function(state = initialState, action) {
         user: null,
         socket: null
       };
+    case SET_GROUP:
+      if (!!state.socket) {
+        state.socket.emit("joinGroup", payload._id);
+      }
+      return state;
     default:
       return state;
   }

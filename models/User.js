@@ -18,8 +18,8 @@ const UserSchema = new mongoose.Schema({
     type: String
   },
   currentGroup: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "group"
+    name: { type: String },
+    HRID: { type: String }
   },
   image: {
     link: {

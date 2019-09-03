@@ -1,9 +1,9 @@
 import React from "react";
 
-const Message = ({ body, time, user, isSelf }) => {
+const Message = ({ body, time, user, isSelf, headerHidden }) => {
   return (
     <div className={`content message ${isSelf ? "is-self" : ""}`}>
-      <div className="header">
+      <div className={`header ${headerHidden ? "is-hidden" : ""}`}>
         {isSelf ? "You" : user}
         <span className="header-time">{time}</span>
       </div>

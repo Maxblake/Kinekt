@@ -53,6 +53,11 @@ const Chat = ({ auth: { user, socket } }) => {
             <Message
               key={index}
               isSelf={message.user.id === user._id}
+              headerHidden={
+                index > 0 && messages[index - 1].user.id === message.user.id
+                  ? true
+                  : false
+              }
               user={message.user.name}
               body={message.body}
               time={message.time}

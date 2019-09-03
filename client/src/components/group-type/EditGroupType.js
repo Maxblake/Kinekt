@@ -147,7 +147,7 @@ const EditGroupType = ({
           label="Group Type Image"
           onChange={handleImageUpload}
           type="groupType"
-          src={groupType.image.link}
+          src={groupType.image ? groupType.image.link : ""}
         />
 
         <SubmitButton text="Submit" />

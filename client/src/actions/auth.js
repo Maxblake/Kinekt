@@ -3,6 +3,7 @@ import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import getSocket from "../utils/io";
 import { handleResponseErrors } from "./helpers/helpers";
+import { addSocketActions } from "./helpers/socketIo";
 
 import {
   AUTH_LOADING,
@@ -26,11 +27,14 @@ export const loadUser = (checkIfAdmin = false) => async dispatch => {
 
     const res = await axios.get(`/api/auth/${checkIfAdmin}`);
 
+    const socket = getSocket(res.data.user._id);
+    dispatch(addSocketActions(socket));
+
     dispatch({
       type: SET_USER,
       payload: {
         user: res.data.user,
-        socket: getSocket()
+        socket
       }
     });
 

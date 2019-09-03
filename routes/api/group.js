@@ -255,6 +255,7 @@ const createGroup = async (req, groupFields, errors) => {
 
   const group = new Group(groupFields);
   group.users.push(req.user.id);
+  group.admins.push(req.user.id);
 
   await assignUniqueHRID(group, errors);
   await handleGroupCreationSideEffects(group, req, groupFields, errors);
@@ -307,7 +308,7 @@ const handleGroupCreationSideEffects = async (
     errors.addError("Unable to find user");
     return;
   }
-  creator.currentGroup = group.id;
+  creator.currentGroup = { HRID: group.HRID, name: group.name };
   await creator.save();
 };
 
@@ -381,6 +382,12 @@ const handleGroupDeletionSideEffects = async (group, errors) => {
       errors.addError(deleteResponse.error);
     }
   }
+
+  await User.findByIdAndUpdate(group.creator, {
+    $set: {
+      currentGroup: null
+    }
+  });
 };
 
 // @route   PUT api/group/notification/:groupId

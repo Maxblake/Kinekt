@@ -2,6 +2,7 @@ import {
   GROUP_LOADING,
   SET_GROUP,
   SET_GROUPS,
+  SET_GROUP_MEMBERS,
   GROUP_ERROR,
   CLEAR_GROUP,
   LOGOUT
@@ -38,6 +39,13 @@ export default function(state = initialState, action) {
         group: payload,
         loading: false,
         error: null
+      };
+    }
+    case SET_GROUP_MEMBERS: {
+      if (payload.groupId !== state.group._id) return state;
+      return {
+        ...state,
+        group: { ...state.group, users: payload.users }
       };
     }
     case GROUP_ERROR: {

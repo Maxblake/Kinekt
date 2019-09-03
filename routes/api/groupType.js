@@ -12,6 +12,7 @@ const {
 } = require("./helpers/helpers");
 
 const Group = require("../../models/Group");
+const User = require("../../models/User");
 const { GroupType, RequestedGroupType } = require("../../models/GroupType");
 
 // @route   POST api/group-type/list
@@ -281,6 +282,12 @@ const handleGroupTypeDeletionSideEffects = async (groupType, errors) => {
         errors.addError(deleteResponse.error);
       }
     }
+
+    await User.findByIdAndUpdate(group.creator, {
+      $set: {
+        currentGroup: null
+      }
+    });
 
     await group.remove();
   }

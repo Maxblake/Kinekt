@@ -29,6 +29,7 @@ export const loadUser = (checkIfAdmin = false) => async dispatch => {
 
     const socket = getSocket(res.data.user._id);
     dispatch(addSocketActions(socket));
+    setInterval(() => console.log("been 10 seconds!"), 10000);
 
     dispatch({
       type: SET_USER,

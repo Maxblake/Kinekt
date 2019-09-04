@@ -14,4 +14,8 @@ export const addSocketActions = socket => dispatch => {
       payload: currentGroup
     })
   );
+
+  socket.on("refreshGroupAndUserNumbers", groupAndUserNumbers =>
+    console.log("yo")
+  );
 };

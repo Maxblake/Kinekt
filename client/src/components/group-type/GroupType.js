@@ -13,7 +13,7 @@ import OnlineStatus from "../common/subcomponents/OnlineStatus";
 import PageOptions from "../layout/page/PageOptions";
 import Dropdown from "../common/subcomponents/Dropdown";
 
-import defaultGroupTypeImage from "../../resources/defaultGroupTypeImage.jpg";
+import defaultGroupTypeImage from "../../resources/default_grouptype_image.jpg";
 
 //TODO format date/times with moment
 const GroupType = ({

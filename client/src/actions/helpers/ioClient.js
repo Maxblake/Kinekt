@@ -1,10 +1,15 @@
 import socketIOClient from "socket.io-client";
 
-import { SET_GROUP_MEMBERS, SET_CURRENT_GROUP, SET_SOCKET } from "../types";
+import {
+  SET_GROUP_MEMBERS,
+  SET_CURRENT_GROUP,
+  SET_SOCKET,
+  SET_GROUP_AND_USER_NUMBERS
+} from "../types";
 
 export const openSocket = () => dispatch => {
   const socket = socketIOClient("http://localhost:5000");
-  addSocketActions(socket);
+  dispatch(addSocketActions(socket));
 
   dispatch({
     type: SET_SOCKET,
@@ -27,5 +32,10 @@ const addSocketActions = socket => dispatch => {
     })
   );
 
-  socket.on("setGroupAndUserNumbers", groupAndUserNumbers => console.log("yo"));
+  socket.on("setGroupAndUserNumbers", groupAndUserNumbers =>
+    dispatch({
+      type: SET_GROUP_AND_USER_NUMBERS,
+      payload: groupAndUserNumbers
+    })
+  );
 };

@@ -27,7 +27,7 @@ const SocketHandler = ({
   const onActive = () => {
     clearInterval(interval);
     getGroupAndUserNumbers();
-    setIntervalState(setInterval(() => getGroupAndUserNumbers(), 3000));
+    setIntervalState(setInterval(() => getGroupAndUserNumbers(), 8000));
   };
 
   const onIdle = () => {
@@ -52,7 +52,7 @@ const SocketHandler = ({
       element={document}
       onActive={() => onActive()}
       onIdle={() => onIdle()}
-      timeout={1000 * 7 * 1}
+      timeout={1000 * 60 * 1}
     />
   );
 };

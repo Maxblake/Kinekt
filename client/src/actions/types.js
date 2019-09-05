@@ -11,6 +11,7 @@ export const AUTH_LOADING = "AUTH_LOADING";
 export const AUTH_ERROR = "AUTH_ERROR";
 export const AUTH_SUCCESS = "AUTH_SUCCESS";
 export const SET_USER = "SET_USER";
+export const SET_SOCKET = "SET_SOCKET";
 export const UPDATE_USER = "UPDATE_USER";
 export const SET_CURRENT_GROUP = "SET_CURRENT_GROUP";
 

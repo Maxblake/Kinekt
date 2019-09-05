@@ -8,6 +8,7 @@ import { loadUser } from "./actions/auth";
 import setAuthToken from "./utils/setAuthToken";
 
 import PrivateRoute from "./components/common/PrivateRoute";
+import SocketHandler from "./components/auth/SocketHandler";
 
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
@@ -37,6 +38,7 @@ const App = () => {
 
   return (
     <Provider store={store}>
+      <SocketHandler />
       <Router>
         <div className="App">
           <Navbar />
@@ -73,7 +75,6 @@ const App = () => {
               <Route component={NotFound} />
             </Switch>
           </div>
-
           <Footer />
         </div>
       </Router>

@@ -29,6 +29,9 @@ class socketHandler {
     this.socket.on("joinGroup", groupId => this.joinGroup(groupId));
     this.socket.on("sendMessage", message => this.sendMessage(message));
     this.socket.on("disconnect", () => this.disconnect());
+    this.socket.on("getGroupAndUserNumbers", groupAndGroupTypeIds =>
+      this.getGroupAndUserNumbers(groupAndGroupTypeIds)
+    );
   }
 
   async setUser(userId) {
@@ -130,6 +133,11 @@ class socketHandler {
     if (shouldEmit) {
       this.socket.emit("updateCurrentGroup", this.user.currentGroup);
     }
+  }
+
+  async getGroupAndUserNumbers(groupAndGroupTypeIds) {
+    console.log(groupAndGroupTypeIds);
+    //this.socket.emit("setGroupAndUserNumbers", {});
   }
 
   async disconnect() {

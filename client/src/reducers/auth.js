@@ -2,6 +2,7 @@ import {
   AUTH_LOADING,
   AUTH_LOADED,
   SET_USER,
+  SET_SOCKET,
   AUTH_ERROR,
   AUTH_SUCCESS,
   LOGOUT,
@@ -32,11 +33,17 @@ export default function(state = initialState, action) {
         loading: false
       };
     case SET_USER:
+      state.socket.emit("setUser", payload._id);
       return {
         ...state,
-        ...payload,
+        user: payload,
         isAuthenticated: true,
         loading: false
+      };
+    case SET_SOCKET:
+      return {
+        ...state,
+        socket: payload
       };
     case UPDATE_USER:
       return {
@@ -60,20 +67,15 @@ export default function(state = initialState, action) {
     case AUTH_ERROR:
     case LOGOUT:
       localStorage.removeItem("token");
-      if (!!state.socket) {
-        state.socket.disconnect();
-      }
       return {
+        ...state,
         token: null,
         isAuthenticated: false,
         loading: false,
-        user: null,
-        socket: null
+        user: null
       };
     case SET_GROUP:
-      if (!!state.socket) {
-        state.socket.emit("joinGroup", payload._id);
-      }
+      state.socket.emit("joinGroup", payload._id);
       return state;
     default:
       return state;

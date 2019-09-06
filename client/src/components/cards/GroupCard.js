@@ -17,7 +17,7 @@ const GroupCard = ({ group, groupTypeName, defaultImg, userNumbers }) => {
             <h1 className="title is-size-4">{group.name}</h1>
             <div className="subtitle is-size-6">
               <OnlineStatus
-                users={userNumbers ? userNumbers.users : "~"}
+                users={userNumbers ? userNumbers.users : ""}
                 maxSize={userNumbers ? userNumbers.maxSize : ""}
               />
             </div>

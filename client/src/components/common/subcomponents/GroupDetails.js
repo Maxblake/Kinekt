@@ -12,7 +12,9 @@ const GroupDetails = ({ group }) => {
             {group.description}
           </p>
         ) : (
-          <p>"There is no description available for this group."</p>
+          <p>
+            <strong>There is no description available for this group.</strong>
+          </p>
         )}
       </div>
       <div className="group-details">

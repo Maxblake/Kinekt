@@ -59,8 +59,8 @@ const GroupTypeCard = ({
         <h1 className="title is-size-4">{name}</h1>
         <div className="subtitle is-size-6">
           <OnlineStatus
-            users={groupAndUserNumbers ? groupAndUserNumbers.users : "~"}
-            groups={groupAndUserNumbers ? groupAndUserNumbers.groups : "~"}
+            users={groupAndUserNumbers ? groupAndUserNumbers.users : ""}
+            groups={groupAndUserNumbers ? groupAndUserNumbers.groups : ""}
           />
         </div>
       </div>

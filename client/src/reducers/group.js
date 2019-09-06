@@ -4,7 +4,7 @@ import {
   SET_GROUPS,
   SET_GROUP_MEMBERS,
   GROUP_ERROR,
-  CLEAR_GROUP,
+  GROUP_DELETED,
   LOGOUT
 } from "../actions/types";
 
@@ -56,8 +56,8 @@ export default function(state = initialState, action) {
         error: payload
       };
     }
-    case LOGOUT:
-    case CLEAR_GROUP: {
+    case GROUP_DELETED:
+    case LOGOUT: {
       return {
         ...state,
         group: null,

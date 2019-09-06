@@ -21,7 +21,7 @@ const GroupType = ({
   getGroups,
   group: { groups, loading, error },
   groupType: { groupType },
-  liveData: {groupNumbersMap, groupTypeNumbersMap},
+  liveData: { groupNumbersMap, groupTypeNumbersMap },
   match
 }) => {
   const [groupData, setGroupData] = useState({
@@ -213,7 +213,20 @@ const GroupType = ({
       <nav className="level" id="page-nav">
         <PageTitle
           title={match.params.groupType.split("_").join(" ")}
-          subtitle={<OnlineStatus users={groupTypeNumbersMap[groupType._id] ? groupTypeNumbersMap[groupType._id].users : "~"} groups={groupTypeNumbersMap[groupType._id] ? groupTypeNumbersMap[groupType._id].groups : "~"} />}
+          subtitle={
+            <OnlineStatus
+              users={
+                groupTypeNumbersMap[groupType._id]
+                  ? groupTypeNumbersMap[groupType._id].users
+                  : ""
+              }
+              groups={
+                groupTypeNumbersMap[groupType._id]
+                  ? groupTypeNumbersMap[groupType._id].groups
+                  : ""
+              }
+            />
+          }
           hasPageOptions
         />
         <PageOptions options={options} />

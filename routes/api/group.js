@@ -391,6 +391,7 @@ const handleGroupDeletionSideEffects = async (group, errors) => {
     }
   }
 
+  //TODO This will probably be taken care of by the socket event
   await User.findByIdAndUpdate(group.creator, {
     $set: {
       currentGroup: null

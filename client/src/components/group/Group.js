@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Redirect, Link, withRouter } from "react-router-dom";
 
 import { getGroup, deleteGroup } from "../../actions/group";
+import { setAlert } from "../../actions/alert";
 
 import Spinner from "../common/Spinner";
 import GroupMembers from "./GroupMembers";
@@ -18,6 +19,7 @@ const Group = ({
   history,
   getGroup,
   deleteGroup,
+  setAlert,
   group: { group, loading, error },
   groupType: { groupType },
   auth: { user, isAuthenticated, socket },
@@ -27,6 +29,12 @@ const Group = ({
     if (isAuthenticated && (!group || group.HRID !== match.params.groupCode)) {
       getGroup(match.params.groupCode);
     }
+
+    socket.on("kickFromGroup", kickFromGroup);
+
+    return () => {
+      socket.off("kickFromGroup");
+    };
   }, [isAuthenticated, group, match.params.groupCode]);
 
   const onClickDelete = e => {
@@ -42,6 +50,14 @@ const Group = ({
   const leaveGroup = () => {
     socket.emit("leaveGroup", group._id);
     history.push(`/k/${groupType.name.split(" ").join("_")}`);
+  };
+
+  const kickFromGroup = kickedUser => {
+    setAlert(
+      `You have been kicked from the group, ${group.name}`,
+      "is-warning"
+    );
+    leaveGroup();
   };
 
   if (loading) {
@@ -127,6 +143,7 @@ const Group = ({
 Group.propTypes = {
   getGroup: PropTypes.func.isRequired,
   deleteGroup: PropTypes.func.isRequired,
+  setAlert: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   group: PropTypes.object.isRequired,
   groupType: PropTypes.object.isRequired
@@ -140,5 +157,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getGroup, deleteGroup }
+  { getGroup, deleteGroup, setAlert }
 )(Group);

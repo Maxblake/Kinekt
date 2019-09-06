@@ -20,7 +20,7 @@ export const SET_GROUPS = "SET_GROUPS";
 export const SET_GROUP = "SET_GROUP";
 export const SET_GROUP_MEMBERS = "SET_GROUP_MEMBERS";
 export const GROUP_ERROR = "GROUP_ERROR";
-export const CLEAR_GROUP = "CLEAR_GROUP";
+export const GROUP_DELETED = "GROUP_DELETED";
 
 export const GROUPTYPE_LOADING = "GROUPTYPE_LOADING";
 export const SET_GROUPTYPE = "SET_GROUPTYPE";

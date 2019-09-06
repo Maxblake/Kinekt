@@ -10,7 +10,7 @@ import {
   SET_GROUPS,
   SET_GROUPTYPE,
   GROUP_ERROR,
-  CLEAR_GROUP
+  GROUP_DELETED
 } from "./types";
 
 // Get group by HRID (human readable id)
@@ -150,7 +150,7 @@ export const deleteGroup = (withoutConfirmation = false) => async dispatch => {
 
       await axios.delete("/api/group");
 
-      dispatch({ type: CLEAR_GROUP });
+      dispatch({ type: GROUP_DELETED });
       dispatch(setAlert(`Group deleted`, "is-warning"));
     } catch (err) {
       dispatch({

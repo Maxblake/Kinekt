@@ -29,6 +29,7 @@ class socketHandler {
     this.socket.on("setUser", userId => this.setUser(userId));
     this.socket.on("joinGroup", groupId => this.joinGroup(groupId));
     this.socket.on("leaveGroup", groupId => this.leaveGroup(groupId));
+    this.socket.on("groupDeleted", () => this.groupDeleted());
     this.socket.on("sendMessage", message => this.sendMessage(message));
     this.socket.on("disconnect", () => this.disconnect());
     this.socket.on("getGroupAndUserNumbers", groupAndGroupTypeIds =>
@@ -60,6 +61,14 @@ class socketHandler {
     }
 
     const newGroup = await Group.findById(groupId);
+
+    if (
+      newGroup.users.filter(user => {
+        user.id.equals(this.user._id);
+      }).length > 0
+    )
+      return;
+
     newGroup.users.push({ id: this.user._id, memberType: "user" });
     await newGroup.save();
 
@@ -78,16 +87,15 @@ class socketHandler {
 
   async leaveGroup(groupId, joiningNewGroup = false) {
     this.socket.leave(groupId);
+    this.updateCurrentGroup({}, !joiningNewGroup);
 
     const oldGroup = await Group.findById(groupId);
 
-    console.log(oldGroup.users);
+    if (!oldGroup) return;
 
     oldGroup.users = oldGroup.users.filter(user => {
       !user.id.equals(this.user._id);
     });
-
-    console.log(oldGroup.users);
 
     await oldGroup.save();
 
@@ -97,7 +105,6 @@ class socketHandler {
       time: moment().format("h:mm A")
     });
 
-    this.updateCurrentGroup({}, !joiningNewGroup);
     this.updateGroupMembers(oldGroup);
   }
 
@@ -131,10 +138,14 @@ class socketHandler {
   }
 
   async updateCurrentGroup(group, shouldEmit = true) {
-    this.user.currentGroup = {
-      name: group.name,
-      HRID: group.HRID
-    };
+    if (group) {
+      this.user.currentGroup = {
+        name: group.name,
+        HRID: group.HRID
+      };
+    } else {
+      this.user.currentGroup = null;
+    }
 
     if (shouldEmit) {
       this.socket.emit("updateCurrentGroup", this.user.currentGroup);
@@ -194,8 +205,6 @@ class socketHandler {
       groupAndUserNumbers.groupTypeNumbersMap = groupTypeNumbersMap;
     }
 
-    console.log(1, groupAndGroupTypeIds);
-
     if (!!groupAndGroupTypeIds.groupType) {
       if (
         groupAndUserNumbers.groupTypeNumbersMap &&
@@ -234,11 +243,13 @@ class socketHandler {
           groupAndGroupTypeIds.groupType
         ] = groupTypeNumbers;
       }
-
-      console.log(2, groupAndUserNumbers);
     }
 
     this.socket.emit("setGroupAndUserNumbers", groupAndUserNumbers);
+  }
+
+  groupDeleted() {
+    this.socket.to(this.group).emit("kickFromGroup", { allUsers: true });
   }
 
   async disconnect() {

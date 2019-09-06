@@ -1,20 +1,35 @@
 import React, { Fragment } from "react";
 
 const OnlineStatus = ({ users, maxSize, groups }) => {
+  const usersInt = parseInt(users);
+  const groupsInt = parseInt(groups);
+
   return (
     <div className="online-status-container">
       {groups !== undefined && (
         <Fragment>
-          <div className="online-status-dot" />
-          <h4 className="online-status-text">{`${groups} groups`}</h4>
+          <div
+            className={`online-status-dot ${
+              Number.isNaN(groupsInt) ? "" : groupsInt < 1 ? "status-away" : ""
+            }`}
+          />
+          <h4 className="online-status-text">{`${
+            Number.isNaN(groupsInt) ? "~" : groupsInt
+          } groups`}</h4>
         </Fragment>
       )}
       {users !== undefined && (
         <Fragment>
-          <div className="online-status-dot" />
-          <h4 className="online-status-text">{`${users}${
-            maxSize ? `/${maxSize}` : ""
-          } users`}</h4>
+          <div
+            className={`online-status-dot ${
+              Number.isNaN(usersInt) ? "" : usersInt < 1 ? "status-away" : ""
+            }`}
+          />
+          <h4 className="online-status-text">{`${
+            Number.isNaN(usersInt) ? "~" : usersInt
+          }${maxSize ? `/${maxSize}` : ""} user${
+            maxSize > 1 || usersInt !== 1 ? "s" : ""
+          }`}</h4>
         </Fragment>
       )}
     </div>

@@ -8,7 +8,8 @@ import {
   LOGOUT,
   UPDATE_USER,
   SET_CURRENT_GROUP,
-  SET_GROUP
+  SET_GROUP,
+  GROUP_DELETED
 } from "../actions/types";
 
 const initialState = {
@@ -56,6 +57,9 @@ export default function(state = initialState, action) {
         ...state,
         user: { ...state.user, currentGroup: payload }
       };
+    case GROUP_DELETED:
+      state.socket.emit("groupDeleted");
+      return state;
     case AUTH_SUCCESS:
       localStorage.setItem("token", payload.token);
       return {

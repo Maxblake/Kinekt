@@ -3,7 +3,7 @@ import React, { Fragment } from "react";
 import GroupMember from "./GroupMember";
 import OnlineStatus from "../common/subcomponents/OnlineStatus";
 
-const GroupMembers = ({ users, maxSize }) => {
+const GroupMembers = ({ users, maxSize, adminOptions }) => {
   return (
     <div className="box" id="group-members-container">
       {users && (
@@ -15,7 +15,13 @@ const GroupMembers = ({ users, maxSize }) => {
           </div>
           <div id="group-members" className="kScroll">
             {users.map((user, index) => {
-              return <GroupMember key={index} user={user} />;
+              return (
+                <GroupMember
+                  key={index}
+                  user={user}
+                  adminOptions={adminOptions}
+                />
+              );
             })}
           </div>
         </Fragment>

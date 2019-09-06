@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { Redirect, Link, withRouter } from "react-router-dom";
 
 import { getGroup, deleteGroup } from "../../actions/group";
-import { setAlert } from "../../actions/alert";
 
 import Spinner from "../common/Spinner";
 import GroupMembers from "./GroupMembers";
@@ -19,7 +18,6 @@ const Group = ({
   history,
   getGroup,
   deleteGroup,
-  setAlert,
   group: { group, loading, error },
   groupType: { groupType },
   auth: { user, isAuthenticated, socket },
@@ -30,10 +28,10 @@ const Group = ({
       getGroup(match.params.groupCode);
     }
 
-    socket.on("kickFromGroup", kickFromGroup);
+    socket.on("kickedFromGroup", kickedFromGroup);
 
     return () => {
-      socket.off("kickFromGroup");
+      socket.off("kickedFromGroup");
     };
   }, [isAuthenticated, group, match.params.groupCode]);
 
@@ -52,12 +50,13 @@ const Group = ({
     history.push(`/k/${groupType.name.split(" ").join("_")}`);
   };
 
-  const kickFromGroup = kickedUser => {
-    setAlert(
-      `You have been kicked from the group, ${group.name}`,
-      "is-warning"
-    );
-    leaveGroup();
+  const kickFromGroup = userId => {
+    socket.emit("kickFromGroup", userId);
+  };
+
+  const kickedFromGroup = kickedUser => {
+    if (!kickedUser.allUsers && kickedUser.id !== user._id) return;
+    history.push(`/k/${groupType.name.split(" ").join("_")}`);
   };
 
   if (loading) {
@@ -135,7 +134,14 @@ const Group = ({
         </div>
       </nav>
       <GroupConsole group={group} imgSrc={getGroupImage()} />
-      <GroupMembers users={group.users} maxSize={group.maxSize} />
+      <GroupMembers
+        users={group.users}
+        maxSize={group.maxSize}
+        adminOptions={{
+          currentUser: user,
+          kickFromGroup
+        }}
+      />
     </section>
   );
 };
@@ -143,7 +149,6 @@ const Group = ({
 Group.propTypes = {
   getGroup: PropTypes.func.isRequired,
   deleteGroup: PropTypes.func.isRequired,
-  setAlert: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   group: PropTypes.object.isRequired,
   groupType: PropTypes.object.isRequired
@@ -157,5 +162,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getGroup, deleteGroup, setAlert }
+  { getGroup, deleteGroup }
 )(Group);

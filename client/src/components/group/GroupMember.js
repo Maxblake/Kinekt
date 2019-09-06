@@ -2,7 +2,7 @@ import React from "react";
 import Modal from "../common/subcomponents/Modal";
 import UserInfo from "../user/UserInfo";
 
-const GroupMember = ({ user }) => {
+const GroupMember = ({ user, adminOptions }) => {
   const getClassList = (status, memberType) => {
     const classList = ["button", "group-member"];
 
@@ -37,7 +37,7 @@ const GroupMember = ({ user }) => {
         </div>
       }
     >
-      <UserInfo user={user} />
+      <UserInfo user={user} adminOptions={adminOptions} />
     </Modal>
   );
 };

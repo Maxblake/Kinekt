@@ -29,6 +29,7 @@ class socketHandler {
     this.socket.on("setUser", userId => this.setUser(userId));
     this.socket.on("joinGroup", groupId => this.joinGroup(groupId));
     this.socket.on("leaveGroup", groupId => this.leaveGroup(groupId));
+    this.socket.on("kickFromGroup", userId => this.kickFromGroup(userId));
     this.socket.on("groupDeleted", () => this.groupDeleted());
     this.socket.on("sendMessage", message => this.sendMessage(message));
     this.socket.on("disconnect", () => this.disconnect());
@@ -65,6 +66,9 @@ class socketHandler {
     if (
       newGroup.users.filter(user => {
         user.id.equals(this.user._id);
+        console.log(1, user.id);
+        console.log(2, this.user._id);
+        console.log(3, user.id.equals(this.user._id));
       }).length > 0
     )
       return;
@@ -248,8 +252,29 @@ class socketHandler {
     this.socket.emit("setGroupAndUserNumbers", groupAndUserNumbers);
   }
 
+  async kickFromGroup(userId, kickEveryone = false) {
+    let kickedUser = {};
+
+    if (kickEveryone) {
+      kickedUser.allUsers = true;
+    } else {
+      kickedUser.id = userId;
+    }
+
+    this.io.in(this.group).emit("kickedFromGroup", kickedUser);
+    this.io.in(this.group).emit("kickedFromGroupAlert", kickedUser);
+
+    const user = await User.findById(userId).select("name");
+
+    this.io.in(this.group).emit("receiveMessage", {
+      body: `${user.name} has been kicked from the group.`,
+      user: { id: 0 },
+      time: moment().format("h:mm A")
+    });
+  }
+
   groupDeleted() {
-    this.socket.to(this.group).emit("kickFromGroup", { allUsers: true });
+    this.kickFromGroup(null, true);
   }
 
   async disconnect() {

@@ -5,7 +5,7 @@ import OnlineStatus from "../common/subcomponents/OnlineStatus";
 import GroupDetails from "../common/subcomponents/GroupDetails";
 import Image from "../common/subcomponents/Image";
 
-const GroupCard = ({ group, groupTypeName, defaultImg }) => {
+const GroupCard = ({ group, groupTypeName, defaultImg, userNumbers }) => {
   return (
     <Link
       to={`/k/${groupTypeName}/group/${group.HRID}`}
@@ -16,7 +16,10 @@ const GroupCard = ({ group, groupTypeName, defaultImg }) => {
           <div className="group-name">
             <h1 className="title is-size-4">{group.name}</h1>
             <div className="subtitle is-size-6">
-              <OnlineStatus users="14/20 users" />
+              <OnlineStatus
+                users={userNumbers ? userNumbers.users : "~"}
+                maxSize={userNumbers ? userNumbers.maxSize : ""}
+              />
             </div>
           </div>
           <GroupDetails group={group} />

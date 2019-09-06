@@ -1,18 +1,20 @@
 import React, { Fragment } from "react";
 
-const OnlineStatus = ({ users, groups }) => {
+const OnlineStatus = ({ users, maxSize, groups }) => {
   return (
     <div className="online-status-container">
-      {groups && (
+      {groups !== undefined && (
         <Fragment>
           <div className="online-status-dot" />
-          <h4 className="online-status-text">{groups}</h4>
+          <h4 className="online-status-text">{`${groups} groups`}</h4>
         </Fragment>
       )}
-      {users && (
+      {users !== undefined && (
         <Fragment>
           <div className="online-status-dot" />
-          <h4 className="online-status-text">{users}</h4>
+          <h4 className="online-status-text">{`${users}${
+            maxSize ? `/${maxSize}` : ""
+          } users`}</h4>
         </Fragment>
       )}
     </div>

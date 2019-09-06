@@ -6,7 +6,12 @@ import OnlineStatus from "../common/subcomponents/OnlineStatus";
 
 import defaultGroupTypeImage from "../../resources/default_grouptype_image.jpg";
 
-const GroupTypeCard = ({ imgSrc, name, groupTypeCategory }) => {
+const GroupTypeCard = ({
+  imgSrc,
+  name,
+  groupTypeCategory,
+  groupAndUserNumbers
+}) => {
   const getClassList = groupTypeCategory => {
     const classList = ["tag", "group-type-tag"];
 
@@ -53,7 +58,10 @@ const GroupTypeCard = ({ imgSrc, name, groupTypeCategory }) => {
       <div className="card-content">
         <h1 className="title is-size-4">{name}</h1>
         <div className="subtitle is-size-6">
-          <OnlineStatus users="30 users" groups="3 groups" />
+          <OnlineStatus
+            users={groupAndUserNumbers ? groupAndUserNumbers.users : "~"}
+            groups={groupAndUserNumbers ? groupAndUserNumbers.groups : "~"}
+          />
         </div>
       </div>
     </Link>

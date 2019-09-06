@@ -27,7 +27,7 @@ export const loadUser = (checkIfAdmin = false) => async dispatch => {
 
     dispatch({
       type: SET_USER,
-      payload: res.data
+      payload: res.data.user
     });
 
     if (checkIfAdmin) {

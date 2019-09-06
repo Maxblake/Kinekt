@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Redirect, Link } from "react-router-dom";
+import { Redirect, Link, withRouter } from "react-router-dom";
 
 import { getGroup, deleteGroup } from "../../actions/group";
 
@@ -15,11 +15,12 @@ import Dropdown from "../common/subcomponents/Dropdown";
 import defaultGroupTypeImage from "../../resources/default_grouptype_image.jpg";
 
 const Group = ({
+  history,
   getGroup,
   deleteGroup,
   group: { group, loading, error },
   groupType: { groupType },
-  auth: { user, isAuthenticated },
+  auth: { user, isAuthenticated, socket },
   match
 }) => {
   useEffect(() => {
@@ -36,6 +37,11 @@ const Group = ({
     if (group.image) return group.image.link;
     if (groupType && groupType.image) return groupType.image.link;
     return defaultGroupTypeImage;
+  };
+
+  const leaveGroup = () => {
+    socket.emit("leaveGroup", group._id);
+    history.push(`/k/${groupType.name.split(" ").join("_")}`);
   };
 
   if (loading) {
@@ -66,9 +72,9 @@ const Group = ({
             </Link>
           }
         />
-        {user._id === group.creator && (
-          <div className="level-right">
-            <div className="level-item">
+        <div className="level-right">
+          <div className="level-item">
+            {user._id === group.creator ? (
               <Dropdown
                 trigger={
                   <button
@@ -98,9 +104,19 @@ const Group = ({
                   Delete Group
                 </a>
               </Dropdown>
-            </div>
+            ) : (
+              <button
+                className="button is-dark-theme"
+                onClick={() => leaveGroup()}
+              >
+                <span>Leave group</span>
+                <span className="icon is-small">
+                  <i className="fas fa-sign-out-alt" aria-hidden="true" />
+                </span>
+              </button>
+            )}
           </div>
-        )}
+        </div>
       </nav>
       <GroupConsole group={group} imgSrc={getGroupImage()} />
       <GroupMembers users={group.users} maxSize={group.maxSize} />

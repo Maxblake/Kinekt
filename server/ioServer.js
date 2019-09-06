@@ -28,6 +28,7 @@ class socketHandler {
 
     this.socket.on("setUser", userId => this.setUser(userId));
     this.socket.on("joinGroup", groupId => this.joinGroup(groupId));
+    this.socket.on("leaveGroup", groupId => this.leaveGroup(groupId));
     this.socket.on("sendMessage", message => this.sendMessage(message));
     this.socket.on("disconnect", () => this.disconnect());
     this.socket.on("getGroupAndUserNumbers", groupAndGroupTypeIds =>
@@ -75,14 +76,18 @@ class socketHandler {
     this.updateGroupMembers(newGroup);
   }
 
-  async leaveGroup(groupId, joiningNewGroup) {
+  async leaveGroup(groupId, joiningNewGroup = false) {
     this.socket.leave(groupId);
 
     const oldGroup = await Group.findById(groupId);
 
+    console.log(oldGroup.users);
+
     oldGroup.users = oldGroup.users.filter(user => {
-      user.id !== this.user._id;
+      !user.id.equals(this.user._id);
     });
+
+    console.log(oldGroup.users);
 
     await oldGroup.save();
 
@@ -189,13 +194,16 @@ class socketHandler {
       groupAndUserNumbers.groupTypeNumbersMap = groupTypeNumbersMap;
     }
 
-    if (
-      !!groupAndGroupTypeIds.groupType &&
-      (groupAndUserNumbers.groupTypeNumbersMap &&
-        !groupAndUserNumbers.groupTypeNumbersMap[
-          groupAndGroupTypeIds.groupType
-        ])
-    ) {
+    console.log(1, groupAndGroupTypeIds);
+
+    if (!!groupAndGroupTypeIds.groupType) {
+      if (
+        groupAndUserNumbers.groupTypeNumbersMap &&
+        !groupAndUserNumbers.groupTypeNumbersMap[groupAndGroupTypeIds.groupType]
+      ) {
+        return;
+      }
+
       const groupType = await GroupType.findById(groupAndGroupTypeIds.groupType)
         .select("groups")
         .lean();
@@ -211,12 +219,23 @@ class socketHandler {
         users += group.users.length;
       }
 
-      groupAndUserNumbers.groupTypeNumbersMap[
-        groupAndGroupTypeIds.groupType
-      ] = {
+      const groupTypeNumbers = {
         groups: groupType.groups.length,
         users: users
       };
+
+      if (groupAndUserNumbers.groupTypeNumbersMap) {
+        groupAndUserNumbers.groupTypeNumbersMap[
+          groupAndGroupTypeIds.groupType
+        ] = groupTypeNumbers;
+      } else {
+        groupAndUserNumbers.groupTypeNumbersMap = {};
+        groupAndUserNumbers.groupTypeNumbersMap[
+          groupAndGroupTypeIds.groupType
+        ] = groupTypeNumbers;
+      }
+
+      console.log(2, groupAndUserNumbers);
     }
 
     this.socket.emit("setGroupAndUserNumbers", groupAndUserNumbers);
@@ -228,7 +247,7 @@ class socketHandler {
     }
 
     if (!!this.group) {
-      await this.leaveGroup(this.group);
+      //await this.leaveGroup(this.group);
     }
   }
 }

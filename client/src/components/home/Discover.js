@@ -13,7 +13,8 @@ import PageOptions from "../layout/page/PageOptions";
 const Discover = ({
   getGroupTypes,
   groupType: { groupTypes, loading },
-  isAuthenticated
+  isAuthenticated,
+  groupTypeNumbersMap
 }) => {
   const [groupTypeData, setgroupTypeData] = useState({
     category: "All",
@@ -74,6 +75,7 @@ const Discover = ({
             groupTypeCategory={
               groupType.category ? groupType.category : "Other"
             }
+            groupAndUserNumbers={groupTypeNumbersMap[groupType._id]}
           />
         ))}
       </div>
@@ -160,11 +162,13 @@ const Discover = ({
 Discover.propTypes = {
   getGroupTypes: PropTypes.func.isRequired,
   groupType: PropTypes.object.isRequired,
+  groupTypeNumbersMap: PropTypes.object.isRequired,
   isAuthenticated: PropTypes.bool
 };
 
 const mapStateToProps = state => ({
   groupType: state.groupType,
+  groupTypeNumbersMap: state.liveData.groupTypeNumbersMap,
   isAuthenticated: state.auth.isAuthenticated
 });
 

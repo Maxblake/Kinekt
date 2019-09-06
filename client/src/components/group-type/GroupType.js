@@ -21,6 +21,7 @@ const GroupType = ({
   getGroups,
   group: { groups, loading, error },
   groupType: { groupType },
+  liveData: {groupNumbersMap, groupTypeNumbersMap},
   match
 }) => {
   const [groupData, setGroupData] = useState({
@@ -212,7 +213,7 @@ const GroupType = ({
       <nav className="level" id="page-nav">
         <PageTitle
           title={match.params.groupType.split("_").join(" ")}
-          subtitle={<OnlineStatus users="30 users" groups="3 groups" />}
+          subtitle={<OnlineStatus users={groupTypeNumbersMap[groupType._id] ? groupTypeNumbersMap[groupType._id].users : "~"} groups={groupTypeNumbersMap[groupType._id] ? groupTypeNumbersMap[groupType._id].groups : "~"} />}
           hasPageOptions
         />
         <PageOptions options={options} />
@@ -229,6 +230,7 @@ const GroupType = ({
                   groupType.image ? groupType.image.link : defaultGroupTypeImage
                 }
                 groupTypeName={match.params.groupType}
+                userNumbers={groupNumbersMap[group._id]}
               />
             ))}
             <div className="content has-text-centered">
@@ -250,13 +252,15 @@ GroupType.propTypes = {
   getGroups: PropTypes.func.isRequired,
   groupType: PropTypes.object.isRequired,
   group: PropTypes.object.isRequired,
+  liveData: PropTypes.object.isRequired,
   user: PropTypes.object
 };
 
 const mapStateToProps = state => ({
   user: state.auth.user,
   groupType: state.groupType,
-  group: state.group
+  group: state.group,
+  liveData: state.liveData
 });
 
 export default connect(

@@ -76,7 +76,14 @@ const Navbar = ({
   const onSubmitGroupCode = async e => {
     e.preventDefault();
 
-    getGroup(groupCode, history);
+    const userCurrentGroupHRID = user.currentGroup
+      ? user.currentGroup.HRID
+      : "";
+
+    getGroup(
+      { HRID: groupCode, userCurrentGroupHRID: userCurrentGroupHRID },
+      history
+    );
   };
 
   const authLinks = (
@@ -85,7 +92,15 @@ const Navbar = ({
         <div className="navbar-item">
           <div className="buttons">
             <button
-              onClick={() => getGroup(user.currentGroup.HRID, history)}
+              onClick={() =>
+                getGroup(
+                  {
+                    HRID: user.currentGroup.HRID,
+                    userCurrentGroupHRID: user.currentGroup.HRID
+                  },
+                  history
+                )
+              }
               className="button is-primary is-outlined is-small"
               id="btn-current-group"
             >

@@ -14,7 +14,18 @@ import {
 } from "./types";
 
 // Get group by HRID (human readable id)
-export const getGroup = (HRID, history = null) => async dispatch => {
+export const getGroup = (
+  { HRID, userCurrentGroupHRID },
+  history = null
+) => async dispatch => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  const body = JSON.stringify({ HRID, userCurrentGroupHRID });
+
   try {
     if (!!history) {
       history.push(`/k/k/group/${HRID}`);
@@ -25,7 +36,7 @@ export const getGroup = (HRID, history = null) => async dispatch => {
       type: GROUP_LOADING
     });
 
-    const res = await axios.get(`/api/group/${HRID}`);
+    const res = await axios.post(`/api/group/`, body, config);
 
     dispatch({
       type: SET_GROUP,

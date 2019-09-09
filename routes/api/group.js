@@ -104,16 +104,17 @@ const sortGroups = (req, groups) => {
   }
 };
 
-// @route   GET api/group/:HRID
+// @route   POST api/group/
 // @desc    Get group by HRID (human readable id)
 // @access  Private
-router.get("/:HRID", auth, (req, res) => {
+router.post("/", auth, (req, res) => {
   const errors = new APIerrors();
+  const { HRID } = req.body;
 
   runAPISafely(async () => {
-    const group = await Group.findOne({ HRID: req.params.HRID }).select(
-      "-users -admins"
-    );
+    checkIfAllowedIn(req);
+
+    const group = await Group.findOne({ HRID: HRID }).select("-users -admins");
 
     if (!group) {
       return errors.addErrAndSendResponse(res, "Group does not exist");
@@ -132,6 +133,22 @@ router.get("/:HRID", auth, (req, res) => {
     res.json(response);
   });
 });
+
+const checkIfAllowedIn = async req => {
+  let { HRID, userCurrentGroupHRID } = req.body;
+
+  if (!userCurrentGroupHRID) {
+    const user = await User.findById(req.user.id).select("currentGroup");
+    userCurrentGroupHRID = user.currentGroup.HRID;
+  }
+
+  if (userCurrentGroupHRID && userCurrentGroupHRID !== HRID) {
+    userCurrentGroup = await Group.findOne({ HRID: userCurrentGroupHRID });
+    if (userCurrentGroup.creator.equals(req.user.id)) {
+      console.log("send error here");
+    }
+  }
+};
 
 // @route   POST api/group
 // @desc    Create a group

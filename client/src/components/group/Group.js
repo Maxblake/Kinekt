@@ -25,7 +25,18 @@ const Group = ({
 }) => {
   useEffect(() => {
     if (isAuthenticated && (!group || group.HRID !== match.params.groupCode)) {
-      getGroup(match.params.groupCode);
+      const userCurrentGroupHRID = user.currentGroup
+        ? user.currentGroup.HRID
+        : "";
+
+      getGroup({
+        HRID: match.params.groupCode,
+        userCurrentGroupHRID: userCurrentGroupHRID
+      });
+    }
+
+    if (group && user && false) {
+      history.goBack();
     }
 
     socket.on("kickedFromGroup", kickedFromGroup);
@@ -73,7 +84,11 @@ const Group = ({
 
   const groupTypeNameSnaked = groupType.name.split(" ").join("_");
   if (groupTypeNameSnaked !== match.params.groupType) {
-    return <Redirect to={`/k/${groupTypeNameSnaked}/group/${group.HRID}`} />;
+    return (
+      <Redirect
+        to={`/k/${groupTypeNameSnaked}/group/${match.params.groupCode}`}
+      />
+    );
   }
 
   return (

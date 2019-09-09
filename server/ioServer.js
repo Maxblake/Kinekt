@@ -69,13 +69,18 @@ class socketHandler {
 
     const newGroup = await Group.findById(groupId);
 
-    if (
-      this.user.currentGroup.HRID !== newGroup.HRID &&
-      this.group &&
-      this.user._id.equals(this.group.creator)
-    ) {
-      console.log("nope sorry");
-      return;
+    if (this.user.currentGroup) {
+      const currentGroup = await Group.findOne({
+        HRID: this.user.currentGroup.HRID
+      });
+
+      if (
+        currentGroup &&
+        currentGroup.HRID !== newGroup.HRID &&
+        this.user._id.equals(currentGroup.creator)
+      ) {
+        return;
+      }
     }
 
     if (
@@ -118,6 +123,11 @@ class socketHandler {
     });
 
     if (!oldGroup) return;
+
+    if (this.user._id.equals(oldGroup.creator)) {
+      console.log("noeee");
+      return;
+    }
 
     this.socket.leave(oldGroup._id.toString());
     this.updateCurrentGroup(null, !joiningNewGroup);

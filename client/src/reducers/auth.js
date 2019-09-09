@@ -79,7 +79,9 @@ export default function(state = initialState, action) {
         user: null
       };
     case SET_GROUP:
-      state.socket.emit("joinGroup", payload._id);
+      if (payload) {
+        state.socket.emit("joinGroup", payload._id);
+      }
       return state;
     default:
       return state;

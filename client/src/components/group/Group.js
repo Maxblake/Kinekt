@@ -46,16 +46,16 @@ const Group = ({
   };
 
   const leaveGroup = () => {
-    socket.emit("leaveGroup", group._id);
+    socket.emit("leaveGroup", { groupId: group._id, isKicked: false });
     history.push(`/k/${groupType.name.split(" ").join("_")}`);
   };
 
   const kickFromGroup = userId => {
-    socket.emit("kickFromGroup", userId);
+    socket.emit("kickFromGroup", { userId });
   };
 
   const kickedFromGroup = kickedUser => {
-    if (!kickedUser.allUsers && kickedUser.id !== user._id) return;
+    if (!kickedUser.allUsers && kickedUser.userId !== user._id) return;
     history.push(`/k/${groupType.name.split(" ").join("_")}`);
   };
 

@@ -28,7 +28,9 @@ class socketHandler {
 
     this.socket.on("setUser", userId => this.setUser(userId));
     this.socket.on("joinGroup", groupId => this.joinGroup(groupId));
-    this.socket.on("leaveGroup", groupId => this.leaveGroup(groupId));
+    this.socket.on("leaveCurrentGroup", payload =>
+      this.leaveCurrentGroup(payload)
+    );
     this.socket.on("kickFromGroup", userId => this.kickFromGroup(userId));
     this.socket.on("groupDeleted", () => this.groupDeleted());
     this.socket.on("sendMessage", message => this.sendMessage(message));
@@ -41,13 +43,21 @@ class socketHandler {
   async setUser(userId) {
     const user = await User.findById(userId);
     this.user = user;
+
+    if (this.user.currentGroup) {
+      const currentGroup = await Group.findOne({
+        HRID: this.user.currentGroup.HRID
+      });
+
+      this.group = currentGroup;
+    }
   }
 
   async sendMessage(message) {
     //TODO validate user token, maybe check for profanity
     const user = await User.findById(message.user).select("name id");
 
-    this.io.in(this.group).emit("receiveMessage", {
+    this.io.in(this.group._id.toString()).emit("receiveMessage", {
       body: message.body,
       user: { name: user.name, id: user.id },
       time: moment().format("h:mm A")
@@ -57,57 +67,74 @@ class socketHandler {
   async joinGroup(groupId) {
     if (!groupId || !this.user) return;
 
-    if (!!this.group) {
-      await this.leaveGroup(this.group, true);
-    }
-
     const newGroup = await Group.findById(groupId);
 
     if (
-      newGroup.users.filter(user => {
-        user.id.equals(this.user._id);
-        console.log(1, user.id);
-        console.log(2, this.user._id);
-        console.log(3, user.id.equals(this.user._id));
-      }).length > 0
-    )
+      this.user.currentGroup.HRID !== newGroup.HRID &&
+      this.group &&
+      this.user._id.equals(this.group.creator)
+    ) {
+      console.log("nope sorry");
       return;
+    }
 
-    newGroup.users.push({ id: this.user._id, memberType: "user" });
-    await newGroup.save();
+    if (
+      this.user.currentGroup.HRID &&
+      this.user.currentGroup.HRID !== newGroup.HRID
+    ) {
+      await this.leaveCurrentGroup({ joiningNewGroup: true });
+    }
 
-    this.group = groupId;
-    this.socket.join(groupId);
+    if (
+      newGroup.users.filter(user => {
+        return user.id.equals(this.user._id);
+      }).length < 1
+    ) {
+      newGroup.users.push({ id: this.user._id, memberType: "user" });
+      await newGroup.save();
+    }
 
-    this.io.in(this.group).emit("receiveMessage", {
-      body: `${this.user.name} has joined the group.`,
-      user: { id: 0 },
-      time: moment().format("h:mm A")
-    });
+    this.group = newGroup;
+    this.socket.join(this.group._id.toString());
 
-    this.updateCurrentGroup(newGroup);
+    if (this.user.currentGroup.HRID !== newGroup.HRID) {
+      this.io.in(this.group._id.toString()).emit("receiveMessage", {
+        body: `${this.user.name} has joined the group.`,
+        user: { id: 0 },
+        time: moment().format("h:mm A")
+      });
+
+      this.updateCurrentGroup(newGroup);
+    }
+
     this.updateGroupMembers(newGroup);
   }
 
-  async leaveGroup(groupId, joiningNewGroup = false) {
-    this.socket.leave(groupId);
-    this.updateCurrentGroup({}, !joiningNewGroup);
+  async leaveCurrentGroup(payload) {
+    const { isKicked, joiningNewGroup } = payload;
 
-    const oldGroup = await Group.findById(groupId);
+    const oldGroup = await Group.findOne({
+      HRID: this.user.currentGroup.HRID
+    });
 
     if (!oldGroup) return;
 
+    this.socket.leave(oldGroup._id.toString());
+    this.updateCurrentGroup(null, !joiningNewGroup);
+
     oldGroup.users = oldGroup.users.filter(user => {
-      !user.id.equals(this.user._id);
+      return !user.id.equals(this.user._id);
     });
 
     await oldGroup.save();
 
-    this.io.in(this.group).emit("receiveMessage", {
-      body: `${this.user.name} has left the group.`,
-      user: { id: 0 },
-      time: moment().format("h:mm A")
-    });
+    if (!isKicked) {
+      this.io.in(oldGroup._id.toString()).emit("receiveMessage", {
+        body: `${this.user.name} has left the group.`,
+        user: { id: 0 },
+        time: moment().format("h:mm A")
+      });
+    }
 
     this.updateGroupMembers(oldGroup);
   }
@@ -252,38 +279,39 @@ class socketHandler {
     this.socket.emit("setGroupAndUserNumbers", groupAndUserNumbers);
   }
 
-  async kickFromGroup(userId, kickEveryone = false) {
-    let kickedUser = {};
-
-    if (kickEveryone) {
-      kickedUser.allUsers = true;
-    } else {
-      kickedUser.id = userId;
+  async kickFromGroup(kickedUser) {
+    console.log(typeof this.group.creator);
+    console.log(typeof kickedUser.userId);
+    if (this.group.creator.equals(kickedUser.userId)) {
+      return;
     }
 
-    this.io.in(this.group).emit("kickedFromGroup", kickedUser);
-    this.io.in(this.group).emit("kickedFromGroupAlert", kickedUser);
+    this.socket
+      .to(this.group._id.toString())
+      .emit("kickedFromGroup", kickedUser);
+    this.socket
+      .to(this.group._id.toString())
+      .emit("kickedFromGroupAlert", kickedUser);
 
-    const user = await User.findById(userId).select("name");
+    if (!kickedUser.allUsers) {
+      const user = await User.findById(kickedUser.userId).select("name");
 
-    this.io.in(this.group).emit("receiveMessage", {
-      body: `${user.name} has been kicked from the group.`,
-      user: { id: 0 },
-      time: moment().format("h:mm A")
-    });
+      this.io.in(this.group._id.toString()).emit("receiveMessage", {
+        body: `${user.name} has been kicked from the group.`,
+        user: { id: 0 },
+        time: moment().format("h:mm A")
+      });
+    }
   }
 
   groupDeleted() {
-    this.kickFromGroup(null, true);
+    this.kickFromGroup({ userId: null, allUsers: true });
+    this.updateCurrentGroup(null, true);
   }
 
   async disconnect() {
     if (!!this.user) {
       await this.user.save();
-    }
-
-    if (!!this.group) {
-      //await this.leaveGroup(this.group);
     }
   }
 }

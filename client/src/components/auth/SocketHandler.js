@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import { openSocket } from "../../actions/helpers/ioClient";
+import {
+  openSocket,
+  clearGroupAndGroupTypeStates
+} from "../../actions/helpers/ioClient";
 import { setAlert } from "../../actions/alert";
 
 import IdleTimer from "react-idle-timer";
@@ -11,7 +14,8 @@ const SocketHandler = ({
   auth: { socket, user },
   openSocket,
   setAlert,
-  groups,
+  clearGroupAndGroupTypeStates,
+  group: { groups, group },
   groupType: { groupType, groupTypes }
 }) => {
   const [interval, setIntervalState] = useState(undefined);
@@ -22,9 +26,12 @@ const SocketHandler = ({
     }
 
     if (user) {
-      console.log("listennig for kick");
       socket.on("kickedFromGroupAlert", kickedUser => {
-        if (!kickedUser.allUsers && kickedUser.id !== user._id) return;
+        if (!kickedUser.allUsers && kickedUser.userId !== user._id) return;
+
+        socket.emit("leaveCurrentGroup", { isKicked: true });
+
+        clearGroupAndGroupTypeStates();
         setAlert(
           `You have been kicked from the group '${user.currentGroup.name}'`,
           "is-warning"
@@ -38,8 +45,6 @@ const SocketHandler = ({
 
     return () => {
       if (socket) {
-        console.log("stopped listnestgnwsdfg for kick");
-
         socket.off("kickedFromGroupAlert");
       }
     };
@@ -80,19 +85,20 @@ const SocketHandler = ({
 
 SocketHandler.propTypes = {
   auth: PropTypes.object.isRequired,
-  groups: PropTypes.array.isRequired,
+  group: PropTypes.object.isRequired,
   groupType: PropTypes.object.isRequired,
   openSocket: PropTypes.func.isRequired,
-  setAlert: PropTypes.func.isRequired
+  setAlert: PropTypes.func.isRequired,
+  clearGroupAndGroupTypeStates: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  groups: state.group.groups,
+  group: state.group,
   groupType: state.groupType
 });
 
 export default connect(
   mapStateToProps,
-  { openSocket, setAlert }
+  { openSocket, setAlert, clearGroupAndGroupTypeStates }
 )(SocketHandler);

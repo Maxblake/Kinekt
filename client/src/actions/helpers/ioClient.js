@@ -1,10 +1,12 @@
 import socketIOClient from "socket.io-client";
 
 import {
-  SET_GROUP_MEMBERS,
-  SET_CURRENT_GROUP,
   SET_SOCKET,
-  SET_GROUP_AND_USER_NUMBERS
+  SET_CURRENT_GROUP,
+  SET_GROUP_AND_USER_NUMBERS,
+  SET_GROUP_MEMBERS,
+  SET_GROUP,
+  SET_GROUPTYPE
 } from "../types";
 
 export const openSocket = () => dispatch => {
@@ -14,6 +16,17 @@ export const openSocket = () => dispatch => {
   dispatch({
     type: SET_SOCKET,
     payload: socket
+  });
+};
+
+export const clearGroupAndGroupTypeStates = () => dispatch => {
+  dispatch({
+    type: SET_GROUP,
+    payload: null
+  });
+  dispatch({
+    type: SET_GROUPTYPE,
+    payload: null
   });
 };
 

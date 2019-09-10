@@ -27,23 +27,25 @@ const Chat = ({ auth: { user, socket } }) => {
     });
   };
 
-  const onSubmitMessage = async e => {
-    e.preventDefault();
-
+  const submitMessage = async e => {
     if (e.keyCode == 13 && e.shiftKey == false) {
+      e.preventDefault();
+
+      if (messageField.trim() === "") return;
+
       const message = {
         user: user._id,
         body: messageField
       };
 
       socket.emit("sendMessage", message);
-
       setMessageData({ ...messageData, messageField: "" });
     }
   };
 
-  const onChange = e =>
+  const onChange = e => {
     setMessageData({ ...messageData, [e.target.name]: e.target.value });
+  };
 
   return (
     <div className="chat">
@@ -67,19 +69,17 @@ const Chat = ({ auth: { user, socket } }) => {
         })}
       </div>
 
-      <form onSubmit={e => onSubmitMessage(e)}>
-        <div className="message-input-container">
-          <textarea
-            className="textarea has-fixed-size"
-            placeholder="Enter a message"
-            rows="2"
-            name="messageField"
-            value={messageField}
-            onChange={e => onChange(e)}
-            onKeyUp={e => onSubmitMessage(e)}
-          />
-        </div>
-      </form>
+      <div className="message-input-container">
+        <textarea
+          className="textarea has-fixed-size"
+          placeholder="Enter a message"
+          rows="2"
+          name="messageField"
+          value={messageField}
+          onChange={e => onChange(e)}
+          onKeyDown={e => submitMessage(e)}
+        />
+      </div>
     </div>
   );
 };

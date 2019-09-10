@@ -13,6 +13,10 @@ export const handleResponseErrors = err => dispatch => {
         dispatch(setAlert(error.msg, "is-danger"));
         break;
       }
+      case "alert-warning": {
+        dispatch(setAlert(error.msg, "is-warning"));
+        break;
+      }
       case "console": {
         console.error(error.msg);
         break;

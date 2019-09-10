@@ -21,15 +21,38 @@ const UserInfo = ({ user, adminOptions }) => {
         <h3 className="is-size-3">{user.name}</h3>
         <h6 className="is-size-6">{user.about}</h6>
       </div>
-      <button
-        onClick={() => adminOptions.kickFromGroup(user._id)}
-        className="button is-fullwidth is-primary"
-      >
-        <span className="icon is-small">
-          <i className="fas fa-sign-out-alt" />
-        </span>
-        <span>Kick user</span>
-      </button>
+
+      <div class="buttons has-addons is-centered">
+        <button
+          onClick={() => adminOptions.kickFromGroup(user._id)}
+          className="button is-dark-theme"
+        >
+          <span className="icon is-small">
+            <i className="fas fa-sign-out-alt" />
+          </span>
+          <span>Kick</span>
+        </button>
+
+        <button
+          onClick={() => adminOptions.kickFromGroup(user._id)}
+          className="button is-dark-theme"
+        >
+          <span className="icon is-small">
+            <i className="fas fa-user-slash" />
+          </span>
+          <span>Ban</span>
+        </button>
+
+        <button
+          onClick={() => adminOptions.kickFromGroup(user._id)}
+          className="button is-dark-theme"
+        >
+          <span className="icon is-small">
+            <i className="fas fa-user-shield" />
+          </span>
+          <span>Make Admin</span>
+        </button>
+      </div>
     </div>
   );
 };

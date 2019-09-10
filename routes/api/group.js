@@ -112,12 +112,18 @@ router.post("/", auth, (req, res) => {
   const { HRID } = req.body;
 
   runAPISafely(async () => {
-    checkIfAllowedIn(req);
+    if (!(await isUserAllowedIn(req))) {
+      return errors.addErrAndSendResponse(
+        res,
+        "You must delete your current group before joining a new one",
+        "alert-warning"
+      );
+    }
 
     const group = await Group.findOne({ HRID: HRID }).select("-users -admins");
 
     if (!group) {
-      return errors.addErrAndSendResponse(res, "Group does not exist");
+      return errors.addErrAndSendResponse(res, "Group does not exist", "alert");
     }
 
     const groupType = await GroupType.findById(group.groupType);
@@ -134,7 +140,7 @@ router.post("/", auth, (req, res) => {
   });
 });
 
-const checkIfAllowedIn = async req => {
+const isUserAllowedIn = async req => {
   let { HRID, userCurrentGroupHRID } = req.body;
 
   if (!userCurrentGroupHRID) {
@@ -145,9 +151,11 @@ const checkIfAllowedIn = async req => {
   if (userCurrentGroupHRID && userCurrentGroupHRID !== HRID) {
     userCurrentGroup = await Group.findOne({ HRID: userCurrentGroupHRID });
     if (userCurrentGroup.creator.equals(req.user.id)) {
-      console.log("send error here");
+      return false;
     }
   }
+
+  return true;
 };
 
 // @route   POST api/group

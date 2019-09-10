@@ -29,14 +29,13 @@ const Group = ({
         ? user.currentGroup.HRID
         : "";
 
-      getGroup({
-        HRID: match.params.groupCode,
-        userCurrentGroupHRID: userCurrentGroupHRID
-      });
-    }
-
-    if (group && user && false) {
-      history.goBack();
+      getGroup(
+        {
+          HRID: match.params.groupCode,
+          userCurrentGroupHRID: userCurrentGroupHRID
+        },
+        history
+      );
     }
 
     socket.on("kickedFromGroup", kickedFromGroup);

@@ -73,17 +73,9 @@ const Navbar = ({
     }
   };
 
-  const onSubmitGroupCode = async e => {
+  const redirectToGroup = async (e, HRID) => {
     e.preventDefault();
-
-    const userCurrentGroupHRID = user.currentGroup
-      ? user.currentGroup.HRID
-      : "";
-
-    getGroup(
-      { HRID: groupCode, userCurrentGroupHRID: userCurrentGroupHRID },
-      history
-    );
+    history.push(`/k/k/group/${HRID}`);
   };
 
   const authLinks = (
@@ -92,15 +84,7 @@ const Navbar = ({
         <div className="navbar-item">
           <div className="buttons">
             <button
-              onClick={() =>
-                getGroup(
-                  {
-                    HRID: user.currentGroup.HRID,
-                    userCurrentGroupHRID: user.currentGroup.HRID
-                  },
-                  history
-                )
-              }
+              onClick={e => redirectToGroup(e, user.currentGroup.HRID)}
               className="button is-primary is-outlined is-small"
               id="btn-current-group"
             >
@@ -162,7 +146,7 @@ const Navbar = ({
       <div id="navMenu" className="navbar-menu">
         <div className="navbar-end">
           <div className="navbar-item">
-            <form onSubmit={e => onSubmitGroupCode(e)}>
+            <form onSubmit={e => redirectToGroup(e, groupCode)}>
               <div className="field has-addons">
                 <div className="control">
                   <input

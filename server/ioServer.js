@@ -160,9 +160,9 @@ class socketHandler {
       .select("name about image")
       .lean();
 
-    const admins = group.users.filter(user => {
-      user.memberType === "admin";
-    });
+    const admins = group.users.map(user =>
+      user.memberType === "admin" ? user.id : null
+    );
 
     users.forEach(user => {
       if (admins.includes(user._id)) {
@@ -171,6 +171,8 @@ class socketHandler {
         user.memberType = "user";
       }
     });
+    console.log(admins);
+    console.log(users);
 
     this.io.in(group._id.toString()).emit("updateGroupMembers", {
       groupId: group._id.toString(),

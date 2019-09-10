@@ -27,11 +27,6 @@ export const getGroup = (
   const body = JSON.stringify({ HRID, userCurrentGroupHRID });
 
   try {
-    if (!!history) {
-      history.push(`/k/k/group/${HRID}`);
-      return;
-    }
-
     dispatch({
       type: GROUP_LOADING
     });
@@ -48,10 +43,7 @@ export const getGroup = (
       payload: res.data.groupType
     });
   } catch (err) {
-    if (!!history) {
-      dispatch(setAlert("Group does not exist", "is-warning"));
-    }
-
+    dispatch(handleResponseErrors(err));
     dispatch({
       type: GROUP_ERROR,
       payload: {
@@ -60,6 +52,9 @@ export const getGroup = (
         HRID
       }
     });
+    if (!!history) {
+      history.goBack();
+    }
   }
 };
 

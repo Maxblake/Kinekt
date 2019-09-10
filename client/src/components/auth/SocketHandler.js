@@ -26,15 +26,19 @@ const SocketHandler = ({
     }
 
     if (user) {
-      socket.on("kickedFromGroupAlert", kickedUser => {
+      socket.on("kickedFromGroupAlert", payload => {
+        const { isBanned, kickedUser } = payload;
+
         if (!kickedUser.allUsers && kickedUser.userId !== user._id) return;
 
         socket.emit("leaveCurrentGroup", { isKicked: true });
 
         clearGroupAndGroupTypeStates();
         setAlert(
-          `You have been kicked from the group '${user.currentGroup.name}'`,
-          "is-warning"
+          `You have been ${isBanned ? "banned" : "kicked"} from the group '${
+            user.currentGroup.name
+          }'`,
+          `is-${isBanned ? "danger" : "warning"}`
         );
       });
     }

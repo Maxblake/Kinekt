@@ -112,18 +112,16 @@ router.post("/", auth, (req, res) => {
   const { HRID } = req.body;
 
   runAPISafely(async () => {
-    if (!(await isUserAllowedIn(req))) {
-      return errors.addErrAndSendResponse(
-        res,
-        "You must delete your current group before joining a new one",
-        "alert-warning"
-      );
-    }
-
     const group = await Group.findOne({ HRID: HRID }).select("-users -admins");
 
     if (!group) {
       return errors.addErrAndSendResponse(res, "Group does not exist", "alert");
+    }
+
+    await isUserAllowedIn(req, group, errors);
+
+    if (errors.isNotEmpty()) {
+      return errors.sendErrorResponse(res);
     }
 
     const groupType = await GroupType.findById(group.groupType);
@@ -140,8 +138,12 @@ router.post("/", auth, (req, res) => {
   });
 });
 
-const isUserAllowedIn = async req => {
+const isUserAllowedIn = async (req, group, errors) => {
   let { HRID, userCurrentGroupHRID } = req.body;
+
+  if (group.bannedUsers && group.bannedUsers.includes(req.user.id)) {
+    errors.addError("You are banned from this group", "alert");
+  }
 
   if (!userCurrentGroupHRID) {
     const user = await User.findById(req.user.id).select("currentGroup");
@@ -151,11 +153,12 @@ const isUserAllowedIn = async req => {
   if (userCurrentGroupHRID && userCurrentGroupHRID !== HRID) {
     userCurrentGroup = await Group.findOne({ HRID: userCurrentGroupHRID });
     if (userCurrentGroup.creator.equals(req.user.id)) {
-      return false;
+      errors.addError(
+        "You must delete your current group before joining a new one",
+        "alert-warning"
+      );
     }
   }
-
-  return true;
 };
 
 // @route   POST api/group

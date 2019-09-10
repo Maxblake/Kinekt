@@ -42,26 +42,6 @@ html {
 }
 
 // General page styles
-.page-title {
-  @extend %is-dark;
-  padding: 0.5rem 0.75rem;
-
-  &.has-page-options {
-    max-width: 400px;
-  }
-}
-
-.page-subtitle {
-  background: whitesmoke;
-  padding: 0.2rem 0.75rem;
-  display: flex;
-
-  a {
-    color: $off-black;
-    width: 100%;
-  }
-}
-
 .box {
   background: whitesmoke;
 }

@@ -40,8 +40,49 @@
 }
 
 @media (max-width: $tablet - 1) {
+  #page-nav {
+    .level-right .level-item {
+      justify-content: flex-end;
+    }
+
+    .level-left .level-item {
+      justify-content: flex-start;
+    }
+  }
+
   .search-control {
     width: 250px;
+  }
+}
+
+// Page Title
+.page-title-container {
+  .page-title {
+    @extend %is-dark;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .page-subtitle {
+    background: whitesmoke;
+    padding: 0.2rem 0.75rem;
+    display: flex;
+
+    a {
+      color: $off-black;
+      width: 100%;
+    }
+  }
+  &.has-page-options {
+    max-width: 400px;
+  }
+}
+
+@media (max-width: $tablet - 1) {
+  .page-title-container {
+    flex: 1;
+    &.has-page-options {
+      max-width: none;
+    }
   }
 }
 

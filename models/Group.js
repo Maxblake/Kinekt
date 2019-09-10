@@ -38,6 +38,12 @@ const GroupSchema = new mongoose.Schema({
       }
     }
   ],
+  bannedUsers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user"
+    }
+  ],
   description: {
     type: String
   },

@@ -1,7 +1,5 @@
 // Group Card
 .group-card-container {
-  background: whitesmoke;
-
   &:hover {
     .title {
       text-decoration: underline;
@@ -14,6 +12,17 @@
 
   .group-details-container {
     height: 100%;
+  }
+
+  &.is-banned::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: $off-black;
+    opacity: 0.5;
   }
 }
 

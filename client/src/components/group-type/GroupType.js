@@ -244,6 +244,11 @@ const GroupType = ({
                 }
                 groupTypeName={match.params.groupType}
                 userNumbers={groupNumbersMap[group._id]}
+                isBanned={
+                  user &&
+                  group.bannedUsers &&
+                  group.bannedUsers.includes(user._id)
+                }
               />
             ))}
             <div className="content has-text-centered">

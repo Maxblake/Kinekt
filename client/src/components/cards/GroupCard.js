@@ -5,11 +5,24 @@ import OnlineStatus from "../common/subcomponents/OnlineStatus";
 import GroupDetails from "../common/subcomponents/GroupDetails";
 import Image from "../common/subcomponents/Image";
 
-const GroupCard = ({ group, groupTypeName, defaultImg, userNumbers }) => {
+const GroupCard = ({
+  group,
+  groupTypeName,
+  defaultImg,
+  userNumbers,
+  isBanned
+}) => {
   return (
     <Link
+      onClick={e => {
+        if (isBanned) {
+          e.preventDefault();
+        }
+      }}
       to={`/k/${groupTypeName}/group/${group.HRID}`}
-      className="columns is-gapless card group-card-container"
+      className={`columns is-gapless card group-card-container ${
+        isBanned ? "is-banned" : ""
+      }`}
     >
       <div className="column is-8 groupCard">
         <div className="card-content">

@@ -32,6 +32,7 @@ class socketHandler {
       this.leaveCurrentGroup(payload)
     );
     this.socket.on("kickFromGroup", userId => this.kickFromGroup(userId));
+    this.socket.on("banFromGroup", userId => this.banFromGroup(userId));
     this.socket.on("groupDeleted", () => this.groupDeleted());
     this.socket.on("sendMessage", message => this.sendMessage(message));
     this.socket.on("disconnect", () => this.disconnect());
@@ -122,12 +123,7 @@ class socketHandler {
       HRID: this.user.currentGroup.HRID
     });
 
-    if (!oldGroup) return;
-
-    if (this.user._id.equals(oldGroup.creator)) {
-      console.log("noeee");
-      return;
-    }
+    if (!oldGroup || this.user._id.equals(oldGroup.creator)) return;
 
     this.socket.leave(oldGroup._id.toString());
     this.updateCurrentGroup(null, !joiningNewGroup);
@@ -171,8 +167,6 @@ class socketHandler {
         user.memberType = "user";
       }
     });
-    console.log(admins);
-    console.log(users);
 
     this.io.in(group._id.toString()).emit("updateGroupMembers", {
       groupId: group._id.toString(),
@@ -292,8 +286,6 @@ class socketHandler {
   }
 
   async kickFromGroup(kickedUser) {
-    console.log(typeof this.group.creator);
-    console.log(typeof kickedUser.userId);
     if (this.group.creator.equals(kickedUser.userId)) {
       return;
     }
@@ -303,7 +295,7 @@ class socketHandler {
       .emit("kickedFromGroup", kickedUser);
     this.socket
       .to(this.group._id.toString())
-      .emit("kickedFromGroupAlert", kickedUser);
+      .emit("kickedFromGroupAlert", { kickedUser });
 
     if (!kickedUser.allUsers) {
       const user = await User.findById(kickedUser.userId).select("name");
@@ -314,6 +306,36 @@ class socketHandler {
         time: moment().format("h:mm A")
       });
     }
+  }
+
+  async banFromGroup(bannedUser) {
+    if (this.group.creator.equals(bannedUser.userId)) {
+      return;
+    }
+
+    if (
+      this.group.bannedUsers.filter(user => {
+        return user.id.equals(this.user._id);
+      }).length < 1
+    ) {
+      this.group.bannedUsers.push(bannedUser.userId);
+      await this.group.save();
+    }
+
+    this.socket
+      .to(this.group._id.toString())
+      .emit("kickedFromGroup", bannedUser);
+    this.socket
+      .to(this.group._id.toString())
+      .emit("kickedFromGroupAlert", { kickedUser: bannedUser, isBanned: true });
+
+    const user = await User.findById(bannedUser.userId).select("name");
+
+    this.io.in(this.group._id.toString()).emit("receiveMessage", {
+      body: `${user.name} has been banned from the group.`,
+      user: { id: 0 },
+      time: moment().format("h:mm A")
+    });
   }
 
   groupDeleted() {

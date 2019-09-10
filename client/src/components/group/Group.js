@@ -69,6 +69,16 @@ const Group = ({
     history.push(`/k/${groupType.name.split(" ").join("_")}`);
   };
 
+  const banFromGroup = userId => {
+    if (
+      window.confirm(
+        "Are you sure you would like to ban this user? This cannot be undone."
+      )
+    ) {
+      socket.emit("banFromGroup", { userId });
+    }
+  };
+
   if (loading) {
     return <Spinner />;
   }
@@ -88,6 +98,22 @@ const Group = ({
         to={`/k/${groupTypeNameSnaked}/group/${match.params.groupCode}`}
       />
     );
+  }
+
+  let adminOptions = null;
+
+  if (group.users) {
+    const currentUser = group.users.filter(groupUser => {
+      return groupUser._id === user._id;
+    })[0];
+
+    if (currentUser.memberType && currentUser.memberType === "admin") {
+      adminOptions = {
+        currentUser: user,
+        kickFromGroup,
+        banFromGroup
+      };
+    }
   }
 
   return (
@@ -151,10 +177,7 @@ const Group = ({
       <GroupMembers
         users={group.users}
         maxSize={group.maxSize}
-        adminOptions={{
-          currentUser: user,
-          kickFromGroup
-        }}
+        adminOptions={adminOptions}
       />
     </section>
   );

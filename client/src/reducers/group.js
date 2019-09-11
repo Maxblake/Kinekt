@@ -2,6 +2,7 @@ import {
   GROUP_LOADING,
   SET_GROUP,
   SET_GROUPS,
+  SET_CURRENT_GROUP,
   SET_GROUP_MEMBERS,
   GROUP_ERROR,
   GROUP_DELETED,
@@ -39,6 +40,12 @@ export default function(state = initialState, action) {
         group: payload,
         loading: false,
         error: null
+      };
+    }
+    case SET_CURRENT_GROUP: {
+      return {
+        ...state,
+        group: payload === null ? null : state.group
       };
     }
     case SET_GROUP_MEMBERS: {

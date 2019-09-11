@@ -17,10 +17,10 @@ const GroupMember = ({ user, adminOptions }) => {
     }
 
     switch (status) {
-      case "online":
+      case "active":
         classList.push("is-online");
         break;
-      case "away":
+      case "idle":
       default:
         classList.push("is-away");
         break;

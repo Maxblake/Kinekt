@@ -10,19 +10,22 @@ const ioServer = app => {
   const server = http.createServer(app);
   const io = socketIo(server);
 
+  const userStatusMap = {};
+
   io.on("connection", socket => {
     console.log("New client connected");
 
-    new socketHandler(io, socket);
+    new socketHandler(io, socket, userStatusMap);
   });
 
   return server;
 };
 
 class socketHandler {
-  constructor(io, socket) {
+  constructor(io, socket, userStatusMap) {
     this.socket = socket;
     this.io = io;
+    this.userStatusMap = userStatusMap;
     this.group = null;
     this.user = null;
 
@@ -31,8 +34,14 @@ class socketHandler {
     this.socket.on("leaveCurrentGroup", payload =>
       this.leaveCurrentGroup(payload)
     );
-    this.socket.on("kickFromGroup", userId => this.kickFromGroup(userId));
-    this.socket.on("banFromGroup", userId => this.banFromGroup(userId));
+    this.socket.on("kickFromGroup", kickedUser =>
+      this.kickFromGroup(kickedUser)
+    );
+    this.socket.on("banFromGroup", bannedUser => this.banFromGroup(bannedUser));
+    this.socket.on("toggleGroupAdmin", userId => this.toggleGroupAdmin(userId));
+    this.socket.on("setUserStatus", userStatus =>
+      this.setUserStatus(userStatus)
+    );
     this.socket.on("groupDeleted", () => this.groupDeleted());
     this.socket.on("sendMessage", message => this.sendMessage(message));
     this.socket.on("disconnect", () => this.disconnect());
@@ -113,7 +122,7 @@ class socketHandler {
       this.updateCurrentGroup(newGroup);
     }
 
-    this.updateGroupMembers(newGroup);
+    this.setUserStatus("active");
   }
 
   async leaveCurrentGroup(payload) {
@@ -146,26 +155,23 @@ class socketHandler {
   }
 
   async updateGroupMembers(group) {
-    const userIds = group.users.map(user => {
-      return user.id;
-    });
+    const userMap = {};
+
+    for (const user of group.users) {
+      userMap[user.id] = user;
+    }
 
     const users = await User.find({
-      _id: { $in: userIds }
+      _id: { $in: Object.keys(userMap) }
     })
       .select("name about image")
       .lean();
 
-    const admins = group.users.map(user =>
-      user.memberType === "admin" ? user.id : null
-    );
-
     users.forEach(user => {
-      if (admins.includes(user._id)) {
-        user.memberType = "admin";
-      } else {
-        user.memberType = "user";
-      }
+      user.memberType = userMap[user._id].memberType;
+      user.status = this.userStatusMap[group._id]
+        ? this.userStatusMap[group._id][user._id]
+        : "idle";
     });
 
     this.io.in(group._id.toString()).emit("updateGroupMembers", {
@@ -336,6 +342,33 @@ class socketHandler {
       user: { id: 0 },
       time: moment().format("h:mm A")
     });
+  }
+
+  async toggleGroupAdmin(userId) {
+    for (const user of this.group.users) {
+      if (user.id.equals(userId)) {
+        if (user.memberType === "admin") {
+          user.memberType = "user";
+        } else {
+          user.memberType = "admin";
+        }
+        break;
+      }
+    }
+
+    await this.group.save();
+    this.updateGroupMembers(this.group);
+  }
+
+  setUserStatus(userStatus) {
+    if (!this.group) return;
+
+    if (!this.userStatusMap[this.group._id])
+      this.userStatusMap[this.group._id] = {};
+
+    this.userStatusMap[this.group._id][this.user._id] = userStatus;
+
+    this.updateGroupMembers(this.group);
   }
 
   groupDeleted() {

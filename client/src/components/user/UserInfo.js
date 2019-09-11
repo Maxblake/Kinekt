@@ -7,7 +7,11 @@ import defaultUserImage from "../../resources/default_user_image.png";
 const UserInfo = ({ user, adminOptions }) => {
   let adminOptionButtons = null;
 
-  if (adminOptions && adminOptions.currentUser._id !== user._id) {
+  if (
+    adminOptions &&
+    adminOptions.currentUser._id !== user._id &&
+    adminOptions.groupCreator !== user._id
+  ) {
     adminOptionButtons = (
       <div className="buttons has-addons is-centered">
         <button
@@ -31,13 +35,13 @@ const UserInfo = ({ user, adminOptions }) => {
         </button>
 
         <button
-          onClick={() => adminOptions.kickFromGroup(user._id)}
+          onClick={() => adminOptions.toggleGroupAdmin(user._id)}
           className="button is-dark-theme"
         >
           <span className="icon is-small">
             <i className="fas fa-user-shield" />
           </span>
-          <span>Make Admin</span>
+          <span>{user.memberType === "admin" ? "Unadminify" : "Adminify"}</span>
         </button>
       </div>
     );

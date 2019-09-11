@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Redirect, Link, withRouter } from "react-router-dom";
 
 import { getGroup, deleteGroup } from "../../actions/group";
 
+import IdleTimer from "react-idle-timer";
 import Spinner from "../common/Spinner";
 import GroupMembers from "./GroupMembers";
 import GroupConsole from "./GroupConsole";
@@ -23,6 +24,8 @@ const Group = ({
   auth: { user, isAuthenticated, socket },
   match
 }) => {
+  const [idleTimerState, setIdleTimerState] = useState(null);
+
   useEffect(() => {
     if (isAuthenticated && (!group || group.HRID !== match.params.groupCode)) {
       const userCurrentGroupHRID = user.currentGroup
@@ -38,9 +41,12 @@ const Group = ({
       );
     }
 
+    console.log("rendering");
+
     socket.on("kickedFromGroup", kickedFromGroup);
 
     return () => {
+      clearTimeout(idleTimerState);
       socket.off("kickedFromGroup");
     };
   }, [isAuthenticated, group, match.params.groupCode]);
@@ -55,8 +61,8 @@ const Group = ({
     return defaultGroupTypeImage;
   };
 
-  const leaveGroup = () => {
-    socket.emit("leaveGroup", { groupId: group._id, isKicked: false });
+  const leaveCurrentGroup = () => {
+    socket.emit("leaveCurrentGroup", { isKicked: false });
     history.push(`/k/${groupType.name.split(" ").join("_")}`);
   };
 
@@ -69,6 +75,10 @@ const Group = ({
     history.push(`/k/${groupType.name.split(" ").join("_")}`);
   };
 
+  const toggleGroupAdmin = userId => {
+    socket.emit("toggleGroupAdmin", userId);
+  };
+
   const banFromGroup = userId => {
     if (
       window.confirm(
@@ -77,6 +87,14 @@ const Group = ({
     ) {
       socket.emit("banFromGroup", { userId });
     }
+  };
+
+  const setUserStatus = userStatus => {
+    socket.emit("setUserStatus", userStatus);
+
+    setIdleTimerState(
+      setTimeout(() => socket.emit("setUserStatus", "idle"), 5000)
+    );
   };
 
   if (loading) {
@@ -100,7 +118,7 @@ const Group = ({
     );
   }
 
-  let adminOptions = null;
+  let isCurrentUserAdmin = false;
 
   if (group.users) {
     const currentUser = group.users.filter(groupUser => {
@@ -108,13 +126,19 @@ const Group = ({
     })[0];
 
     if (currentUser.memberType && currentUser.memberType === "admin") {
-      adminOptions = {
-        currentUser: user,
-        kickFromGroup,
-        banFromGroup
-      };
+      isCurrentUserAdmin = true;
     }
   }
+
+  const adminOptions = isCurrentUserAdmin
+    ? {
+        currentUser: user,
+        groupCreator: group.creator,
+        kickFromGroup,
+        banFromGroup,
+        toggleGroupAdmin
+      }
+    : null;
 
   return (
     <section className="group">
@@ -129,7 +153,7 @@ const Group = ({
         />
         <div className="level-right">
           <div className="level-item">
-            {user._id === group.creator ? (
+            {isCurrentUserAdmin ? (
               <Dropdown
                 trigger={
                   <button
@@ -137,7 +161,6 @@ const Group = ({
                     aria-haspopup="true"
                     aria-controls="dropdown-menu"
                   >
-                    <span>Filter</span>
                     <span className="icon is-small">
                       <i className="fas fa-cog" aria-hidden="true" />
                     </span>
@@ -147,22 +170,31 @@ const Group = ({
                 <a href="#" className="dropdown-item">
                   Edit Details
                 </a>
-                <a href="#" className="dropdown-item">
-                  Manage Admins
-                </a>
-                <hr className="dropdown-divider" />
-                <a
-                  href="#"
-                  className="dropdown-item"
-                  onClick={e => onClickDelete(e)}
-                >
-                  Delete Group
-                </a>
+                {user._id === group.creator ? (
+                  <Fragment>
+                    <hr className="dropdown-divider" />
+                    <a
+                      href="#"
+                      className="dropdown-item"
+                      onClick={e => onClickDelete(e)}
+                    >
+                      Delete Group
+                    </a>
+                  </Fragment>
+                ) : (
+                  <a
+                    href="#"
+                    className="dropdown-item"
+                    onClick={() => leaveCurrentGroup()}
+                  >
+                    Leave Group
+                  </a>
+                )}
               </Dropdown>
             ) : (
               <button
                 className="button is-dark-theme"
-                onClick={() => leaveGroup()}
+                onClick={() => leaveCurrentGroup()}
               >
                 <span>Leave group</span>
                 <span className="icon is-small">
@@ -178,6 +210,11 @@ const Group = ({
         users={group.users}
         maxSize={group.maxSize}
         adminOptions={adminOptions}
+      />
+      <IdleTimer
+        element={document}
+        onAction={() => setUserStatus("active")}
+        throttle={500}
       />
     </section>
   );

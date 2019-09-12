@@ -110,18 +110,9 @@ const validateRequest = APImethod => {
         check("accessLevel", "Invalid access level option")
           .optional({ checkFalsy: true })
           .isIn(["Public", "Private"]),
-        check("minSize", "Minimum size must be between 1 and 999")
-          .optional({ checkFalsy: true })
-          .isInt({ min: 0, max: 999 }),
         check("maxSize", "Maximum size must be between 1 and 999")
           .optional({ checkFalsy: true })
           .isInt({ min: 0, max: 999 })
-          .custom((maxSize, { req }) =>
-            req.body.minSize
-              ? parseInt(maxSize) > parseInt(req.body.minSize)
-              : true
-          )
-          .withMessage("Maximum size must be greater than minimum size")
       ];
     }
     case "updateGroup": {
@@ -152,18 +143,9 @@ const validateRequest = APImethod => {
         check("accessLevel", "Invalid access level option")
           .optional({ checkFalsy: true })
           .isIn(["Public", "Private"]),
-        check("minSize", "Minimum size must be between 1 and 999")
-          .optional({ checkFalsy: true })
-          .isInt({ min: 0, max: 999 }),
         check("maxSize", "Maximum size must be between 1 and 999")
           .optional({ checkFalsy: true })
           .isInt({ min: 0, max: 999 })
-          .custom((maxSize, { req }) =>
-            req.body.minSize
-              ? parseInt(maxSize) > parseInt(req.body.minSize)
-              : true
-          )
-          .withMessage("Maximum size must be greater than minimum size")
       ];
     }
     case "addNotification": {

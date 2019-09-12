@@ -1,7 +1,7 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Redirect, Link, withRouter } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 import { getGroup, deleteGroup } from "../../actions/group";
 
@@ -24,8 +24,6 @@ const Group = ({
   auth: { user, isAuthenticated, socket },
   match
 }) => {
-  const [idleTimerState, setIdleTimerState] = useState(null);
-
   useEffect(() => {
     if (isAuthenticated && (!group || group.HRID !== match.params.groupCode)) {
       const userCurrentGroupHRID = user.currentGroup
@@ -41,12 +39,9 @@ const Group = ({
       );
     }
 
-    console.log("rendering");
-
     socket.on("kickedFromGroup", kickedFromGroup);
 
     return () => {
-      clearTimeout(idleTimerState);
       socket.off("kickedFromGroup");
     };
   }, [isAuthenticated, group, match.params.groupCode]);
@@ -91,10 +86,6 @@ const Group = ({
 
   const setUserStatus = userStatus => {
     socket.emit("setUserStatus", userStatus);
-
-    setIdleTimerState(
-      setTimeout(() => socket.emit("setUserStatus", "idle"), 5000)
-    );
   };
 
   if (loading) {
@@ -125,7 +116,7 @@ const Group = ({
       return groupUser._id === user._id;
     })[0];
 
-    if (currentUser.memberType && currentUser.memberType === "admin") {
+    if (currentUser && currentUser.memberType === "admin") {
       isCurrentUserAdmin = true;
     }
   }
@@ -146,9 +137,7 @@ const Group = ({
         <PageTitle
           title={group.name}
           subtitle={
-            <Link to={`/k/${groupType.name.split(" ").join("_")}`}>
-              {groupType.name}
-            </Link>
+            <Link to={`/k/${groupTypeNameSnaked}`}>{groupType.name}</Link>
           }
         />
         <div className="level-right">
@@ -167,9 +156,12 @@ const Group = ({
                   </button>
                 }
               >
-                <a href="#" className="dropdown-item">
-                  Edit Details
-                </a>
+                <Link
+                  to={`/k/${groupTypeNameSnaked}/group/${group.HRID}/edit`}
+                  className="dropdown-item"
+                >
+                  <span>Edit Group Type</span>
+                </Link>
                 {user._id === group.creator ? (
                   <Fragment>
                     <hr className="dropdown-divider" />
@@ -214,7 +206,8 @@ const Group = ({
       <IdleTimer
         element={document}
         onAction={() => setUserStatus("active")}
-        throttle={500}
+        onIdle={() => console.log("idling")}
+        throttle={1000 * 30}
       />
     </section>
   );

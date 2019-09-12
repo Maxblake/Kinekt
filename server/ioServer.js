@@ -28,6 +28,7 @@ class socketHandler {
     this.userStatusMap = userStatusMap;
     this.group = null;
     this.user = null;
+    this.userStatusTimeout = null;
 
     this.socket.on("setUser", userId => this.setUser(userId));
     this.socket.on("joinGroup", groupId => this.joinGroup(groupId));
@@ -362,6 +363,14 @@ class socketHandler {
 
   setUserStatus(userStatus) {
     if (!this.group) return;
+
+    if (userStatus === "active") {
+      clearTimeout(this.userStatusTimeout);
+      this.userStatusTimeout = setTimeout(
+        () => this.setUserStatus("idle"),
+        1000 * 60 * 2
+      );
+    }
 
     if (!this.userStatusMap[this.group._id])
       this.userStatusMap[this.group._id] = {};

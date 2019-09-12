@@ -107,7 +107,7 @@ const sortGroups = (req, groups) => {
 // @route   POST api/group/
 // @desc    Get group by HRID (human readable id)
 // @access  Private
-router.post("/", auth, (req, res) => {
+router.post("/HRID", auth, (req, res) => {
   const errors = new APIerrors();
   const { HRID } = req.body;
 
@@ -180,48 +180,44 @@ router.post(
 // @route   PUT api/group
 // @desc    Update a group
 // @access  Private
-router.put("/:id", [auth, validateRequest("updateGroup")], (req, res) => {
-  createOrUpdateGroup(req, res, true);
-});
+router.put(
+  "/:id",
+  [upload.single("image"), auth, validateRequest("updateGroup")],
+  (req, res) => {
+    createOrUpdateGroup(req, res, true);
+  }
+);
 
 const createOrUpdateGroup = async (req, res, updating) => {
   const errors = new APIerrors();
 
   runAPISafely(async () => {
     const groupFields = buildGroupFields(req, updating);
-    const groupType = await GroupType.findById(groupFields.groupType);
-    let response = {};
-
-    if (!groupType) {
-      return errors.addErrAndSendResponse(res, "Invalid Group Type ID");
-    }
-
-    response = { groupType };
+    let group = null;
+    let groupType = null;
 
     if (updating) {
-      response.group = await updateGroup(req, groupFields, errors);
+      group = await updateGroup(req, groupFields, errors);
+      groupType = group ? await GroupType.findById(group.groupType) : null;
     } else {
-      response.group = await createGroup(req, groupFields, errors);
+      groupType = await GroupType.findById(groupFields.groupType);
+      group = await createGroup(req, groupFields, errors);
+    }
+
+    if (!groupType) {
+      errors.addError("Invalid Group Type ID");
     }
 
     if (errors.isNotEmpty()) {
       return errors.sendErrorResponse(res);
     }
 
-    return res.json(response);
+    return res.json({ group, groupType });
   });
 };
 
 const buildGroupFields = (req, updating) => {
-  const {
-    name,
-    description,
-    place,
-    accessLevel,
-    time,
-    minSize,
-    maxSize
-  } = req.body;
+  const { name, description, place, accessLevel, time, maxSize } = req.body;
   const groupTypeId = req.body.groupType;
 
   let groupFields = {};
@@ -233,7 +229,6 @@ const buildGroupFields = (req, updating) => {
   if (!updating) groupFields.creator = req.user.id;
   if (description) groupFields.description = description;
   if (time) groupFields.time = time;
-  if (minSize) groupFields.minSize = minSize;
   if (maxSize) groupFields.maxSize = maxSize;
 
   return groupFields;
@@ -258,12 +253,12 @@ const updateGroup = async (req, groupFields, errors) => {
     return;
   }
 
-  if (
-    group.users.filter(user => {
-      user.id === req.user.id;
-    })[0].memberType !== "admin"
-  ) {
-    errors.addError("You do not have permission to update this group");
+  const currentUser = group.users.filter(groupUser => {
+    return groupUser.id.equals(req.user.id);
+  })[0];
+
+  if (!currentUser || currentUser.memberType !== "admin") {
+    errors.addError("You do not have permission to update this group", "alert");
     return;
   }
 
@@ -504,11 +499,11 @@ router.delete("/notification/:groupId/:notifId", auth, async (req, res) => {
       return errors.addErrAndSendResponse(res, "Unable to find group");
     }
 
-    if (
-      group.users.filter(user => {
-        user.id === req.user.id;
-      })[0].memberType !== "admin"
-    ) {
+    const currentUser = group.users.filter(groupUser => {
+      return groupUser.id === req.user.id;
+    })[0];
+
+    if (currentUser && currentUser.memberType !== "admin") {
       return errors.addErrAndSendResponse(
         res,
         "You do not have permission to remove a notification from this group"

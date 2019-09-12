@@ -20,8 +20,9 @@ import NotFound from "./components/common/NotFound";
 import Home from "./components/home/Home";
 import NewGroupType from "./components/group-type/NewGroupType";
 import GroupType from "./components/group-type/GroupType";
-import NewGroup from "./components/group/NewGroup";
 import EditGroupType from "./components/group-type/EditGroupType";
+import NewGroup from "./components/group/NewGroup";
+import EditGroup from "./components/group/EditGroup";
 import Group from "./components/group/Group";
 import Admin from "./components/auth/Admin";
 
@@ -55,6 +56,11 @@ const App = () => {
                 exact
                 path="/k/:groupType/create"
                 component={NewGroup}
+              />
+              <PrivateRoute
+                exact
+                path="/k/:groupType/group/:groupCode/edit"
+                component={EditGroup}
               />
               <PrivateRoute
                 exact

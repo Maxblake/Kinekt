@@ -9,15 +9,18 @@ const FormControl = ({
   type,
   placeholder,
   required,
-  readonly
+  readonly,
+  isSmall
 }) => {
   return (
     <Fragment>
-      <label className="label">{`${label}${required ? " *" : ""}`}</label>
+      <label className="label form-label">{`${label}${
+        required ? " *" : ""
+      }`}</label>
       <div className="field">
         <div className="control">
           <input
-            className="input"
+            className={`input ${isSmall ? "small-input" : ""}`}
             name={name}
             value={value}
             onChange={e => onChange(e)}

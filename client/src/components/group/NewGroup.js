@@ -35,7 +35,6 @@ const NewGroup = ({
     accessLevel: "Public",
     time: { formatted: moment().format("h:mm A") },
     displayTimepicker: false,
-    minSize: "",
     maxSize: "",
     image: undefined
   });
@@ -48,7 +47,6 @@ const NewGroup = ({
     accessLevel,
     time,
     displayTimepicker,
-    minSize,
     maxSize,
     image
   } = formData;
@@ -113,7 +111,6 @@ const NewGroup = ({
       description,
       place,
       accessLevel,
-      minSize,
       maxSize,
       image
     };
@@ -199,7 +196,7 @@ const NewGroup = ({
                   handleClick={handleTimeContextChange}
                 />
               </div>
-              <div className="control centeredVertically">
+              <div className="control">
                 <h3>-or-</h3>
               </div>
               <div className="control">
@@ -252,36 +249,6 @@ const NewGroup = ({
         />
 
         <CustomField
-          label="Group Size"
-          children={
-            <div className="field">
-              <div className="control is-flex">
-                <input
-                  className="input small-input"
-                  type="text"
-                  placeholder="Any"
-                  name="minSize"
-                  value={minSize}
-                  onChange={e => onChange(e)}
-                />
-                <div className="centeredVertically grouped-control-margin">
-                  <h3>-to-</h3>
-                </div>
-                <input
-                  className="input small-input"
-                  type="text"
-                  placeholder="Any"
-                  name="maxSize"
-                  value={maxSize}
-                  onChange={e => onChange(e)}
-                />
-              </div>
-              {errMaxSize && <p className="help is-danger">{errMaxSize.msg}</p>}
-            </div>
-          }
-        />
-
-        <CustomField
           label="Access Level"
           children={
             <div className="field is-grouped">
@@ -301,6 +268,15 @@ const NewGroup = ({
               </div>
             </div>
           }
+        />
+        <FormControl
+          label="Max Group Size"
+          name="maxSize"
+          value={maxSize}
+          onChange={onChange}
+          error={errMaxSize ? errMaxSize.msg : undefined}
+          placeholder="Any"
+          isSmall={true}
         />
 
         <ImgUploadControl

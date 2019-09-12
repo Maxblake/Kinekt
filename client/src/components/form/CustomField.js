@@ -3,7 +3,9 @@ import React, { Fragment } from "react";
 const CustomField = ({ label, children, required }) => {
   return (
     <Fragment>
-      <label className="label">{`${label}${required ? " *" : ""}`}</label>
+      <label className="label form-label">{`${label}${
+        required ? " *" : ""
+      }`}</label>
       {children}
     </Fragment>
   );

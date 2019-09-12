@@ -31,7 +31,7 @@ export const getGroup = (
       type: GROUP_LOADING
     });
 
-    const res = await axios.post(`/api/group/`, body, config);
+    const res = await axios.post(`/api/group/HRID`, body, config);
 
     dispatch({
       type: SET_GROUP,
@@ -133,6 +133,38 @@ export const createGroup = (groupFields, history) => async dispatch => {
       `/k/${res.data.groupType.name.split(" ").join("_")}/group/${
         res.data.group.HRID
       }`
+    );
+  } catch (err) {
+    dispatch(handleResponseErrors(err));
+    dispatch({
+      type: GROUP_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+export const editGroup = (groupFields, groupId) => async dispatch => {
+  const formData = new FormData();
+
+  for (const key of Object.keys(groupFields)) {
+    formData.append(key, groupFields[key]);
+  }
+
+  try {
+    dispatch({
+      type: GROUP_LOADING
+    });
+
+    const res = await axios.put(`/api/group/${groupId}`, formData);
+
+    dispatch({
+      type: SET_GROUP,
+      payload: res.data.group
+    });
+
+    dispatch(clearErrorsAndAlerts());
+    dispatch(
+      setAlert(`Group, ${res.data.group.name}, has been updated`, "is-success")
     );
   } catch (err) {
     dispatch(handleResponseErrors(err));

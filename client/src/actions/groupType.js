@@ -101,7 +101,12 @@ export const editGroupType = (
     });
 
     dispatch(clearErrorsAndAlerts());
-    dispatch(setAlert("Group type updated successfully", "is-success"));
+    dispatch(
+      setAlert(
+        `Group Type, ${groupTypeFields.name}, has been updated`,
+        "is-success"
+      )
+    );
   } catch (err) {
     dispatch(handleResponseErrors(err));
 

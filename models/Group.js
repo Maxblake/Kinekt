@@ -50,9 +50,6 @@ const GroupSchema = new mongoose.Schema({
   time: {
     type: Date
   },
-  minSize: {
-    type: Number
-  },
   maxSize: {
     type: Number
   },

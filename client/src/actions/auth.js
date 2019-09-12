@@ -9,7 +9,8 @@ import {
   AUTH_ERROR,
   AUTH_SUCCESS,
   CLEAR_ERRORS_AND_ALERTS,
-  LOGOUT
+  LOGOUT,
+  SET_ERRORS
 } from "./types";
 
 // Load User
@@ -72,10 +73,17 @@ export const login = (email, password) => async dispatch => {
   }
 };
 
-// Clear errors
+// Clear errors / alerts
 export const clearErrorsAndAlerts = () => dispatch => {
   dispatch({
     type: CLEAR_ERRORS_AND_ALERTS
+  });
+};
+
+export const clearErrors = () => dispatch => {
+  dispatch({
+    type: SET_ERRORS,
+    payload: []
   });
 };
 

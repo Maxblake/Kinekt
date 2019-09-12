@@ -160,7 +160,7 @@ const Group = ({
                   to={`/k/${groupTypeNameSnaked}/group/${group.HRID}/edit`}
                   className="dropdown-item"
                 >
-                  <span>Edit Group Type</span>
+                  <span>Edit Group</span>
                 </Link>
                 {user._id === group.creator ? (
                   <Fragment>
@@ -206,7 +206,6 @@ const Group = ({
       <IdleTimer
         element={document}
         onAction={() => setUserStatus("active")}
-        onIdle={() => console.log("idling")}
         throttle={1000 * 30}
       />
     </section>

@@ -13,16 +13,25 @@
   .group-details-container {
     height: 100%;
   }
+}
 
-  &.is-banned::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: $off-black;
-    opacity: 0.5;
+.group-card-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+
+  background: $off-black; //linear-gradient(120deg, blue, $off-black);
+  opacity: 0.8;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  h5 {
+    color: whitesmoke;
   }
 }
 

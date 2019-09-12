@@ -6,6 +6,7 @@ import { setAlert } from "./alert";
 
 import {
   GROUP_LOADING,
+  GROUP_LOADED,
   SET_GROUP,
   SET_GROUPS,
   SET_GROUPTYPE,
@@ -169,8 +170,7 @@ export const editGroup = (groupFields, groupId) => async dispatch => {
   } catch (err) {
     dispatch(handleResponseErrors(err));
     dispatch({
-      type: GROUP_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      type: GROUP_LOADED
     });
   }
 };

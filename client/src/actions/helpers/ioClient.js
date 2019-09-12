@@ -32,7 +32,6 @@ export const clearGroupAndGroupTypeStates = () => dispatch => {
 
 const addSocketActions = socket => dispatch => {
   socket.on("updateGroupMembers", updatedMembers => {
-    console.log(updatedMembers);
     dispatch({
       type: SET_GROUP_MEMBERS,
       payload: updatedMembers

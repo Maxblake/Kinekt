@@ -112,13 +112,14 @@ router.post("/HRID", auth, (req, res) => {
   const { HRID } = req.body;
 
   runAPISafely(async () => {
-    const group = await Group.findOne({ HRID: HRID }).select("-users -admins");
+    const group = await Group.findOne({ HRID: HRID }).lean();
 
     if (!group) {
       return errors.addErrAndSendResponse(res, "Group does not exist", "alert");
     }
 
     await isUserAllowedIn(req, group, errors);
+    delete group.users;
 
     if (errors.isNotEmpty()) {
       return errors.sendErrorResponse(res);
@@ -141,8 +142,12 @@ router.post("/HRID", auth, (req, res) => {
 const isUserAllowedIn = async (req, group, errors) => {
   let { HRID, userCurrentGroupHRID } = req.body;
 
+  if (group.maxSize && group.users.length >= group.maxSize) {
+    errors.addError(`'${group.name}' is currently full`, "alert-warning");
+  }
+
   if (group.bannedUsers && group.bannedUsers.includes(req.user.id)) {
-    errors.addError("You are banned from this group", "alert");
+    errors.addError(`You are banned from '${group.name}'`, "alert");
   }
 
   if (!userCurrentGroupHRID) {
@@ -168,11 +173,6 @@ router.post(
   "/",
   [upload.single("image"), auth, validateRequest("createGroup")],
   (req, res) => {
-    const errors = new APIerrors();
-
-    if (errors.addExpressValidationResult(req))
-      return errors.sendErrorResponse(res);
-
     createOrUpdateGroup(req, res, false);
   }
 );
@@ -191,6 +191,9 @@ router.put(
 const createOrUpdateGroup = async (req, res, updating) => {
   const errors = new APIerrors();
 
+  if (errors.addExpressValidationResult(req))
+    return errors.sendErrorResponse(res);
+
   runAPISafely(async () => {
     const groupFields = buildGroupFields(req, updating);
     let group = null;
@@ -204,7 +207,7 @@ const createOrUpdateGroup = async (req, res, updating) => {
       group = await createGroup(req, groupFields, errors);
     }
 
-    if (!groupType) {
+    if (!updating && !groupType) {
       errors.addError("Invalid Group Type ID");
     }
 
@@ -235,21 +238,18 @@ const buildGroupFields = (req, updating) => {
 };
 
 const updateGroup = async (req, groupFields, errors) => {
-  //TODO delete this after confirming other update method works ok
-  // for (const key of Object.keys(groupFields)) {
-  //   group[key] = groupFields[key];
-  // }
-
-  // const group = await Group.findByIdAndUpdate(
-  //   req.params.id,
-  //   { $set: groupFields },
-  //   { new: true }
-  // );
-
   const group = await Group.findById(req.params.id);
 
   if (!group) {
     errors.addError("Invalid Group ID");
+    return;
+  }
+
+  if (groupFields.maxSize && group.users.length > groupFields.maxSize) {
+    errors.addError(
+      "Max group size cannot be smaller than the current number of members",
+      "maxSize"
+    );
     return;
   }
 

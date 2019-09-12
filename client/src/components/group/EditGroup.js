@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
 
 import { editGroup, getGroup } from "../../actions/group";
+import { clearErrors } from "../../actions/auth";
 
 import Spinner from "../common/Spinner";
 import NotFound from "../common/NotFound";
@@ -17,8 +18,8 @@ import ImgUploadControl from "../form/ImgUploadControl";
 
 const EditGroup = ({
   match,
-  history,
   getGroup,
+  clearErrors,
   group: { group, loading, error },
   groupType: { groupType },
   auth: { user, isAuthenticated },
@@ -51,7 +52,7 @@ const EditGroup = ({
       });
     }
 
-    if (group) {
+    if (group && errors.length === 0) {
       setFormData({
         ...formData,
         description: group.description,
@@ -60,6 +61,9 @@ const EditGroup = ({
         maxSize: group.maxSize
       });
     }
+    return () => {
+      clearErrors();
+    };
   }, [isAuthenticated, group, match.params.groupCode]);
 
   const onChange = e =>
@@ -193,6 +197,7 @@ const EditGroup = ({
 EditGroup.propTypes = {
   editGroup: PropTypes.func.isRequired,
   getGroup: PropTypes.func.isRequired,
+  clearErrors: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   group: PropTypes.object.isRequired,
   groupType: PropTypes.object.isRequired,
@@ -208,5 +213,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { editGroup, getGroup }
+  { editGroup, getGroup, clearErrors }
 )(withRouter(EditGroup));

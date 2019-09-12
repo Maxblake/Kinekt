@@ -1,5 +1,6 @@
 import {
   GROUP_LOADING,
+  GROUP_LOADED,
   SET_GROUP,
   SET_GROUPS,
   SET_CURRENT_GROUP,
@@ -24,6 +25,12 @@ export default function(state = initialState, action) {
       return {
         ...state,
         loading: true
+      };
+    }
+    case GROUP_LOADED: {
+      return {
+        ...state,
+        loading: false
       };
     }
     case SET_GROUPS: {

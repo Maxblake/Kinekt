@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 
 import OnlineStatus from "../common/subcomponents/OnlineStatus";
@@ -12,18 +12,15 @@ const GroupCard = ({
   userNumbers,
   isBanned
 }) => {
-  return (
-    <Link
-      onClick={e => {
-        if (isBanned) {
-          e.preventDefault();
-        }
-      }}
-      to={`/k/${groupTypeName}/group/${group.HRID}`}
-      className={`columns is-gapless card group-card-container ${
-        isBanned ? "is-banned" : ""
-      }`}
-    >
+  const isFull =
+    userNumbers &&
+    userNumbers.maxSize &&
+    userNumbers.users >= userNumbers.maxSize
+      ? true
+      : false;
+
+  const groupCard = (
+    <Fragment>
       <div className="column is-8 groupCard">
         <div className="card-content">
           <div className="group-name">
@@ -44,7 +41,31 @@ const GroupCard = ({
           src={group.image ? group.image.link : defaultImg}
         />
       </div>
-    </Link>
+    </Fragment>
+  );
+
+  return (
+    <Fragment>
+      {isBanned || isFull ? (
+        <div className={"columns is-gapless card group-card-container"}>
+          <div className="group-card-overlay">
+            <h5 className="is-size-5 ">
+              {isBanned
+                ? "You are banned from this group"
+                : "This group is currently full"}
+            </h5>
+          </div>
+          {groupCard}
+        </div>
+      ) : (
+        <Link
+          to={`/k/${groupTypeName}/group/${group.HRID}`}
+          className={"columns is-gapless card group-card-container"}
+        >
+          {groupCard}
+        </Link>
+      )}
+    </Fragment>
   );
 };
 

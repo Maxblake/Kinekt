@@ -126,9 +126,10 @@ const validateRequest = APImethod => {
           .withMessage(
             "Name may contain profanity, please remove it to proceed"
           ),
-        check("place", "Meeting place is too long")
-          .optional({ checkFalsy: true })
+        check("place", "Meeting place is required")
+          .exists({ checkFalsy: true })
           .isLength({ max: 256 })
+          .withMessage("Meeting place is too long")
           .custom(place => !filter.isProfane(place))
           .withMessage(
             "Meeting place may contain profanity, please remove it to proceed"

@@ -1,4 +1,4 @@
-import { setAlert } from "../alert";
+import { setTextAlert } from "../alert";
 
 import { SET_ERRORS } from "../types";
 
@@ -10,11 +10,11 @@ export const handleResponseErrors = err => dispatch => {
   err.response.data.forEach(error => {
     switch (error.param) {
       case "alert": {
-        dispatch(setAlert(error.msg, "is-danger"));
+        dispatch(setTextAlert(error.msg, "is-danger"));
         break;
       }
       case "alert-warning": {
-        dispatch(setAlert(error.msg, "is-warning"));
+        dispatch(setTextAlert(error.msg, "is-warning"));
         break;
       }
       case "console": {

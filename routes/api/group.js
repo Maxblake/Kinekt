@@ -142,12 +142,25 @@ router.post("/HRID", auth, (req, res) => {
 const isUserAllowedIn = async (req, group, errors) => {
   let { HRID, userCurrentGroupHRID } = req.body;
 
+  if (
+    group.accessLevel !== "Public" &&
+    !group.users.find(groupUser => groupUser.id.equals(req.user.id))
+  ) {
+    errors.addError(
+      `You do not have permission to join '${group.name}'`,
+      "alert-warning"
+    );
+    return;
+  }
+
   if (group.maxSize && group.users.length >= group.maxSize) {
     errors.addError(`'${group.name}' is currently full`, "alert-warning");
+    return;
   }
 
   if (group.bannedUsers && group.bannedUsers.includes(req.user.id)) {
     errors.addError(`You are banned from '${group.name}'`, "alert");
+    return;
   }
 
   if (!userCurrentGroupHRID) {

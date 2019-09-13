@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { handleResponseErrors } from "./helpers/helpers";
 import { clearErrorsAndAlerts, logout, loadUser } from "./auth";
-import { setAlert } from "./alert";
+import { setTextAlert } from "./alert";
 import { deleteGroup } from "./group";
 
 import {
@@ -34,7 +34,9 @@ export const register = userFields => async dispatch => {
     });
 
     dispatch(clearErrorsAndAlerts());
-    dispatch(setAlert(`Welcome to Kinekt, ${userFields.name}`, "is-success"));
+    dispatch(
+      setTextAlert(`Welcome to Kinekt, ${userFields.name}`, "is-success")
+    );
     dispatch(loadUser());
   } catch (err) {
     dispatch(handleResponseErrors(err));
@@ -66,7 +68,7 @@ export const editUser = userFields => async dispatch => {
     });
 
     dispatch(clearErrorsAndAlerts());
-    dispatch(setAlert("Account settings saved", "is-success"));
+    dispatch(setTextAlert("Account settings saved", "is-success"));
   } catch (err) {
     dispatch({
       type: AUTH_LOADED
@@ -87,10 +89,10 @@ export const deleteUser = () => async dispatch => {
 
       dispatch(deleteGroup(true));
       dispatch(logout());
-      dispatch(setAlert(`User account deleted`, "is-warning"));
+      dispatch(setTextAlert(`User account deleted`, "is-warning"));
     } catch (err) {
       //TODO should this dispatch a USER_ERROR action?
-      dispatch(setAlert(`Unable to delete user`, "is-danger"));
+      dispatch(setTextAlert(`Unable to delete user`, "is-danger"));
     }
   }
 };

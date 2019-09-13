@@ -262,6 +262,13 @@ const NewGroup = ({
               <div className="control">
                 <RadioButton
                   selectedValue={accessLevel}
+                  value="Protected"
+                  handleClick={handleAccessLevelChange}
+                />
+              </div>
+              <div className="control">
+                <RadioButton
+                  selectedValue={accessLevel}
                   value="Private"
                   handleClick={handleAccessLevelChange}
                 />

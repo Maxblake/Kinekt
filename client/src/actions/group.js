@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { handleResponseErrors } from "./helpers/helpers";
 import { clearErrorsAndAlerts } from "./auth";
-import { setAlert } from "./alert";
+import { setTextAlert } from "./alert";
 
 import {
   GROUP_LOADING,
@@ -123,7 +123,10 @@ export const createGroup = (groupFields, history) => async dispatch => {
 
     dispatch(clearErrorsAndAlerts());
     dispatch(
-      setAlert(`Group, ${groupFields.name}, created successfully`, "is-success")
+      setTextAlert(
+        `Group, ${groupFields.name}, created successfully`,
+        "is-success"
+      )
     );
     dispatch({
       type: SET_GROUP,
@@ -165,7 +168,10 @@ export const editGroup = (groupFields, groupId) => async dispatch => {
 
     dispatch(clearErrorsAndAlerts());
     dispatch(
-      setAlert(`Group, ${res.data.group.name}, has been updated`, "is-success")
+      setTextAlert(
+        `Group, ${res.data.group.name}, has been updated`,
+        "is-success"
+      )
     );
   } catch (err) {
     dispatch(handleResponseErrors(err));
@@ -189,7 +195,7 @@ export const deleteGroup = (withoutConfirmation = false) => async dispatch => {
       await axios.delete("/api/group");
 
       dispatch({ type: GROUP_DELETED });
-      dispatch(setAlert(`Group deleted`, "is-warning"));
+      dispatch(setTextAlert(`Group deleted`, "is-warning"));
     } catch (err) {
       dispatch({
         type: GROUP_ERROR,

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { setAlert } from "./alert";
+import { setTextAlert } from "./alert";
 import { clearErrorsAndAlerts } from "./auth";
 
 import { GROUPTYPE_ERROR } from "./types";
@@ -28,7 +28,7 @@ export const processRequestedGroupTypes = groupTypeDecisions => async dispatch =
     await axios.post(`/api/admin/process-requested-group-types`, body, config);
 
     dispatch(clearErrorsAndAlerts());
-    dispatch(setAlert("Group types processed", "is-success"));
+    dispatch(setTextAlert("Group types processed", "is-success"));
   } catch (err) {
     dispatch({
       type: GROUPTYPE_ERROR,
@@ -46,9 +46,9 @@ export const deleteGroupType = groupTypeId => async dispatch => {
   ) {
     try {
       await axios.delete(`/api/group-type/${groupTypeId}`);
-      dispatch(setAlert(`Group Type deleted`, "is-warning"));
+      dispatch(setTextAlert(`Group Type deleted`, "is-warning"));
     } catch (err) {
-      dispatch(setAlert(`Unable to delete group type`, "is-danger"));
+      dispatch(setTextAlert(`Unable to delete group type`, "is-danger"));
     }
   }
 };

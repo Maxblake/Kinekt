@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { handleResponseErrors } from "./helpers/helpers";
 import { clearErrorsAndAlerts } from "./auth";
-import { setAlert } from "./alert";
+import { setTextAlert } from "./alert";
 
 import {
   GROUPTYPE_LOADING,
@@ -60,7 +60,7 @@ export const requestGroupType = (
 
     dispatch(clearErrorsAndAlerts());
     dispatch(
-      setAlert(
+      setTextAlert(
         "Your request for a new Group Type has been submitted. Please allow up to 48 hours for a response by email",
         "is-success"
       )
@@ -102,7 +102,7 @@ export const editGroupType = (
 
     dispatch(clearErrorsAndAlerts());
     dispatch(
-      setAlert(
+      setTextAlert(
         `Group Type, ${groupTypeFields.name}, has been updated`,
         "is-success"
       )

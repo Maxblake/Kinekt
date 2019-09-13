@@ -13,7 +13,7 @@ const GroupTypeCard = ({
   groupAndUserNumbers
 }) => {
   const getClassList = groupTypeCategory => {
-    const classList = ["tag", "group-type-tag"];
+    const classList = ["tag", "card-tag"];
 
     switch (groupTypeCategory) {
       case "Social":

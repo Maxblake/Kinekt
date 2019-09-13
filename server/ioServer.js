@@ -35,6 +35,7 @@ class socketHandler {
     this.socket.on("leaveCurrentGroup", payload =>
       this.leaveCurrentGroup(payload)
     );
+    this.socket.on("requestEntry", groupId => this.requestEntry(groupId));
     this.socket.on("kickFromGroup", kickedUser =>
       this.kickFromGroup(kickedUser)
     );
@@ -52,7 +53,7 @@ class socketHandler {
   }
 
   async setUser(userId) {
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).select("-password");
     this.user = user;
 
     if (this.user.currentGroup) {
@@ -124,6 +125,17 @@ class socketHandler {
     }
 
     this.setUserStatus("active");
+  }
+
+  async requestEntry(groupId) {
+    this.io
+      .in(groupId)
+      .emit("entryRequestReceived", {
+        id: this.user._id,
+        name: this.user.name,
+        about: this.user.about,
+        image: this.user.image
+      });
   }
 
   async leaveCurrentGroup(payload) {

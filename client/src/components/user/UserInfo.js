@@ -61,7 +61,7 @@ const UserInfo = ({ user, adminOptions }) => {
       />
       <div className="content">
         <h3 className="is-size-3">{user.name}</h3>
-        <h6 className="is-size-6">{user.about}</h6>
+        {user.about && <h6 className="is-size-6">{user.about}</h6>}
       </div>
       {adminOptionButtons}
     </div>

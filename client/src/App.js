@@ -12,7 +12,7 @@ import SocketHandler from "./components/auth/SocketHandler";
 
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
-import Alert from "./components/layout/Alert";
+import Alert from "./components/alerts/Alert";
 import Login from "./components/auth/Login";
 import Register from "./components/user/Register";
 import EditUser from "./components/user/EditUser";

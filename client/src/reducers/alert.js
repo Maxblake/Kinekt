@@ -11,7 +11,12 @@ export default function(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
     case SET_ALERT: {
-      if (state.find(alert => alert.msg === payload.msg)) {
+      if (
+        payload.alertType === "text" &&
+        state.find(alert => alert.msg === payload.msg)
+      ) {
+        return state;
+      } else if (state.find(alert => alert.id === payload.id)) {
         return state;
       }
       return [...state, payload];

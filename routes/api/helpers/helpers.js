@@ -109,7 +109,7 @@ const validateRequest = APImethod => {
           ),
         check("accessLevel", "Invalid access level option")
           .optional({ checkFalsy: true })
-          .isIn(["Public", "Private"]),
+          .isIn(["Public", "Protected", "Private"]),
         check("maxSize", "Maximum size must be between 1 and 999")
           .optional({ checkFalsy: true })
           .isInt({ min: 0, max: 999 })
@@ -143,7 +143,7 @@ const validateRequest = APImethod => {
           ),
         check("accessLevel", "Invalid access level option")
           .optional({ checkFalsy: true })
-          .isIn(["Public", "Private"]),
+          .isIn(["Public", "Protected", "Private"]),
         check("maxSize", "Maximum size must be between 1 and 999")
           .optional({ checkFalsy: true })
           .isInt({ min: 0, max: 999 })
@@ -201,7 +201,6 @@ const validateRequest = APImethod => {
             "Educational",
             "Professional",
             "Hobby",
-            "Private",
             "Other"
           ])
       ];
@@ -232,7 +231,6 @@ const validateRequest = APImethod => {
             "Educational",
             "Professional",
             "Hobby",
-            "Private",
             "Other"
           ])
       ];

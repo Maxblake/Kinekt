@@ -6,14 +6,15 @@ import {
   openSocket,
   clearGroupAndGroupTypeStates
 } from "../../actions/helpers/ioClient";
-import { setAlert } from "../../actions/alert";
+import { setTextAlert, setCustomAlert } from "../../actions/alert";
 
 import IdleTimer from "react-idle-timer";
 
 const SocketHandler = ({
   auth: { socket, user },
   openSocket,
-  setAlert,
+  setTextAlert,
+  setCustomAlert,
   clearGroupAndGroupTypeStates,
   group: { groups, group },
   groupType: { groupType, groupTypes }
@@ -26,21 +27,8 @@ const SocketHandler = ({
     }
 
     if (user) {
-      socket.on("kickedFromGroupAlert", payload => {
-        const { isBanned, kickedUser } = payload;
-
-        if (!kickedUser.allUsers && kickedUser.userId !== user._id) return;
-
-        socket.emit("leaveCurrentGroup", { isKicked: true });
-
-        clearGroupAndGroupTypeStates();
-        setAlert(
-          `You have been ${isBanned ? "banned" : "kicked"} from the group '${
-            user.currentGroup.name
-          }'`,
-          `is-${isBanned ? "danger" : "warning"}`
-        );
-      });
+      socket.on("kickedFromGroupAlert", kickedFromGroupAlert);
+      socket.on("entryRequestReceived", entryRequestReceived);
     }
 
     if (groups.length > 0 || groupType || groupTypes.length > 0) {
@@ -50,9 +38,30 @@ const SocketHandler = ({
     return () => {
       if (socket) {
         socket.off("kickedFromGroupAlert");
+        socket.off("entryRequestReceived");
       }
     };
   }, [groups, groupType, groupTypes, user]);
+
+  const kickedFromGroupAlert = payload => {
+    const { isBanned, kickedUser } = payload;
+
+    if (!kickedUser.allUsers && kickedUser.userId !== user._id) return;
+
+    socket.emit("leaveCurrentGroup", { isKicked: true });
+
+    clearGroupAndGroupTypeStates();
+    setTextAlert(
+      `You have been ${isBanned ? "banned" : "kicked"} from the group '${
+        user.currentGroup.name
+      }'`,
+      `is-${isBanned ? "danger" : "warning"}`
+    );
+  };
+
+  const entryRequestReceived = userInfo => {
+    setCustomAlert(userInfo.id, "entryRequestReceived", { userInfo });
+  };
 
   const onActive = () => {
     clearInterval(interval);
@@ -92,7 +101,8 @@ SocketHandler.propTypes = {
   group: PropTypes.object.isRequired,
   groupType: PropTypes.object.isRequired,
   openSocket: PropTypes.func.isRequired,
-  setAlert: PropTypes.func.isRequired,
+  setTextAlert: PropTypes.func.isRequired,
+  setCustomAlert: PropTypes.func.isRequired,
   clearGroupAndGroupTypeStates: PropTypes.func.isRequired
 };
 
@@ -104,5 +114,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { openSocket, setAlert, clearGroupAndGroupTypeStates }
+  { openSocket, setTextAlert, setCustomAlert, clearGroupAndGroupTypeStates }
 )(SocketHandler);

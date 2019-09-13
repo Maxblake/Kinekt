@@ -17,7 +17,7 @@ import defaultGroupTypeImage from "../../resources/default_grouptype_image.jpg";
 
 //TODO format date/times with moment
 const GroupType = ({
-  user,
+  auth: { user, socket },
   getGroups,
   group: { groups, loading, error },
   groupType: { groupType },
@@ -68,6 +68,10 @@ const GroupType = ({
       ...groupData,
       readyToLoadNewGroups: true
     });
+  };
+
+  const requestEntry = groupId => {
+    socket.emit("requestEntry", groupId);
   };
 
   if (loading) {
@@ -249,6 +253,12 @@ const GroupType = ({
                   group.bannedUsers &&
                   group.bannedUsers.includes(user._id)
                 }
+                isMember={
+                  user &&
+                  group.users &&
+                  group.users.find(groupUser => groupUser.id === user._id)
+                }
+                requestEntry={requestEntry}
               />
             ))}
             <div className="content has-text-centered">
@@ -271,11 +281,11 @@ GroupType.propTypes = {
   groupType: PropTypes.object.isRequired,
   group: PropTypes.object.isRequired,
   liveData: PropTypes.object.isRequired,
-  user: PropTypes.object
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  user: state.auth.user,
+  auth: state.auth,
   groupType: state.groupType,
   group: state.group,
   liveData: state.liveData

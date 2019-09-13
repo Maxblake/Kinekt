@@ -10,14 +10,46 @@ const GroupCard = ({
   groupTypeName,
   defaultImg,
   userNumbers,
-  isBanned
+  isBanned,
+  isMember,
+  requestEntry
 }) => {
+  const handleCardClicked = e => {
+    if (!isMember && group.accessLevel !== "Public") {
+      e.preventDefault();
+      requestEntry(group._id);
+    }
+  };
+
   const isFull =
     userNumbers &&
     userNumbers.maxSize &&
     userNumbers.users >= userNumbers.maxSize
       ? true
       : false;
+
+  const accessLevelTag = isMember ? (
+    <div className="tag card-tag">
+      <span className="icon">
+        <i className="fas fa-user-check" />
+      </span>
+      <span>Joined</span>
+    </div>
+  ) : group.accessLevel === "Protected" ? (
+    <div className="tag card-tag">
+      <span className="icon">
+        <i className="fas fa-lock" />
+      </span>
+      <span>Protected</span>
+    </div>
+  ) : (
+    <div className="tag card-tag">
+      <span className="icon">
+        <i className="fas fa-door-open" />
+      </span>
+      <span>Public</span>
+    </div>
+  );
 
   const groupCard = (
     <Fragment>
@@ -26,6 +58,7 @@ const GroupCard = ({
           <div className="group-name">
             <h1 className="title is-size-4">{group.name}</h1>
             <div className="subtitle is-size-6">
+              {accessLevelTag}
               <OnlineStatus
                 users={userNumbers ? userNumbers.users : ""}
                 maxSize={userNumbers ? userNumbers.maxSize : ""}
@@ -60,6 +93,7 @@ const GroupCard = ({
       ) : (
         <Link
           to={`/k/${groupTypeName}/group/${group.HRID}`}
+          onClick={e => handleCardClicked(e)}
           className={"columns is-gapless card group-card-container"}
         >
           {groupCard}

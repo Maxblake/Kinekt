@@ -1,0 +1,23 @@
+.countdown-container {
+  display: flex;
+
+  .circle-background,
+  .circle-progress {
+    fill: none;
+  }
+
+  .circle-background {
+    stroke: whitesmoke;
+  }
+
+  .circle-progress {
+    stroke: $primary;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .countdown-text {
+    font-size: 1.1em;
+    fill: whitesmoke;
+  }
+}

@@ -55,7 +55,7 @@ const UserInfo = ({ user, adminOptions }) => {
         </div>
       )}
       <Image
-        src={user.image ? user.image.link : defaultUserImage}
+        src={user.image && user.image.link ? user.image.link : defaultUserImage}
         figureClass="is-square"
         imageClass="is-rounded"
       />

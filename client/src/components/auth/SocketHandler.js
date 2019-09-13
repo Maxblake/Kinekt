@@ -60,7 +60,9 @@ const SocketHandler = ({
   };
 
   const entryRequestReceived = userInfo => {
-    setCustomAlert(userInfo.id, "entryRequestReceived", { userInfo });
+    setCustomAlert(userInfo.id, "is-info", "entryRequestReceived", {
+      userInfo
+    });
   };
 
   const onActive = () => {

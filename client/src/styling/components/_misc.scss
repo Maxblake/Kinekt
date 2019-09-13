@@ -150,3 +150,45 @@
   top: 16px;
   right: 18px;
 }
+
+// Alerts
+.entry-request-alert {
+  display: flex;
+  align-items: center;
+
+  .alert-items {
+    display: flex;
+    align-items: center;
+    flex: 1;
+
+    h3 {
+      min-width: 200px;
+      flex: 1;
+    }
+  }
+
+  .countdown-container {
+    margin-right: 0.75rem;
+  }
+}
+
+@media (max-width: $tablet - 1) {
+  .entry-request-alert {
+    align-items: flex-start;
+
+    .alert-items {
+      align-items: flex-start;
+      flex-direction: column;
+
+      h3 {
+        text-align: left;
+        margin-top: 0.25rem;
+      }
+
+      .field {
+        margin-top: 0.75rem;
+        align-self: flex-end;
+      }
+    }
+  }
+}

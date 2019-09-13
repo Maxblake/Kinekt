@@ -14,13 +14,19 @@ export const setTextAlert = (msg, alertStatus) => dispatch => {
   });
 };
 
-export const setCustomAlert = (id, alertType, props) => dispatch => {
+export const setCustomAlert = (
+  id,
+  alertStatus,
+  alertType,
+  props
+) => dispatch => {
   dispatch({
     type: SET_ALERT,
     payload: {
       id,
       props,
-      alertType
+      alertType,
+      alertStatus
     }
   });
 };

@@ -11,16 +11,8 @@ const GroupCard = ({
   defaultImg,
   userNumbers,
   isBanned,
-  isMember,
-  requestEntry
+  isMember
 }) => {
-  const handleCardClicked = e => {
-    if (!isMember && group.accessLevel !== "Public") {
-      e.preventDefault();
-      requestEntry(group._id);
-    }
-  };
-
   const isFull =
     userNumbers &&
     userNumbers.maxSize &&
@@ -93,7 +85,6 @@ const GroupCard = ({
       ) : (
         <Link
           to={`/k/${groupTypeName}/group/${group.HRID}`}
-          onClick={e => handleCardClicked(e)}
           className={"columns is-gapless card group-card-container"}
         >
           {groupCard}

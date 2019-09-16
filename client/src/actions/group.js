@@ -16,7 +16,7 @@ import {
 
 // Get group by HRID (human readable id)
 export const getGroup = (
-  { HRID, userCurrentGroupHRID },
+  { HRID, userCurrentGroupHRID, joinKey },
   history = null
 ) => async dispatch => {
   const config = {
@@ -25,7 +25,7 @@ export const getGroup = (
     }
   };
 
-  const body = JSON.stringify({ HRID, userCurrentGroupHRID });
+  const body = JSON.stringify({ HRID, userCurrentGroupHRID, joinKey });
 
   try {
     dispatch({

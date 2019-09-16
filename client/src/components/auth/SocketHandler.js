@@ -41,7 +41,7 @@ const SocketHandler = ({
         socket.off("entryRequestReceived");
       }
     };
-  }, [groups, groupType, groupTypes, user]);
+  }, [group, groups, groupType, groupTypes, user]);
 
   const kickedFromGroupAlert = payload => {
     const { isBanned, kickedUser } = payload;
@@ -60,9 +60,17 @@ const SocketHandler = ({
   };
 
   const entryRequestReceived = userInfo => {
-    setCustomAlert(userInfo.id, "is-info", "entryRequestReceived", {
-      userInfo
-    });
+    if (group.users) {
+      const groupUser = group.users.find(
+        groupUser => groupUser._id === user._id
+      );
+
+      if (groupUser && groupUser.memberType === "admin") {
+        setCustomAlert(userInfo.id, "is-info", "entryRequestReceived", {
+          userInfo
+        });
+      }
+    }
   };
 
   const onActive = () => {

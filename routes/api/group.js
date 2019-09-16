@@ -146,12 +146,14 @@ const isUserAllowedIn = async (req, group, errors) => {
     group.accessLevel !== "Public" &&
     !group.users.find(groupUser => groupUser.id.equals(req.user.id))
   ) {
-    errors.addError(
-      `You do not have permission to join '${group.name}'`,
-      "alert-warning"
-    );
+    errors.addError("", "alert-requestEntry", {
+      groupName: group.name,
+      groupId: group._id
+    });
     return;
   }
+
+  console.log(group.users);
 
   if (group.maxSize && group.users.length >= group.maxSize) {
     errors.addError(`'${group.name}' is currently full`, "alert-warning");

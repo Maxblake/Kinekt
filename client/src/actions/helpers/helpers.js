@@ -1,4 +1,4 @@
-import { setTextAlert } from "../alert";
+import { setTextAlert, setCustomAlert } from "../alert";
 
 import { SET_ERRORS } from "../types";
 
@@ -15,6 +15,14 @@ export const handleResponseErrors = err => dispatch => {
       }
       case "alert-warning": {
         dispatch(setTextAlert(error.msg, "is-warning"));
+        break;
+      }
+      case "alert-requestEntry": {
+        dispatch(
+          setCustomAlert(err.payload.groupId, "is-info", "requestEntry", {
+            groupName: err.payload.groupName
+          })
+        );
         break;
       }
       case "console": {

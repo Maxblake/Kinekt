@@ -36,6 +36,12 @@ class socketHandler {
       this.leaveCurrentGroup(payload)
     );
     this.socket.on("requestEntry", groupId => this.requestEntry(groupId));
+    this.socket.on("acceptEntryRequest", userId =>
+      this.acceptEntryRequest(userId)
+    );
+    this.socket.on("rejectEntryRequest", userId =>
+      this.rejectEntryRequest(userId)
+    );
     this.socket.on("kickFromGroup", kickedUser =>
       this.kickFromGroup(kickedUser)
     );
@@ -56,6 +62,8 @@ class socketHandler {
     const user = await User.findById(userId).select("-password");
     this.user = user;
 
+    this.socket.join(`user-${user._id.toString()}`);
+
     if (this.user.currentGroup) {
       const currentGroup = await Group.findOne({
         HRID: this.user.currentGroup.HRID
@@ -69,7 +77,7 @@ class socketHandler {
     //TODO validate user token, maybe check for profanity
     const user = await User.findById(message.user).select("name id");
 
-    this.io.in(this.group._id.toString()).emit("receiveMessage", {
+    this.io.in(`group-${this.group._id.toString()}`).emit("receiveMessage", {
       body: message.body,
       user: { name: user.name, id: user.id },
       time: moment().format("h:mm A")
@@ -112,10 +120,10 @@ class socketHandler {
     }
 
     this.group = newGroup;
-    this.socket.join(this.group._id.toString());
+    this.socket.join(`group-${this.group._id.toString()}`);
 
     if (this.user.currentGroup.HRID !== newGroup.HRID) {
-      this.io.in(this.group._id.toString()).emit("receiveMessage", {
+      this.io.in(`group-${this.group._id.toString()}`).emit("receiveMessage", {
         body: `${this.user.name} has joined the group.`,
         user: { id: 0 },
         time: moment().format("h:mm A")
@@ -128,14 +136,20 @@ class socketHandler {
   }
 
   async requestEntry(groupId) {
-    this.io
-      .in(groupId)
-      .emit("entryRequestReceived", {
-        id: this.user._id,
-        name: this.user.name,
-        about: this.user.about,
-        image: this.user.image
-      });
+    this.io.in(`group-${groupId}`).emit("entryRequestReceived", {
+      id: this.user._id,
+      name: this.user.name,
+      about: this.user.about,
+      image: this.user.image
+    });
+  }
+
+  async acceptEntryRequest(userId) {
+    this.socket.to(`user-${userId}`).emit("entryRequestAccepted");
+  }
+
+  async rejectEntryRequest(userId) {
+    console.log(userId);
   }
 
   async leaveCurrentGroup(payload) {
@@ -147,7 +161,7 @@ class socketHandler {
 
     if (!oldGroup || this.user._id.equals(oldGroup.creator)) return;
 
-    this.socket.leave(oldGroup._id.toString());
+    this.socket.leave(`group-${oldGroup._id.toString()}`);
     this.updateCurrentGroup(null, !joiningNewGroup);
 
     oldGroup.users = oldGroup.users.filter(user => {
@@ -157,7 +171,7 @@ class socketHandler {
     await oldGroup.save();
 
     if (!isKicked) {
-      this.io.in(oldGroup._id.toString()).emit("receiveMessage", {
+      this.io.in(`group-${oldGroup._id.toString()}`).emit("receiveMessage", {
         body: `${this.user.name} has left the group.`,
         user: { id: 0 },
         time: moment().format("h:mm A")
@@ -187,7 +201,7 @@ class socketHandler {
         : "idle";
     });
 
-    this.io.in(group._id.toString()).emit("updateGroupMembers", {
+    this.io.in(`group-${group._id.toString()}`).emit("updateGroupMembers", {
       groupId: group._id.toString(),
       users
     });
@@ -310,16 +324,16 @@ class socketHandler {
     }
 
     this.socket
-      .to(this.group._id.toString())
+      .to(`group-${this.group._id.toString()}`)
       .emit("kickedFromGroup", kickedUser);
     this.socket
-      .to(this.group._id.toString())
+      .to(`group-${this.group._id.toString()}`)
       .emit("kickedFromGroupAlert", { kickedUser });
 
     if (!kickedUser.allUsers) {
       const user = await User.findById(kickedUser.userId).select("name");
 
-      this.io.in(this.group._id.toString()).emit("receiveMessage", {
+      this.io.in(`group-${this.group._id.toString()}`).emit("receiveMessage", {
         body: `${user.name} has been kicked from the group.`,
         user: { id: 0 },
         time: moment().format("h:mm A")
@@ -342,15 +356,15 @@ class socketHandler {
     }
 
     this.socket
-      .to(this.group._id.toString())
+      .to(`group-${this.group._id.toString()}`)
       .emit("kickedFromGroup", bannedUser);
     this.socket
-      .to(this.group._id.toString())
+      .to(`group-${this.group._id.toString()}`)
       .emit("kickedFromGroupAlert", { kickedUser: bannedUser, isBanned: true });
 
     const user = await User.findById(bannedUser.userId).select("name");
 
-    this.io.in(this.group._id.toString()).emit("receiveMessage", {
+    this.io.in(`group-${this.group._id.toString()}`).emit("receiveMessage", {
       body: `${user.name} has been banned from the group.`,
       user: { id: 0 },
       time: moment().format("h:mm A")

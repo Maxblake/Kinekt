@@ -17,8 +17,8 @@ import defaultGroupTypeImage from "../../resources/default_grouptype_image.jpg";
 
 //TODO format date/times with moment
 const GroupType = ({
-  auth: { user, socket },
   getGroups,
+  auth: { user },
   group: { groups, loading, error },
   groupType: { groupType },
   liveData: { groupNumbersMap, groupTypeNumbersMap },
@@ -68,10 +68,6 @@ const GroupType = ({
       ...groupData,
       readyToLoadNewGroups: true
     });
-  };
-
-  const requestEntry = groupId => {
-    socket.emit("requestEntry", groupId);
   };
 
   if (loading) {
@@ -258,7 +254,6 @@ const GroupType = ({
                   group.users &&
                   group.users.find(groupUser => groupUser.id === user._id)
                 }
-                requestEntry={requestEntry}
               />
             ))}
             <div className="content has-text-centered">

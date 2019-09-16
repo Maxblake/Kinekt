@@ -3,10 +3,11 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import EntryRequestReceivedAlert from "./EntryRequestReceivedAlert";
+import RequestEntryAlert from "./RequestEntryAlert";
 
 import { removeAlert } from "../../actions/alert";
 
-const Alert = ({ alerts, errors, removeAlert }) => {
+const Alert = ({ socket, alerts, errors, removeAlert }) => {
   let alertsAndErrors = [];
 
   alerts.forEach(alert => {
@@ -41,6 +42,11 @@ const Alert = ({ alerts, errors, removeAlert }) => {
           alertBody = <EntryRequestReceivedAlert {...alert.props} />;
           break;
         }
+        case "requestEntry": {
+          socket.emit("requestEntry", alert.props.groupId);
+          alertBody = <RequestEntryAlert {...alert.props} />;
+          break;
+        }
         case "text":
         default: {
           alertBody = alert.msg;
@@ -64,6 +70,7 @@ const Alert = ({ alerts, errors, removeAlert }) => {
 };
 
 Alert.propTypes = {
+  socket: PropTypes.object,
   alerts: PropTypes.array.isRequired,
   errors: PropTypes.array.isRequired,
   removeAlert: PropTypes.func.isRequired
@@ -71,7 +78,8 @@ Alert.propTypes = {
 
 const mapStateToProps = state => ({
   alerts: state.alert,
-  errors: state.error
+  errors: state.error,
+  socket: state.auth.socket
 });
 
 export default connect(

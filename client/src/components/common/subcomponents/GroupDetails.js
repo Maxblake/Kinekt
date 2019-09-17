@@ -31,7 +31,7 @@ const GroupDetails = ({ group }) => {
             <span className="icon">
               <i className="fas fa-map-marker-alt" />
             </span>
-            <h3>{group.place}</h3>
+            <h3>{group.place.address}</h3>
           </div>
         </div>
       </div>

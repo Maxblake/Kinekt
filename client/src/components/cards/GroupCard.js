@@ -71,7 +71,7 @@ const GroupCard = ({
 
   return (
     <Fragment>
-      {isBanned || isFull ? (
+      {isBanned || (isFull && !isMember) ? (
         <div className={"columns is-gapless card group-card-container"}>
           <div className="group-card-overlay">
             <h5 className="is-size-5 ">

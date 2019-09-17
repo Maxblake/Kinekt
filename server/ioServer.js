@@ -144,6 +144,7 @@ class socketHandler {
   }
 
   async answerEntryRequest(answer, userId) {
+    const group = await Group.findById(this.groupId).select("HRID");
     let joinKey = undefined;
 
     if (answer === "Accepted") {
@@ -152,7 +153,7 @@ class socketHandler {
 
     this.socket
       .to(`user-${userId}`)
-      .emit("entryRequestAnswered", { answer, joinKey });
+      .emit("entryRequestAnswered", { answer, joinKey, HRID: group.HRID });
   }
 
   async leaveCurrentGroup(payload) {

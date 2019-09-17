@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
 import moment from "moment";
+import Geosuggest from "react-geosuggest";
 
 import { createGroup, getGroups } from "../../actions/group";
 
@@ -109,7 +110,11 @@ const NewGroup = ({
     const groupFields = {
       name,
       description,
-      place,
+      place: {
+        address: place,
+        latitude: "",
+        longitude: ""
+      },
       accessLevel,
       maxSize,
       image
@@ -247,6 +252,8 @@ const NewGroup = ({
           error={errPlace ? errPlace.msg : undefined}
           required={true}
         />
+
+        <Geosuggest />
 
         <CustomField
           label="Access Level"

@@ -99,7 +99,7 @@ const Navbar = ({
       <div className="navbar-item">
         <div className="buttons">
           <Link to="/account" className="button is-primary is-small">
-            My Account &nbsp;
+            {user ? user.name : "My Account"} &nbsp;
             <i className="fas fa-user-circle" />
           </Link>
           <a

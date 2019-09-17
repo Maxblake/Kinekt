@@ -93,9 +93,9 @@ const validateRequest = APImethod => {
           ),
         check("place", "Meeting place is required")
           .exists({ checkFalsy: true })
-          .isLength({ max: 256 })
+          .custom(place => place.address.length < 256)
           .withMessage("Meeting place is too long")
-          .custom(place => !filter.isProfane(place))
+          .custom(place => !filter.isProfane(place.address))
           .withMessage(
             "Meeting place may contain profanity, please remove it to proceed"
           ),
@@ -128,9 +128,9 @@ const validateRequest = APImethod => {
           ),
         check("place", "Meeting place is required")
           .exists({ checkFalsy: true })
-          .isLength({ max: 256 })
+          .custom(place => place.address.length < 256)
           .withMessage("Meeting place is too long")
-          .custom(place => !filter.isProfane(place))
+          .custom(place => !filter.isProfane(place.address))
           .withMessage(
             "Meeting place may contain profanity, please remove it to proceed"
           ),

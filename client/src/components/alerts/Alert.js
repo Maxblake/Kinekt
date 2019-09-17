@@ -8,9 +8,7 @@ import RequestEntryAlert from "./RequestEntryAlert";
 import { removeAlert } from "../../actions/alert";
 
 const Alert = ({ alerts, errors, removeAlert }) => {
-  const [alertState, setAlertState] = useState({ showCloseButton: false });
-
-  const { showCloseButton } = alertState;
+  const [alertState, setAlertState] = useState([]);
 
   let alertsAndErrors = [];
 
@@ -35,6 +33,24 @@ const Alert = ({ alerts, errors, removeAlert }) => {
     }
   });
 
+  const closeAlertAndClearSettings = alertId => {
+    setAlertState(
+      alertState.filter(alertSettings => alertSettings.id !== alertId)
+    );
+    removeAlert(alertId);
+  };
+
+  const showCloseButton = alertId => {
+    const currentAlertSettings = alertState.find(
+      alertSettings => alertSettings.id === alertId
+    );
+
+    setAlertState([
+      ...alertState,
+      { ...currentAlertSettings, id: alertId, showCloseButton: true }
+    ]);
+  };
+
   if (alertsAndErrors.length > 0) {
     return alertsAndErrors.map(alert => {
       let alertBody = null;
@@ -44,10 +60,8 @@ const Alert = ({ alerts, errors, removeAlert }) => {
           alertBody = (
             <EntryRequestReceivedAlert
               {...alert.props}
-              closeAlert={() => removeAlert(alert.id)}
-              showCloseButton={() =>
-                setAlertState({ ...alertState, showCloseButton: true })
-              }
+              closeAlert={() => closeAlertAndClearSettings(alert.id)}
+              showCloseButton={() => showCloseButton(alert.id)}
             />
           );
           break;
@@ -56,10 +70,8 @@ const Alert = ({ alerts, errors, removeAlert }) => {
           alertBody = (
             <RequestEntryAlert
               {...alert.props}
-              closeAlert={() => removeAlert(alert.id)}
-              showCloseButton={() =>
-                setAlertState({ ...alertState, showCloseButton: true })
-              }
+              closeAlert={() => closeAlertAndClearSettings(alert.id)}
+              showCloseButton={() => showCloseButton(alert.id)}
             />
           );
           break;
@@ -70,6 +82,9 @@ const Alert = ({ alerts, errors, removeAlert }) => {
         }
       }
 
+      const currentAlertSettings =
+        alertState.find(alertSettings => alertSettings.id === alert.id) || {};
+
       return (
         <div
           key={alert.id}
@@ -77,8 +92,12 @@ const Alert = ({ alerts, errors, removeAlert }) => {
             alert.alertStatus ? alert.alertStatus : ""
           }`}
         >
-          {(alert.alertType === "text" || showCloseButton) && (
-            <button className="delete" onClick={() => removeAlert(alert.id)} />
+          {(alert.alertType === "text" ||
+            currentAlertSettings.showCloseButton) && (
+            <button
+              className="delete"
+              onClick={() => closeAlertAndClearSettings(alert.id)}
+            />
           )}
           {alertBody}
         </div>

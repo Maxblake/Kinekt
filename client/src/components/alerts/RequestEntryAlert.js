@@ -19,8 +19,8 @@ const RequestEntryAlert = ({
   const [entryRequestAnswer, setEntryRequestAnswer] = useState("");
 
   useEffect(() => {
-    socket.on("entryRequestAnswered", ({ answer, joinKey }) =>
-      onRequestAnswered(answer, joinKey)
+    socket.on("entryRequestAnswered", ({ answer, joinKey, HRID }) =>
+      onRequestAnswered(answer, joinKey, HRID)
     );
 
     return () => {
@@ -33,7 +33,9 @@ const RequestEntryAlert = ({
     showCloseButton();
   };
 
-  const onRequestAnswered = (answer, joinKey) => {
+  const onRequestAnswered = (answer, joinKey, answeredHRID) => {
+    if (answeredHRID !== HRID) return;
+
     setEntryRequestAnswer(answer);
 
     if (answer === "Accepted") {
@@ -54,7 +56,7 @@ const RequestEntryAlert = ({
           <i className="fas fa-2x fa-check-circle"></i>
         </span>
       ) : (
-        <Countdown totalTime={30} onTimeout={() => onTimeout()} />
+        <Countdown totalTime={45} onTimeout={() => onTimeout()} />
       )}
       <div className="alert-items">
         <h3>

@@ -1,10 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/auth");
-const { check } = require("express-validator");
 const { hri } = require("human-readable-ids");
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
+const jwt = require("jsonwebtoken");
+const config = require("config");
+
 const { updateImage, uploadImage, deleteImage } = require("./external/imgur");
 const {
   runAPISafely,
@@ -143,22 +145,10 @@ const isUserAllowedIn = async (req, group, errors) => {
   let { HRID, userCurrentGroupHRID, joinKey } = req.body;
 
   if (
-    group.accessLevel !== "Public" &&
+    group.maxSize &&
+    group.users.length >= group.maxSize &&
     !group.users.find(groupUser => groupUser.id.equals(req.user.id))
   ) {
-    if (joinKey !== 12345) {
-      errors.addError("", "alert-requestEntry", {
-        groupName: group.name,
-        HRID: group.HRID,
-        groupId: group._id
-      });
-      return;
-    }
-  }
-
-  console.log(joinKey);
-
-  if (group.maxSize && group.users.length >= group.maxSize) {
     errors.addError(`'${group.name}' is currently full`, "alert-warning");
     return;
   }
@@ -180,6 +170,31 @@ const isUserAllowedIn = async (req, group, errors) => {
         "You must delete your current group before joining a new one",
         "alert-warning"
       );
+      return;
+    }
+  }
+
+  if (
+    group.accessLevel !== "Public" &&
+    !group.users.find(groupUser => groupUser.id.equals(req.user.id))
+  ) {
+    if (!joinKey) {
+      errors.addError("", "alert-requestEntry", {
+        groupName: group.name,
+        HRID: group.HRID,
+        groupId: group._id
+      });
+      return;
+    } else {
+      const decoded = jwt.verify(joinKey, config.get("jwtSecret"));
+      if (decoded.userId !== req.user.id) {
+        errors.addError("Cannot join group: invalid token", "alert", {
+          groupName: group.name,
+          HRID: group.HRID,
+          groupId: group._id
+        });
+        return;
+      }
     }
   }
 };

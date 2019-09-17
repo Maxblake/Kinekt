@@ -49,8 +49,8 @@ class APIerrors {
     return this.errors.length > 0;
   }
 
-  addError(msg, param = "console", payload) {
-    if (!msg) return false;
+  addError(msg, param = "console", payload = null) {
+    if (!msg && payload === null) return false;
 
     let error = { param, msg, payload };
     this.errors.push(error);

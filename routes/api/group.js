@@ -140,20 +140,23 @@ router.post("/HRID", auth, (req, res) => {
 });
 
 const isUserAllowedIn = async (req, group, errors) => {
-  let { HRID, userCurrentGroupHRID } = req.body;
+  let { HRID, userCurrentGroupHRID, joinKey } = req.body;
 
   if (
     group.accessLevel !== "Public" &&
     !group.users.find(groupUser => groupUser.id.equals(req.user.id))
   ) {
-    errors.addError("", "alert-requestEntry", {
-      groupName: group.name,
-      groupId: group._id
-    });
-    return;
+    if (joinKey !== 12345) {
+      errors.addError("", "alert-requestEntry", {
+        groupName: group.name,
+        HRID: group.HRID,
+        groupId: group._id
+      });
+      return;
+    }
   }
 
-  console.log(group.users);
+  console.log(joinKey);
 
   if (group.maxSize && group.users.length >= group.maxSize) {
     errors.addError(`'${group.name}' is currently full`, "alert-warning");

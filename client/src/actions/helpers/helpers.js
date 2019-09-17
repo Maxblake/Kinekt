@@ -18,9 +18,10 @@ export const handleResponseErrors = err => dispatch => {
         break;
       }
       case "alert-requestEntry": {
+        console.log(error);
         dispatch(
-          setCustomAlert(err.payload.groupId, "is-info", "requestEntry", {
-            groupName: err.payload.groupName
+          setCustomAlert(error.payload.groupId, "is-info", "requestEntry", {
+            ...error.payload
           })
         );
         break;

@@ -6,12 +6,17 @@ import Countdown from "../common/subcomponents/Countdown";
 import Modal from "../common/subcomponents/Modal";
 import UserInfo from "../user/UserInfo";
 
-const EntryRequestReceivedAlert = ({ userInfo, socket }) => {
+const EntryRequestReceivedAlert = ({ userInfo, socket, showCloseButton }) => {
   const [isActive, setIsActive] = useState(true);
 
+  const onTimeout = () => {
+    setIsActive(false);
+    showCloseButton();
+  };
+
   return (
-    <div className="entry-request-alert">
-      <Countdown totalTime={30} onTimeout={() => setIsActive(false)} />
+    <div className="custom-action-alert">
+      <Countdown totalTime={30} onTimeout={() => onTimeout()} />
       <div className="alert-items">
         <h3>
           <Modal trigger={userInfo.name}>

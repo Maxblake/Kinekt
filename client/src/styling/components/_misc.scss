@@ -152,7 +152,7 @@
 }
 
 // Alerts
-.entry-request-alert {
+.custom-action-alert {
   display: flex;
   align-items: center;
 
@@ -173,7 +173,7 @@
 }
 
 @media (max-width: $tablet - 1) {
-  .entry-request-alert {
+  .custom-action-alert {
     align-items: flex-start;
 
     .alert-items {
@@ -182,7 +182,7 @@
 
       h3 {
         text-align: left;
-        margin-top: 0.25rem;
+        margin-top: 0.6rem;
       }
 
       .field {

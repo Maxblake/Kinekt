@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 
 const Countdown = ({ totalTime, onTimeout }) => {
   const [currentTime, setcurrentTime] = useState(totalTime);
@@ -38,37 +38,46 @@ const Countdown = ({ totalTime, onTimeout }) => {
   return (
     <div className="countdown-container">
       {currentTime > 0 ? (
-        <svg width={sqSize} height={sqSize} viewBox={viewBox}>
-          <circle
-            className="circle-background"
-            cx={sqSize / 2}
-            cy={sqSize / 2}
-            r={radius}
-            strokeWidth={`${strokeWidth}px`}
-          />
-          <circle
-            className="circle-progress"
-            cx={sqSize / 2}
-            cy={sqSize / 2}
-            r={radius}
-            strokeWidth={`${strokeWidth}px`}
-            // Start progress marker at 12 O'Clock
-            transform={`rotate(-90 ${sqSize / 2} ${sqSize / 2})`}
-            style={{
-              strokeDasharray: dashArray,
-              strokeDashoffset: dashOffset
-            }}
-          />
-          <text
-            className="countdown-text"
-            x="50%"
-            y="50%"
-            dy=".3em"
-            textAnchor="middle"
-          >
-            {Math.ceil(currentTime)}
-          </text>
-        </svg>
+        <Fragment>
+          <svg width={sqSize} height={sqSize} viewBox={viewBox}>
+            <circle
+              className="circle-background"
+              cx={sqSize / 2}
+              cy={sqSize / 2}
+              r={radius}
+              strokeWidth={`${strokeWidth}px`}
+            />
+            <circle
+              className="circle-progress"
+              cx={sqSize / 2}
+              cy={sqSize / 2}
+              r={radius}
+              strokeWidth={`${strokeWidth}px`}
+              // Start progress marker at 12 O'Clock
+              transform={`rotate(-90 ${sqSize / 2} ${sqSize / 2})`}
+              style={{
+                strokeDasharray: dashArray,
+                strokeDashoffset: dashOffset
+              }}
+            />
+            {currentTime <= 10 && (
+              <text
+                className="countdown-text"
+                x="50%"
+                y="50%"
+                dy=".3em"
+                textAnchor="middle"
+              >
+                {Math.ceil(currentTime)}
+              </text>
+            )}
+          </svg>
+          {currentTime > 10 && (
+            <span className="icon countdown-icon is-large">
+              <i className="fas fa-hourglass-end"></i>
+            </span>
+          )}
+        </Fragment>
       ) : (
         <span className="icon is-large">
           <span className="fa-stack fa-lg">

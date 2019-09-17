@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
@@ -8,6 +8,10 @@ import RequestEntryAlert from "./RequestEntryAlert";
 import { removeAlert } from "../../actions/alert";
 
 const Alert = ({ socket, alerts, errors, removeAlert }) => {
+  const [alertState, setAlertState] = useState({ showCloseButton: false });
+
+  const { showCloseButton } = alertState;
+
   let alertsAndErrors = [];
 
   alerts.forEach(alert => {
@@ -35,16 +39,28 @@ const Alert = ({ socket, alerts, errors, removeAlert }) => {
     return alertsAndErrors.map(alert => {
       let alertBody = null;
 
-      console.log(alert);
-
       switch (alert.alertType) {
         case "entryRequestReceived": {
-          alertBody = <EntryRequestReceivedAlert {...alert.props} />;
+          alertBody = (
+            <EntryRequestReceivedAlert
+              {...alert.props}
+              showCloseButton={() =>
+                setAlertState({ ...alertState, showCloseButton: true })
+              }
+            />
+          );
           break;
         }
         case "requestEntry": {
           socket.emit("requestEntry", alert.props.groupId);
-          alertBody = <RequestEntryAlert {...alert.props} />;
+          alertBody = (
+            <RequestEntryAlert
+              {...alert.props}
+              showCloseButton={() =>
+                setAlertState({ ...alertState, showCloseButton: true })
+              }
+            />
+          );
           break;
         }
         case "text":
@@ -60,7 +76,9 @@ const Alert = ({ socket, alerts, errors, removeAlert }) => {
             alert.alertStatus ? alert.alertStatus : ""
           }`}
         >
-          <button className="delete" onClick={() => removeAlert(alert.id)} />
+          {(alert.alertType === "text" || showCloseButton) && (
+            <button className="delete" onClick={() => removeAlert(alert.id)} />
+          )}
           {alertBody}
         </div>
       );

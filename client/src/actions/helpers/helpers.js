@@ -1,6 +1,6 @@
 import { setTextAlert, setCustomAlert } from "../alert";
 
-import { SET_ERRORS } from "../types";
+import { SET_ERRORS, REQUEST_ENTRY } from "../types";
 
 export const handleResponseErrors = err => dispatch => {
   const errors = [];
@@ -18,12 +18,15 @@ export const handleResponseErrors = err => dispatch => {
         break;
       }
       case "alert-requestEntry": {
-        console.log(error);
         dispatch(
           setCustomAlert(error.payload.groupId, "is-info", "requestEntry", {
             ...error.payload
           })
         );
+        dispatch({
+          type: REQUEST_ENTRY,
+          payload: error.payload.groupId
+        });
         break;
       }
       case "console": {

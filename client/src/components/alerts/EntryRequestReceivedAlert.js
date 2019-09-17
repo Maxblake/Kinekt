@@ -6,12 +6,25 @@ import Countdown from "../common/subcomponents/Countdown";
 import Modal from "../common/subcomponents/Modal";
 import UserInfo from "../user/UserInfo";
 
-const EntryRequestReceivedAlert = ({ userInfo, socket, showCloseButton }) => {
+const EntryRequestReceivedAlert = ({
+  userInfo,
+  socket,
+  closeAlert,
+  showCloseButton
+}) => {
   const [isActive, setIsActive] = useState(true);
 
   const onTimeout = () => {
     setIsActive(false);
     showCloseButton();
+  };
+
+  const answerEntryRequest = answer => {
+    socket.emit("answerEntryRequest", {
+      answer,
+      userId: userInfo.id
+    });
+    closeAlert();
   };
 
   return (
@@ -27,7 +40,7 @@ const EntryRequestReceivedAlert = ({ userInfo, socket, showCloseButton }) => {
         <div className="field is-grouped is-grouped-right">
           <div className="control">
             <button
-              onClick={() => socket.emit("acceptEntryRequest", userInfo.id)}
+              onClick={() => answerEntryRequest("Accepted")}
               disabled={!isActive}
               className="button is-light is-outlined"
               type="button"
@@ -37,7 +50,7 @@ const EntryRequestReceivedAlert = ({ userInfo, socket, showCloseButton }) => {
           </div>
           <div className="control">
             <button
-              onClick={() => socket.emit("rejectEntryRequest", userInfo.id)}
+              onClick={() => answerEntryRequest("Rejected")}
               disabled={!isActive}
               className="button is-light is-outlined"
               type="button"

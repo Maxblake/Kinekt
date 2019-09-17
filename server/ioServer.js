@@ -1,6 +1,8 @@
 const socketIo = require("socket.io");
 const http = require("http");
 const moment = require("moment");
+const jwt = require("jsonwebtoken");
+const config = require("config");
 
 const User = require("../models/User");
 const Group = require("../models/Group");
@@ -36,11 +38,8 @@ class socketHandler {
       this.leaveCurrentGroup(payload)
     );
     this.socket.on("requestEntry", groupId => this.requestEntry(groupId));
-    this.socket.on("acceptEntryRequest", userId =>
-      this.acceptEntryRequest(userId)
-    );
-    this.socket.on("rejectEntryRequest", userId =>
-      this.rejectEntryRequest(userId)
+    this.socket.on("answerEntryRequest", ({ answer, userId }) =>
+      this.answerEntryRequest(answer, userId)
     );
     this.socket.on("kickFromGroup", kickedUser =>
       this.kickFromGroup(kickedUser)
@@ -144,12 +143,16 @@ class socketHandler {
     });
   }
 
-  async acceptEntryRequest(userId) {
-    this.socket.to(`user-${userId}`).emit("entryRequestAccepted", 12345);
-  }
+  async answerEntryRequest(answer, userId) {
+    let joinKey = undefined;
 
-  async rejectEntryRequest(userId) {
-    console.log(userId);
+    if (answer === "Accepted") {
+      joinKey = jwt.sign({ userId }, config.get("jwtSecret"));
+    }
+
+    this.socket
+      .to(`user-${userId}`)
+      .emit("entryRequestAnswered", { answer, joinKey });
   }
 
   async leaveCurrentGroup(payload) {

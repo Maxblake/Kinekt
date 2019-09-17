@@ -78,11 +78,8 @@
 }
 
 @media (max-width: $tablet - 1) {
-  .page-title-container {
-    flex: 1;
-    &.has-page-options {
-      max-width: none;
-    }
+  .page-title-container.has-page-options {
+    max-width: none;
   }
 }
 

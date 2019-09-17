@@ -45,7 +45,7 @@ router.post("/list", (req, res) => {
 
 const buildQuery = (req, groupIds) => {
   const { searchTerms } = req.body;
-  const query = { _id: { $in: groupIds } };
+  const query = { _id: { $in: groupIds }, accessLevel: { $ne: "Private" } };
 
   if (searchTerms) {
     query.$text = { $search: searchTerms };

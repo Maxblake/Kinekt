@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 import { getGroup } from "../../actions/group";
 
@@ -11,15 +12,19 @@ const RequestEntryAlert = ({
   groupName,
   HRID,
   socket,
+  closeAlert,
   showCloseButton
 }) => {
   const [isActive, setIsActive] = useState(true);
+  const [entryRequestAnswer, setEntryRequestAnswer] = useState("");
 
   useEffect(() => {
-    socket.on("entryRequestAccepted", joinKey => getGroup({ HRID, joinKey }));
+    socket.on("entryRequestAnswered", ({ answer, joinKey }) =>
+      onRequestAnswered(answer, joinKey)
+    );
 
     return () => {
-      socket.off("entryRequestAccepted");
+      socket.off("entryRequestAnswered");
     };
   }, []);
 
@@ -28,25 +33,55 @@ const RequestEntryAlert = ({
     showCloseButton();
   };
 
+  const onRequestAnswered = (answer, joinKey) => {
+    setEntryRequestAnswer(answer);
+
+    if (answer === "Accepted") {
+      getGroup({ HRID, joinKey });
+    }
+
+    showCloseButton();
+  };
+
   return (
     <div className="custom-action-alert">
-      <Countdown totalTime={30} onTimeout={() => onTimeout()} />
+      {entryRequestAnswer === "Rejected" ? (
+        <span className="icon is-large">
+          <i className="fas fa-2x fa-times-circle"></i>
+        </span>
+      ) : entryRequestAnswer === "Accepted" ? (
+        <span className="icon is-large">
+          <i className="fas fa-2x fa-check-circle"></i>
+        </span>
+      ) : (
+        <Countdown totalTime={30} onTimeout={() => onTimeout()} />
+      )}
       <div className="alert-items">
-        <h3>{`Request to join '${groupName}' is pending`}</h3>
-        <div className="field is-grouped is-grouped-right">
-          <div className="control">
-            <button
-              disabled={!isActive}
-              className="button is-light is-outlined"
-              type="button"
-            >
-              <span>{groupName}</span>
-              <span className="icon is-small">
-                <i className="fas fa-chalkboard-teacher" />
-              </span>
-            </button>
+        <h3>
+          {!isActive
+            ? `Request to join '${groupName}'has timed out`
+            : entryRequestAnswer === "Accepted"
+            ? `Request to join '${groupName}' is approved`
+            : entryRequestAnswer === "Rejected"
+            ? `Request to join '${groupName}' is denied`
+            : `Request to join '${groupName}' is pending`}
+        </h3>
+        {entryRequestAnswer === "Accepted" && (
+          <div className="field is-grouped is-grouped-right">
+            <div className="control">
+              <Link
+                onClick={() => closeAlert()}
+                className="button is-light is-outlined"
+                to={`/k/k/group/${HRID}`}
+              >
+                <span>{groupName}</span>
+                <span className="icon is-small">
+                  <i className="fas fa-chalkboard-teacher" />
+                </span>
+              </Link>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

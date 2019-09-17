@@ -9,7 +9,8 @@ import {
   UPDATE_USER,
   SET_CURRENT_GROUP,
   SET_GROUP,
-  GROUP_DELETED
+  GROUP_DELETED,
+  REQUEST_ENTRY
 } from "../actions/types";
 
 const initialState = {
@@ -82,6 +83,9 @@ export default function(state = initialState, action) {
       if (payload) {
         state.socket.emit("joinGroup", payload._id);
       }
+      return state;
+    case REQUEST_ENTRY:
+      state.socket.emit("requestEntry", payload);
       return state;
     default:
       return state;

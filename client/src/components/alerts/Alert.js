@@ -7,7 +7,7 @@ import RequestEntryAlert from "./RequestEntryAlert";
 
 import { removeAlert } from "../../actions/alert";
 
-const Alert = ({ socket, alerts, errors, removeAlert }) => {
+const Alert = ({ alerts, errors, removeAlert }) => {
   const [alertState, setAlertState] = useState({ showCloseButton: false });
 
   const { showCloseButton } = alertState;
@@ -35,7 +35,7 @@ const Alert = ({ socket, alerts, errors, removeAlert }) => {
     }
   });
 
-  if (!!alertsAndErrors.length) {
+  if (alertsAndErrors.length > 0) {
     return alertsAndErrors.map(alert => {
       let alertBody = null;
 
@@ -44,6 +44,7 @@ const Alert = ({ socket, alerts, errors, removeAlert }) => {
           alertBody = (
             <EntryRequestReceivedAlert
               {...alert.props}
+              closeAlert={() => removeAlert(alert.id)}
               showCloseButton={() =>
                 setAlertState({ ...alertState, showCloseButton: true })
               }
@@ -52,10 +53,10 @@ const Alert = ({ socket, alerts, errors, removeAlert }) => {
           break;
         }
         case "requestEntry": {
-          socket.emit("requestEntry", alert.props.groupId);
           alertBody = (
             <RequestEntryAlert
               {...alert.props}
+              closeAlert={() => removeAlert(alert.id)}
               showCloseButton={() =>
                 setAlertState({ ...alertState, showCloseButton: true })
               }
@@ -88,7 +89,6 @@ const Alert = ({ socket, alerts, errors, removeAlert }) => {
 };
 
 Alert.propTypes = {
-  socket: PropTypes.object,
   alerts: PropTypes.array.isRequired,
   errors: PropTypes.array.isRequired,
   removeAlert: PropTypes.func.isRequired
@@ -96,8 +96,7 @@ Alert.propTypes = {
 
 const mapStateToProps = state => ({
   alerts: state.alert,
-  errors: state.error,
-  socket: state.auth.socket
+  errors: state.error
 });
 
 export default connect(

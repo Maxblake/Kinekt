@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import Geosuggest from "react-geosuggest";
 
 import { editUser, deleteUser } from "../../actions/user";
 
@@ -21,13 +22,17 @@ const EditUser = ({
   const [formData, setFormData] = useState({
     name: "",
     about: "",
-    image: undefined
+    image: undefined,
+    currentLocation: { address: "" }
   });
 
-  const { name, about, image } = formData;
+  const { name, about, image, currentLocation } = formData;
 
   const errName = errors.find(error => error.param === "name");
   const errAbout = errors.find(error => error.param === "about");
+  const errCurrentLocation = errors.find(
+    error => error.param === "currentLocationAddress"
+  );
 
   useEffect(() => {
     if (user) {
@@ -49,9 +54,33 @@ const EditUser = ({
     });
   };
 
+  const onChangeCurrentLocation = value =>
+    setFormData({ ...formData, currentLocation: { address: value } });
+
+  const onSelectCurrentLocation = selectedPlace => {
+    if (!selectedPlace) return;
+
+    const currentLocation = {
+      address: selectedPlace.description,
+      lat: selectedPlace.location.lat,
+      lng: selectedPlace.location.lng
+    };
+    setFormData({ ...formData, currentLocation });
+  };
+
   const onSubmit = e => {
     e.preventDefault();
-    editUser({ name, about, image });
+
+    const userFields = {
+      name,
+      about,
+      image,
+      currentLocationAddress: currentLocation.address,
+      currentLocationLat: currentLocation.lat ? currentLocation.lat : "",
+      currentLocationLng: currentLocation.lng ? currentLocation.lng : ""
+    };
+
+    editUser(userFields);
   };
 
   const onClickDelete = () => {

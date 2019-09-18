@@ -189,3 +189,20 @@
     }
   }
 }
+
+// Info modal
+.info-modal {
+  max-width: 650px;
+  align-items: center;
+
+  .content {
+    border-top: 2px solid #dbdbdb;
+    margin-top: 0.75rem;
+    padding-top: 0.25rem;
+    text-align: left;
+  }
+}
+
+.info-icon {
+  color: #4a4a4a;
+}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
+import Geosuggest from "react-geosuggest";
 
 import { editGroup, getGroup } from "../../actions/group";
 import { clearErrors } from "../../actions/auth";
@@ -28,7 +29,7 @@ const EditGroup = ({
 }) => {
   const [formData, setFormData] = useState({
     description: "",
-    place: "",
+    place: { address: "" },
     accessLevel: "Public",
     maxSize: "",
     image: undefined
@@ -37,7 +38,7 @@ const EditGroup = ({
   const { description, place, accessLevel, maxSize, image } = formData;
 
   const errDescription = errors.find(error => error.param === "description");
-  const errPlace = errors.find(error => error.param === "place");
+  const errPlace = errors.find(error => error.param === "placeAddress");
   const errMaxSize = errors.find(error => error.param === "maxSize");
 
   useEffect(() => {
@@ -80,16 +81,34 @@ const EditGroup = ({
     });
   };
 
+  const onChangePlace = value =>
+    setFormData({ ...formData, place: { address: value } });
+
+  const onSelectPlace = selectedPlace => {
+    if (!selectedPlace) return;
+
+    const place = {
+      address: selectedPlace.description,
+      lat: selectedPlace.location.lat,
+      lng: selectedPlace.location.lng
+    };
+    setFormData({ ...formData, place });
+  };
+
   const onSubmit = e => {
     e.preventDefault();
 
     const groupFields = {
       description,
-      place,
+      placeAddress: place.address,
+      placeLat: place.lat ? place.lat : "",
+      placeLng: place.lng ? place.lng : "",
       accessLevel,
       maxSize,
       image
     };
+
+    console.log(groupFields);
 
     editGroup(groupFields, group._id);
   };
@@ -141,13 +160,23 @@ const EditGroup = ({
           }
         />
 
-        <FormControl
+        <CustomField
           label="Meeting Place"
-          name="place"
-          value={place}
-          onChange={onChange}
-          error={errPlace ? errPlace.msg : undefined}
-          required={true}
+          children={
+            <div className="field">
+              <div className="control">
+                <Geosuggest
+                  initialValue={place.address}
+                  placeDetailFields={[]}
+                  queryDelay={500}
+                  onChange={onChangePlace}
+                  onSuggestSelect={onSelectPlace}
+                  inputClassName="input"
+                />
+              </div>
+              {errPlace && <p className="help is-danger">{errPlace.msg}</p>}
+            </div>
+          }
         />
 
         <CustomField

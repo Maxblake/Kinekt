@@ -98,12 +98,25 @@ router.put(
 );
 
 const buildUserFields = (req, updating = false) => {
-  const { name, email, about } = req.body;
+  const {
+    name,
+    email,
+    about,
+    currentLocationAddress,
+    currentLocationLat,
+    currentLocationLng
+  } = req.body;
   let userFields = {};
 
   if (!updating && email) userFields.email = email;
   if (name) userFields.name = name;
   if (about) userFields.about = about;
+  if (currentLocationAddress || currentLocationLat)
+    userFields.currentLocation = {
+      address: currentLocationAddress,
+      lat: currentLocationLat,
+      lng: currentLocationLng
+    };
 
   return userFields;
 };

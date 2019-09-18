@@ -325,7 +325,7 @@ class socketHandler {
   async kickFromGroup(kickedUser) {
     const group = await Group.findById(this.groupId);
 
-    if (group.creator.equals(kickedUser.userId)) {
+    if (!group || group.creator.equals(kickedUser.userId)) {
       return;
     }
 

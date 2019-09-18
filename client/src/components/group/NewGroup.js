@@ -31,7 +31,7 @@ const NewGroup = ({
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    place: "",
+    place: { address: "" },
     timeContext: "Now",
     accessLevel: "Public",
     time: { formatted: moment().format("h:mm A") },
@@ -54,7 +54,7 @@ const NewGroup = ({
 
   const errName = errors.find(error => error.param === "name");
   const errDescription = errors.find(error => error.param === "description");
-  const errPlace = errors.find(error => error.param === "place");
+  const errPlace = errors.find(error => error.param === "placeAddress");
   const errMaxSize = errors.find(error => error.param === "maxSize");
 
   useEffect(() => {
@@ -104,17 +104,29 @@ const NewGroup = ({
     setFormData({ ...formData, displayTimepicker: !displayTimepicker });
   };
 
+  const onChangePlace = value =>
+    setFormData({ ...formData, place: { address: value } });
+
+  const onSelectPlace = selectedPlace => {
+    if (!selectedPlace) return;
+
+    const place = {
+      address: selectedPlace.description,
+      lat: selectedPlace.location.lat,
+      lng: selectedPlace.location.lng
+    };
+    setFormData({ ...formData, place });
+  };
+
   const onSubmit = e => {
     e.preventDefault();
 
     const groupFields = {
       name,
       description,
-      place: {
-        address: place,
-        latitude: "",
-        longitude: ""
-      },
+      placeAddress: place.address,
+      placeLat: place.lat ? place.lat : "",
+      placeLng: place.lng ? place.lng : "",
       accessLevel,
       maxSize,
       image
@@ -244,16 +256,24 @@ const NewGroup = ({
           }
         />
 
-        <FormControl
+        <CustomField
           label="Meeting Place"
-          name="place"
-          value={place}
-          onChange={onChange}
-          error={errPlace ? errPlace.msg : undefined}
-          required={true}
+          children={
+            <div className="field">
+              <div className="control">
+                <Geosuggest
+                  initialValue={place.address}
+                  placeDetailFields={[]}
+                  queryDelay={500}
+                  onChange={onChangePlace}
+                  onSuggestSelect={onSelectPlace}
+                  inputClassName="input"
+                />
+              </div>
+              {errPlace && <p className="help is-danger">{errPlace.msg}</p>}
+            </div>
+          }
         />
-
-        <Geosuggest />
 
         <CustomField
           label="Access Level"

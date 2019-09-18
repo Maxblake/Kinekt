@@ -60,7 +60,7 @@ const UserInfo = ({ user, adminOptions }) => {
         imageClass="is-rounded"
       />
       <div className="content">
-        <h3 className="is-size-3">{user.name}</h3>
+        <h3 className="is-size-4">{user.name}</h3>
         {user.about && <h6 className="is-size-6">{user.about}</h6>}
       </div>
       {adminOptionButtons}

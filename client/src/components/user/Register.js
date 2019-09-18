@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
+import Geosuggest from "react-geosuggest";
 
 import { register } from "../../actions/user";
 
@@ -19,15 +20,19 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
     email: "",
     password: "",
     about: "",
-    image: undefined
+    image: undefined,
+    currentLocation: { address: "" }
   });
 
-  const { name, email, password, about, image } = formData;
+  const { name, email, password, about, image, currentLocation } = formData;
 
   const errName = errors.find(error => error.param === "name");
   const errEmail = errors.find(error => error.param === "email");
   const errPassword = errors.find(error => error.param === "password");
   const errAbout = errors.find(error => error.param === "about");
+  const errCurrentLocation = errors.find(
+    error => error.param === "currentLocationAddress"
+  );
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -39,10 +44,47 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
     });
   };
 
+  const onChangeCurrentLocation = value =>
+    setFormData({ ...formData, currentLocation: { address: value } });
+
+  const onSelectCurrentLocation = selectedPlace => {
+    if (!selectedPlace) return;
+
+    const currentLocation = {
+      address: selectedPlace.description,
+      lat: selectedPlace.location.lat,
+      lng: selectedPlace.location.lng
+    };
+    setFormData({ ...formData, currentLocation });
+  };
+
   const onSubmit = async e => {
     e.preventDefault();
-    register({ name, email, password, about, image });
+
+    const userFields = {
+      name,
+      email,
+      password,
+      about,
+      image,
+      currentLocationAddress: currentLocation.address,
+      currentLocationLat: currentLocation.lat ? currentLocation.lat : "",
+      currentLocationLng: currentLocation.lng ? currentLocation.lng : ""
+    };
+
+    register(userFields);
   };
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(displayLocationInfo);
+  }
+
+  function displayLocationInfo(position) {
+    const lng = position.coords.longitude;
+    const lat = position.coords.latitude;
+
+    console.log(`longitude: ${lng} | latitude: ${lat}`);
+  }
 
   if (isAuthenticated) {
     return <Redirect to="/" />;
@@ -102,6 +144,34 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
                 />
               </div>
               {errAbout && <p className="help is-danger">{errAbout.msg}</p>}
+            </div>
+          }
+        />
+
+        <CustomField
+          label={
+            <span>
+              Location
+              <span className="icon">
+                <i className="fas fa-user-check" />
+              </span>
+            </span>
+          }
+          children={
+            <div className="field">
+              <div className="control">
+                <Geosuggest
+                  initialValue={currentLocation.address}
+                  placeDetailFields={[]}
+                  queryDelay={500}
+                  onChange={onChangeCurrentLocation}
+                  onSuggestSelect={onSelectCurrentLocation}
+                  inputClassName="input"
+                />
+              </div>
+              {errCurrentLocation && (
+                <p className="help is-danger">{errCurrentLocation.msg}</p>
+              )}
             </div>
           }
         />

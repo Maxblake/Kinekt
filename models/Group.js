@@ -25,10 +25,8 @@ const GroupSchema = new mongoose.Schema({
   },
   place: {
     address: { type: String, required: true },
-    location: {
-      latitude: { type: String },
-      longitude: { type: String }
-    }
+    lat: { type: String },
+    lng: { type: String }
   },
   users: [
     {

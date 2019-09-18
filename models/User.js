@@ -21,6 +21,11 @@ const UserSchema = new mongoose.Schema({
     name: { type: String },
     HRID: { type: String }
   },
+  currentLocation: {
+    address: { type: String, required: true },
+    lat: { type: String },
+    lng: { type: String }
+  },
   image: {
     link: {
       type: String

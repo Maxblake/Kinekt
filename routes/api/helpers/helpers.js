@@ -91,11 +91,14 @@ const validateRequest = APImethod => {
           .withMessage(
             "Name may contain profanity, please remove it to proceed"
           ),
-        check("place", "Meeting place is required")
+        check("placeAddress", "Meeting place is required")
           .exists({ checkFalsy: true })
-          .custom(place => place.address.length < 256)
+          .isLength({ max: 256 })
           .withMessage("Meeting place is too long")
-          .custom(place => !filter.isProfane(place.address))
+          .custom((placeAddress, { req }) => {
+            if (!!req.body.placeLat) return true;
+            return !filter.isProfane(placeAddress);
+          })
           .withMessage(
             "Meeting place may contain profanity, please remove it to proceed"
           ),
@@ -126,11 +129,14 @@ const validateRequest = APImethod => {
           .withMessage(
             "Name may contain profanity, please remove it to proceed"
           ),
-        check("place", "Meeting place is required")
+        check("placeAddress", "Meeting place is required")
           .exists({ checkFalsy: true })
-          .custom(place => place.address.length < 256)
+          .isLength({ max: 256 })
           .withMessage("Meeting place is too long")
-          .custom(place => !filter.isProfane(place.address))
+          .custom((placeAddress, { req }) => {
+            if (!!req.body.placeLat) return true;
+            return !filter.isProfane(placeAddress);
+          })
           .withMessage(
             "Meeting place may contain profanity, please remove it to proceed"
           ),
@@ -262,6 +268,16 @@ const validateRequest = APImethod => {
           .custom(about => !filter.isProfane(about))
           .withMessage(
             "About may contain profanity, please remove it to proceed"
+          ),
+        check("currentLocationAddress", "Current location is too long")
+          .optional({ checkFalsy: true })
+          .isLength({ max: 256 })
+          .custom((currentLocationAddress, { req }) => {
+            if (!!req.body.currentLocationLat) return true;
+            return !filter.isProfane(currentLocationAddress);
+          })
+          .withMessage(
+            "Current location may contain profanity, please remove it to proceed"
           )
       ];
     }
@@ -283,6 +299,16 @@ const validateRequest = APImethod => {
           .custom(about => !filter.isProfane(about))
           .withMessage(
             "About may contain profanity, please remove it to proceed"
+          ),
+        check("currentLocationAddress", "Current location is too long")
+          .optional({ checkFalsy: true })
+          .isLength({ max: 256 })
+          .custom((currentLocationAddress, { req }) => {
+            if (!!req.body.currentLocationLat) return true;
+            return !filter.isProfane(currentLocationAddress);
+          })
+          .withMessage(
+            "Current location may contain profanity, please remove it to proceed"
           )
       ];
     }

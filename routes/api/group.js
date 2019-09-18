@@ -253,14 +253,28 @@ const createOrUpdateGroup = async (req, res, updating) => {
 };
 
 const buildGroupFields = (req, updating) => {
-  const { name, description, place, accessLevel, time, maxSize } = req.body;
+  const {
+    name,
+    description,
+    placeAddress,
+    placeLat,
+    placeLng,
+    accessLevel,
+    time,
+    maxSize
+  } = req.body;
   const groupTypeId = req.body.groupType;
 
   let groupFields = {};
 
   if (name) groupFields.name = name;
   if (!updating && groupTypeId) groupFields.groupType = groupTypeId;
-  if (place) groupFields.place = place;
+  if (placeAddress)
+    groupFields.place = {
+      address: placeAddress,
+      lat: placeLat,
+      lng: placeLng
+    };
   if (accessLevel) groupFields.accessLevel = accessLevel;
   if (!updating) groupFields.creator = req.user.id;
   if (description) groupFields.description = description;

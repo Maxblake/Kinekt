@@ -70,11 +70,10 @@ export const getGroups = (
     }
   };
 
-  const bodyBuilder = { groupTypeName: groupTypeName.toLowerCase() }; //hehehe
+  let bodyBuilder = { groupTypeName: groupTypeName.toLowerCase() }; //hehehe
 
   if (queryParams !== null) {
-    bodyBuilder.sortBy = queryParams.sortBy;
-    bodyBuilder.searchTerms = queryParams.searchTerms;
+    bodyBuilder = { ...bodyBuilder, ...queryParams };
   }
 
   const body = JSON.stringify(bodyBuilder);

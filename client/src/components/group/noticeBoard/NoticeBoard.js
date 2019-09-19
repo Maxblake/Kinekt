@@ -1,8 +1,7 @@
 import React from "react";
+import Notice from "./Notice";
 
-import Carousel from "./carousel/Carousel";
-
-const NoticeBoard = ({ items }) => {
+const NoticeBoard = ({ noticeInfoArray }) => {
   return (
     <div className="noticeboard">
       <div className="header-tab">
@@ -10,8 +9,8 @@ const NoticeBoard = ({ items }) => {
           Notice Board
         </div>
       </div>
-      {items.length ? (
-        <Carousel items={items} active={0} />
+      {noticeInfoArray.length > 0 ? (
+        noticeInfoArray.map((noticeInfo, index) => <Notice key={index} />)
       ) : (
         <div className="notices">
           <div className="notice">- Nothing to see here -</div>

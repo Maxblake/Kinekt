@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { getGroups } from "../../actions/group";
+import { setTextAlert } from "../../actions/alert";
 
 import Spinner from "../common/Spinner";
 import NotFound from "../common/NotFound";
@@ -18,6 +19,7 @@ import defaultGroupTypeImage from "../../resources/default_grouptype_image.jpg";
 //TODO format date/times with moment
 const GroupType = ({
   getGroups,
+  setTextAlert,
   auth: { user },
   group: { groups, loading, error },
   groupType: { groupType },
@@ -43,7 +45,16 @@ const GroupType = ({
       !groups.length ||
       readyToLoadNewGroups
     ) {
-      getGroups(groupTypeParamSpaced, groupData);
+      let queryParams = {
+        sortBy,
+        searchTerms
+      };
+
+      if (sortBy === "Nearby" && user && user.currentLocation) {
+        queryParams.userLocation = user.currentLocation;
+      }
+
+      getGroups(groupTypeParamSpaced, queryParams);
 
       setGroupData({
         ...groupData,
@@ -53,6 +64,24 @@ const GroupType = ({
   }, [match.params.groupType, readyToLoadNewGroups]);
 
   const onChange = e => {
+    if (
+      e.target.name === "sortBy" &&
+      e.target.value === "Nearby" &&
+      (!user || !user.currentLocation)
+    ) {
+      if (!user) {
+        setTextAlert(
+          "You must log in and specify a location to search from in order to find nearby groups",
+          "is-warning"
+        );
+      } else if (!user.currentLocation) {
+        setTextAlert(
+          "You must specify a location to search from in your account settings in order to find nearby groups",
+          "is-warning"
+        );
+      }
+    }
+
     setGroupData({
       ...groupData,
       [e.target.name]: e.target.value,
@@ -273,6 +302,7 @@ const GroupType = ({
 
 GroupType.propTypes = {
   getGroups: PropTypes.func.isRequired,
+  setTextAlert: PropTypes.func.isRequired,
   groupType: PropTypes.object.isRequired,
   group: PropTypes.object.isRequired,
   liveData: PropTypes.object.isRequired,
@@ -288,5 +318,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getGroups }
+  { getGroups, setTextAlert }
 )(GroupType);

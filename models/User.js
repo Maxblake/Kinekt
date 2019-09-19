@@ -22,7 +22,7 @@ const UserSchema = new mongoose.Schema({
     HRID: { type: String }
   },
   currentLocation: {
-    address: { type: String, required: true },
+    address: { type: String },
     lat: { type: String },
     lng: { type: String }
   },

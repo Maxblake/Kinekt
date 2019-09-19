@@ -23,7 +23,7 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
     about: "",
     image: undefined,
     currentLocation: { address: "" },
-    userUsersLocation: false
+    useUsersLocation: false
   });
 
   const {
@@ -33,7 +33,7 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
     about,
     image,
     currentLocation,
-    userUsersLocation
+    useUsersLocation
   } = formData;
 
   const errName = errors.find(error => error.param === "name");
@@ -70,15 +70,13 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
 
   const currentLocationCBChanged = async e => {
     const checked = e.target.checked;
-    let currLocation = currentLocation;
+    let newCurrentLocation = currentLocation;
 
     if (checked) {
       const coords = await getCurrentPosition();
 
-      console.log(coords);
-
       if (!!coords && !!coords.latitude) {
-        currLocation = {
+        newCurrentLocation = {
           address: "",
           lat: coords.latitude,
           lng: coords.longitude
@@ -88,12 +86,14 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
           "Kinekt is unable to determine your location, please check your browser settings or enter a location manually."
         );
       }
+    } else {
+      newCurrentLocation = { address: "" };
     }
 
     setFormData({
       ...formData,
-      userUsersLocation: checked,
-      currentLocation: currLocation
+      useUsersLocation: checked,
+      currentLocation: newCurrentLocation
     });
   };
 
@@ -218,7 +218,7 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
                 <div className="field">
                   <div className="control">
                     <Geosuggest
-                      disabled={userUsersLocation}
+                      disabled={useUsersLocation}
                       initialValue={currentLocation.address}
                       placeDetailFields={[]}
                       queryDelay={500}

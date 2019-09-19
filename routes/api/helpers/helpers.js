@@ -115,7 +115,7 @@ const validateRequest = APImethod => {
           .isIn(["Public", "Protected", "Private"]),
         check("maxSize", "Maximum size must be between 1 and 999")
           .optional({ checkFalsy: true })
-          .isInt({ min: 0, max: 999 })
+          .isInt({ min: 1, max: 999 })
       ];
     }
     case "updateGroup": {
@@ -152,7 +152,7 @@ const validateRequest = APImethod => {
           .isIn(["Public", "Protected", "Private"]),
         check("maxSize", "Maximum size must be between 1 and 999")
           .optional({ checkFalsy: true })
-          .isInt({ min: 0, max: 999 })
+          .isInt({ min: 1, max: 999 })
       ];
     }
     case "addNotification": {

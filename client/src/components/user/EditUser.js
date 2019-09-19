@@ -12,6 +12,7 @@ import FormControl from "../form/FormControl";
 import SubmitButton from "../form/SubmitButton";
 import CustomField from "../form/CustomField";
 import ImgUploadControl from "../form/ImgUploadControl";
+import Modal from "../common/subcomponents/Modal";
 
 const EditUser = ({
   editUser,
@@ -23,10 +24,11 @@ const EditUser = ({
     name: "",
     about: "",
     image: undefined,
-    currentLocation: { address: "" }
+    currentLocation: { address: "" },
+    useUsersLocation: false
   });
 
-  const { name, about, image, currentLocation } = formData;
+  const { name, about, image, currentLocation, useUsersLocation } = formData;
 
   const errName = errors.find(error => error.param === "name");
   const errAbout = errors.find(error => error.param === "about");
@@ -39,7 +41,16 @@ const EditUser = ({
       setFormData({
         ...formData,
         name: user.name,
-        about: user.about ? user.about : ""
+        about: user.about ? user.about : "",
+        currentLocation: user.currentLocation
+          ? user.currentLocation
+          : currentLocation,
+        useUsersLocation:
+          user.currentLocation &&
+          user.currentLocation.lat !== undefined &&
+          user.currentLocation.address === ""
+            ? true
+            : false
       });
     }
   }, [user]);
@@ -66,6 +77,47 @@ const EditUser = ({
       lng: selectedPlace.location.lng
     };
     setFormData({ ...formData, currentLocation });
+  };
+
+  const currentLocationCBChanged = async e => {
+    const checked = e.target.checked;
+    let newCurrentLocation = currentLocation;
+
+    if (checked) {
+      const coords = await getCurrentPosition();
+
+      if (!!coords && !!coords.latitude) {
+        newCurrentLocation = {
+          address: "",
+          lat: coords.latitude,
+          lng: coords.longitude
+        };
+      } else {
+        alert(
+          "Kinekt is unable to determine your location, please check your browser settings or enter a location manually."
+        );
+      }
+    } else {
+      newCurrentLocation = { address: "" };
+    }
+
+    setFormData({
+      ...formData,
+      useUsersLocation: checked,
+      currentLocation: newCurrentLocation
+    });
+  };
+
+  const getCurrentPosition = async () => {
+    return new Promise(res => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position =>
+          res(position.coords)
+        );
+      } else {
+        res(null);
+      }
+    });
   };
 
   const onSubmit = e => {
@@ -122,6 +174,64 @@ const EditUser = ({
                 />
               </div>
               {errAbout && <p className="help is-danger">{errAbout.msg}</p>}
+            </div>
+          }
+        />
+
+        <CustomField
+          label={
+            <span>
+              Location&nbsp;
+              <Modal
+                trigger={
+                  <span className="icon info-icon">
+                    <i className="far fa-question-circle" />
+                  </span>
+                }
+              >
+                <div className="box info-modal is-vcentered">
+                  <div className="icon is-large info-icon">
+                    <i className="far fa-3x fa-question-circle" />
+                  </div>
+                  <div className="content">
+                    The location you provide is used solely to help find groups
+                    around you. You can update or elect not to share your
+                    location at any time.
+                  </div>
+                </div>
+              </Modal>
+            </span>
+          }
+          children={
+            <div className="field is-grouped">
+              <div className="control is-expanded">
+                <div className="field">
+                  <div className="control">
+                    <Geosuggest
+                      disabled={useUsersLocation}
+                      initialValue={currentLocation.address}
+                      placeDetailFields={[]}
+                      queryDelay={500}
+                      onChange={onChangeCurrentLocation}
+                      onSuggestSelect={onSelectCurrentLocation}
+                      inputClassName="input"
+                    />
+                  </div>
+                  {errCurrentLocation && (
+                    <p className="help is-danger">{errCurrentLocation.msg}</p>
+                  )}
+                </div>
+              </div>
+              <div className="control">
+                <label className="checkbox">
+                  <input
+                    type="checkbox"
+                    checked={useUsersLocation}
+                    onChange={currentLocationCBChanged}
+                  />
+                  &nbsp;Use Current
+                </label>
+              </div>
             </div>
           }
         />

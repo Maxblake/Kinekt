@@ -6,6 +6,7 @@ const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
 const jwt = require("jsonwebtoken");
 const config = require("config");
+const { getDistance } = require("geolib");
 
 const { updateImage, uploadImage, deleteImage } = require("./external/imgur");
 const {
@@ -95,9 +96,31 @@ const sortGroups = (req, groups) => {
       break;
     }
     case "Nearby": {
-      groups.sort((a, b) => {
-        return 1;
-      });
+      const { userLocation } = req.body;
+
+      if (userLocation !== undefined) {
+        groups.sort((a, b) => {
+          if (a.place.lat) {
+            if (!b.place.lat) {
+              return -1;
+            } else {
+              const distanceToA = getDistance(
+                { lat: userLocation.lat, lng: userLocation.lng },
+                { lat: a.place.lat, lng: a.place.lng }
+              );
+              const distanceToB = getDistance(
+                { lat: userLocation.lat, lng: userLocation.lng },
+                { lat: b.place.lat, lng: b.place.lng }
+              );
+              return distanceToA - distanceToB;
+            }
+          } else if (b.place.lat) {
+            return 1;
+          }
+
+          return 0;
+        });
+      }
       break;
     }
     default: {

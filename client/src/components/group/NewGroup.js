@@ -128,9 +128,10 @@ const NewGroup = ({
       placeLat: place.lat ? place.lat : "",
       placeLng: place.lng ? place.lng : "",
       accessLevel,
-      maxSize,
       image
     };
+
+    if (Number.isInteger(maxSize)) groupFields.maxSize = maxSize;
 
     const ISODate = moment();
     if (timeContext !== "Now") {

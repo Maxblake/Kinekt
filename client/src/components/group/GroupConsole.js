@@ -1,7 +1,7 @@
 import React from "react";
 
 import Chat from "./chat/Chat";
-import NoticeBoard from "../noticeBoard/NoticeBoard";
+import NoticeBoard from "./noticeBoard/NoticeBoard";
 import GroupDetails from "../common/subcomponents/GroupDetails";
 import Image from "../common/subcomponents/Image";
 
@@ -17,7 +17,7 @@ const GroupConsole = ({ group, imgSrc }) => {
         <div className="group-image">
           <Image figureClass="is-2by1" src={imgSrc} alt="Placeholder image" />
         </div>
-        <NoticeBoard items={[]} />
+        <NoticeBoard noticeInfoArray={[1, 2]} />
       </div>
     </div>
   );

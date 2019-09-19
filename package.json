@@ -18,6 +18,7 @@
     "config": "^3.1.0",
     "express": "^4.17.1",
     "express-validator": "^6.1.1",
+    "geolib": "^3.0.4",
     "human-readable-ids": "^1.0.4",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",

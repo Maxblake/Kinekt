@@ -197,12 +197,12 @@ const Group = ({
           </div>
         </div>
       </nav>
-      <GroupConsole group={group} imgSrc={getGroupImage()} />
       <GroupMembers
         users={group.users}
         maxSize={group.maxSize}
         adminOptions={adminOptions}
       />
+      <GroupConsole group={group} imgSrc={getGroupImage()} />
       <IdleTimer
         element={document}
         onAction={() => setUserStatus("active")}

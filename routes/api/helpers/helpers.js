@@ -155,15 +155,15 @@ const validateRequest = APImethod => {
           .isInt({ min: 1, max: 999 })
       ];
     }
-    case "addNotification": {
+    case "addNotice": {
       return [
-        check("body", "Notification body is required")
+        check("body", "Notice body is required")
           .exists({ checkFalsy: true })
           .isLength({ max: 1024 })
-          .withMessage("Notification body is too long")
-          .custom(notif => !filter.isProfane(notif))
+          .withMessage("Notice body is too long")
+          .custom(body => !filter.isProfane(body))
           .withMessage(
-            "Notification body may contain profanity, please remove it to proceed"
+            "Notice body may contain profanity, please remove it to proceed"
           )
       ];
     }

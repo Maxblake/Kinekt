@@ -1,7 +1,8 @@
 import React from "react";
 import Notice from "./Notice";
+import NewNotice from "./NewNotice";
 
-const NoticeBoard = ({ noticeInfoArray }) => {
+const NoticeBoard = ({ user, noticeInfoArray }) => {
   return (
     <div className="noticeboard">
       <div className="header-tab">
@@ -9,13 +10,18 @@ const NoticeBoard = ({ noticeInfoArray }) => {
           Notice Board
         </div>
       </div>
-      {noticeInfoArray.length > 0 ? (
-        noticeInfoArray.map((noticeInfo, index) => <Notice key={index} />)
-      ) : (
-        <div className="notices">
-          <div className="notice">- Nothing to see here -</div>
-        </div>
-      )}
+      <div className="notices is-vcentered">
+        <NewNotice user={user} />
+        {noticeInfoArray.length > 10 ? (
+          noticeInfoArray.map((noticeInfo, index) => (
+            <Notice noticeInfo={noticeInfo} key={index} />
+          ))
+        ) : (
+          <div className="notice has-text-centered">
+            There's nothing to see here
+          </div>
+        )}
+      </div>
     </div>
   );
 };

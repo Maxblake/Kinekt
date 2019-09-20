@@ -62,7 +62,7 @@ const GroupSchema = new mongoose.Schema({
       type: String
     }
   },
-  notifications: [
+  notices: [
     {
       author: {
         id: {
@@ -74,6 +74,10 @@ const GroupSchema = new mongoose.Schema({
           type: String,
           required: true
         }
+      },
+      creationTimestamp: {
+        type: Date,
+        default: Date.now
       },
       body: {
         type: String,

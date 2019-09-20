@@ -492,12 +492,12 @@ const handleGroupDeletionSideEffects = async (group, errors) => {
   });
 };
 
-// @route   PUT api/group/notification/:groupId
-// @desc    Add a notification to a group
+// @route   PUT api/group/notice/:groupId
+// @desc    Add a notice to a group
 // @access  Private
 router.put(
-  "/notification/:groupId",
-  [auth, validateRequest("addNotification")],
+  "/notice/:groupId",
+  [auth, validateRequest("addNotice")],
   async (req, res) => {
     const errors = new APIerrors();
 
@@ -506,38 +506,37 @@ router.put(
 
     runAPISafely(async () => {
       const { groupId } = req.params;
-      const notification = await buildNotification(req, errors);
+      const notice = await buildNotice(req, errors);
       const group = await Group.findById(groupId);
 
       if (!group) {
         return errors.addErrAndSendResponse(res, "Unable to find group");
       }
 
-      if (
-        group.users.filter(user => {
-          user.id === req.user.id;
-        })[0].memberType !== "admin"
-      ) {
-        return errors.addErrAndSendResponse(
-          res,
-          "You do not have permission to add a notification to this group"
+      const currentUser = group.users.filter(groupUser => {
+        return groupUser.id.equals(req.user.id);
+      })[0];
+
+      if (!currentUser || currentUser.memberType !== "admin") {
+        errors.addError(
+          "You do not have permission to add a notice to this group",
+          "alert"
         );
       }
-
-      group.notifications.push(notification);
 
       if (errors.isNotEmpty()) {
         return errors.sendErrorResponse(res);
       }
 
+      group.notices.push(notice);
       await group.save();
 
-      res.json(group);
+      res.json(group.notices);
     });
   }
 );
 
-const buildNotification = async (req, errors) => {
+const buildNotice = async (req, errors) => {
   const { authorId, body } = req.body;
   let { authorName } = req.body;
 
@@ -555,14 +554,14 @@ const buildNotification = async (req, errors) => {
   return { author, body };
 };
 
-// @route   DELETE api/group/notification/:groupId/:notifId
-// @desc    Remove a notification from a group
+// @route   DELETE api/group/notice/:groupId/:noticeId
+// @desc    Remove a notice from a group
 // @access  Private
-router.delete("/notification/:groupId/:notifId", auth, async (req, res) => {
+router.delete("/notice/:groupId/:noticeId", auth, async (req, res) => {
   const errors = new APIerrors();
 
   runAPISafely(async () => {
-    const { groupId, notifId } = req.params;
+    const { groupId, noticeId } = req.params;
     const group = await Group.findById(groupId);
 
     if (!group) {
@@ -570,128 +569,117 @@ router.delete("/notification/:groupId/:notifId", auth, async (req, res) => {
     }
 
     const currentUser = group.users.filter(groupUser => {
-      return groupUser.id === req.user.id;
+      return groupUser.id.equals(req.user.id);
     })[0];
 
-    if (currentUser && currentUser.memberType !== "admin") {
-      return errors.addErrAndSendResponse(
-        res,
-        "You do not have permission to remove a notification from this group"
+    if (!currentUser || currentUser.memberType !== "admin") {
+      errors.addError(
+        "You do not have permission to remove a notice from this group",
+        "alert"
       );
     }
 
-    const notifIndex = getNotifIndex(group, notifId, errors);
+    const noticeIndex = getNoticeIndex(group, noticeId, errors);
 
     if (errors.isNotEmpty()) {
       return errors.sendErrorResponse(res);
     }
-    group.notifications.splice(notifIndex, 1);
 
+    group.notices.splice(noticeIndex, 1);
     await group.save();
 
-    res.json(group);
+    res.json(group.notices);
   });
 });
 
-// @route   PUT api/group/notification/:groupId/like/:notifId
-// @desc    Like a notification
+// @route   PUT api/group/notice/:groupId/like/:noticeId
+// @desc    Like a notice
 // @access  Private
-router.put("/notification/:groupId/like/:notifId", auth, async (req, res) => {
+router.put("/notice/:groupId/like/:noticeId", auth, async (req, res) => {
   const errors = new APIerrors();
 
   runAPISafely(async () => {
-    const { groupId, notifId } = req.params;
+    const { groupId, noticeId } = req.params;
     const group = await Group.findById(groupId);
 
     if (!group) {
       return errors.addErrAndSendResponse(res, "Unable to find group");
     }
 
-    if (!group.users.includes(req.user.id)) {
+    if (!group.users.find(groupUser => groupUser.id.equals(req.user.id))) {
       return errors.addErrAndSendResponse(
         res,
-        "You must be a group member to like this notification"
+        "You must be a group member to like this notice"
       );
     }
 
-    const notifIndex = getNotifIndex(group, notifId, errors);
+    const noticeIndex = getNoticeIndex(group, noticeId, errors);
 
     if (errors.isNotEmpty()) {
       return errors.sendErrorResponse(res);
     }
-    const notification = group.notifications[notifIndex];
+    const notice = group.notices[noticeIndex];
 
-    if (notification.likes.includes(req.user.id)) {
-      return errors.addErrAndSendResponse(res, "Notification already liked");
+    if (notice.likes.includes(req.user.id)) {
+      return errors.addErrAndSendResponse(res, "Notice already liked");
     }
 
-    notification.likes.unshift(req.user.id);
-
+    notice.likes.unshift(req.user.id);
     await group.save();
 
-    res.json(notification.likes);
+    res.json(notice.likes);
   });
 });
 
-// @route   PUT api/group/notification/:groupId/unlike/:notifId
-// @desc    Unlike a notification
+// @route   PUT api/group/notice/:groupId/unlike/:noticeId
+// @desc    Unlike a notice
 // @access  Private
-router.put("/notification/:groupId/unlike/:notifId", auth, async (req, res) => {
+router.put("/notice/:groupId/unlike/:noticeId", auth, async (req, res) => {
   const errors = new APIerrors();
 
   runAPISafely(async () => {
-    const { groupId, notifId } = req.params;
+    const { groupId, noticeId } = req.params;
     const group = await Group.findById(groupId);
 
     if (!group) {
       return errors.addErrAndSendResponse(res, "Unable to find group");
     }
 
-    if (
-      group.users.filter(user => {
-        user.id === req.user.id;
-      }).length < 1
-    ) {
+    if (!group.users.find(groupUser => groupUser.id.equals(req.user.id))) {
       return errors.addErrAndSendResponse(
         res,
-        "You must be a group member to unlike this notification"
+        "You must be a group member to unlike this notice"
       );
     }
 
-    const notifIndex = getNotifIndex(group, notifId, errors);
+    const noticeIndex = getNoticeIndex(group, noticeId, errors);
 
     if (errors.isNotEmpty()) {
       return errors.sendErrorResponse(res);
     }
 
-    const notification = group.notifications[notifIndex];
-    const likeIndex = notification.likes.indexOf(req.user.id);
+    const notice = group.notices[noticeIndex];
+    const likeIndex = notice.likes.indexOf(req.user.id);
 
     if (likeIndex === -1) {
-      return errors.addErrAndSendResponse(
-        res,
-        "Notification has not yet been liked"
-      );
+      return errors.addErrAndSendResponse(res, "Notice has not yet been liked");
     }
 
-    notification.likes.splice(likeIndex, 1);
-
+    notice.likes.splice(likeIndex, 1);
     await group.save();
 
-    res.json(notification.likes);
+    res.json(notice.likes);
   });
 });
 
-const getNotifIndex = (group, notifId, errors) => {
-  const notifIndex = group.notifications
-    .map(notif => notif.id)
-    .indexOf(notifId);
+const getNoticeIndex = (group, noticeId, errors) => {
+  const noticeIndex = group.notices.map(notice => notice.id).indexOf(noticeId);
 
-  if (notifIndex === -1) {
-    errors.addError("Invalid notification id");
+  if (noticeIndex === -1) {
+    errors.addError("Invalid notice id");
   }
 
-  return notifIndex;
+  return noticeIndex;
 };
 
 module.exports = router;

@@ -1,6 +1,8 @@
 import React from "react";
 
-const Notice = () => {
+const Notice = ({ noticeInfo }) => {
+  console.log(noticeInfo);
+
   return (
     <div className="notice box">
       <div className="media">
@@ -41,7 +43,9 @@ const Notice = () => {
           </nav>
         </div>
         <div class="media-right">
-          <button class="delete"></button>
+          <span class="icon">
+            <i className="fas fa-chevron-up"></i>
+          </span>
         </div>
       </div>
     </div>

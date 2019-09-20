@@ -173,6 +173,7 @@
   margin-bottom: 1.25rem;
 
   .group-chat {
+    position: relative;
     align-self: flex-start;
     padding: 1.25rem;
     padding-right: 0;
@@ -180,6 +181,15 @@
     border-radius: 6px 0 0 6px;
 
     flex: 2;
+
+    .corner-fill {
+      width: 6px;
+      height: 6px;
+      background: $off-black;
+      position: absolute;
+      right: -6px;
+      bottom: 0;
+    }
   }
 
   .group-details-and-nb {
@@ -215,6 +225,10 @@
       width: 90%;
       left: 5%;
       bottom: 0;
+
+      .corner-fill {
+        display: none;
+      }
 
       .show-chat-btn {
         display: block;
@@ -269,6 +283,7 @@
 
   .show-chat-btn {
     display: none;
+    cursor: pointer;
     border-radius: 6px 6px 0 0;
     background-color: $primary;
 
@@ -362,7 +377,7 @@
   min-height: 100px;
   background: #404040;
   color: whitesmoke;
-  padding: 3rem 1.25rem 1.25rem 1.25rem;
+  padding: 3rem 0.75rem 1.25rem 0.75rem;
   position: relative;
 
   border-radius: 0 0 20px 20px;
@@ -373,12 +388,30 @@
 
   .notices {
     height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 
     .notice {
-      color: whitesmoke;
+      .notice-header {
+        margin-bottom: 0.25rem;
+      }
+      .minimize-notice-btn {
+        cursor: pointer;
+      }
+
+      &.is-minimized {
+        padding: 0.5rem 1.5rem;
+        margin-bottom: 1.5rem;
+
+        .notice-header {
+          font-weight: 700;
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .new-notice {
+      .media-left {
+        width: 60px;
+      }
     }
   }
 }

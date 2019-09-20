@@ -5,6 +5,7 @@ import {
   SET_GROUPS,
   SET_CURRENT_GROUP,
   SET_GROUP_MEMBERS,
+  SET_GROUP_NOTICES,
   GROUP_ERROR,
   GROUP_DELETED,
   LOGOUT
@@ -56,16 +57,19 @@ export default function(state = initialState, action) {
       };
     }
     case SET_GROUP_MEMBERS: {
-      //TODO clean this up
       if (!state.group) return state;
 
-      if (state.group && payload.groupId !== state.group._id) {
-        console.log("THIS SHOULD NEVER HIT");
-        return state;
-      }
       return {
         ...state,
         group: { ...state.group, users: payload.users }
+      };
+    }
+    case SET_GROUP_NOTICES: {
+      if (!state.group) return state;
+
+      return {
+        ...state,
+        group: { ...state.group, notices: payload }
       };
     }
     case GROUP_ERROR: {

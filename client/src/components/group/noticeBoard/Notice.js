@@ -1,17 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 
-const Notice = ({ noticeInfo }) => {
-  console.log(noticeInfo);
+import Image from "../../common/subcomponents/Image";
+
+import defaultUserImage from "../../../resources/default_user_image.png";
+
+const Notice = ({ user }) => {
+  const [noticeState, setNoticeState] = useState({ isMinimized: true });
+  const { isMinimized } = noticeState;
+
+  const toggleMinimizeNotice = () => {
+    setNoticeState({ ...noticeState, isMinimized: !isMinimized });
+  };
 
   return (
-    <div className="notice box">
+    <div className="notice new-notice box">
       <div className="media">
-        <figure class="media-left">
-          <p class="image is-64x64">
-            <img src="https://bulma.io/images/placeholders/128x128.png" />
-          </p>
-        </figure>
+        <div className="media-left">
+          <Image
+            src={
+              user.image && user.image.link ? user.image.link : defaultUserImage
+            }
+            figureClass="is-square"
+          />
+        </div>
         <div class="media-content">
+          <nav class="level notice-header">
+            <div class="level-left">
+              <div class="level-item">
+                <strong>{user.name}</strong>
+              </div>
+            </div>
+            <div class="level-right">
+              <div class="level-item">
+                <span
+                  class="icon minimize-notice-btn"
+                  onClick={() => toggleMinimizeNotice()}
+                >
+                  <i
+                    className={`fas fa-chevron-${isMinimized ? "up" : "down"}`}
+                  ></i>
+                </span>
+              </div>
+            </div>
+          </nav>
           <div class="content">
             <p>
               <strong>John Smith</strong> <small>@johnsmith</small>{" "}
@@ -41,11 +72,6 @@ const Notice = ({ noticeInfo }) => {
               </a>
             </div>
           </nav>
-        </div>
-        <div class="media-right">
-          <span class="icon">
-            <i className="fas fa-chevron-up"></i>
-          </span>
         </div>
       </div>
     </div>

@@ -151,10 +151,10 @@
 .header-tab {
   z-index: 1;
   position: absolute;
-  left: 50%; /* position the left edge of the element at the middle of the parent */
-
-  transform: translateX(-50%);
   top: 0;
+
+  left: 50%;
+  transform: translateX(-50%);
 
   background: whitesmoke;
   padding: 4px 16px;
@@ -384,6 +384,14 @@
 
   .header-tab {
     box-shadow: inset 0px 11px 8px -10px $off-black;
+
+    & .new-notice-tab {
+      cursor: pointer;
+      left: 11.5rem;
+      line-height: 1.25;
+      color: whitesmoke;
+      background: $primary;
+    }
   }
 
   .notices {
@@ -395,16 +403,6 @@
       }
       .minimize-notice-btn {
         cursor: pointer;
-      }
-
-      &.is-minimized {
-        padding: 0.5rem 1.5rem;
-        margin-bottom: 1.5rem;
-
-        .notice-header {
-          font-weight: 700;
-          margin-bottom: 0;
-        }
       }
     }
 

@@ -11,7 +11,8 @@ import {
   SET_GROUPS,
   SET_GROUPTYPE,
   GROUP_ERROR,
-  GROUP_DELETED
+  GROUP_DELETED,
+  SET_GROUP_NOTICES
 } from "./types";
 
 // Get group by HRID (human readable id)
@@ -201,5 +202,30 @@ export const deleteGroup = (withoutConfirmation = false) => async dispatch => {
         payload: { msg: err.response.statusText, status: err.response.status }
       });
     }
+  }
+};
+
+// Add a notice
+export const addNotice = (noticeFields, groupId) => async dispatch => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  const body = JSON.stringify(noticeFields);
+
+  try {
+    const res = await axios.put(`/api/group/notice/${groupId}`, body, config);
+
+    dispatch({
+      type: SET_GROUP_NOTICES,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: GROUP_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
   }
 };

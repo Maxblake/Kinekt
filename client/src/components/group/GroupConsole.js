@@ -18,7 +18,7 @@ const GroupConsole = ({ user, group, imgSrc }) => {
         <div className="group-image">
           <Image figureClass="is-2by1" src={imgSrc} alt="Placeholder image" />
         </div>
-        <NoticeBoard user={user} noticeInfoArray={[1, 2, 3]} />
+        <NoticeBoard user={user} groupId={group._id} notices={[1, 2, 3]} />
       </div>
     </div>
   );

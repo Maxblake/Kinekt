@@ -538,20 +538,7 @@ router.put(
 
 const buildNotice = async (req, errors) => {
   const { authorId, body } = req.body;
-  let { authorName } = req.body;
-
-  if (authorName === undefined) {
-    let user = await User.findById(authorId).select("name");
-
-    if (!user) {
-      errors.addError("Unable to find user from given author ID");
-      return;
-    }
-    authorName = user.name;
-  }
-
-  const author = { id: authorId, name: authorName };
-  return { author, body };
+  return { authorId, body };
 };
 
 // @route   DELETE api/group/notice/:groupId/:noticeId

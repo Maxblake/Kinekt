@@ -64,16 +64,10 @@ const GroupSchema = new mongoose.Schema({
   },
   notices: [
     {
-      author: {
-        id: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "user",
-          required: true
-        },
-        name: {
-          type: String,
-          required: true
-        }
+      authorId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+        required: true
       },
       creationTimestamp: {
         type: Date,

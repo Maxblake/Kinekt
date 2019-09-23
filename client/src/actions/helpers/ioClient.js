@@ -5,6 +5,7 @@ import {
   SET_CURRENT_GROUP,
   SET_GROUP_AND_USER_NUMBERS,
   SET_GROUP_MEMBERS,
+  SET_GROUP_NOTICES,
   SET_GROUP,
   SET_GROUPTYPE
 } from "../types";
@@ -35,6 +36,13 @@ const addSocketActions = socket => dispatch => {
     dispatch({
       type: SET_GROUP_MEMBERS,
       payload: updatedMembers
+    });
+  });
+
+  socket.on("updateGroupNotices", updatedNotices => {
+    dispatch({
+      type: SET_GROUP_NOTICES,
+      payload: updatedNotices
     });
   });
 

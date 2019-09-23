@@ -12,7 +12,7 @@ import {
   SET_GROUPTYPE,
   GROUP_ERROR,
   GROUP_DELETED,
-  SET_GROUP_NOTICES
+  GET_GROUP_NOTICES
 } from "./types";
 
 // Get group by HRID (human readable id)
@@ -219,13 +219,24 @@ export const addNotice = (noticeFields, groupId) => async dispatch => {
     const res = await axios.put(`/api/group/notice/${groupId}`, body, config);
 
     dispatch({
-      type: SET_GROUP_NOTICES,
+      type: GET_GROUP_NOTICES,
       payload: res.data
     });
   } catch (err) {
+    dispatch(handleResponseErrors(err));
+  }
+};
+
+// Delete a notice
+export const deleteNotice = (noticeId, groupId) => async dispatch => {
+  try {
+    const res = await axios.delete(`/api/group/notice/${groupId}/${noticeId}`);
+
     dispatch({
-      type: GROUP_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      type: GET_GROUP_NOTICES,
+      payload: res.data
     });
+  } catch (err) {
+    dispatch(handleResponseErrors(err));
   }
 };

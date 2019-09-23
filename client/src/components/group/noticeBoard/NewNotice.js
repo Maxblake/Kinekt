@@ -8,8 +8,17 @@ import { addNotice } from "../../../actions/group";
 
 import defaultUserImage from "../../../resources/default_user_image.png";
 
-const NewNotice = ({ user, isHidden, hideNotice, addNotice, groupId }) => {
-  const [newNoticeState, setNewNoticeState] = useState({ body: "d" });
+const NewNotice = ({
+  user,
+  newNoticeBody,
+  isHidden,
+  hideNotice,
+  addNotice,
+  groupId
+}) => {
+  const [newNoticeState, setNewNoticeState] = useState({
+    body: newNoticeBody ? newNoticeBody : ""
+  });
   const { body } = newNoticeState;
 
   const onChange = e =>
@@ -26,8 +35,8 @@ const NewNotice = ({ user, isHidden, hideNotice, addNotice, groupId }) => {
     };
 
     addNotice(noticeFields, groupId);
-
     setNewNoticeState({ ...newNoticeState, body: "" });
+    hideNotice();
   };
 
   return (
@@ -49,17 +58,24 @@ const NewNotice = ({ user, isHidden, hideNotice, addNotice, groupId }) => {
               </div>
             </div>
           </nav>
-          <div class="field">
-            <p class="control">
-              <textarea
-                class="textarea"
-                placeholder="Add a notice..."
-                name="body"
-                value={body}
-                onChange={e => onChange(e)}
-              ></textarea>
-            </p>
-          </div>
+          {newNoticeBody ? (
+            <div class="content">
+              <p>{newNoticeBody}</p>
+            </div>
+          ) : (
+            <div class="field">
+              <p class="control">
+                <textarea
+                  readOnly={newNoticeBody}
+                  class="textarea"
+                  placeholder="Add a notice..."
+                  name="body"
+                  value={body}
+                  onChange={e => onChange(e)}
+                ></textarea>
+              </p>
+            </div>
+          )}
           <nav class="level">
             <div className="level-left"></div>
             <div class="level-right">
@@ -70,7 +86,7 @@ const NewNotice = ({ user, isHidden, hideNotice, addNotice, groupId }) => {
               </div>
               <div class="level-item">
                 <a class="button is-primary" onClick={() => onSubmit()}>
-                  Submit
+                  Add Notice
                 </a>
               </div>
             </div>

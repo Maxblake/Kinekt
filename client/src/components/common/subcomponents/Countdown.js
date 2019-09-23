@@ -33,8 +33,6 @@ const Countdown = ({ totalTime, onTimeout }) => {
   // Scale 100% coverage overlay with the actual percent
   const dashOffset = dashArray - (dashArray * percentage) / 100;
 
-  //console.log(currentTime, percentage);
-
   return (
     <div className="countdown-container">
       {currentTime > 0 ? (

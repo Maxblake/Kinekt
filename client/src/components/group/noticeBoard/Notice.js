@@ -1,15 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import moment from "moment";
 
 import Image from "../../common/subcomponents/Image";
 
+import { deleteNotice } from "../../../actions/group";
+
 import defaultUserImage from "../../../resources/default_user_image.png";
 
-const Notice = ({ user }) => {
-  const [noticeState, setNoticeState] = useState({ isMinimized: true });
-  const { isMinimized } = noticeState;
+const Notice = ({ notice, groupId, deleteNotice, isCurrentUserAdmin }) => {
+  const onClickDelete = () => {
+    deleteNotice(notice._id, groupId);
+  };
 
-  const toggleMinimizeNotice = () => {
-    setNoticeState({ ...noticeState, isMinimized: !isMinimized });
+  const getTimeString = ISODate => {
+    const currentTime = moment();
+    const creationTime = moment(ISODate);
+
+    const diff = currentTime.diff(creationTime);
+    const diffDuration = moment.duration(diff);
+
+    if (diffDuration.hours() > 0) {
+      return `${diffDuration.hours()} hours ago`;
+    }
+
+    return `${diffDuration.minutes()} minutes ago`;
   };
 
   return (
@@ -17,9 +33,7 @@ const Notice = ({ user }) => {
       <div className="media">
         <div className="media-left">
           <Image
-            src={
-              user.image && user.image.link ? user.image.link : defaultUserImage
-            }
+            src={notice.authorImage ? notice.authorImage : defaultUserImage}
             figureClass="is-square"
           />
         </div>
@@ -27,31 +41,25 @@ const Notice = ({ user }) => {
           <nav class="level notice-header">
             <div class="level-left">
               <div class="level-item">
-                <strong>{user.name}</strong>
+                <strong>{notice.authorName}</strong>
+              </div>
+              <div class="level-item">
+                <small>{getTimeString(notice.creationTimestamp)}</small>
               </div>
             </div>
             <div class="level-right">
-              <div class="level-item">
-                <span
-                  class="icon minimize-notice-btn"
-                  onClick={() => toggleMinimizeNotice()}
-                >
-                  <i
-                    className={`fas fa-chevron-${isMinimized ? "up" : "down"}`}
-                  ></i>
-                </span>
-              </div>
+              {isCurrentUserAdmin && (
+                <div class="level-item">
+                  <button
+                    className="delete"
+                    onClick={() => onClickDelete()}
+                  ></button>
+                </div>
+              )}
             </div>
           </nav>
           <div class="content">
-            <p>
-              <strong>John Smith</strong> <small>@johnsmith</small>{" "}
-              <small>31m</small>
-              <br />
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin
-              ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas
-              non massa sem. Etiam finibus odio quis feugiat facilisis.
-            </p>
+            <p>{notice.body}</p>
           </div>
           <nav class="level is-mobile">
             <div class="level-left">
@@ -78,4 +86,11 @@ const Notice = ({ user }) => {
   );
 };
 
-export default Notice;
+Notice.propTypes = {
+  deleteNotice: PropTypes.func.isRequired
+};
+
+export default connect(
+  null,
+  { deleteNotice }
+)(Notice);

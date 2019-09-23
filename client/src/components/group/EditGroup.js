@@ -109,8 +109,6 @@ const EditGroup = ({
 
     if (Number.isInteger(maxSize)) groupFields.maxSize = maxSize;
 
-    console.log(groupFields);
-
     editGroup(groupFields, group._id);
   };
 

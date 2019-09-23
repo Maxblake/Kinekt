@@ -8,6 +8,7 @@ import {
   LOGOUT,
   UPDATE_USER,
   SET_CURRENT_GROUP,
+  GET_GROUP_NOTICES,
   SET_GROUP,
   GROUP_DELETED,
   REQUEST_ENTRY
@@ -83,6 +84,9 @@ export default function(state = initialState, action) {
       if (payload) {
         state.socket.emit("joinGroup", payload._id);
       }
+      return state;
+    case GET_GROUP_NOTICES:
+        state.socket.emit("getGroupNotices", payload);
       return state;
     case REQUEST_ENTRY:
       state.socket.emit("requestEntry", payload);

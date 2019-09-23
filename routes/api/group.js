@@ -528,7 +528,7 @@ router.put(
         return errors.sendErrorResponse(res);
       }
 
-      group.notices.push(notice);
+      group.notices.unshift(notice);
       await group.save();
 
       res.json(group.notices);
@@ -614,7 +614,7 @@ router.put("/notice/:groupId/like/:noticeId", auth, async (req, res) => {
     notice.likes.unshift(req.user.id);
     await group.save();
 
-    res.json(notice.likes);
+    res.json(group.notices);
   });
 });
 
@@ -655,12 +655,13 @@ router.put("/notice/:groupId/unlike/:noticeId", auth, async (req, res) => {
     notice.likes.splice(likeIndex, 1);
     await group.save();
 
-    res.json(notice.likes);
+    res.json(group.notices);
   });
 });
 
 const getNoticeIndex = (group, noticeId, errors) => {
-  const noticeIndex = group.notices.map(notice => notice.id).indexOf(noticeId);
+  //TODO rewrite the entire notice API
+  const noticeIndex = group.notices.map(notice => notice._id).indexOf(noticeId);
 
   if (noticeIndex === -1) {
     errors.addError("Invalid notice id");

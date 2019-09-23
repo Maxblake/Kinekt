@@ -5,7 +5,7 @@ import NoticeBoard from "./noticeBoard/NoticeBoard";
 import GroupDetails from "../common/subcomponents/GroupDetails";
 import Image from "../common/subcomponents/Image";
 
-const GroupConsole = ({ user, group, imgSrc }) => {
+const GroupConsole = ({ user, isCurrentUserAdmin, group, imgSrc }) => {
   return (
     <div className="flex-row-wrap" id="group-console">
       <div className="group-chat">
@@ -18,7 +18,12 @@ const GroupConsole = ({ user, group, imgSrc }) => {
         <div className="group-image">
           <Image figureClass="is-2by1" src={imgSrc} alt="Placeholder image" />
         </div>
-        <NoticeBoard user={user} groupId={group._id} notices={[1, 2, 3]} />
+        <NoticeBoard
+          user={user}
+          isCurrentUserAdmin={isCurrentUserAdmin}
+          groupId={group._id}
+          notices={group.notices}
+        />
       </div>
     </div>
   );

@@ -55,6 +55,7 @@ class socketHandler {
     this.socket.on("getGroupAndUserNumbers", groupAndGroupTypeIds =>
       this.getGroupAndUserNumbers(groupAndGroupTypeIds)
     );
+    this.socket.on("getGroupNotices", notices => this.getGroupNotices(notices));
   }
 
   async setUser(userId) {
@@ -131,6 +132,7 @@ class socketHandler {
       this.updateCurrentGroup(newGroup);
     }
 
+    this.updateGroupNotices(newGroup.notices.toObject());
     this.setUserStatus("active");
   }
 
@@ -209,6 +211,40 @@ class socketHandler {
       groupId: group._id.toString(),
       users
     });
+  }
+
+  getGroupNotices(notices) {
+    this.updateGroupNotices(notices);
+  }
+
+  async updateGroupNotices(passedNotices = null) {
+    if (!this.groupId) return;
+
+    let notices = passedNotices;
+    const updatedNotices = [];
+
+    if (notices === null) {
+      const group = await Group.findById(this.groupId)
+        .select("notices")
+        .lean();
+      notices = group.notices;
+    }
+
+    if (!notices) return;
+
+    for (const notice of notices) {
+      const user = await User.findById(notice.authorId);
+
+      updatedNotices.push({
+        ...notice,
+        authorImage: user.image ? user.image.link : "",
+        authorName: user.name
+      });
+    }
+
+    this.io
+      .in(`group-${this.groupId.toString()}`)
+      .emit("updateGroupNotices", updatedNotices);
   }
 
   async updateCurrentGroup(group, shouldEmit = true) {

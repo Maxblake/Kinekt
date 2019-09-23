@@ -1,7 +1,7 @@
 // Discover header
 .discover-header {
   padding: 0 1.5rem 1.5rem 1.5rem;
-  margin: 1.5rem auto 3rem auto;
+  margin: 2rem auto 3rem auto;
   background: whitesmoke;
   border-radius: 6px;
 
@@ -12,10 +12,10 @@
   }
 
   .header-welcome {
-    margin: 0 -1.5rem 1.75rem -1.5rem;
-    padding: 0.5rem 0.5rem;
-    font-size: 1.9rem;
-    background: #2a4d69;
+    margin: 0 -1.5rem 1.5rem -1.5rem;
+    padding: 0.75rem;
+    font-size: 1.6rem;
+    background: $off-black;
     color: whitesmoke;
   }
 
@@ -26,16 +26,17 @@
     flex: 1;
 
     .step-description {
-      background: #4a4a4a;
+      background: $off-black;
       color: whitesmoke;
 
-      margin: 1.5rem 0.75rem 0 0.75rem;
+      margin: 1rem 0.75rem 0 0.75rem;
       padding: 0.5rem 0.75rem;
       border-radius: 6px;
     }
 
     .step-image {
-      width: 50%;
+      max-width: 200px;
+      width: 90%;
     }
 
     img {
@@ -64,7 +65,7 @@
       }
 
       .step-image {
-        width: 90%;
+        max-width: 375px;
       }
 
       &:last-child {

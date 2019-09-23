@@ -10,14 +10,15 @@ import defaultUserImage from "../../../resources/default_user_image.png";
 
 const NewNotice = ({
   user,
-  newNoticeBody,
+  newNotice,
+  setNewNotice,
   isHidden,
   hideNotice,
   addNotice,
   groupId
 }) => {
   const [newNoticeState, setNewNoticeState] = useState({
-    body: newNoticeBody ? newNoticeBody : ""
+    body: newNotice ? newNotice.body : ""
   });
   const { body } = newNoticeState;
 
@@ -25,17 +26,30 @@ const NewNotice = ({
     setNewNoticeState({ ...newNoticeState, [e.target.name]: e.target.value });
 
   const onSubmit = () => {
-    if (body === "") {
+    if (body === "" && !newNotice) {
       return;
     }
 
-    const noticeFields = {
-      body,
-      authorId: user._id
-    };
+    let noticeFields = {};
+
+    if (newNotice) {
+      noticeFields = {
+        body: newNotice.body,
+        authorId: newNotice.authorId
+      };
+    } else {
+      noticeFields = { body, authorId: user._id };
+    }
 
     addNotice(noticeFields, groupId);
     setNewNoticeState({ ...newNoticeState, body: "" });
+    if (newNotice) setNewNotice(null);
+    hideNotice();
+  };
+
+  const onCancel = () => {
+    setNewNoticeState({ ...newNoticeState, body: "" });
+    setNewNotice(null);
     hideNotice();
   };
 
@@ -43,12 +57,20 @@ const NewNotice = ({
     <div className={`notice new-notice box ${isHidden ? "is-hidden" : ""}`}>
       <div className="media">
         <div className="media-left">
-          <Image
-            src={
-              user.image && user.image.link ? user.image.link : defaultUserImage
-            }
-            figureClass="is-square"
-          />
+          {!newNotice ? (
+            <Image
+              src={
+                user.image && user.image.link
+                  ? user.image.link
+                  : defaultUserImage
+              }
+              figureClass="is-square"
+            />
+          ) : (
+            <span class="icon notice-from-chat-icon">
+              <i class="fas fa-comment-dots"></i>
+            </span>
+          )}
         </div>
         <div class="media-content">
           <nav class="level notice-header">
@@ -58,15 +80,14 @@ const NewNotice = ({
               </div>
             </div>
           </nav>
-          {newNoticeBody ? (
+          {newNotice ? (
             <div class="content">
-              <p>{newNoticeBody}</p>
+              <p>{newNotice.body}</p>
             </div>
           ) : (
             <div class="field">
               <p class="control">
                 <textarea
-                  readOnly={newNoticeBody}
                   class="textarea"
                   placeholder="Add a notice..."
                   name="body"
@@ -80,7 +101,7 @@ const NewNotice = ({
             <div className="level-left"></div>
             <div class="level-right">
               <div class="level-item">
-                <a class="button is-light" onClick={() => hideNotice()}>
+                <a class="button is-light" onClick={() => onCancel()}>
                   Cancel
                 </a>
               </div>

@@ -2,9 +2,16 @@ import React, { useState } from "react";
 import Notice from "./Notice";
 import NewNotice from "./NewNotice";
 
-const NoticeBoard = ({ user, isCurrentUserAdmin, notices, groupId }) => {
+const NoticeBoard = ({
+  user,
+  isCurrentUserAdmin,
+  notices,
+  newNotice,
+  setNewNotice,
+  groupId
+}) => {
   const [noticeBoardState, setNoticeBoardState] = useState({
-    newNoticeHidden: true
+    newNoticeHidden: newNotice ? false : true
   });
   const { newNoticeHidden } = noticeBoardState;
 
@@ -14,6 +21,8 @@ const NoticeBoard = ({ user, isCurrentUserAdmin, notices, groupId }) => {
   const hideNotice = () => {
     setNoticeBoardState({ ...noticeBoardState, newNoticeHidden: true });
   };
+
+  if (newNotice && newNoticeHidden) showNotice();
 
   return (
     <div className="noticeboard">
@@ -34,7 +43,8 @@ const NoticeBoard = ({ user, isCurrentUserAdmin, notices, groupId }) => {
         {isCurrentUserAdmin && (
           <NewNotice
             user={user}
-            newNoticeBody={"false"}
+            newNotice={newNotice}
+            setNewNotice={setNewNotice}
             isHidden={newNoticeHidden}
             hideNotice={hideNotice}
             groupId={groupId}

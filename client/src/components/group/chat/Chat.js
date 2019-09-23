@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import Message from "./Message";
 
-const Chat = ({ auth: { user, socket } }) => {
+const Chat = ({ auth: { user, socket }, setNewNotice }) => {
   const [messageData, setMessageData] = useState({
     messageField: "",
     messages: [],
@@ -26,6 +26,8 @@ const Chat = ({ auth: { user, socket } }) => {
       ...messageData,
       messages: messages.concat(message)
     });
+
+    console.log(messageData);
   };
 
   const submitMessage = async e => {
@@ -75,9 +77,10 @@ const Chat = ({ auth: { user, socket } }) => {
                     ? true
                     : false
                 }
-                user={message.user.name}
+                user={message.user}
                 body={message.body}
                 time={message.time}
+                setNewNotice={setNewNotice}
               />
             );
           })}

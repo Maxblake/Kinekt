@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Chat from "./chat/Chat";
 import NoticeBoard from "./noticeBoard/NoticeBoard";
@@ -6,10 +6,19 @@ import GroupDetails from "../common/subcomponents/GroupDetails";
 import Image from "../common/subcomponents/Image";
 
 const GroupConsole = ({ user, isCurrentUserAdmin, group, imgSrc }) => {
+  const [groupConsoleState, setGroupConsoleState] = useState({
+    newNotice: null
+  });
+  const { newNotice } = groupConsoleState;
+
+  const setNewNotice = passedNewNotice => {
+    setGroupConsoleState({ ...groupConsoleState, newNotice: passedNewNotice });
+  };
+
   return (
     <div className="flex-row-wrap" id="group-console">
       <div className="group-chat">
-        <Chat />
+        <Chat setNewNotice={setNewNotice} />
         <div className="corner-fill"></div>
       </div>
       <div className="group-details-and-nb flex-row-wrap">
@@ -23,6 +32,8 @@ const GroupConsole = ({ user, isCurrentUserAdmin, group, imgSrc }) => {
           isCurrentUserAdmin={isCurrentUserAdmin}
           groupId={group._id}
           notices={group.notices}
+          newNotice={newNotice}
+          setNewNotice={setNewNotice}
         />
       </div>
     </div>

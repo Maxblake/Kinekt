@@ -325,6 +325,10 @@
         background-color: transparent;
         border: 1px solid whitesmoke;
         color: whitesmoke;
+
+        a {
+          color: inherit;
+        }
       }
     }
 
@@ -377,7 +381,7 @@
   min-height: 100px;
   background: #404040;
   color: whitesmoke;
-  padding: 3rem 0.75rem 1.25rem 0.75rem;
+  padding: 2.75rem 0.75rem 1.25rem 0.75rem;
   position: relative;
 
   border-radius: 0 0 20px 20px;
@@ -398,6 +402,10 @@
     height: 100%;
 
     .notice {
+      &:not(:last-child) {
+        margin-bottom: 0.75rem;
+      }
+
       .notice-header {
         margin-bottom: 0.25rem;
       }
@@ -409,6 +417,17 @@
     .new-notice {
       .media-left {
         width: 60px;
+        text-align: center;
+
+        .notice-from-chat-icon {
+          height: 60px;
+          width: 60px;
+          font-size: 2rem;
+          background: $off-black;
+          color: whitesmoke;
+          border: 3px solid $primary;
+          border-radius: 15%;
+        }
       }
     }
   }

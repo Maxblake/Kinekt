@@ -22,10 +22,16 @@ const Notice = ({ notice, groupId, deleteNotice, isCurrentUserAdmin }) => {
     const diffDuration = moment.duration(diff);
 
     if (diffDuration.hours() > 0) {
-      return `${diffDuration.hours()} hours ago`;
+      return `${diffDuration.hours()} hour${
+        diffDuration.hours() === 1 ? "" : "s"
+      } ago`;
+    } else if (diffDuration.minutes() < 1) {
+      return "A few seconds ago";
     }
 
-    return `${diffDuration.minutes()} minutes ago`;
+    return `${diffDuration.minutes()} minute${
+      diffDuration.minutes() === 1 ? "" : "s"
+    } ago`;
   };
 
   return (

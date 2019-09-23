@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import Image from "../common/subcomponents/Image";
 
@@ -11,9 +12,9 @@ const DiscoverHeader = () => {
   return (
     <div className="discover-header has-text-centered">
       <h2 className="header-welcome">
-        <span className="ws-nowrap">Welcome to Kinekt.</span>{" "}
+        <span className="ws-nowrap">Welcome to Kinekt!</span>{" "}
         <span className="ws-nowrap">Getting started is</span>{" "}
-        <span className="ws-nowrap">easy as pie.</span>
+        <span className="ws-nowrap">fast and easy.</span>
       </h2>
       <div className="level">
         <div className="level-item header-step">
@@ -24,9 +25,9 @@ const DiscoverHeader = () => {
               imageClass="is-rounded"
             />
           </div>
-          <div className="step-description has-text-centered">
+          <Link to="/register" className="step-description has-text-centered">
             1. Create a free (forever) account.
-          </div>
+          </Link>
         </div>
         <div className="level-item header-step">
           <div className="step-image">

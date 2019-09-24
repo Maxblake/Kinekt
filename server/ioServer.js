@@ -29,10 +29,12 @@ class socketHandler {
     this.io = io;
     this.userStatusMap = userStatusMap;
     this.groupId = null;
+    this.isAuthenticated = false;
     this.user = null;
     this.userStatusTimeout = null;
 
-    this.socket.on("setUser", userId => this.setUser(userId));
+    this.socket.on("setUser", userToken => this.setUser(userToken));
+    this.socket.on("clearUser", () => this.clearUser());
     this.socket.on("joinGroup", groupId => this.joinGroup(groupId));
     this.socket.on("leaveCurrentGroup", payload =>
       this.leaveCurrentGroup(payload)
@@ -58,8 +60,17 @@ class socketHandler {
     this.socket.on("getGroupNotices", notices => this.getGroupNotices(notices));
   }
 
-  async setUser(userId) {
-    const user = await User.findById(userId).select("-password");
+  async setUser(userToken) {
+    const decoded = jwt.verify(userToken, config.get("jwtSecret"));
+
+    const user = await User.findById(decoded.user.id).select("-password");
+
+    if (!user) {
+      this.isAuthenticated = false;
+      return;
+    }
+
+    this.isAuthenticated = true;
     this.user = user;
 
     this.socket.join(`user-${user._id.toString()}`);
@@ -71,6 +82,11 @@ class socketHandler {
 
       this.groupId = currentGroup ? currentGroup._id : null;
     }
+  }
+
+  async clearUser() {
+    this.isAuthenticated = false;
+    this.user = null;
   }
 
   async sendMessage(message) {
@@ -85,7 +101,7 @@ class socketHandler {
   }
 
   async joinGroup(groupId) {
-    if (!groupId || !this.user) return;
+    if (!groupId || !this.isAuthenticated) return;
 
     const newGroup = await Group.findById(groupId);
 
@@ -137,6 +153,8 @@ class socketHandler {
   }
 
   async requestEntry(groupId) {
+    if (!this.isAuthenticated) return;
+
     this.io.in(`group-${groupId}`).emit("entryRequestReceived", {
       id: this.user._id,
       name: this.user.name,

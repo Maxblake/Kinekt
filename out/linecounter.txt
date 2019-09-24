@@ -1,0 +1,137 @@
+===============================================================================
+EXTENSION NAME : linecounter
+EXTENSION VERSION : 0.2.2
+-------------------------------------------------------------------------------
+count time : 2019-09-24 13:34:49
+count workspace : c:\Users\Donovan\Desktop\dev\app_Kinekt\app
+total files : 115
+total code lines : 31353
+total comment lines : 201
+total blank lines : 1296
+
+    statistics
+   |      extension|     total code|  total comment|    total blank|percent|
+   -------------------------------------------------------------------------
+   |               |              3|              0|              0| 0.0096|
+   |          .json|          22419|              0|              1|     72|
+   |            .js|           7272|            132|           1099|     23|
+   |          .html|             29|              4|              0|  0.092|
+   |          .scss|           1399|             61|            196|    4.5|
+   |           .pdn|            231|              4|              0|   0.74|
+   -------------------------------------------------------------------------
+.gitignore, code is 3, comment is 0, blank is 0.
+client\package-lock.json, code is 17754, comment is 0, blank is 0.
+client\package.json, code is 43, comment is 0, blank is 1.
+client\public\favicon.ico, it is a binary file.
+client\public\index.html, code is 29, comment is 4, blank is 0.
+client\public\manifest.json, code is 15, comment is 0, blank is 0.
+client\src\actions\admin.js, code is 42, comment is 4, blank is 8.
+client\src\actions\alert.js, code is 36, comment is 0, blank is 3.
+client\src\actions\auth.js, code is 75, comment is 4, blank is 16.
+client\src\actions\group.js, code is 211, comment is 7, blank is 40.
+client\src\actions\groupType.js, code is 92, comment is 3, blank is 23.
+client\src\actions\helpers\helpers.js, code is 43, comment is 0, blank is 5.
+client\src\actions\helpers\ioClient.js, code is 54, comment is 0, blank is 8.
+client\src\actions\types.js, code is 28, comment is 1, blank is 7.
+client\src\actions\user.js, code is 76, comment is 4, blank is 18.
+client\src\App.js, code is 82, comment is 1, blank is 8.
+client\src\components\alerts\Alert.js, code is 108, comment is 0, blank is 16.
+client\src\components\alerts\EntryRequestReceivedAlert.js, code is 70, comment is 0, blank is 8.
+client\src\components\alerts\RequestEntryAlert.js, code is 90, comment is 0, blank is 14.
+client\src\components\auth\Admin.js, code is 260, comment is 1, blank is 29.
+client\src\components\auth\Login.js, code is 69, comment is 0, blank is 12.
+client\src\components\auth\SocketHandler.js, code is 108, comment is 0, blank is 21.
+client\src\components\cards\GroupCard.js, code is 91, comment is 0, blank is 6.
+client\src\components\cards\GroupTypeCard.js, code is 64, comment is 0, blank is 7.
+client\src\components\common\NotFound.js, code is 18, comment is 0, blank is 2.
+client\src\components\common\PrivateRoute.js, code is 37, comment is 0, blank is 5.
+client\src\components\common\Spinner.js, code is 6, comment is 0, blank is 1.
+client\src\components\common\subcomponents\Countdown.js, code is 78, comment is 6, blank is 7.
+client\src\components\common\subcomponents\Dropdown.js, code is 41, comment is 0, blank is 8.
+client\src\components\common\subcomponents\GroupDetails.js, code is 39, comment is 0, blank is 3.
+client\src\components\common\subcomponents\Image.js, code is 9, comment is 0, blank is 2.
+client\src\components\common\subcomponents\Modal.js, code is 37, comment is 0, blank is 4.
+client\src\components\common\subcomponents\OnlineStatus.js, code is 36, comment is 0, blank is 3.
+client\src\components\form\CustomField.js, code is 13, comment is 0, blank is 2.
+client\src\components\form\Form.js, code is 9, comment is 0, blank is 2.
+client\src\components\form\FormControl.js, code is 36, comment is 0, blank is 2.
+client\src\components\form\ImgUploadControl.js, code is 76, comment is 0, blank is 10.
+client\src\components\form\RadioButton.js, code is 26, comment is 0, blank is 4.
+client\src\components\form\SubmitButton.js, code is 13, comment is 0, blank is 2.
+client\src\components\group-type\EditGroupType.js, code is 158, comment is 0, blank is 20.
+client\src\components\group-type\GroupType.js, code is 326, comment is 1, blank is 31.
+client\src\components\group-type\NewGroupType.js, code is 128, comment is 0, blank is 20.
+client\src\components\group\chat\Chat.js, code is 102, comment is 0, blank is 18.
+client\src\components\group\chat\Message.js, code is 33, comment is 0, blank is 2.
+client\src\components\group\EditGroup.js, code is 223, comment is 0, blank is 29.
+client\src\components\group\Group.js, code is 210, comment is 0, blank is 27.
+client\src\components\group\GroupConsole.js, code is 37, comment is 0, blank is 6.
+client\src\components\group\GroupMember.js, code is 39, comment is 0, blank is 6.
+client\src\components\group\GroupMembers.js, code is 30, comment is 0, blank is 3.
+client\src\components\group\NewGroup.js, code is 311, comment is 0, blank is 35.
+client\src\components\group\noticeBoard\NewNotice.js, code is 116, comment is 0, blank is 14.
+client\src\components\group\noticeBoard\Notice.js, code is 103, comment is 0, blank is 13.
+client\src\components\group\noticeBoard\NoticeBoard.js, code is 62, comment is 0, blank is 4.
+client\src\components\home\Discover.js, code is 161, comment is 0, blank is 17.
+client\src\components\home\DiscoverHeader.js, code is 56, comment is 1, blank is 4.
+client\src\components\home\Home.js, code is 14, comment is 0, blank is 3.
+client\src\components\layout\Footer.js, code is 13, comment is 0, blank is 1.
+client\src\components\layout\Navbar.js, code is 182, comment is 2, blank is 21.
+client\src\components\layout\page\PageOptions.js, code is 36, comment is 0, blank is 3.
+client\src\components\layout\page\PageTitle.js, code is 20, comment is 0, blank is 2.
+client\src\components\user\EditUser.js, code is 241, comment is 0, blank is 31.
+client\src\components\user\Register.js, code is 240, comment is 0, blank is 32.
+client\src\components\user\UserInfo.js, code is 63, comment is 0, blank is 8.
+client\src\index.js, code is 4, comment is 0, blank is 1.
+client\src\reducers\alert.js, code is 31, comment is 0, blank is 2.
+client\src\reducers\auth.js, code is 95, comment is 0, blank is 2.
+client\src\reducers\error.js, code is 16, comment is 0, blank is 2.
+client\src\reducers\group.js, code is 89, comment is 0, blank is 5.
+client\src\reducers\groupType.js, code is 49, comment is 0, blank is 3.
+client\src\reducers\index.js, code is 15, comment is 0, blank is 1.
+client\src\reducers\liveData.js, code is 23, comment is 0, blank is 3.
+client\src\resources\default_grouptype_image.jpg, it is a binary file.
+client\src\resources\default_user_image.png, it is a binary file.
+client\src\resources\discover_step_one.jpg, it is a binary file.
+client\src\resources\discover_step_three.jpg, it is a binary file.
+client\src\resources\discover_step_two.jpg, it is a binary file.
+client\src\resources\lost_moto.png, it is a binary file.
+client\src\resources\workspaces\balcony-3616087_640.png, it is a binary file.
+client\src\resources\workspaces\defaultGroupTypeImage.pdn, code is 231, comment is 4, blank is 0.
+client\src\store.js, code is 12, comment is 0, blank is 4.
+client\src\styling\_general.scss, code is 140, comment is 23, blank is 32.
+client\src\styling\_theme.scss, code is 11, comment is 0, blank is 2.
+client\src\styling\abstracts\_placeholders.scss, code is 8, comment is 0, blank is 1.
+client\src\styling\App.scss, code is 36, comment is 4, blank is 9.
+client\src\styling\components\_admin.scss, code is 24, comment is 1, blank is 5.
+client\src\styling\components\_discover.scss, code is 62, comment is 2, blank is 14.
+client\src\styling\components\_group.scss, code is 367, comment is 7, blank is 67.
+client\src\styling\components\_grouptype.scss, code is 59, comment is 1, blank is 6.
+client\src\styling\components\_misc.scss, code is 163, comment is 12, blank is 37.
+client\src\styling\components\_navbar.scss, code is 51, comment is 2, blank is 9.
+client\src\styling\components\_notfound.scss, code is 29, comment is 1, blank is 4.
+client\src\styling\utils\_countdown.scss, code is 25, comment is 0, blank is 6.
+client\src\styling\utils\_geosuggest.scss, code is 38, comment is 0, blank is 2.
+client\src\styling\utils\_hexdots.scss, code is 382, comment is 1, blank is 0.
+client\src\styling\utils\_variables.scss, code is 4, comment is 7, blank is 2.
+client\src\utils\setAuthToken.js, code is 9, comment is 2, blank is 2.
+client\src\utils\typewriter.js, code is 49, comment is 12, blank is 11.
+client\src\utils\utils.js, code is 5, comment is 0, blank is 0.
+config\db.js, code is 17, comment is 0, blank is 3.
+config\default.json, code is 6, comment is 0, blank is 0.
+middleware\auth.js, code is 16, comment is 3, blank is 4.
+models\Group.js, code is 94, comment is 0, blank is 3.
+models\GroupType.js, code is 48, comment is 0, blank is 5.
+models\User.js, code is 41, comment is 0, blank is 2.
+package-lock.json, code is 4564, comment is 0, blank is 0.
+package.json, code is 37, comment is 0, blank is 0.
+routes\api\admin.js, code is 31, comment is 6, blank is 10.
+routes\api\auth.js, code is 48, comment is 6, blank is 15.
+routes\api\external\imgur.js, code is 59, comment is 1, blank is 7.
+routes\api\group.js, code is 514, comment is 30, blank is 131.
+routes\api\groupType.js, code is 220, comment is 21, blank is 55.
+routes\api\helpers\helpers.js, code is 282, comment is 1, blank is 36.
+routes\api\user.js, code is 139, comment is 9, blank is 36.
+server\ioServer.js, code is 374, comment is 2, blank is 92.
+server\server.js, code is 15, comment is 4, blank is 8.
+===============================================================================

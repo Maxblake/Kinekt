@@ -50,7 +50,7 @@ const NoticeBoard = ({
             groupId={groupId}
           />
         )}
-        {notices.length > 0
+        {notices && notices.length > 0
           ? notices.map(notice => (
               <Notice
                 notice={notice}

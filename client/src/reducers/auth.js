@@ -36,7 +36,7 @@ export default function(state = initialState, action) {
         loading: false
       };
     case SET_USER:
-      state.socket.emit("setUser", payload._id);
+      state.socket.emit("setUser", localStorage.getItem("token"));
       return {
         ...state,
         user: payload,
@@ -73,6 +73,7 @@ export default function(state = initialState, action) {
     case AUTH_ERROR:
     case LOGOUT:
       localStorage.removeItem("token");
+      state.socket.emit("clearUser");
       return {
         ...state,
         token: null,
@@ -86,7 +87,7 @@ export default function(state = initialState, action) {
       }
       return state;
     case GET_GROUP_NOTICES:
-        state.socket.emit("getGroupNotices", payload);
+      state.socket.emit("getGroupNotices", payload);
       return state;
     case REQUEST_ENTRY:
       state.socket.emit("requestEntry", payload);

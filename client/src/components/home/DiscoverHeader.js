@@ -12,8 +12,8 @@ const DiscoverHeader = () => {
   return (
     <div className="discover-header has-text-centered">
       <h2 className="header-welcome">
-        <span className="ws-nowrap">Welcome to Kinekt!</span>{" "}
-        <span className="ws-nowrap">Getting started is</span>{" "}
+        <span className="ws-nowrap">Welcome to Kinekt,</span>{" "}
+        <span className="ws-nowrap">getting started is</span>{" "}
         <span className="ws-nowrap">fast and easy.</span>
       </h2>
       <div className="level">

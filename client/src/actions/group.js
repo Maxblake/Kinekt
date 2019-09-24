@@ -240,3 +240,18 @@ export const deleteNotice = (noticeId, groupId) => async dispatch => {
     dispatch(handleResponseErrors(err));
   }
 };
+
+export const toggleLikeNotice = (noticeId, groupId) => async dispatch => {
+  try {
+    const res = await axios.put(
+      `/api/group/notice/${groupId}/toggle-like/${noticeId}`
+    );
+
+    dispatch({
+      type: GET_GROUP_NOTICES,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch(handleResponseErrors(err));
+  }
+};

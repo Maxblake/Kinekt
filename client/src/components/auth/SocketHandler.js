@@ -31,7 +31,7 @@ const SocketHandler = ({
       socket.on("entryRequestReceived", entryRequestReceived);
     }
 
-    if (groups.length > 0 || groupType || groupTypes.length > 0) {
+    if ((groups && groups.length > 0) || groupType || groupTypes.length > 0) {
       onActive();
     }
 
@@ -85,7 +85,10 @@ const SocketHandler = ({
 
   const getGroupAndUserNumbers = () => {
     const groupAndGroupTypeIds = {
-      groups: groups.length > 0 ? groups.map(group => group._id) : undefined,
+      groups:
+        groups && groups.length > 0
+          ? groups.map(group => group._id)
+          : undefined,
       groupTypes:
         groupTypes.length > 0
           ? groupTypes.map(groupType => groupType._id)

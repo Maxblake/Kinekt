@@ -12,7 +12,7 @@ import {
 } from "../actions/types";
 
 const initialState = {
-  groups: [],
+  groups: null,
   group: null,
   loading: false,
   error: null
@@ -74,7 +74,7 @@ export default function(state = initialState, action) {
     }
     case GROUP_ERROR: {
       return {
-        groups: [],
+        groups: null,
         group: null,
         loading: false,
         error: payload

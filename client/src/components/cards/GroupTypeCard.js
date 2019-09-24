@@ -12,7 +12,7 @@ const GroupTypeCard = ({
   groupTypeCategory,
   groupAndUserNumbers
 }) => {
-  const getClassList = groupTypeCategory => {
+  const getClassName = groupTypeCategory => {
     const classList = ["tag", "card-tag"];
 
     switch (groupTypeCategory) {
@@ -52,7 +52,7 @@ const GroupTypeCard = ({
           src={imgSrc !== "" ? imgSrc : defaultGroupTypeImage}
         />
       </div>
-      <span className={getClassList(groupTypeCategory)}>
+      <span className={getClassName(groupTypeCategory)}>
         {groupTypeCategory}
       </span>
       <div className="card-content">

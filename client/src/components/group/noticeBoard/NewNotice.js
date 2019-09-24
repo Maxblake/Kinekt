@@ -53,6 +53,8 @@ const NewNotice = ({
     hideNotice();
   };
 
+  console.log(newNotice);
+
   return (
     <div className={`notice new-notice box ${isHidden ? "is-hidden" : ""}`}>
       <div className="media">
@@ -73,10 +75,10 @@ const NewNotice = ({
           )}
         </div>
         <div class="media-content">
-          <nav class="level notice-header">
+          <nav class="level notice-header is-mobile">
             <div class="level-left">
               <div class="level-item">
-                <strong>{user.name}</strong>
+                <strong>{newNotice ? newNotice.authorName : user.name}</strong>
               </div>
             </div>
           </nav>
@@ -97,7 +99,7 @@ const NewNotice = ({
               </p>
             </div>
           )}
-          <nav class="level">
+          <nav class="level is-mobile">
             <div className="level-left"></div>
             <div class="level-right">
               <div class="level-item">

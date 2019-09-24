@@ -20,7 +20,11 @@ const Message = ({
         <span className="header-time">{time}</span>
       </div>
       <div className="body">
-        <a onClick={() => setNewNotice({ authorId: user.id, body })}>
+        <a
+          onClick={() =>
+            setNewNotice({ authorName: user.name, authorId: user.id, body })
+          }
+        >
           <span>{body}</span>
         </a>
       </div>

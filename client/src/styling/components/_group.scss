@@ -405,12 +405,18 @@
       &:not(:last-child) {
         margin-bottom: 0.75rem;
       }
-
       .notice-header {
         margin-bottom: 0.25rem;
       }
       .minimize-notice-btn {
         cursor: pointer;
+      }
+      .like-notice-button {
+        font-weight: 700;
+
+        span {
+          margin-top: 1px;
+        }
       }
     }
 

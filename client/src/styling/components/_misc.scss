@@ -71,6 +71,10 @@
       color: $off-black;
       width: 100%;
     }
+
+    .online-status-container {
+      margin-top: 2px;
+    }
   }
   &.has-page-options {
     max-width: 400px;

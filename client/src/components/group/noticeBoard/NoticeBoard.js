@@ -57,6 +57,8 @@ const NoticeBoard = ({
                 key={notice._id}
                 groupId={groupId}
                 isCurrentUserAdmin={isCurrentUserAdmin}
+                isLiked={notice.likes.includes(user._id)}
+                numLikes={notice.likes.length}
               />
             ))
           : newNoticeHidden && (

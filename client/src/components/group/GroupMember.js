@@ -3,7 +3,7 @@ import Modal from "../common/subcomponents/Modal";
 import UserInfo from "../user/UserInfo";
 
 const GroupMember = ({ user, adminOptions }) => {
-  const getClassList = (status, memberType) => {
+  const getClassName = (status, memberType) => {
     const classList = ["button", "group-member"];
 
     switch (memberType) {
@@ -32,7 +32,7 @@ const GroupMember = ({ user, adminOptions }) => {
   return (
     <Modal
       trigger={
-        <div className={getClassList(user.status, user.memberType)}>
+        <div className={getClassName(user.status, user.memberType)}>
           {user.name}
         </div>
       }

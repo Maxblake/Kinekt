@@ -579,10 +579,10 @@ router.delete("/notice/:groupId/:noticeId", auth, async (req, res) => {
   });
 });
 
-// @route   PUT api/group/notice/:groupId/like/:noticeId
-// @desc    Like a notice
+// @route   PUT api/group/notice/:groupId/toggle-like/:noticeId
+// @desc    Like or unlike a notice
 // @access  Private
-router.put("/notice/:groupId/like/:noticeId", auth, async (req, res) => {
+router.put("/notice/:groupId/toggle-like/:noticeId", auth, async (req, res) => {
   const errors = new APIerrors();
 
   runAPISafely(async () => {
@@ -596,7 +596,7 @@ router.put("/notice/:groupId/like/:noticeId", auth, async (req, res) => {
     if (!group.users.find(groupUser => groupUser.id.equals(req.user.id))) {
       return errors.addErrAndSendResponse(
         res,
-        "You must be a group member to like this notice"
+        "You must be a group member to like or unlike this notice"
       );
     }
 
@@ -606,12 +606,14 @@ router.put("/notice/:groupId/like/:noticeId", auth, async (req, res) => {
       return errors.sendErrorResponse(res);
     }
     const notice = group.notices[noticeIndex];
+    const likeIndex = notice.likes.indexOf(req.user.id);
 
-    if (notice.likes.includes(req.user.id)) {
-      return errors.addErrAndSendResponse(res, "Notice already liked");
+    if (likeIndex === -1) {
+      notice.likes.push(req.user.id);
+    } else {
+      notice.likes.splice(likeIndex, 1);
     }
 
-    notice.likes.unshift(req.user.id);
     await group.save();
 
     res.json(group.notices);

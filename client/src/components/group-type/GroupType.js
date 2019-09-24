@@ -39,11 +39,13 @@ const GroupType = ({
     const groupTypeParamChanged =
       groupType && groupType.name !== groupTypeParamSpaced;
 
+    console.log(groups);
+
     if (
       !groupType ||
       groupTypeParamChanged ||
-      !groups.length ||
-      readyToLoadNewGroups
+      readyToLoadNewGroups ||
+      groups === null
     ) {
       let queryParams = {
         sortBy,
@@ -97,6 +99,35 @@ const GroupType = ({
       ...groupData,
       readyToLoadNewGroups: true
     });
+  };
+
+  const getTagClassName = groupTypeCategory => {
+    const classList = ["tag"];
+
+    switch (groupTypeCategory) {
+      case "Social":
+        classList.push("category-social");
+        break;
+      case "Gaming":
+        classList.push("category-gaming");
+        break;
+      case "Educational":
+        classList.push("category-educational");
+        break;
+      case "Professional":
+        classList.push("category-professional");
+        break;
+      case "Hobby":
+        classList.push("category-hobby");
+        break;
+      case "Other":
+        classList.push("category-other");
+        break;
+      default:
+        classList.push("is-light");
+    }
+
+    return classList.join(" ");
   };
 
   if (loading) {
@@ -243,18 +274,23 @@ const GroupType = ({
         <PageTitle
           title={match.params.groupType.split("_").join(" ")}
           subtitle={
-            <OnlineStatus
-              users={
-                groupTypeNumbersMap[groupType._id]
-                  ? groupTypeNumbersMap[groupType._id].users
-                  : ""
-              }
-              groups={
-                groupTypeNumbersMap[groupType._id]
-                  ? groupTypeNumbersMap[groupType._id].groups
-                  : ""
-              }
-            />
+            <div className="group-type-subtitle">
+              <OnlineStatus
+                users={
+                  groupTypeNumbersMap[groupType._id]
+                    ? groupTypeNumbersMap[groupType._id].users
+                    : ""
+                }
+                groups={
+                  groupTypeNumbersMap[groupType._id]
+                    ? groupTypeNumbersMap[groupType._id].groups
+                    : ""
+                }
+              />
+              <div className={getTagClassName(groupType.category)}>
+                {groupType.category}
+              </div>
+            </div>
           }
           hasPageOptions
         />
@@ -262,7 +298,7 @@ const GroupType = ({
       </nav>
 
       <div className="groupCards">
-        {!!groups.length ? (
+        {groups && groups.length > 0 ? (
           <Fragment>
             {groups.map(group => (
               <GroupCard

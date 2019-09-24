@@ -53,3 +53,14 @@
   top: 16px;
   right: 18px;
 }
+
+.group-type-subtitle {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+
+  .tag {
+    margin-right: -0.5rem;
+    margin-left: 0.75rem;
+  }
+}

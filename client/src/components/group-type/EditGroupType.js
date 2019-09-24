@@ -45,7 +45,7 @@ const EditGroupType = ({
       setFormData({
         ...formData,
         description: groupType.description,
-        cateogry: groupType.category
+        category: groupType.category
       });
     }
   }, [groupType]);

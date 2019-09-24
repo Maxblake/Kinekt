@@ -6,7 +6,7 @@ export default function RadioButton({
   value,
   selectedValue
 }) {
-  const getClassList = isSelected => {
+  const getClassName = isSelected => {
     const classList = ["button"];
 
     if (isSelected) {
@@ -19,7 +19,7 @@ export default function RadioButton({
   return (
     <button
       type="button"
-      className={getClassList(selectedValue === value)}
+      className={getClassName(selectedValue === value)}
       onClick={() =>
         valueKey ? handleClick(value, valueKey) : handleClick(value)
       }

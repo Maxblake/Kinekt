@@ -26,12 +26,12 @@
     flex: 1;
 
     .step-description {
-      background: $off-black;
-      color: whitesmoke;
+      color: $off-black;
 
       margin: 1rem 0.75rem 0 0.75rem;
       padding: 0.5rem 0.75rem;
       border-radius: 6px;
+      border: 2px solid;
     }
 
     .step-image {

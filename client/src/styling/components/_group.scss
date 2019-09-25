@@ -117,6 +117,7 @@
   background: $off-black;
   position: relative;
   padding: 3rem 10px 1.25rem 10px;
+  margin-bottom: 0;
 
   #group-members {
     max-height: 35vh;
@@ -166,6 +167,14 @@
   .online-status-text {
     font-weight: bold;
   }
+}
+
+.members-to-console-gap {
+  width: 97%;
+  margin: auto;
+  height: 0.65rem;
+  box-shadow: inset 0px 11px 8px -10px #141414;
+  background: #404040;
 }
 
 #group-console {
@@ -256,6 +265,10 @@
 }
 
 @media (max-width: $tablet - 1) {
+  .members-to-console-gap {
+    width: 94%;
+  }
+
   #group-console {
     .group-details-container {
       flex: 1 auto;

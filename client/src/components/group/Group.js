@@ -202,6 +202,7 @@ const Group = ({
         maxSize={group.maxSize}
         adminOptions={adminOptions}
       />
+      <div className="members-to-console-gap"></div>
       <GroupConsole
         user={user}
         isCurrentUserAdmin={isCurrentUserAdmin}

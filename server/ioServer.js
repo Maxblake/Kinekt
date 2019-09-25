@@ -84,7 +84,7 @@ class socketHandler {
     }
   }
 
-  async clearUser() {
+  clearUser() {
     this.isAuthenticated = false;
     this.user = null;
   }
@@ -164,6 +164,8 @@ class socketHandler {
   }
 
   async answerEntryRequest(answer, userId) {
+    if (!this.isAuthenticated) return;
+
     const group = await Group.findById(this.groupId).select("HRID");
     let joinKey = undefined;
 
@@ -206,6 +208,8 @@ class socketHandler {
   }
 
   async updateGroupMembers(group) {
+    if (!this.isAuthenticated) return;
+
     const userMap = {};
 
     for (const user of group.users) {
@@ -236,7 +240,7 @@ class socketHandler {
   }
 
   async updateGroupNotices(passedNotices = null) {
-    if (!this.groupId) return;
+    if (!this.groupId || !this.isAuthenticated) return;
 
     let notices = passedNotices;
     const updatedNotices = [];
@@ -266,6 +270,10 @@ class socketHandler {
   }
 
   async updateCurrentGroup(group, shouldEmit = true) {
+    if (!this.isAuthenticated) return;
+
+    //this.user
+
     if (group) {
       this.user.currentGroup = {
         name: group.name,
@@ -274,6 +282,8 @@ class socketHandler {
     } else {
       this.user.currentGroup = null;
     }
+
+    await this.user.save();
 
     if (shouldEmit) {
       this.socket.emit("updateCurrentGroup", this.user.currentGroup);
@@ -377,8 +387,9 @@ class socketHandler {
   }
 
   async kickFromGroup(kickedUser) {
-    const group = await Group.findById(this.groupId);
+    if (!this.isAuthenticated) return;
 
+    const group = await Group.findById(this.groupId);
     if (!group || group.creator.equals(kickedUser.userId)) {
       return;
     }
@@ -434,6 +445,8 @@ class socketHandler {
   }
 
   async toggleGroupAdmin(userId) {
+    if (!this.isAuthenticated) return;
+
     const group = await Group.findById(this.groupId);
 
     for (const user of group.users) {
@@ -453,7 +466,6 @@ class socketHandler {
 
   async setUserStatus(userStatus) {
     const group = await Group.findById(this.groupId);
-
     if (!group) return;
 
     if (userStatus === "active") {
@@ -476,11 +488,7 @@ class socketHandler {
     this.updateCurrentGroup(null, true);
   }
 
-  async disconnect() {
-    if (!!this.user) {
-      await this.user.save();
-    }
-  }
+  async disconnect() {}
 }
 
 module.exports = ioServer;

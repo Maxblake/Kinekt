@@ -3,6 +3,7 @@ import {
   GROUP_LOADED,
   SET_GROUP,
   SET_GROUPS,
+  CONCAT_GROUPS,
   SET_CURRENT_GROUP,
   SET_GROUP_MEMBERS,
   SET_GROUP_NOTICES,
@@ -38,6 +39,14 @@ export default function(state = initialState, action) {
       return {
         ...state,
         groups: payload,
+        loading: false,
+        error: null
+      };
+    }
+    case CONCAT_GROUPS: {
+      return {
+        ...state,
+        groups: [...state.groups, ...payload],
         loading: false,
         error: null
       };

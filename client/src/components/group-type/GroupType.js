@@ -14,6 +14,8 @@ import OnlineStatus from "../common/subcomponents/OnlineStatus";
 import PageOptions from "../layout/page/PageOptions";
 import Dropdown from "../common/subcomponents/Dropdown";
 
+import { useInfiniteScroll } from "../../utils/CustomHooks";
+
 import defaultGroupTypeImage from "../../resources/default_grouptype_image.jpg";
 
 //TODO format date/times with moment
@@ -34,12 +36,12 @@ const GroupType = ({
 
   const { sortBy, searchTerms, readyToLoadNewGroups } = groupData;
 
+  const [isFetching, setIsFetching] = useInfiniteScroll(() => getMoreGroups());
+
   useEffect(() => {
     const groupTypeParamSpaced = match.params.groupType.split("_").join(" ");
     const groupTypeParamChanged =
       groupType && groupType.name !== groupTypeParamSpaced;
-
-    console.log(groups);
 
     if (
       !groupType ||
@@ -99,6 +101,22 @@ const GroupType = ({
       ...groupData,
       readyToLoadNewGroups: true
     });
+  };
+
+  const getMoreGroups = () => {
+    if (isFetching && !loading) {
+      //TODO refactor this
+      let queryParams = {
+        sortBy,
+        searchTerms
+      };
+
+      if (sortBy === "Nearby" && user && user.currentLocation) {
+        queryParams.userLocation = user.currentLocation;
+      }
+
+      getGroups(groupType.name, queryParams, groups.map(group => group._id));
+    }
   };
 
   const getTagClassName = groupTypeCategory => {

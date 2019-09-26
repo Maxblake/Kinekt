@@ -8,18 +8,22 @@ import {
   GROUPTYPE_LOADING,
   SET_GROUPTYPE,
   SET_GROUPTYPES,
+  CONCAT_GROUPTYPES,
   GROUPTYPE_ERROR
 } from "./types";
 
 // Get a list of group types ordered and filtered by passed criteria
-export const getGroupTypes = ({ category, searchTerms }) => async dispatch => {
+export const getGroupTypes = (
+  { category, searchTerms },
+  seenGroupTypes = []
+) => async dispatch => {
   const config = {
     headers: {
       "Content-Type": "application/json"
     }
   };
 
-  const body = JSON.stringify({ category, searchTerms });
+  const body = JSON.stringify({ category, searchTerms, seenGroupTypes });
 
   try {
     dispatch({
@@ -29,7 +33,7 @@ export const getGroupTypes = ({ category, searchTerms }) => async dispatch => {
     const res = await axios.post(`/api/group-type/list`, body, config);
 
     dispatch({
-      type: SET_GROUPTYPES,
+      type: seenGroupTypes.length > 0 ? CONCAT_GROUPTYPES : SET_GROUPTYPES,
       payload: res.data
     });
   } catch (err) {

@@ -2,6 +2,7 @@ import {
   GROUPTYPE_LOADING,
   SET_GROUPTYPE,
   SET_GROUPTYPES,
+  CONCAT_GROUPTYPES,
   GROUPTYPE_ERROR
 } from "../actions/types";
 
@@ -26,6 +27,14 @@ export default function(state = initialState, action) {
       return {
         ...state,
         groupTypes: payload,
+        loading: false,
+        error: null
+      };
+    }
+    case CONCAT_GROUPTYPES: {
+      return {
+        ...state,
+        groupTypes: [...state.groupTypes, ...payload],
         loading: false,
         error: null
       };

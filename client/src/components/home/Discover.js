@@ -10,6 +10,8 @@ import GroupTypeCard from "../cards/GroupTypeCard";
 import PageTitle from "../layout/page/PageTitle";
 import PageOptions from "../layout/page/PageOptions";
 
+import { useInfiniteScroll } from "../../utils/CustomHooks";
+
 const Discover = ({
   getGroupTypes,
   groupType: { groupTypes, loading },
@@ -19,10 +21,19 @@ const Discover = ({
   const [groupTypeData, setgroupTypeData] = useState({
     category: "All",
     searchTerms: "",
+    lastSubmittedSearchTerms: "",
     readyToLoadNewTypes: true
   });
+  const {
+    category,
+    searchTerms,
+    lastSubmittedSearchTerms,
+    readyToLoadNewTypes
+  } = groupTypeData;
 
-  const { category, searchTerms, readyToLoadNewTypes } = groupTypeData;
+  const [isFetching, setIsFetching] = useInfiniteScroll(() =>
+    getMoreGroupTypes()
+  );
 
   useEffect(() => {
     if (readyToLoadNewTypes) {
@@ -30,10 +41,14 @@ const Discover = ({
 
       setgroupTypeData({
         ...groupTypeData,
+        lastSubmittedSearchTerms: searchTerms,
         readyToLoadNewTypes: false
       });
     }
-  }, [readyToLoadNewTypes]);
+    if (!loading && isFetching) {
+      setIsFetching(false);
+    }
+  }, [readyToLoadNewTypes, loading]);
 
   const onChange = e => {
     setgroupTypeData({
@@ -53,11 +68,18 @@ const Discover = ({
     });
   };
 
+  const getMoreGroupTypes = () => {
+    if (isFetching && !loading) {
+      getGroupTypes(
+        { ...groupTypeData, searchTerms: lastSubmittedSearchTerms },
+        groupTypes.map(groupType => groupType._id)
+      );
+    }
+  };
+
   let groupTypeCards;
 
-  if (loading) {
-    groupTypeCards = <Spinner />;
-  } else if (!groupTypes.length) {
+  if (!groupTypes.length) {
     groupTypeCards = (
       <div className="box no-card-notice">
         There are currently no group types here. It may be time to request a new
@@ -155,6 +177,7 @@ const Discover = ({
         <PageOptions options={options} />
       </nav>
       {groupTypeCards}
+      {loading && <Spinner />}
     </section>
   );
 };

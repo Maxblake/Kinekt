@@ -9,6 +9,7 @@ import {
   GROUP_LOADED,
   SET_GROUP,
   SET_GROUPS,
+  CONCAT_GROUPS,
   SET_GROUPTYPE,
   GROUP_ERROR,
   GROUP_DELETED,
@@ -63,7 +64,8 @@ export const getGroup = (
 // Get a list of groups within a given group type
 export const getGroups = (
   groupTypeName,
-  queryParams = null
+  queryParams = null,
+  seenGroups = []
 ) => async dispatch => {
   const config = {
     headers: {
@@ -71,7 +73,7 @@ export const getGroups = (
     }
   };
 
-  let bodyBuilder = { groupTypeName: groupTypeName.toLowerCase() }; //hehehe
+  let bodyBuilder = { groupTypeName: groupTypeName.toLowerCase(), seenGroups }; //hehehe
 
   if (queryParams !== null) {
     bodyBuilder = { ...bodyBuilder, ...queryParams };
@@ -87,7 +89,7 @@ export const getGroups = (
     const res = await axios.post(`/api/group/list`, body, config);
 
     dispatch({
-      type: SET_GROUPS,
+      type: seenGroups.length > 0 ? CONCAT_GROUPS : SET_GROUPS,
       payload: res.data.groups
     });
     dispatch({

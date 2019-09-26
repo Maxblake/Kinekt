@@ -28,8 +28,8 @@ router.post("/list", async (req, res) => {
 });
 
 const buildQuery = req => {
-  const { category, searchTerms } = req.body;
-  const query = {};
+  const { category, searchTerms, seenGroupTypes } = req.body;
+  const query = { _id: { $nin: seenGroupTypes } };
 
   if (category && category !== "All") query.category = category;
   if (searchTerms) {
@@ -47,6 +47,7 @@ const getGroupTypes = async query => {
     .sort({
       score: { $meta: "textScore" }
     })
+    .limit(12)
     .lean();
 
   if (!!query.$text) {

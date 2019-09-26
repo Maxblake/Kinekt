@@ -47,8 +47,11 @@ router.post("/list", (req, res) => {
 });
 
 const buildQuery = (req, groupIds) => {
-  const { searchTerms } = req.body;
-  const query = { _id: { $in: groupIds }, accessLevel: { $ne: "Private" } };
+  const { searchTerms, seenGroups } = req.body;
+  const query = {
+    _id: { $in: groupIds.filter(id => !seenGroups.includes(id)) },
+    accessLevel: { $ne: "Private" }
+  };
 
   if (searchTerms) {
     query.$text = { $search: searchTerms };
@@ -64,6 +67,7 @@ const getGroups = async query => {
     .sort({
       score: { $meta: "textScore" }
     })
+    .limit(8)
     .lean();
 
   if (!!query.$text) {

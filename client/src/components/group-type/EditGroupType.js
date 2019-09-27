@@ -5,6 +5,7 @@ import { Link, withRouter } from "react-router-dom";
 
 import { editGroupType } from "../../actions/groupType";
 import { getGroups } from "../../actions/group";
+import { clearErrors } from "../../actions/auth";
 
 import PageTitle from "../layout/page/PageTitle";
 import Form from "../form/Form";
@@ -18,6 +19,7 @@ const EditGroupType = ({
   match,
   editGroupType,
   getGroups,
+  clearErrors,
   errors,
   group,
   groupType: { groupType, loading },
@@ -41,13 +43,16 @@ const EditGroupType = ({
 
     if (!groupType || groupTypeParamChanged) {
       getGroups(groupTypeParamSpaced);
-    } else if (groupType) {
+    } else if (groupType && errors.length === 0) {
       setFormData({
         ...formData,
         description: groupType.description,
         category: groupType.category
       });
     }
+    return () => {
+      clearErrors();
+    };
   }, [groupType]);
 
   const onChange = e =>
@@ -159,6 +164,7 @@ const EditGroupType = ({
 EditGroupType.propTypes = {
   editGroupType: PropTypes.func.isRequired,
   getGroups: PropTypes.func.isRequired,
+  clearErrors: PropTypes.func.isRequired,
   errors: PropTypes.array.isRequired,
   auth: PropTypes.object.isRequired,
   group: PropTypes.object.isRequired,
@@ -174,5 +180,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { editGroupType, getGroups }
+  { editGroupType, getGroups, clearErrors }
 )(withRouter(EditGroupType));

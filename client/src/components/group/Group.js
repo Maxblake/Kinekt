@@ -57,7 +57,7 @@ const Group = ({
   };
 
   const leaveCurrentGroup = () => {
-    socket.emit("leaveCurrentGroup", { isKicked: false });
+    socket.emit("leaveCurrentGroup");
     history.push(`/k/${groupType.name.split(" ").join("_")}`);
   };
 

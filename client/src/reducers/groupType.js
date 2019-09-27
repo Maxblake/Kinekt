@@ -1,5 +1,6 @@
 import {
   GROUPTYPE_LOADING,
+  GROUPTYPE_LOADED,
   SET_GROUPTYPE,
   SET_GROUPTYPES,
   CONCAT_GROUPTYPES,
@@ -21,6 +22,12 @@ export default function(state = initialState, action) {
       return {
         ...state,
         loading: true
+      };
+    }
+    case GROUPTYPE_LOADED: {
+      return {
+        ...state,
+        loading: false
       };
     }
     case SET_GROUPTYPES: {

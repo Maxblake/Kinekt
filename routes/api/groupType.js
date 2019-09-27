@@ -170,6 +170,9 @@ router.put(
   async (req, res) => {
     const errors = new APIerrors();
 
+    if (errors.addExpressValidationResult(req))
+      return errors.sendErrorResponse(res);
+
     runAPISafely(async () => {
       const groupTypeFields = buildGroupTypeFields(req, true);
 

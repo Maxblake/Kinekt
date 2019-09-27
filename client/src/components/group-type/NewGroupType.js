@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 
 import { requestGroupType } from "../../actions/groupType";
+import { clearErrors } from "../../actions/auth";
 
 import PageTitle from "../layout/page/PageTitle";
 import Form from "../form/Form";
@@ -13,7 +14,13 @@ import CustomField from "../form/CustomField";
 import ImgUploadControl from "../form/ImgUploadControl";
 import Spinner from "../common/Spinner";
 
-const NewGroupType = ({ history, requestGroupType, loading, errors }) => {
+const NewGroupType = ({
+  history,
+  requestGroupType,
+  clearErrors,
+  loading,
+  errors
+}) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -26,6 +33,12 @@ const NewGroupType = ({ history, requestGroupType, loading, errors }) => {
   const errName = errors.find(error => error.param === "name");
   const errDescription = errors.find(error => error.param === "description");
   const errCategory = errors.find(error => error.param === "category");
+
+  useEffect(() => {
+    return () => {
+      clearErrors();
+    };
+  }, []);
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -133,6 +146,7 @@ const NewGroupType = ({ history, requestGroupType, loading, errors }) => {
 
 NewGroupType.propTypes = {
   requestGroupType: PropTypes.func.isRequired,
+  clearErrors: PropTypes.func.isRequired,
   errors: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired
 };
@@ -144,5 +158,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { requestGroupType }
+  { requestGroupType, clearErrors }
 )(withRouter(NewGroupType));

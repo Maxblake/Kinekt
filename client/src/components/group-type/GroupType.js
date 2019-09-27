@@ -31,10 +31,11 @@ const GroupType = ({
   const [groupData, setGroupData] = useState({
     sortBy: "New",
     searchTerms: "",
-    readyToLoadNewGroups: false
+    readyToLoadNewGroups: false,
+    sortDir: "Ascending"
   });
 
-  const { sortBy, searchTerms, readyToLoadNewGroups } = groupData;
+  const { sortBy, searchTerms, readyToLoadNewGroups, sortDir } = groupData;
 
   const [isFetching, setIsFetching] = useInfiniteScroll(() => getMoreGroups());
 
@@ -44,13 +45,15 @@ const GroupType = ({
       groupType && groupType.name !== groupTypeParamSpaced;
 
     if (
-      !groupType ||
-      groupTypeParamChanged ||
-      readyToLoadNewGroups ||
-      groups === null
+      !loading &&
+      (!groupType ||
+        groupTypeParamChanged ||
+        readyToLoadNewGroups ||
+        groups === null)
     ) {
       let queryParams = {
         sortBy,
+        sortDir,
         searchTerms
       };
 
@@ -65,7 +68,10 @@ const GroupType = ({
         readyToLoadNewGroups: false
       });
     }
-  }, [match.params.groupType, readyToLoadNewGroups]);
+    if (!loading && isFetching) {
+      setIsFetching(false);
+    }
+  }, [match.params.groupType, readyToLoadNewGroups, loading]);
 
   const onChange = e => {
     if (
@@ -108,6 +114,7 @@ const GroupType = ({
       //TODO refactor this
       let queryParams = {
         sortBy,
+        sortDir,
         searchTerms
       };
 
@@ -148,10 +155,6 @@ const GroupType = ({
     return classList.join(" ");
   };
 
-  if (loading) {
-    return <Spinner />;
-  }
-
   if (
     !groupType ||
     (error &&
@@ -161,21 +164,40 @@ const GroupType = ({
   }
 
   const options = [
-    <div className="field">
-      <div className="select is-fullwidth-touch">
-        <select
-          className="is-fullwidth-touch"
-          name="sortBy"
-          value={sortBy}
-          onChange={e => onChange(e)}
+    <div class="field has-addons">
+      <div class="control is-expanded">
+        <div class="select is-fullwidth">
+          <select name="sortBy" value={sortBy} onChange={e => onChange(e)}>
+            <option>New</option>
+            <option>Start Time</option>
+            <option>Spots left</option>
+            <option>Nearby</option>
+          </select>
+        </div>
+      </div>
+      <div className="control">
+        <button
+          className="button is-primary"
+          type="button"
+          onClick={() =>
+            setGroupData({
+              ...groupData,
+              readyToLoadNewGroups: true,
+              sortDir: sortDir === "Ascending" ? "Descending" : "Ascending"
+            })
+          }
         >
-          <option>New</option>
-          <option>Start Time</option>
-          <option>Spots left</option>
-          <option>Nearby</option>
-        </select>
+          <span className="icon is-small">
+            <i
+              className={`fas fa-sort-${
+                sortDir === "Ascending" ? "up" : "down"
+              }`}
+            />
+          </span>
+        </button>
       </div>
     </div>,
+
     <form onSubmit={e => onSearchTermsSubmit(e)}>
       <div className="field has-addons">
         <p className="control search-control">
@@ -350,6 +372,7 @@ const GroupType = ({
           </div>
         )}
       </div>
+      {loading && <Spinner />}
     </section>
   );
 };

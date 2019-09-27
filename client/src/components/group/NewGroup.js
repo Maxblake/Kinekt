@@ -6,6 +6,7 @@ import moment from "moment";
 import Geosuggest from "react-geosuggest";
 
 import { createGroup, getGroups } from "../../actions/group";
+import { clearErrors } from "../../actions/auth";
 
 import Spinner from "../common/Spinner";
 import NotFound from "../common/NotFound";
@@ -26,7 +27,8 @@ const NewGroup = ({
   loading,
   errors,
   createGroup,
-  getGroups
+  getGroups,
+  clearErrors
 }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -65,6 +67,9 @@ const NewGroup = ({
     if (!groupType || groupTypeParamChanged) {
       getGroups(match.params.groupType.split("_").join(" "));
     }
+    return () => {
+      clearErrors();
+    };
   }, []);
 
   const onChange = e =>
@@ -329,6 +334,7 @@ const NewGroup = ({
 NewGroup.propTypes = {
   createGroup: PropTypes.func.isRequired,
   getGroups: PropTypes.func.isRequired,
+  clearErrors: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   groupType: PropTypes.object.isRequired,
   errors: PropTypes.array.isRequired
@@ -342,5 +348,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { createGroup, getGroups }
+  { createGroup, getGroups, clearErrors }
 )(withRouter(NewGroup));

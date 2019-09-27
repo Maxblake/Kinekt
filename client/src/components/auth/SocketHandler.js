@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import {
   openSocket,
-  clearGroupAndGroupTypeStates
+  adjustStateForKickedUser
 } from "../../actions/helpers/ioClient";
 import { setTextAlert, setCustomAlert } from "../../actions/alert";
 
@@ -15,7 +15,7 @@ const SocketHandler = ({
   openSocket,
   setTextAlert,
   setCustomAlert,
-  clearGroupAndGroupTypeStates,
+  adjustStateForKickedUser,
   group: { groups, group },
   groupType: { groupType, groupTypes }
 }) => {
@@ -48,9 +48,9 @@ const SocketHandler = ({
 
     if (!kickedUser.allUsers && kickedUser.userId !== user._id) return;
 
-    socket.emit("leaveCurrentGroup", { isKicked: true });
+    socket.emit("leaveSocket");
 
-    clearGroupAndGroupTypeStates();
+    adjustStateForKickedUser();
     setTextAlert(
       `You have been ${isBanned ? "banned" : "kicked"} from the group '${
         user.currentGroup.name
@@ -116,7 +116,7 @@ SocketHandler.propTypes = {
   openSocket: PropTypes.func.isRequired,
   setTextAlert: PropTypes.func.isRequired,
   setCustomAlert: PropTypes.func.isRequired,
-  clearGroupAndGroupTypeStates: PropTypes.func.isRequired
+  adjustStateForKickedUser: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -127,5 +127,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { openSocket, setTextAlert, setCustomAlert, clearGroupAndGroupTypeStates }
+  { openSocket, setTextAlert, setCustomAlert, adjustStateForKickedUser }
 )(SocketHandler);

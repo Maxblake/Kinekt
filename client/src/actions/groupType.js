@@ -6,6 +6,7 @@ import { setTextAlert } from "./alert";
 
 import {
   GROUPTYPE_LOADING,
+  GROUPTYPE_LOADED,
   SET_GROUPTYPE,
   SET_GROUPTYPES,
   CONCAT_GROUPTYPES,
@@ -113,10 +114,8 @@ export const editGroupType = (
     );
   } catch (err) {
     dispatch(handleResponseErrors(err));
-
     dispatch({
-      type: GROUPTYPE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      type: GROUPTYPE_LOADED
     });
   }
 };

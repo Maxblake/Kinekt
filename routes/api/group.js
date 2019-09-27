@@ -49,7 +49,7 @@ router.post("/list", (req, res) => {
 const buildQuery = (req, groupIds) => {
   const { searchTerms, seenGroups } = req.body;
   const query = {
-    _id: { $in: groupIds.filter(id => !seenGroups.includes(id)) },
+    _id: { $in: groupIds.filter(id => !seenGroups.includes(id.toString())) },
     accessLevel: { $ne: "Private" }
   };
 
@@ -78,24 +78,37 @@ const getGroups = async query => {
 };
 
 const sortGroups = (req, groups) => {
-  const { sortBy } = req.body;
+  const { sortBy, sortDir } = req.body;
+  const sortDirInt = sortDir === "Ascending" ? 1 : -1;
 
   switch (sortBy) {
     case "New": {
       groups.sort((a, b) => {
-        return b.creationTimestamp.getTime() - a.creationTimestamp.getTime();
+        return (
+          sortDirInt *
+          (b.creationTimestamp.getTime() - a.creationTimestamp.getTime())
+        );
       });
       break;
     }
     case "Start Time": {
       groups.sort((a, b) => {
-        return a.time.getTime() - b.time.getTime();
+        return sortDirInt * (a.time.getTime() - b.time.getTime());
       });
       break;
     }
-    case "Size": {
+    case "Spots left": {
       groups.sort((a, b) => {
-        return a.users.length - b.users.length;
+        if (a.maxSize) {
+          if (b.maxSize) {
+            const aSpotsLeft = a.maxSize - a.users.length;
+            const bSpotsLeft = b.maxSize - b.users.length;
+
+            return sortDirInt * (aSpotsLeft - bSpotsLeft);
+          }
+          return sortDirInt * -1;
+        }
+        return sortDirInt;
       });
       break;
     }
@@ -105,9 +118,7 @@ const sortGroups = (req, groups) => {
       if (userLocation !== undefined) {
         groups.sort((a, b) => {
           if (a.place.lat) {
-            if (!b.place.lat) {
-              return -1;
-            } else {
+            if (b.place.lat) {
               const distanceToA = getDistance(
                 { lat: userLocation.lat, lng: userLocation.lng },
                 { lat: a.place.lat, lng: a.place.lng }
@@ -116,13 +127,11 @@ const sortGroups = (req, groups) => {
                 { lat: userLocation.lat, lng: userLocation.lng },
                 { lat: b.place.lat, lng: b.place.lng }
               );
-              return distanceToA - distanceToB;
+              return sortDirInt * (distanceToA - distanceToB);
             }
-          } else if (b.place.lat) {
-            return 1;
+            return sortDirInt * -1;
           }
-
-          return 0;
+          return sortDirInt;
         });
       }
       break;

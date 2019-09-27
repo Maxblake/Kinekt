@@ -20,13 +20,17 @@ export const openSocket = () => dispatch => {
   });
 };
 
-export const clearGroupAndGroupTypeStates = () => dispatch => {
+export const adjustStateForKickedUser = () => dispatch => {
   dispatch({
     type: SET_GROUP,
     payload: null
   });
   dispatch({
     type: SET_GROUPTYPE,
+    payload: null
+  });
+  dispatch({
+    type: SET_CURRENT_GROUP,
     payload: null
   });
 };

@@ -49,7 +49,9 @@
       justify-content: flex-start;
     }
   }
+}
 
+@media (max-width: $widescreen - 1) {
   .search-control {
     width: 250px;
   }

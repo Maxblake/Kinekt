@@ -36,9 +36,8 @@ class socketHandler {
     this.socket.on("setUser", userToken => this.setUser(userToken));
     this.socket.on("clearUser", () => this.clearUser());
     this.socket.on("joinGroup", groupId => this.joinGroup(groupId));
-    this.socket.on("leaveCurrentGroup", payload =>
-      this.leaveCurrentGroup(payload)
-    );
+    this.socket.on("leaveCurrentGroup", () => this.leaveCurrentGroup());
+    this.socket.on("leaveSocket", () => this.leaveSocket());
     this.socket.on("requestEntry", groupId => this.requestEntry(groupId));
     this.socket.on("answerEntryRequest", ({ answer, userId }) =>
       this.answerEntryRequest(answer, userId)
@@ -102,6 +101,7 @@ class socketHandler {
 
   async joinGroup(groupId) {
     if (!groupId || !this.isAuthenticated) return;
+    this.user = await User.findById(this.user._id);
 
     const newGroup = await Group.findById(groupId);
 
@@ -123,7 +123,7 @@ class socketHandler {
       this.user.currentGroup.HRID &&
       this.user.currentGroup.HRID !== newGroup.HRID
     ) {
-      await this.leaveCurrentGroup({ joiningNewGroup: true });
+      await this.leaveCurrentGroup(true);
     }
 
     if (
@@ -154,6 +154,7 @@ class socketHandler {
 
   async requestEntry(groupId) {
     if (!this.isAuthenticated) return;
+    this.user = await User.findById(this.user._id);
 
     this.io.in(`group-${groupId}`).emit("entryRequestReceived", {
       id: this.user._id,
@@ -178,16 +179,14 @@ class socketHandler {
       .emit("entryRequestAnswered", { answer, joinKey, HRID: group.HRID });
   }
 
-  async leaveCurrentGroup(payload) {
-    const { isKicked, joiningNewGroup } = payload;
-
+  async leaveCurrentGroup(joiningNewGroup = false) {
     const oldGroup = await Group.findOne({
       HRID: this.user.currentGroup.HRID
     });
 
     if (!oldGroup || this.user._id.equals(oldGroup.creator)) return;
 
-    this.socket.leave(`group-${oldGroup._id.toString()}`);
+    this.leaveSocket();
     this.updateCurrentGroup(null, !joiningNewGroup);
 
     oldGroup.users = oldGroup.users.filter(user => {
@@ -196,15 +195,17 @@ class socketHandler {
 
     await oldGroup.save();
 
-    if (!isKicked) {
-      this.io.in(`group-${oldGroup._id.toString()}`).emit("receiveMessage", {
-        body: `${this.user.name} has left the group.`,
-        user: { id: 0 },
-        time: moment().format("h:mm A")
-      });
-    }
+    this.io.in(`group-${oldGroup._id.toString()}`).emit("receiveMessage", {
+      body: `${this.user.name} has left the group.`,
+      user: { id: 0 },
+      time: moment().format("h:mm A")
+    });
 
     this.updateGroupMembers(oldGroup);
+  }
+
+  leaveSocket() {
+    this.socket.leave(`group-${this.groupId.toString()}`);
   }
 
   async updateGroupMembers(group) {
@@ -271,8 +272,6 @@ class socketHandler {
 
   async updateCurrentGroup(group, shouldEmit = true) {
     if (!this.isAuthenticated) return;
-
-    //this.user
 
     if (group) {
       this.user.currentGroup = {
@@ -394,6 +393,14 @@ class socketHandler {
       return;
     }
 
+    if (
+      group.users.filter(
+        user => user.id.equals(this.user._id) && user.memberType === "admin"
+      ).length < 1
+    ) {
+      return;
+    }
+
     this.socket
       .to(`group-${this.groupId.toString()}`)
       .emit("kickedFromGroup", kickedUser);
@@ -401,8 +408,18 @@ class socketHandler {
       .to(`group-${this.groupId.toString()}`)
       .emit("kickedFromGroupAlert", { kickedUser });
 
-    if (!kickedUser.allUsers) {
-      const user = await User.findById(kickedUser.userId).select("name");
+    if (!!kickedUser.userId) {
+      const user = await User.findById(kickedUser.userId);
+
+      group.users = group.users.filter(user => {
+        return !user.id.equals(kickedUser.userId);
+      });
+      await group.save();
+
+      user.currentGroup = null;
+      await user.save();
+
+      this.updateGroupMembers(group);
 
       this.io.in(`group-${this.groupId.toString()}`).emit("receiveMessage", {
         body: `${user.name} has been kicked from the group.`,

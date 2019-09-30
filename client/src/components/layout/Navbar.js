@@ -148,7 +148,7 @@ const Navbar = ({
           <div className="navbar-item">
             <form onSubmit={e => redirectToGroup(e, groupCode)}>
               <div className="field has-addons">
-                <div className="control">
+                <div className="control is-expanded">
                   <input
                     className="input is-small"
                     type="text"

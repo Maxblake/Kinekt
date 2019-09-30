@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
 
 import { getGroup, deleteGroup } from "../../actions/group";
+import { setTextAlert } from "../../actions/alert";
 
 import IdleTimer from "react-idle-timer";
 import Spinner from "../common/Spinner";
@@ -19,6 +20,7 @@ const Group = ({
   history,
   getGroup,
   deleteGroup,
+  setTextAlert,
   group: { group, loading, error },
   groupType: { groupType },
   auth: { user, isAuthenticated, socket },
@@ -47,7 +49,10 @@ const Group = ({
   }, [isAuthenticated, group, match.params.groupCode]);
 
   const onClickDelete = e => {
-    deleteGroup();
+    if (window.confirm("Are you sure you would like to delete this group?")) {
+      socket.emit("preDeleteGroupActions");
+      history.push(`/k/${groupType.name.split(" ").join("_")}`);
+    }
   };
 
   const getGroupImage = () => {
@@ -80,7 +85,7 @@ const Group = ({
         "Are you sure you would like to ban this user? This cannot be undone."
       )
     ) {
-      socket.emit("banFromGroup", { userId });
+      socket.emit("kickFromGroup", { userId, isBanned: true });
     }
   };
 
@@ -221,6 +226,7 @@ const Group = ({
 Group.propTypes = {
   getGroup: PropTypes.func.isRequired,
   deleteGroup: PropTypes.func.isRequired,
+  setTextAlert: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   group: PropTypes.object.isRequired,
   groupType: PropTypes.object.isRequired
@@ -234,5 +240,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getGroup, deleteGroup }
+  { getGroup, deleteGroup, setTextAlert }
 )(Group);

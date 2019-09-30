@@ -87,7 +87,7 @@ export const deleteUser = () => async dispatch => {
     try {
       await axios.delete("/api/user");
 
-      dispatch(deleteGroup(true));
+      dispatch(deleteGroup());
       dispatch(logout());
       dispatch(setTextAlert(`User account deleted`, "is-warning"));
     } catch (err) {

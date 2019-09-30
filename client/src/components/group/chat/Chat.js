@@ -8,7 +8,7 @@ const Chat = ({ auth: { user, socket }, setNewNotice }) => {
   const [messageData, setMessageData] = useState({
     messageField: "",
     messages: [],
-    showChat: true
+    showChat: false
   });
 
   const { messageField, messages, showChat } = messageData;
@@ -19,15 +19,13 @@ const Chat = ({ auth: { user, socket }, setNewNotice }) => {
     return () => {
       socket.off("receiveMessage");
     };
-  }, [messages]);
+  }, [messageData]);
 
   const receiveMessage = message => {
     setMessageData({
       ...messageData,
       messages: messages.concat(message)
     });
-
-    console.log(messageData);
   };
 
   const submitMessage = async e => {

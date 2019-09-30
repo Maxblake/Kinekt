@@ -1,4 +1,5 @@
 import axios from "axios";
+import moment from "moment";
 
 import { handleResponseErrors } from "./helpers/helpers";
 import { clearErrorsAndAlerts } from "./auth";
@@ -8,6 +9,7 @@ import {
   GROUP_LOADING,
   GROUP_LOADED,
   SET_GROUP,
+  SET_CURRENT_GROUP,
   SET_GROUPS,
   CONCAT_GROUPS,
   SET_GROUPTYPE,
@@ -40,11 +42,11 @@ export const getGroup = (
       type: SET_GROUP,
       payload: res.data.group
     });
-
     dispatch({
       type: SET_GROUPTYPE,
       payload: res.data.groupType
     });
+    dispatch(sendExpirationWarning(res.data.group));
   } catch (err) {
     dispatch(handleResponseErrors(err));
     dispatch({
@@ -58,6 +60,25 @@ export const getGroup = (
     if (!!history) {
       history.goBack();
     }
+  }
+};
+
+const sendExpirationWarning = group => dispatch => {
+  const currentTime = moment();
+  const expirationTime = moment(group.creationTimestamp).add(24, "hours");
+
+  const diff = currentTime.diff(expirationTime);
+  const diffDuration = moment.duration(diff);
+
+  if (diffDuration.hours() >= -1) {
+    dispatch(
+      setTextAlert(
+        `Heads up! '${group.name}' expires on ${expirationTime.format(
+          "ddd M/D @ h:mm A"
+        )}`,
+        "is-warning"
+      )
+    );
   }
 };
 
@@ -126,13 +147,20 @@ export const createGroup = (groupFields, history) => async dispatch => {
     dispatch(clearErrorsAndAlerts());
     dispatch(
       setTextAlert(
-        `Group, ${groupFields.name}, created successfully`,
+        `Group, '${groupFields.name}', created successfully`,
         "is-success"
       )
     );
     dispatch({
       type: SET_GROUP,
       payload: res.data.group
+    });
+    dispatch({
+      type: SET_CURRENT_GROUP,
+      payload: {
+        name: res.data.group.name,
+        HRID: res.data.group.HRID
+      }
     });
 
     history.push(
@@ -184,26 +212,24 @@ export const editGroup = (groupFields, groupId) => async dispatch => {
 };
 
 // Delete group
-export const deleteGroup = (withoutConfirmation = false) => async dispatch => {
-  if (
-    withoutConfirmation ||
-    window.confirm("Are you sure you would like to delete this group?")
-  ) {
-    try {
-      dispatch({
-        type: GROUP_LOADING
-      });
+export const deleteGroup = groupId => async dispatch => {
+  try {
+    dispatch({
+      type: GROUP_LOADING
+    });
 
-      await axios.delete("/api/group");
-
-      dispatch({ type: GROUP_DELETED });
-      dispatch(setTextAlert(`Group deleted`, "is-warning"));
-    } catch (err) {
-      dispatch({
-        type: GROUP_ERROR,
-        payload: { msg: err.response.statusText, status: err.response.status }
-      });
-    }
+    await axios.delete("/api/group");
+    dispatch({ type: GROUP_DELETED, payload: groupId });
+    dispatch({
+      type: SET_CURRENT_GROUP,
+      payload: null
+    });
+    dispatch(setTextAlert(`Group deleted`, "is-warning"));
+  } catch (err) {
+    dispatch({
+      type: GROUP_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
   }
 };
 

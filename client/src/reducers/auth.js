@@ -10,7 +10,6 @@ import {
   SET_CURRENT_GROUP,
   GET_GROUP_NOTICES,
   SET_GROUP,
-  GROUP_DELETED,
   REQUEST_ENTRY
 } from "../actions/types";
 
@@ -59,9 +58,6 @@ export default function(state = initialState, action) {
         ...state,
         user: { ...state.user, currentGroup: payload }
       };
-    case GROUP_DELETED:
-      state.socket.emit("groupDeleted");
-      return state;
     case AUTH_SUCCESS:
       localStorage.setItem("token", payload.token);
       return {
@@ -73,7 +69,7 @@ export default function(state = initialState, action) {
     case AUTH_ERROR:
     case LOGOUT:
       localStorage.removeItem("token");
-      state.socket.emit("clearUser");
+      state.socket.emit("logout");
       return {
         ...state,
         token: null,

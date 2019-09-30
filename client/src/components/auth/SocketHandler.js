@@ -7,6 +7,7 @@ import {
   adjustStateForKickedUser
 } from "../../actions/helpers/ioClient";
 import { setTextAlert, setCustomAlert } from "../../actions/alert";
+import { deleteGroup } from "../../actions/group";
 
 import IdleTimer from "react-idle-timer";
 
@@ -16,6 +17,7 @@ const SocketHandler = ({
   setTextAlert,
   setCustomAlert,
   adjustStateForKickedUser,
+  deleteGroup,
   group: { groups, group },
   groupType: { groupType, groupTypes }
 }) => {
@@ -24,11 +26,13 @@ const SocketHandler = ({
   useEffect(() => {
     if (!socket) {
       openSocket();
-    }
+    } else {
+      socket.on("preDeleteActionsComplete", () => deleteGroup(group._id));
 
-    if (user) {
-      socket.on("kickedFromGroupAlert", kickedFromGroupAlert);
-      socket.on("entryRequestReceived", entryRequestReceived);
+      if (user) {
+        socket.on("kickedFromGroupAlert", kickedFromGroupAlert);
+        socket.on("entryRequestReceived", entryRequestReceived);
+      }
     }
 
     if ((groups && groups.length > 0) || groupType || groupTypes.length > 0) {
@@ -39,14 +43,15 @@ const SocketHandler = ({
       if (socket) {
         socket.off("kickedFromGroupAlert");
         socket.off("entryRequestReceived");
+        socket.off("preDeleteActionsComplete");
       }
     };
   }, [group, groups, groupType, groupTypes, user]);
 
   const kickedFromGroupAlert = payload => {
-    const { isBanned, kickedUser } = payload;
+    const { isBanned, allUsers, userId } = payload;
 
-    if (!kickedUser.allUsers && kickedUser.userId !== user._id) return;
+    if (!allUsers && userId !== user._id) return;
 
     socket.emit("leaveSocket");
 
@@ -116,7 +121,8 @@ SocketHandler.propTypes = {
   openSocket: PropTypes.func.isRequired,
   setTextAlert: PropTypes.func.isRequired,
   setCustomAlert: PropTypes.func.isRequired,
-  adjustStateForKickedUser: PropTypes.func.isRequired
+  adjustStateForKickedUser: PropTypes.func.isRequired,
+  deleteGroup: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -127,5 +133,11 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { openSocket, setTextAlert, setCustomAlert, adjustStateForKickedUser }
+  {
+    openSocket,
+    setTextAlert,
+    setCustomAlert,
+    adjustStateForKickedUser,
+    deleteGroup
+  }
 )(SocketHandler);

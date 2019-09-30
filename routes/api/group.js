@@ -201,7 +201,7 @@ const isUserAllowedIn = async (req, group, errors) => {
 
   if (userCurrentGroupHRID && userCurrentGroupHRID !== HRID) {
     userCurrentGroup = await Group.findOne({ HRID: userCurrentGroupHRID });
-    if (userCurrentGroup.creator.equals(req.user.id)) {
+    if (userCurrentGroup && userCurrentGroup.creator.equals(req.user.id)) {
       errors.addError(
         "You must delete your current group before joining a new one",
         "alert-warning"

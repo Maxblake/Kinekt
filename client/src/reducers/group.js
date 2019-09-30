@@ -89,7 +89,14 @@ export default function(state = initialState, action) {
         error: payload
       };
     }
-    case GROUP_DELETED:
+    case GROUP_DELETED: {
+      return {
+        ...state,
+        groups: state.groups.filter(group => group._id !== payload),
+        group: null,
+        loading: false
+      };
+    }
     case LOGOUT: {
       return {
         ...state,

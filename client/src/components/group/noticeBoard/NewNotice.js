@@ -53,8 +53,6 @@ const NewNotice = ({
     hideNotice();
   };
 
-  console.log(newNotice);
-
   return (
     <div className={`notice new-notice box ${isHidden ? "is-hidden" : ""}`}>
       <div className="media">

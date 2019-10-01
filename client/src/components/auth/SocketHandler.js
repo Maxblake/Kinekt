@@ -28,6 +28,7 @@ const SocketHandler = ({
       openSocket();
     } else {
       socket.on("preDeleteActionsComplete", () => deleteGroup(group._id));
+      socket.on("groupExpired", groupExpired);
 
       if (user) {
         socket.on("kickedFromGroupAlert", kickedFromGroupAlert);
@@ -44,6 +45,7 @@ const SocketHandler = ({
         socket.off("kickedFromGroupAlert");
         socket.off("entryRequestReceived");
         socket.off("preDeleteActionsComplete");
+        socket.off("groupExpired");
       }
     };
   }, [group, groups, groupType, groupTypes, user]);
@@ -76,6 +78,13 @@ const SocketHandler = ({
         });
       }
     }
+  };
+
+  const groupExpired = () => {
+    setTextAlert(`'${group.name}' has expired`, "is-danger");
+
+    socket.emit("leaveCurrentGroup");
+    //adjustStateForKickedUser();
   };
 
   const onActive = () => {

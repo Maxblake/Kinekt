@@ -19,6 +19,16 @@ const runAPISafely = coreFunction => {
   }
 };
 
+const getTempUserToken = userId => {
+  const payload = {
+    user: {
+      id: userId
+    }
+  };
+
+  return jwt.sign(payload, config.get("jwtSecret"), { expiresIn: 60 });
+};
+
 const signUserToken = (res, userId) => {
   const errors = new APIerrors();
   const payload = {
@@ -315,4 +325,10 @@ const validateRequest = APImethod => {
   }
 };
 
-module.exports = { runAPISafely, signUserToken, APIerrors, validateRequest };
+module.exports = {
+  runAPISafely,
+  signUserToken,
+  getTempUserToken,
+  APIerrors,
+  validateRequest
+};

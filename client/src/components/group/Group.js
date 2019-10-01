@@ -3,8 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
 
-import { getGroup, deleteGroup } from "../../actions/group";
-import { setTextAlert } from "../../actions/alert";
+import { getGroup } from "../../actions/group";
 
 import IdleTimer from "react-idle-timer";
 import Spinner from "../common/Spinner";
@@ -19,8 +18,6 @@ import defaultGroupTypeImage from "../../resources/default_grouptype_image.jpg";
 const Group = ({
   history,
   getGroup,
-  deleteGroup,
-  setTextAlert,
   group: { group, loading, error },
   groupType: { groupType },
   auth: { user, isAuthenticated, socket },
@@ -225,8 +222,6 @@ const Group = ({
 
 Group.propTypes = {
   getGroup: PropTypes.func.isRequired,
-  deleteGroup: PropTypes.func.isRequired,
-  setTextAlert: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   group: PropTypes.object.isRequired,
   groupType: PropTypes.object.isRequired
@@ -240,5 +235,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getGroup, deleteGroup, setTextAlert }
+  { getGroup }
 )(Group);

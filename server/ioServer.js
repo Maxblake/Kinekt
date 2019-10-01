@@ -3,6 +3,9 @@ const http = require("http");
 const moment = require("moment");
 const jwt = require("jsonwebtoken");
 const config = require("config");
+const axios = require("axios");
+
+const { getTempUserToken } = require("../routes/api/helpers/helpers");
 
 const User = require("../models/User");
 const Group = require("../models/Group");
@@ -16,9 +19,12 @@ const ioServer = app => {
 
   io.on("connection", socket => {
     console.log("New client connected");
-
     new socketHandler(io, socket, userStatusMap);
   });
+
+  //scheduleGroupExpirations(io);
+  //setInterval(() => scheduleGroupExpirations(io), 1000 * 60 * 30);
+  setTimeout(() => scheduleGroupExpirations(io), 2000);
 
   return server;
 };
@@ -171,14 +177,14 @@ class socketHandler {
   }
 
   async leaveCurrentGroup(joiningNewGroup = false) {
+    this.leaveSocket();
+    this.updateCurrentGroup(null, !joiningNewGroup);
+
     const oldGroup = await Group.findOne({
       HRID: this.user.currentGroup.HRID
     });
 
     if (!oldGroup || this.user._id.equals(oldGroup.creator)) return;
-
-    this.leaveSocket();
-    this.updateCurrentGroup(null, !joiningNewGroup);
 
     oldGroup.users = oldGroup.users.filter(user => {
       return !user.id.equals(this.user._id);
@@ -388,7 +394,8 @@ class socketHandler {
 
     if (
       isBanned &&
-      group.bannedUsers.filter(user => user.id.equals(userId)).length < 1
+      group.bannedUsers.filter(bannedUserId => bannedUserId.equals(userId))
+        .length < 1
     ) {
       group.bannedUsers.push(userId);
       await group.save();
@@ -410,13 +417,16 @@ class socketHandler {
       .emit("kickedFromGroupAlert", { isBanned, allUsers, userId });
 
     if (allUsers) {
-      for (const user of group.users) {
-        await this.handleKickSideEffects(group, user.id);
+      for (const groupUser of group.users) {
+        const user = await User.findById(groupUser.id);
+        await this.handleKickSideEffects(group, user);
       }
     }
 
     if (!!userId) {
-      this.handleKickSideEffects(group, userId);
+      const user = await User.findById(userId);
+
+      this.handleKickSideEffects(group, user);
       this.updateGroupMembers(group);
 
       this.io.in(`group-${this.groupId.toString()}`).emit("receiveMessage", {
@@ -429,11 +439,9 @@ class socketHandler {
     }
   }
 
-  async handleKickSideEffects(group, userId) {
-    const user = await User.findById(userId);
-
-    group.users = group.users.filter(user => {
-      return !user.id.equals(userId);
+  async handleKickSideEffects(group, user) {
+    group.users = group.users.filter(groupUser => {
+      return !groupUser.id.equals(user._id);
     });
     await group.save();
 
@@ -495,5 +503,44 @@ class socketHandler {
     this.userStatusTimeout = null;
   }
 }
+
+const scheduleGroupExpirations = async io => {
+  const expiringGroups = await Group.find({
+    creationTimestamp: { $lt: moment().subtract(60 * 23 + 30, "minutes") }
+  });
+
+  const expirationCutoff = moment().subtract(24, "hours");
+
+  expiringGroups.forEach(group => {
+    const creationTime = moment(group.creationTimestamp);
+    const diff = creationTime.diff(expirationCutoff);
+    const diffDuration = moment.duration(diff);
+    const timeToExpiration = diffDuration.asMilliseconds();
+
+    setTimeout(
+      () => expireGroup(group, io),
+      timeToExpiration < 0 ? 0 : timeToExpiration
+    );
+  });
+};
+
+const expireGroup = (group, io) => {
+  //TODO dev only comment
+  const tempToken = "Bad token"; //getTempUserToken(group.creator.toString());
+  const config = {
+    headers: {
+      "x-auth-token": tempToken
+    }
+  };
+
+  axios
+    .delete("http://localhost:5000/api/group", config)
+    .catch(err => console.error(err.message));
+
+  io.in(`group-${group._id.toString()}`).emit("kickedFromGroup", {
+    allUsers: true
+  });
+  io.in(`group-${group._id.toString()}`).emit("groupExpired");
+};
 
 module.exports = ioServer;

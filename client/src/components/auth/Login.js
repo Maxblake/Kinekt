@@ -53,28 +53,29 @@ const Login = ({
   }
 
   return (
-    <section className="centered-form">
+    <section className="centered-form login-form">
       <nav className="level" id="page-nav">
         <PageTitle title="Log in" />
       </nav>
 
       <Form onSubmit={onSubmit}>
+        <div className="centered-logo">HS</div>
         <FormControl
-          label="Email Address"
+          placeholder="Email"
           name="email"
           value={email}
           onChange={onChange}
           error={errEmail ? errEmail.msg : undefined}
         />
         <FormControl
-          label="Password"
+          placeholder="Password"
           name="password"
           value={password}
           type="password"
           onChange={onChange}
           error={errPassword ? errPassword.msg : undefined}
         />
-        <SubmitButton text="Log in" />
+        <SubmitButton text="Log in" isFullwidth={true} />
       </Form>
       <div className="content has-text-centered">
         <p className="">

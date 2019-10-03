@@ -54,7 +54,7 @@ const NewNotice = ({
   };
 
   return (
-    <div className={`notice new-notice box ${isHidden ? "is-hidden" : ""}`}>
+    <div className={`notice new-notice hs-box ${isHidden ? "is-hidden" : ""}`}>
       <div className="media">
         <div className="media-left">
           {!newNotice ? (

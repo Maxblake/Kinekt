@@ -366,7 +366,7 @@ const GroupType = ({
             </div>
           </Fragment>
         ) : (
-          <div className="box no-card-notice">
+          <div className="hs-box no-card-notice">
             There are currently no groups here. It may be time to make a new
             one!
           </div>

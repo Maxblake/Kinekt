@@ -7,7 +7,7 @@
 // Spinner
 .spinner-container {
   background-color: whitesmoke;
-  border-radius: 6px;
+  border-radius: 4px;
   width: 100px;
   height: 100px;
   margin: 2rem auto 0 auto;
@@ -200,6 +200,7 @@
 .info-modal {
   max-width: 650px;
   align-items: center;
+  padding: 2rem;
 
   .content {
     border-top: 2px solid #dbdbdb;
@@ -211,4 +212,9 @@
 
 .info-icon {
   color: #4a4a4a;
+}
+
+// Login
+.centered-form.login-form {
+  max-width: 400px;
 }

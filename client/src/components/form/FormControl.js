@@ -14,9 +14,11 @@ const FormControl = ({
 }) => {
   return (
     <Fragment>
-      <label className="label form-label">{`${label}${
-        required ? " *" : ""
-      }`}</label>
+      {label !== undefined && (
+        <label className="label form-label">{`${label}${
+          required ? " *" : ""
+        }`}</label>
+      )}
       <div className="field">
         <div className="control">
           <input

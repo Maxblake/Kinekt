@@ -10,9 +10,9 @@ import imgStepThree from "../../resources/discover_step_three.jpg";
 // TODO use a level for this
 const DiscoverHeader = () => {
   return (
-    <div className="discover-header has-text-centered">
+    <div className="discover-header has-text-centered has-rounded-corners">
       <h2 className="header-welcome">
-        <span className="ws-nowrap">Welcome to Kinekt,</span>{" "}
+        <span className="ws-nowrap">Welcome to HappenStack,</span>{" "}
         <span className="ws-nowrap">getting started is</span>{" "}
         <span className="ws-nowrap">fast and easy.</span>
       </h2>
@@ -26,7 +26,7 @@ const DiscoverHeader = () => {
             />
           </div>
           <Link to="/register" className="step-description has-text-centered">
-            1. Create a free (forever) account.
+            1. Click here for a free account.
           </Link>
         </div>
         <div className="level-item header-step">

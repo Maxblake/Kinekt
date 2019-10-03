@@ -1,10 +1,13 @@
 import React from "react";
 
-const SubmitButton = ({ text }) => {
+const SubmitButton = ({ text, isFullwidth }) => {
   return (
     <div className="field is-grouped is-grouped-right">
-      <div className="control">
-        <button className="button is-primary" type="submit">
+      <div className={`control ${isFullwidth ? "is-expanded" : ""}`}>
+        <button
+          className={`button is-primary ${isFullwidth ? "is-fullwidth" : ""}`}
+          type="submit"
+        >
           {text}
         </button>
       </div>

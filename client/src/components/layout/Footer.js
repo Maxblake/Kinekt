@@ -5,8 +5,8 @@ export default function Footer() {
     <footer className="footer">
       <div className="content has-text-centered">
         <p>
-          Copyright &copy; {new Date().getFullYear()} Kinekt | Current version:
-          0.7 (pre-alpha)
+          Copyright &copy; {new Date().getFullYear()} HappenStack | Current
+          version: 0.7 (pre-alpha)
         </p>
       </div>
     </footer>

@@ -16,7 +16,7 @@ const Message = ({
       }`}
     >
       <div className={`header ${headerHidden ? "is-hidden" : ""}`}>
-        {isSelf ? "You" : isServer ? "Kinekt" : user.name}
+        {isSelf ? "You" : isServer ? "HappenStack" : user.name}
         <span className="header-time">{time}</span>
       </div>
       <div className="body">

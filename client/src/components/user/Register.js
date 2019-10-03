@@ -83,7 +83,7 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
         };
       } else {
         alert(
-          "Kinekt is unable to determine your location, please check your browser settings or enter a location manually."
+          "HappenStack is unable to determine your location, please check your browser settings or enter a location manually."
         );
       }
     } else {
@@ -142,7 +142,7 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
 
       <Form onSubmit={onSubmit}>
         <FormControl
-          label="Email Address"
+          label="Email"
           name="email"
           value={email}
           onChange={onChange}
@@ -188,6 +188,12 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
           }
         />
 
+        <ImgUploadControl
+          label="Profile Picture"
+          onChange={handleImageUpload}
+          type="profile"
+        />
+
         <CustomField
           label={
             <span>
@@ -199,7 +205,7 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
                   </span>
                 }
               >
-                <div className="box info-modal is-vcentered">
+                <div className="hs-box info-modal is-vcentered has-rounded-corners">
                   <div className="icon is-large info-icon">
                     <i className="far fa-3x fa-question-circle" />
                   </div>
@@ -242,13 +248,7 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
           }
         />
 
-        <ImgUploadControl
-          label="Profile Picture"
-          onChange={handleImageUpload}
-          type="profile"
-        />
-
-        <SubmitButton text="Submit" />
+        <SubmitButton isFullwidth={true} text="Submit" />
       </Form>
     </section>
   );

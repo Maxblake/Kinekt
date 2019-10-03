@@ -5,7 +5,7 @@ import OnlineStatus from "../common/subcomponents/OnlineStatus";
 
 const GroupMembers = ({ users, maxSize, adminOptions }) => {
   return (
-    <div className="box" id="group-members-container">
+    <div className="hs-box" id="group-members-container">
       {users && (
         <Fragment>
           <div className="header-tab">

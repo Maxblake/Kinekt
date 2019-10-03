@@ -6,7 +6,12 @@ const PageOptions = ({ options }) => {
   return (
     <div className="level-right">
       {options.map((option, index) => (
-        <div key={index} className="level-item is-hidden-touch">
+        <div
+          key={index}
+          className={`level-item is-hidden-touch ${
+            index + 1 === options.length ? "is-marginless" : ""
+          }`}
+        >
           {option}
         </div>
       ))}

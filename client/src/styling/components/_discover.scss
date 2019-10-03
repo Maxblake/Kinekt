@@ -3,7 +3,6 @@
   padding: 0 1.5rem 1.5rem 1.5rem;
   margin: 2rem auto 3rem auto;
   background: whitesmoke;
-  border-radius: 6px;
 
   //box-shadow: 0 2px 3px rgba(10, 10, 10, 0.2), 0 0 0 1px rgba(10, 10, 10, 0.2);
 
@@ -17,6 +16,7 @@
     font-size: 1.6rem;
     background: $off-black;
     color: whitesmoke;
+    border-radius: 14px 14px 0 0;
   }
 
   .header-step {
@@ -30,7 +30,6 @@
 
       margin: 1rem 0.75rem 0 0.75rem;
       padding: 0.5rem 0.75rem;
-      border-radius: 6px;
       border: 2px solid;
     }
 

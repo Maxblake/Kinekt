@@ -55,7 +55,7 @@ const Notice = ({
   };
 
   return (
-    <div className="notice new-notice box">
+    <div className="notice new-notice hs-box">
       <div className="media">
         <div className="media-left">
           <Image

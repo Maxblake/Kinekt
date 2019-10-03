@@ -22,13 +22,15 @@ export const useInfiniteScroll = callback => {
         : document.documentElement.offsetHeight;
     const body = document.body;
     const html = document.documentElement;
-    const docHeight = Math.max(
-      body.scrollHeight,
-      body.offsetHeight,
-      html.clientHeight,
-      html.scrollHeight,
-      html.offsetHeight
-    );
+    const offsetFromBottom = 220;
+    const docHeight =
+      Math.max(
+        body.scrollHeight,
+        body.offsetHeight,
+        html.clientHeight,
+        html.scrollHeight,
+        html.offsetHeight
+      ) - offsetFromBottom;
     const windowBottom = windowHeight + window.pageYOffset;
 
     if (!isFetching && movedSinceFetch && windowBottom >= docHeight) {

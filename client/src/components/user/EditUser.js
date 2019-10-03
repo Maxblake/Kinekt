@@ -94,7 +94,7 @@ const EditUser = ({
         };
       } else {
         alert(
-          "Kinekt is unable to determine your location, please check your browser settings or enter a location manually."
+          "HappenStack is unable to determine your location, please check your browser settings or enter a location manually."
         );
       }
     } else {
@@ -189,7 +189,7 @@ const EditUser = ({
                   </span>
                 }
               >
-                <div className="box info-modal is-vcentered">
+                <div className="hs-box info-modal is-vcentered has-rounded-corners">
                   <div className="icon is-large info-icon">
                     <i className="far fa-3x fa-question-circle" />
                   </div>

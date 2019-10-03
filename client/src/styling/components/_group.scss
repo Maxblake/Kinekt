@@ -118,6 +118,7 @@
   position: relative;
   padding: 3rem 10px 1.25rem 10px;
   margin-bottom: 0;
+  border-radius: 4px 4px 0 0;
 
   #group-members {
     max-height: 35vh;
@@ -169,10 +170,6 @@
   }
 }
 
-.members-to-console-gap {
-  height: 1rem;
-}
-
 #group-console {
   align-items: stretch;
   margin-bottom: 1.25rem;
@@ -183,16 +180,16 @@
     padding: 1.25rem;
     padding-right: 0;
     background: $off-black;
-    border-radius: 6px 0 0 6px;
+    border-bottom-left-radius: 4px;
 
     flex: 2;
 
     .corner-fill {
-      width: 6px;
-      height: 6px;
+      width: 14px;
+      height: 14px;
       background: $off-black;
       position: absolute;
-      right: -6px;
+      right: -14px;
       bottom: 0;
     }
   }
@@ -200,7 +197,7 @@
   .group-details-and-nb {
     padding: 1.25rem;
     background: $off-black;
-    border-radius: 0 6px 6px 6px;
+    border-radius: 0 0 4px 4px;
 
     flex: 5;
   }
@@ -242,10 +239,6 @@
       .messages {
         max-height: 420px;
       }
-    }
-
-    .group-details-and-nb {
-      border-radius: 6px;
     }
 
     .group-details-container {
@@ -293,7 +286,7 @@
   .show-chat-btn {
     display: none;
     cursor: pointer;
-    border-radius: 6px 6px 0 0;
+    border-radius: 4px 4px 0 0;
     background-color: $primary;
 
     text-align: center;
@@ -328,7 +321,7 @@
         display: inline-block;
         flex-shrink: 1;
         font-size: 0.9rem;
-        border-radius: 7px;
+        border-radius: 4px;
         padding: 4px 9px;
         margin-bottom: 7px;
         background-color: transparent;
@@ -393,7 +386,7 @@
   padding: 2.75rem 0.75rem 1.25rem 0.75rem;
   position: relative;
 
-  border-radius: 0 0 20px 20px;
+  border-radius: 0 0 4px 4px;
 
   .header-tab {
     box-shadow: inset 0px 11px 8px -10px $off-black;
@@ -440,8 +433,7 @@
           font-size: 2rem;
           background: $off-black;
           color: whitesmoke;
-          border: 3px solid $primary;
-          border-radius: 15%;
+          border-radius: 4px;
         }
       }
     }

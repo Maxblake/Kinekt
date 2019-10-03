@@ -48,7 +48,7 @@ const UserInfo = ({ user, adminOptions }) => {
   }
 
   return (
-    <div className="box has-text-centered user-info">
+    <div className="hs-box has-text-centered user-info has-rounded-corners">
       {user.memberType === "admin" && (
         <div className="header-tab">
           <div className="subtitle is-size-6 has-text-weight-bold">Admin</div>

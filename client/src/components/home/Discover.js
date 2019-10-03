@@ -81,7 +81,7 @@ const Discover = ({
 
   if (!groupTypes.length) {
     groupTypeCards = (
-      <div className="box no-card-notice">
+      <div className="hs-box no-card-notice">
         There are currently no group types here. It may be time to request a new
         one!
       </div>

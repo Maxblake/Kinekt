@@ -33,13 +33,19 @@ html {
   margin-top: 0.75rem;
   padding: 0 10%;
   background: $off-black;
-
-  border-radius: 6px;
 }
 
 // General page styles
-.box {
-  background: whitesmoke;
+.hs-box {
+  background-color: whitesmoke;
+  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+  color: #404040;
+  display: block;
+  padding: 1.25rem;
+}
+
+.has-rounded-corners {
+  border-radius: 14px;
 }
 
 .card {
@@ -121,10 +127,11 @@ html {
 }
 
 .centered-form {
-  max-width: 700px;
+  max-width: 600px;
   margin: auto;
 
-  .box {
+  .hs-box {
+    padding: 2.25rem 2.75rem;
     margin-bottom: 0.5rem;
   }
 }
@@ -192,4 +199,12 @@ html {
 .label.form-label:not(:last-child) {
   margin-bottom: 0;
   padding: 0.25rem 0;
+}
+
+.centered-logo {
+  text-align: center;
+  margin-bottom: 1.25rem;
+  font-weight: bold;
+  font-size: 4rem;
+  line-height: 1;
 }

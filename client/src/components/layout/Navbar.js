@@ -133,7 +133,7 @@ const Navbar = ({
       <div className="navbar-brand">
         <div className="navbar-item">
           <Link to="/" id="logo" className="is-size-4">
-            Kinekt&nbsp;
+            HappenStack&nbsp;
           </Link>
           <div id="logo-typewriter" className="is-size-4" />
         </div>

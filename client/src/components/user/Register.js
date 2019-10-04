@@ -23,7 +23,8 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
     about: "",
     image: undefined,
     currentLocation: { address: "" },
-    useUsersLocation: false
+    useUsersLocation: false,
+    isSubmitDisabled: true
   });
 
   const {
@@ -33,7 +34,8 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
     about,
     image,
     currentLocation,
-    useUsersLocation
+    useUsersLocation,
+    isSubmitDisabled
   } = formData;
 
   const errName = errors.find(error => error.param === "name");
@@ -106,6 +108,13 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
       } else {
         res(null);
       }
+    });
+  };
+
+  const termsCBChanged = e => {
+    setFormData({
+      ...formData,
+      isSubmitDisabled: !e.target.checked
     });
   };
 
@@ -248,7 +257,70 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
           }
         />
 
-        <SubmitButton isFullwidth={true} text="Submit" />
+        <CustomField
+          children={
+            <div className="field">
+              <div className="control">
+                <label className="checkbox">
+                  <input
+                    type="checkbox"
+                    onChange={termsCBChanged}
+                    checked={!isSubmitDisabled}
+                  />
+                  &nbsp;I have read and agree to the{" "}
+                  <Modal trigger={<a>terms of service</a>}>
+                    <div className="hs-box info-modal is-vcentered has-rounded-corners">
+                      <div className="icon is-large info-icon">
+                        <i className="far fa-3x fa-question-circle" />
+                      </div>
+                      <div className="content">
+                        If you're reading this, thank you for doing your due
+                        diligence and checking out the TOS. At this time,
+                        HappenStack is unreleased and as such has no official
+                        terms of service. All I ask is that you don't use this
+                        platform for anything illicit, and if you do, don't sue
+                        me if you get in trouble for it.
+                        <br />
+                        <br />
+                        To better emulate the normal size of this contract,
+                        here's a snippet from the Cars 2 script.
+                        <br />
+                        <br />
+                        A sleek British sports car talks directly to us in a
+                        pixilated, garbled video. He's OUT OF BREATH. Crates are
+                        visible behind him. We're in the shadowy bowels of a
+                        steel room.
+                        <br />
+                        <br />
+                        LELAND TURBO This is Agent Leland Turbo. I have a flash
+                        transmission for Agent Finn McMissile.
+                        <br />
+                        <br />
+                        SUPERIMPOSE OVER BLACK: WALT DISNEY PICTURES PRESENTS
+                        <br />
+                        <br />
+                        LELAND TURBO Finn. My cover's been compromised.
+                        Everything's gone pear-shaped.
+                        <br />
+                        <br />
+                        SUPERIMPOSE OVER BLACK: A PIXAR ANIMATION STUDIOS FILM
+                        <br />
+                        <br />
+                        LELAND TURBO You won't believe what I've found out here.
+                        <br />
+                        <br />
+                        He angles our camera view, reveals a PORTHOLE through
+                        which we can see flames rising in the distance.
+                      </div>
+                    </div>
+                  </Modal>
+                </label>
+              </div>
+            </div>
+          }
+        />
+
+        <SubmitButton isDisabled={isSubmitDisabled} text="Submit" />
       </Form>
     </section>
   );

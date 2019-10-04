@@ -75,7 +75,7 @@ const Login = ({
           onChange={onChange}
           error={errPassword ? errPassword.msg : undefined}
         />
-        <SubmitButton text="Log in" isFullwidth={true} />
+        <SubmitButton isFullwidth={true} text="Log in" />
       </Form>
       <div className="content has-text-centered">
         <p className="">

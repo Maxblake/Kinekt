@@ -2,6 +2,13 @@
 .footer {
   @extend %is-dark;
   margin-top: 5em;
+  padding-bottom: 1.5rem;
+
+  .content {
+    border-top: 1px solid #404040;
+    font-size: 0.8rem;
+    padding-top: 0.75rem;
+  }
 }
 
 // Spinner
@@ -204,8 +211,8 @@
 
   .content {
     border-top: 2px solid #dbdbdb;
-    margin-top: 0.75rem;
-    padding-top: 0.25rem;
+    margin-top: 1.25rem;
+    padding-top: 0.75rem;
     text-align: left;
   }
 }

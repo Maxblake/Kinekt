@@ -136,7 +136,7 @@ const Discover = ({
           />
         </p>
         <p className="control">
-          <button className="button is-primary" type="submit">
+          <button className="button is-dark-theme" type="submit">
             <span className="icon is-small">
               <i className="fas fa-search" />
             </span>
@@ -151,7 +151,7 @@ const Discover = ({
       <Fragment>
         <Link
           to="/request-grouptype"
-          className="button is-primary is-hidden-touch is-hidden-widescreen"
+          className="button is-dark-theme is-hidden-touch is-hidden-widescreen"
         >
           <span className="icon">
             <i className="fas fa-plus" />
@@ -159,7 +159,7 @@ const Discover = ({
         </Link>
         <Link
           to="/request-grouptype"
-          className="button is-primary is-fullwidth-touch is-hidden-desktop-only"
+          className="button is-dark-theme is-fullwidth-touch is-hidden-desktop-only"
         >
           <span className="icon">
             <i className="fas fa-plus" />

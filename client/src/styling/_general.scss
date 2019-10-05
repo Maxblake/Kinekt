@@ -37,7 +37,7 @@ html {
 
 // General page styles
 .hs-box {
-  background-color: whitesmoke;
+  background-color: ghostwhite;
   box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
   color: #404040;
   display: block;
@@ -49,7 +49,7 @@ html {
 }
 
 .card {
-  background: whitesmoke;
+  background: ghostwhite;
   box-shadow: none;
 }
 
@@ -127,7 +127,7 @@ html {
 }
 
 .centered-form {
-  max-width: 600px;
+  max-width: 525px;
   margin: auto;
 
   .hs-box {
@@ -160,10 +160,16 @@ html {
 
 .card-image {
   position: relative;
-  border: 7px solid whitesmoke;
+  border: 7px solid ghostwhite;
+
+  figure,
+  img {
+    border-radius: 4px;
+  }
 
   &::after {
     content: "";
+    border-radius: 4px;
     position: absolute;
     top: 0;
     left: 0;
@@ -202,9 +208,7 @@ html {
 }
 
 .centered-logo {
-  text-align: center;
-  margin-bottom: 1.25rem;
-  font-weight: bold;
-  font-size: 4rem;
-  line-height: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

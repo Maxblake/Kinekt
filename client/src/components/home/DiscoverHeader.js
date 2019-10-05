@@ -12,9 +12,9 @@ const DiscoverHeader = () => {
   return (
     <div className="discover-header has-text-centered has-rounded-corners">
       <h2 className="header-welcome">
-        <span className="ws-nowrap">Welcome to HappenStack,</span>{" "}
-        <span className="ws-nowrap">getting started is</span>{" "}
-        <span className="ws-nowrap">fast and easy.</span>
+        <span className="ws-nowrap">Welcome to HappenStack!</span>{" "}
+        <span className="ws-nowrap">Getting started is</span>{" "}
+        <span className="ws-nowrap">pretty dang easy.</span>
       </h2>
       <div className="level">
         <div className="level-item header-step">

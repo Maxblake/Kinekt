@@ -1,5 +1,7 @@
 // Group Card
 .group-card-container {
+  border-radius: 4px;
+
   &:hover {
     .title {
       text-decoration: underline;
@@ -31,11 +33,12 @@
   align-items: center;
 
   h5 {
-    color: whitesmoke;
+    color: ghostwhite;
   }
 }
 
 .card-content {
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -137,7 +140,7 @@
       text-overflow: ellipsis;
       border-width: 2px;
       background-color: transparent;
-      color: whitesmoke;
+      color: ghostwhite;
     }
   }
 
@@ -146,7 +149,7 @@
     border-color: limegreen;
   }
   .is-away {
-    border-color: whitesmoke;
+    border-color: ghostwhite;
   }
 }
 
@@ -158,7 +161,7 @@
   left: 50%;
   transform: translateX(-50%);
 
-  background: whitesmoke;
+  background: ghostwhite;
   padding: 4px 16px;
   border-bottom-right-radius: 6px;
   border-bottom-left-radius: 6px;
@@ -204,7 +207,7 @@
 
   .group-details-container {
     flex: 2;
-    background: whitesmoke;
+    background: ghostwhite;
     padding: 1rem;
   }
   .group-image {
@@ -290,7 +293,7 @@
     background-color: $primary;
 
     text-align: center;
-    color: whitesmoke;
+    color: ghostwhite;
     font-weight: bold;
   }
 
@@ -309,7 +312,7 @@
       max-width: 80%;
       .header {
         font-size: 0.8rem;
-        color: whitesmoke;
+        color: ghostwhite;
 
         .header-time {
           color: $primary;
@@ -325,8 +328,8 @@
         padding: 4px 9px;
         margin-bottom: 7px;
         background-color: transparent;
-        border: 1px solid whitesmoke;
-        color: whitesmoke;
+        border: 1px solid ghostwhite;
+        color: ghostwhite;
 
         a {
           color: inherit;
@@ -339,7 +342,7 @@
       text-align: right;
 
       .body {
-        background-color: whitesmoke;
+        background-color: ghostwhite;
         border: none;
         color: $off-black;
         text-align: left;
@@ -382,7 +385,7 @@
 .noticeboard {
   min-height: 100px;
   background: #404040;
-  color: whitesmoke;
+  color: ghostwhite;
   padding: 2.75rem 0.75rem 1.25rem 0.75rem;
   position: relative;
 
@@ -395,7 +398,7 @@
       cursor: pointer;
       left: 11.5rem;
       line-height: 1.25;
-      color: whitesmoke;
+      color: ghostwhite;
       background: $primary;
     }
   }
@@ -432,7 +435,7 @@
           width: 60px;
           font-size: 2rem;
           background: $off-black;
-          color: whitesmoke;
+          color: ghostwhite;
           border-radius: 4px;
         }
       }

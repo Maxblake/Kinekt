@@ -2,7 +2,7 @@
 .tag.category-social,
 .category-social {
   background-color: hsl(322, 100%, 75%);
-  color: whitesmoke;
+  color: ghostwhite;
 }
 .tag.category-gaming,
 .category-gaming {
@@ -27,7 +27,7 @@
 .tag.category-other,
 .category-other {
   background-color: #707070;
-  color: whitesmoke;
+  color: ghostwhite;
 }
 
 .group-type-cards {
@@ -38,6 +38,11 @@
 
 .group-type-card {
   position: relative;
+  border-radius: 4px;
+
+  .card-content {
+    height: fit-content;
+  }
 
   &:hover {
     .title {

@@ -1,6 +1,6 @@
 // Navbar
 #logo {
-  color: whitesmoke;
+  color: ghostwhite;
   transition: color 0.2s;
 
   &:hover {
@@ -10,7 +10,7 @@
 }
 
 #btn-current-group {
-  color: whitesmoke;
+  color: ghostwhite;
 }
 
 .navbar-burger span {
@@ -40,7 +40,7 @@
   .navbar-menu {
     margin-left: auto;
     padding: 0;
-    background-color: whitesmoke; // rgba(0, 0, 0, 0.6);
+    background-color: ghostwhite; // rgba(0, 0, 0, 0.6);
     border-bottom-left-radius: 6px;
 
     .navbar-end {

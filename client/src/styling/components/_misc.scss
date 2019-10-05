@@ -1,19 +1,31 @@
 // Footer
 .footer {
   @extend %is-dark;
-  margin-top: 5em;
-  padding-bottom: 1.5rem;
+  margin-top: 6rem;
+  //padding-top: 6rem;
+
+  .centered-logo {
+    max-width: 325px;
+  }
+
+  a {
+    color: ghostwhite;
+  }
+
+  .column {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
   .content {
-    border-top: 1px solid #404040;
     font-size: 0.8rem;
-    padding-top: 0.75rem;
   }
 }
 
 // Spinner
 .spinner-container {
-  background-color: whitesmoke;
+  background-color: ghostwhite;
   border-radius: 4px;
   width: 100px;
   height: 100px;
@@ -46,6 +58,10 @@
   width: 300px;
 }
 
+.submit-control {
+  padding-top: 1.25rem;
+}
+
 @media (max-width: $tablet - 1) {
   #page-nav {
     .level-right .level-item {
@@ -72,7 +88,7 @@
   }
 
   .page-subtitle {
-    background: whitesmoke;
+    background: ghostwhite;
     padding: 0.2rem 0.75rem;
     display: flex;
 
@@ -115,7 +131,7 @@
     background: $off-black;
 
     .subtitle {
-      color: whitesmoke;
+      color: ghostwhite;
     }
   }
 
@@ -148,7 +164,7 @@
 
     .button {
       flex: 1;
-      border-color: whitesmoke;
+      border-color: ghostwhite;
     }
   }
 }

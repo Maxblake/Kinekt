@@ -25,11 +25,11 @@
 }
 .geosuggest__item:hover,
 .geosuggest__item:focus {
-  background: ghostwhite;
+  background: #fafafa;
 }
 .geosuggest__item--active {
   background: $primary;
-  color: ghostwhite;
+  color: #fafafa;
 }
 .geosuggest__item--active:hover,
 .geosuggest__item--active:focus {

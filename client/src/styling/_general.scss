@@ -2,8 +2,6 @@ html {
   overflow-y: auto;
   min-height: 100%;
 
-  //background: $secondary;
-
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#87e0fd+0,53cbf1+40,05abe0+100;Blue+3D+%23+16 */
   background: #87e0fd; /* Old browsers */
   background: -moz-linear-gradient(
@@ -27,18 +25,21 @@ html {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#87e0fd', endColorstr='#05abe0',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 
   background-attachment: fixed;
+
+  //background: #fafafa;
 }
 
 .image-preview {
   margin-top: 0.75rem;
   padding: 0 10%;
   background: $off-black;
+  border-radius: 4px;
 }
 
 // General page styles
 .hs-box {
-  background-color: ghostwhite;
-  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+  @extend %has-shadow;
+  background-color: #fafafa;
   color: #404040;
   display: block;
   padding: 1.25rem;
@@ -49,8 +50,8 @@ html {
 }
 
 .card {
-  background: ghostwhite;
-  box-shadow: none;
+  @extend %has-shadow;
+  background: #fafafa;
 }
 
 .online-status-container {
@@ -140,6 +141,10 @@ html {
   margin: 0 0.75rem;
 }
 
+.textonly-control {
+  padding-top: 0.25rem;
+}
+
 @media (max-width: $desktop - 1) {
   .is-fullwidth-touch {
     width: 100%;
@@ -160,7 +165,7 @@ html {
 
 .card-image {
   position: relative;
-  border: 7px solid ghostwhite;
+  border: 7px solid #fafafa;
 
   figure,
   img {

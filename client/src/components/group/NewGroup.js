@@ -211,7 +211,7 @@ const NewGroup = ({
           label="Meeting Time"
           required={true}
           children={
-            <div className="field is-grouped">
+            <div className="field is-grouped is-grouped-multiline">
               <div className="control">
                 <RadioButton
                   selectedValue={timeContext}
@@ -219,7 +219,7 @@ const NewGroup = ({
                   handleClick={handleTimeContextChange}
                 />
               </div>
-              <div className="control">
+              <div className="control textonly-control">
                 <h3>-or-</h3>
               </div>
               <div className="control">
@@ -284,7 +284,7 @@ const NewGroup = ({
         <CustomField
           label="Access Level"
           children={
-            <div className="field is-grouped">
+            <div className="field is-grouped is-grouped-multiline">
               <div className="control">
                 <RadioButton
                   selectedValue={accessLevel}

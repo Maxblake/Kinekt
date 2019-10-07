@@ -15,10 +15,10 @@
     tr {
       td {
         &:nth-child(even) {
-          background: ghostwhite;
+          background: #fafafa;
         }
         color: $off-black;
-        background: ghostwhite;
+        background: #fafafa;
         padding: 0.5em 1em;
       }
     }

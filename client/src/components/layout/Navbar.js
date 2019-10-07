@@ -8,6 +8,8 @@ import { getGroup } from "../../actions/group";
 
 import TypeWriter from "../../utils/typewriter";
 
+import logo from "../../resources/logo_icon_md.png";
+
 const Navbar = ({
   history,
   getGroup,
@@ -31,7 +33,7 @@ const Navbar = ({
 
     //Typewriter effect on logo
     const txtElement = document.querySelector("#logo-typewriter");
-    const logo = document.querySelector("#logo");
+    const logo = document.querySelector("#logo-text");
     const words = [
       "with friends.",
       "with strangers.",
@@ -131,12 +133,13 @@ const Navbar = ({
   return (
     <nav className="navbar is-black is-fixed-top">
       <div className="navbar-brand">
-        <div className="navbar-item">
-          <Link to="/" id="logo" className="is-size-4">
-            HappenStack&nbsp;
-          </Link>
-          <div id="logo-typewriter" className="is-size-4" />
-        </div>
+        <Link to="/" className="is-size-4">
+          <div className="navbar-item">
+            <img src={logo} alt="" />{" "}
+            <span id="logo-text">HappenStack&nbsp;</span>
+            <div id="logo-typewriter" className="is-size-4" />
+          </div>
+        </Link>
         <span className="navbar-burger burger" data-target="navMenu">
           <span aria-hidden="true" />
           <span aria-hidden="true" />

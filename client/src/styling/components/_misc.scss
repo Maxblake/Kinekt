@@ -2,14 +2,16 @@
 .footer {
   @extend %is-dark;
   margin-top: 6rem;
+  padding-top: 6rem;
   //padding-top: 6rem;
 
   .centered-logo {
+    opacity: 0.1;
     max-width: 325px;
   }
 
   a {
-    color: ghostwhite;
+    color: #fafafa;
   }
 
   .column {
@@ -25,7 +27,7 @@
 
 // Spinner
 .spinner-container {
-  background-color: ghostwhite;
+  background-color: #fafafa;
   border-radius: 4px;
   width: 100px;
   height: 100px;
@@ -43,6 +45,7 @@
 
 // Cards
 .no-card-notice {
+  border-radius: 4px;
   text-align: center;
   margin-top: 1.5rem;
   font-size: 1.1rem;
@@ -51,7 +54,7 @@
 // Page nav
 #page-nav {
   align-items: flex-end;
-  margin: 2.5rem 0 1.5rem 0;
+  margin: 4.5rem 0 1.5rem 0;
 }
 
 .search-control {
@@ -64,6 +67,8 @@
 
 @media (max-width: $tablet - 1) {
   #page-nav {
+    margin-top: 2rem;
+
     .level-right .level-item {
       justify-content: flex-end;
     }
@@ -88,7 +93,7 @@
   }
 
   .page-subtitle {
-    background: ghostwhite;
+    background: #fafafa;
     padding: 0.2rem 0.75rem;
     display: flex;
 
@@ -113,6 +118,9 @@
 }
 
 // Modal
+.modal {
+  cursor: default;
+}
 .modal-content {
   text-align: center;
   width: fit-content;
@@ -131,14 +139,13 @@
     background: $off-black;
 
     .subtitle {
-      color: ghostwhite;
+      color: #fafafa;
     }
   }
 
   img {
+    @extend %has-shadow;
     border: 7px solid white;
-    box-shadow: 0 5px 5px rgba(10, 10, 10, 0.2),
-      0 2px 6px 2px rgba(10, 10, 10, 0.2);
   }
 
   .content {
@@ -164,7 +171,7 @@
 
     .button {
       flex: 1;
-      border-color: ghostwhite;
+      border-color: #fafafa;
     }
   }
 }
@@ -262,13 +269,17 @@
 
   padding: 0.5rem;
   border-radius: 4px;
-  color: ghostwhite;
+  color: #fafafa;
   background-color: rgba(20, 20, 20, 0.8);
+  visibility: hidden;
   opacity: 0;
 
-  transition: opacity 0.2s;
+  transition: visibility 0s 0.2s, opacity 0.2s;
 
   &.is-visible {
+    visibility: visible;
     opacity: 1;
+
+    transition: opacity 0.2s;
   }
 }

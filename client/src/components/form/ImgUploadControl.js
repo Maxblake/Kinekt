@@ -68,7 +68,7 @@ const ImgUploadControl = ({ label, src, onChange, type }) => {
             </label>
           </div>
           {imgSrc && (
-            <div className="image-preview has-rounded-corners">
+            <div className="image-preview">
               <Image
                 src={imgSrc}
                 figureClass={figureClass}

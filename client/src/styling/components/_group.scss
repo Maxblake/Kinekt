@@ -33,7 +33,7 @@
   align-items: center;
 
   h5 {
-    color: ghostwhite;
+    color: #fafafa;
   }
 }
 
@@ -140,7 +140,7 @@
       text-overflow: ellipsis;
       border-width: 2px;
       background-color: transparent;
-      color: ghostwhite;
+      color: #fafafa;
     }
   }
 
@@ -149,7 +149,7 @@
     border-color: limegreen;
   }
   .is-away {
-    border-color: ghostwhite;
+    border-color: #fafafa;
   }
 }
 
@@ -160,7 +160,7 @@
   left: 50%;
   transform: translateX(-50%);
 
-  background: ghostwhite;
+  background: #fafafa;
   padding: 4px 16px;
   border-bottom-right-radius: 6px;
   border-bottom-left-radius: 6px;
@@ -206,7 +206,7 @@
 
   .group-details-container {
     flex: 2;
-    background: ghostwhite;
+    background: #fafafa;
     padding: 1rem;
   }
   .group-image {
@@ -292,7 +292,7 @@
     background-color: $primary;
 
     text-align: center;
-    color: ghostwhite;
+    color: #fafafa;
     font-weight: bold;
   }
 
@@ -311,7 +311,7 @@
       max-width: 80%;
       .header {
         font-size: 0.8rem;
-        color: ghostwhite;
+        color: #fafafa;
 
         .header-time {
           color: $primary;
@@ -327,8 +327,8 @@
         padding: 4px 9px;
         margin-bottom: 7px;
         background-color: transparent;
-        border: 1px solid ghostwhite;
-        color: ghostwhite;
+        border: 1px solid #fafafa;
+        color: #fafafa;
 
         a {
           color: inherit;
@@ -341,7 +341,7 @@
       text-align: right;
 
       .body {
-        background-color: ghostwhite;
+        background-color: #fafafa;
         border: none;
         color: $off-black;
         text-align: left;
@@ -384,7 +384,7 @@
 .noticeboard {
   min-height: 100px;
   background: #404040;
-  color: ghostwhite;
+  color: #fafafa;
   padding: 2.75rem 0.75rem 1.25rem 0.75rem;
   position: relative;
 
@@ -397,7 +397,7 @@
       cursor: pointer;
       left: 11.5rem;
       line-height: 1.25;
-      color: ghostwhite;
+      color: #fafafa;
       background: $primary;
     }
   }
@@ -406,6 +406,16 @@
     height: 100%;
 
     .notice {
+      &.hs-box {
+        padding: 0.75rem 1.25rem;
+      }
+      .media-left {
+        margin-top: 0.25rem;
+
+        img {
+          border-radius: 4px;
+        }
+      }
       &:not(:last-child) {
         margin-bottom: 0.75rem;
       }
@@ -434,7 +444,7 @@
           width: 60px;
           font-size: 2rem;
           background: $off-black;
-          color: ghostwhite;
+          color: #fafafa;
           border-radius: 4px;
         }
       }

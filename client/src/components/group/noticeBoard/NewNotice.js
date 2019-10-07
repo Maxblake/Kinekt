@@ -88,6 +88,7 @@ const NewNotice = ({
             <div class="field">
               <p class="control">
                 <textarea
+                  rows="3"
                   class="textarea"
                   placeholder="Add a notice..."
                   name="body"

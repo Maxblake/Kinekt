@@ -3,18 +3,29 @@
   background: $off-black;
 }
 
-#logo {
-  color: ghostwhite;
-  transition: color 0.2s;
+.navbar-brand {
+  img {
+    max-height: 2.15rem;
+    margin-right: 0.25rem;
+  }
 
-  &:hover {
-    color: $primary;
-    background-color: transparent;
+  #logo-typewriter {
+    color: #fafafa;
+  }
+
+  #logo-text {
+    color: #fafafa;
+    transition: color 0.2s;
+
+    &:hover {
+      color: $primary;
+      background-color: transparent;
+    }
   }
 }
 
 #btn-current-group {
-  color: ghostwhite;
+  color: #fafafa;
 }
 
 .navbar-burger span {
@@ -22,7 +33,8 @@
 }
 
 @media (max-width: $tablet - 1) {
-  #logo-typewriter {
+  #logo-typewriter,
+  #logo-text {
     display: none;
   }
 }
@@ -44,7 +56,7 @@
   .navbar-menu {
     margin-left: auto;
     padding: 0;
-    background-color: ghostwhite; // rgba(0, 0, 0, 0.6);
+    background-color: #fafafa; // rgba(0, 0, 0, 0.6);
     border-bottom-left-radius: 6px;
 
     .navbar-end {

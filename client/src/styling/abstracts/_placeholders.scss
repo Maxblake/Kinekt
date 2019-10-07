@@ -1,9 +1,14 @@
 %is-dark {
   background: $off-black;
-  color: ghostwhite;
+  color: #fafafa;
 }
 
 %is-light {
-  background: ghostwhite;
+  background: #fafafa;
   color: $off-black;
+}
+
+%has-shadow {
+  -webkit-box-shadow: 0px 7px 20px -7px rgba(20, 20, 20, 0.5);
+  box-shadow: 0px 7px 20px -7px rgba(20, 20, 20, 0.5);
 }

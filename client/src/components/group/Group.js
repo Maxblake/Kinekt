@@ -94,7 +94,13 @@ const Group = ({
     socket.emit("setUserStatus", userStatus);
   };
 
-  const copyHRIDToClipboard = () => {
+  const copyHRIDToClipboard = e => {
+    var tempInputEl = document.createElement("input");
+    document.body.appendChild(tempInputEl);
+    tempInputEl.setAttribute("value", group.HRID);
+    tempInputEl.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInputEl);
     setGroupState({ ...groupState, showCopyHRIDTooltip: true });
   };
 
@@ -172,28 +178,29 @@ const Group = ({
                 >
                   <span>Edit Group</span>
                 </Link>
-
-                <Fragment>
-                  <a
-                    onClick={() => copyHRIDToClipboard()}
-                    className="dropdown-item"
-                  >
-                    <Tooltip
-                      body="Group code copied to clipboard"
-                      isVisible={showCopyHRIDTooltip}
-                      setIsVisible={isVisible =>
-                        setGroupState({
-                          ...groupState,
-                          showCopyHRIDTooltip: isVisible
-                        })
-                      }
-                    />
-                    <span>{group.HRID}</span>
-                    <span className="icon">
-                      <i className="fas fa-link"></i>
-                    </span>
-                  </a>
-                </Fragment>
+                {document.queryCommandSupported("copy") && (
+                  <Fragment>
+                    <a
+                      onClick={() => copyHRIDToClipboard()}
+                      className="dropdown-item"
+                    >
+                      <Tooltip
+                        body="Group code copied to clipboard"
+                        isVisible={showCopyHRIDTooltip}
+                        setIsVisible={isVisible =>
+                          setGroupState({
+                            ...groupState,
+                            showCopyHRIDTooltip: isVisible
+                          })
+                        }
+                      />
+                      <span>{group.HRID}</span>
+                      <span className="icon">
+                        <i className="fas fa-link"></i>
+                      </span>
+                    </a>
+                  </Fragment>
+                )}
 
                 {user._id === group.creator ? (
                   <Fragment>

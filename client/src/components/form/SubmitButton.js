@@ -1,6 +1,6 @@
 import React from "react";
 
-const SubmitButton = ({ text, isFullwidth, isDisabled }) => {
+const SubmitButton = ({ text, isFullwidth, isDisabled, buttonClasses }) => {
   return (
     <div className="field is-grouped is-grouped-right">
       <div
@@ -8,7 +8,9 @@ const SubmitButton = ({ text, isFullwidth, isDisabled }) => {
       >
         <button
           disabled={isDisabled}
-          className={`button is-primary ${isFullwidth ? "is-fullwidth" : ""}`}
+          className={`button is-primary ${isFullwidth ? "is-fullwidth" : ""} ${
+            buttonClasses !== undefined ? buttonClasses.join(" ") : ""
+          }`}
           type="submit"
         >
           &nbsp;&nbsp;{text}&nbsp;&nbsp;

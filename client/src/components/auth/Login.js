@@ -11,6 +11,8 @@ import FormControl from "../form/FormControl";
 import SubmitButton from "../form/SubmitButton";
 import Spinner from "../common/Spinner";
 
+import logo from "../../resources/logo_vertical_md.png";
+
 const Login = ({
   location,
   history,
@@ -59,7 +61,9 @@ const Login = ({
       </nav>
 
       <Form onSubmit={onSubmit}>
-        <div className="centered-logo">HS</div>
+        <div className="centered-logo">
+          <img src={logo} alt="" />
+        </div>
         <FormControl
           placeholder="Email"
           name="email"
@@ -75,7 +79,11 @@ const Login = ({
           onChange={onChange}
           error={errPassword ? errPassword.msg : undefined}
         />
-        <SubmitButton isFullwidth={true} text="Log in" />
+        <SubmitButton
+          isFullwidth={true}
+          buttonClasses={["is-outlined"]}
+          text="Log in"
+        />
       </Form>
       <div className="content has-text-centered">
         <p className="">

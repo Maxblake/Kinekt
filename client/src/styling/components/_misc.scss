@@ -240,4 +240,35 @@
 // Login
 .centered-form.login-form {
   max-width: 400px;
+
+  .hs-box {
+    background-color: #141414;
+  }
+
+  .centered-logo {
+    max-width: 300px;
+    padding-bottom: 1.75rem;
+    margin: auto;
+  }
+}
+
+// Tooltip
+.hs-tooltip {
+  z-index: 1;
+  position: absolute;
+  top: -2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+
+  padding: 0.5rem;
+  border-radius: 4px;
+  color: ghostwhite;
+  background-color: rgba(20, 20, 20, 0.8);
+  opacity: 0;
+
+  transition: opacity 0.2s;
+
+  &.is-visible {
+    opacity: 1;
+  }
 }

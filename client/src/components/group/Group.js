@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
@@ -14,6 +14,7 @@ import PageTitle from "../layout/page/PageTitle";
 import Dropdown from "../common/subcomponents/Dropdown";
 
 import defaultGroupTypeImage from "../../resources/default_grouptype_image.jpg";
+import Tooltip from "../common/Tooltip";
 
 const Group = ({
   history,
@@ -23,6 +24,9 @@ const Group = ({
   auth: { user, isAuthenticated, socket },
   match
 }) => {
+  const [groupState, setGroupState] = useState({ showCopyHRIDTooltip: false });
+  const { showCopyHRIDTooltip } = groupState;
+
   useEffect(() => {
     if (isAuthenticated && (!group || group.HRID !== match.params.groupCode)) {
       const userCurrentGroupHRID = user.currentGroup
@@ -88,6 +92,10 @@ const Group = ({
 
   const setUserStatus = userStatus => {
     socket.emit("setUserStatus", userStatus);
+  };
+
+  const copyHRIDToClipboard = () => {
+    setGroupState({ ...groupState, showCopyHRIDTooltip: true });
   };
 
   if (loading) {
@@ -164,11 +172,33 @@ const Group = ({
                 >
                   <span>Edit Group</span>
                 </Link>
+
+                <Fragment>
+                  <a
+                    onClick={() => copyHRIDToClipboard()}
+                    className="dropdown-item"
+                  >
+                    <Tooltip
+                      body="Group code copied to clipboard"
+                      isVisible={showCopyHRIDTooltip}
+                      setIsVisible={isVisible =>
+                        setGroupState({
+                          ...groupState,
+                          showCopyHRIDTooltip: isVisible
+                        })
+                      }
+                    />
+                    <span>{group.HRID}</span>
+                    <span className="icon">
+                      <i className="fas fa-link"></i>
+                    </span>
+                  </a>
+                </Fragment>
+
                 {user._id === group.creator ? (
                   <Fragment>
                     <hr className="dropdown-divider" />
                     <a
-                      href="#"
                       className="dropdown-item"
                       onClick={e => onClickDelete(e)}
                     >

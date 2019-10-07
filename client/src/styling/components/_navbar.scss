@@ -1,4 +1,8 @@
 // Navbar
+.navbar.is-fixed-top {
+  background: $off-black;
+}
+
 #logo {
   color: ghostwhite;
   transition: color 0.2s;

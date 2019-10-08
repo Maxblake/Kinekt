@@ -1,13 +1,83 @@
-.is-dark-theme {
+@import "css-vars";
+
+// Instantiate CSS vars
+$css-vars-use-native: true;
+@include css-vars(
+  (
+    --primary: $primary,
+    --primary-darker: $primary-darker,
+    --gradient-top: $gradient-top,
+    --gradient-bottom: $gradient-bottom
+  )
+);
+
+// Bulma overrides
+.is-dark {
   @extend %is-dark;
 
   &.button {
+    @extend %is-dark;
     border-color: transparent;
 
+    &:active,
     &:focus,
     &:hover {
       background: #404040;
       color: #fafafa;
     }
   }
+}
+
+.is-primary {
+  &.file {
+    &:hover .file-cta {
+      background-color: var(--primary-darker);
+    }
+    .file-cta {
+      background-color: var(--primary);
+    }
+  }
+
+  &.button {
+    background-color: var(--primary);
+
+    &[disabled] {
+      background-color: var(--primary);
+    }
+
+    &:active,
+    &:focus,
+    &:hover {
+      background-color: var(--primary-darker);
+    }
+
+    &.is-outlined {
+      background-color: transparent;
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+  }
+}
+
+// Theme styling
+html {
+  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#fda085+0,f6d365+100 */
+  background: var(--gradient-top); /* Old browsers */
+  background: -moz-linear-gradient(
+    -45deg,
+    var(--gradient-top) 0%,
+    var(--gradient-bottom) 100%
+  ); /* FF3.6-15 */
+  background: -webkit-linear-gradient(
+    -45deg,
+    var(--gradient-top) 0%,
+    var(--gradient-bottom) 100%
+  ); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(
+    135deg,
+    var(--gradient-top) 0%,
+    var(--gradient-bottom) 100%
+  ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+
+  background-attachment: fixed;
 }

@@ -16,7 +16,7 @@ const UserInfo = ({ user, adminOptions }) => {
       <div className="buttons has-addons is-centered">
         <button
           onClick={() => adminOptions.kickFromGroup(user._id)}
-          className="button is-dark-theme"
+          className="button is-dark"
         >
           <span className="icon is-small">
             <i className="fas fa-sign-out-alt" />
@@ -26,7 +26,7 @@ const UserInfo = ({ user, adminOptions }) => {
 
         <button
           onClick={() => adminOptions.banFromGroup(user._id)}
-          className="button is-dark-theme"
+          className="button is-dark"
         >
           <span className="icon is-small">
             <i className="fas fa-user-slash" />
@@ -36,7 +36,7 @@ const UserInfo = ({ user, adminOptions }) => {
 
         <button
           onClick={() => adminOptions.toggleGroupAdmin(user._id)}
-          className="button is-dark-theme"
+          className="button is-dark"
         >
           <span className="icon is-small">
             <i className="fas fa-user-shield" />

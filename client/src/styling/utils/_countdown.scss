@@ -11,7 +11,7 @@
   }
 
   .circle-progress {
-    stroke: $primary;
+    stroke: var(--primary);
     stroke-linecap: round;
     stroke-linejoin: round;
   }

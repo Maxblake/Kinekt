@@ -28,7 +28,7 @@
   background: #fafafa;
 }
 .geosuggest__item--active {
-  background: $primary;
+  background: var(--primary);
   color: #fafafa;
 }
 .geosuggest__item--active:hover,

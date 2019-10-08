@@ -162,7 +162,7 @@ const Group = ({
               <Dropdown
                 trigger={
                   <button
-                    className="button is-dark-theme"
+                    className="button is-dark"
                     aria-haspopup="true"
                     aria-controls="dropdown-menu"
                   >
@@ -224,7 +224,7 @@ const Group = ({
               </Dropdown>
             ) : (
               <button
-                className="button is-dark-theme"
+                className="button is-dark"
                 onClick={() => leaveCurrentGroup()}
               >
                 <span>Leave group</span>

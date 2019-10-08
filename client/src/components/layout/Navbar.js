@@ -107,7 +107,7 @@ const Navbar = ({
           <a
             onClick={() => logout()}
             href="#!"
-            className="button is-dark-theme is-small"
+            className="button is-dark is-small"
           >
             Log out &nbsp;
             <i className="fas fa-sign-out-alt" />
@@ -120,7 +120,7 @@ const Navbar = ({
   const guestLinks = (
     <div className="navbar-item">
       <div className="buttons">
-        <Link to="/login" className="button is-dark-theme is-small">
+        <Link to="/login" className="button is-dark is-small">
           Log in
         </Link>
         <Link to="/register" className="button is-primary is-small">

@@ -18,7 +18,7 @@
     transition: color 0.2s;
 
     &:hover {
-      color: $primary;
+      color: var(--primary);
       background-color: transparent;
     }
   }
@@ -41,7 +41,7 @@
 
 @media (max-width: $desktop - 1) {
   #btn-current-group {
-    background-color: $primary;
+    background-color: var(--primary);
   }
 
   .navbar.is-fixed-top {

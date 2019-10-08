@@ -177,7 +177,7 @@ const GroupType = ({
       </div>
       <div className="control">
         <button
-          className="button is-dark-theme"
+          className="button is-dark"
           type="button"
           onClick={() =>
             setGroupData({
@@ -211,7 +211,7 @@ const GroupType = ({
           />
         </p>
         <p className="control">
-          <button className="button is-dark-theme" type="submit">
+          <button className="button is-dark" type="submit">
             <span className="icon is-small">
               <i className="fas fa-search" />
             </span>
@@ -229,7 +229,7 @@ const GroupType = ({
           trigger={
             <Fragment>
               <button
-                className="button is-dark-theme is-hidden-touch is-hidden-widescreen"
+                className="button is-dark is-hidden-touch is-hidden-widescreen"
                 aria-haspopup="true"
                 aria-controls="dropdown-menu"
               >
@@ -239,7 +239,7 @@ const GroupType = ({
               </button>
 
               <button
-                className="button is-dark-theme is-hidden-desktop-only"
+                className="button is-dark is-hidden-desktop-only"
                 aria-haspopup="true"
                 aria-controls="dropdown-menu"
               >
@@ -266,7 +266,7 @@ const GroupType = ({
         </Dropdown>
         <Link
           to={`/k/${match.params.groupType}/create`}
-          className="button is-dark-theme is-fullwidth-touch is-hidden-desktop"
+          className="button is-dark is-fullwidth-touch is-hidden-desktop"
         >
           <span className="icon">
             <i className="fas fa-plus" />
@@ -279,7 +279,7 @@ const GroupType = ({
     options.unshift(
       <Link
         to={`/k/${match.params.groupType}/edit`}
-        className="button is-dark-theme is-fullwidth-touch is-hidden-desktop"
+        className="button is-dark is-fullwidth-touch is-hidden-desktop"
       >
         <span>Edit Group Type</span>
       </Link>
@@ -289,7 +289,7 @@ const GroupType = ({
       <Fragment>
         <Link
           to={`/k/${match.params.groupType}/create`}
-          className="button is-dark-theme  is-hidden-touch is-hidden-widescreen"
+          className="button is-dark  is-hidden-touch is-hidden-widescreen"
         >
           <span className="icon">
             <i className="fas fa-plus" />
@@ -297,7 +297,7 @@ const GroupType = ({
         </Link>
         <Link
           to={`/k/${match.params.groupType}/create`}
-          className="button is-dark-theme is-fullwidth-touch is-hidden-desktop-only"
+          className="button is-dark is-fullwidth-touch is-hidden-desktop-only"
         >
           <span className="icon">
             <i className="fas fa-plus" />

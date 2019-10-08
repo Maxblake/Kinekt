@@ -1,7 +1,7 @@
 // Discover header
 .discover-header {
   @extend %has-shadow;
-  padding: 0 1.5rem 1.5rem 1.5rem;
+  padding: 0 1.5rem 1.75rem 1.5rem;
   margin: 3rem auto;
   background: #fafafa;
 
@@ -27,7 +27,7 @@
     .step-description {
       color: $off-black;
 
-      margin: 1rem 0.75rem 0 0.75rem;
+      margin: 1.25rem 0.75rem 0 0.75rem;
       padding: 0.5rem 0.75rem;
       border: 2px solid;
     }
@@ -46,7 +46,7 @@
 
 @media (max-width: $tablet - 1) {
   .discover-header {
-    padding: 0 0.5rem 0.5rem 0.5rem;
+    padding: 0 0.5rem 1.5rem 0.5rem;
     margin-top: 2rem;
 
     .header-welcome {
@@ -58,7 +58,7 @@
       margin: 1rem 0;
 
       .step-description {
-        margin: 1rem 0.5rem 1.5rem 0.5rem;
+        margin: 1.25rem 0.5rem 1.5rem 0.5rem;
       }
 
       .step-image {

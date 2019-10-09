@@ -155,7 +155,7 @@ const EditGroupType = ({
           src={groupType.image ? groupType.image.link : ""}
         />
 
-        <SubmitButton text="Submit" />
+        <SubmitButton text="Save Changes" />
       </Form>
     </section>
   );

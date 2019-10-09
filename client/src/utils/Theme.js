@@ -3,13 +3,13 @@ const themes = [
     name: "Open Air",
     "--primary": "hsl(203.9, 85.8%, 52%)",
     "--primary-darker": "hsl(203.9, 85.8%, 48%)",
-    "--gradient-top": "#ace0f9",
-    "--gradient-bottom": "#fff1eb"
+    "--gradient-top": "#d4effa",
+    "--gradient-bottom": "#ecfaff"
   },
   {
     name: "Clean Slate",
-    "--primary": "hsl(38.4, 85.8%, 52%)",
-    "--primary-darker": "hsl(38.4, 85.8%, 48%)",
+    "--primary": "hsl(38.4, 85.8%, 50%)",
+    "--primary-darker": "hsl(38.4, 85.8%, 46%)",
     "--gradient-top": "#dfe9f3",
     "--gradient-bottom": "#fafafa"
   },
@@ -17,26 +17,33 @@ const themes = [
     name: "Mint",
     "--primary": "hsl(143.9, 85.7%, 41%)",
     "--primary-darker": "hsl(143.9, 85.7%, 37%)",
-    "--gradient-top": "#9cfbc4",
-    "--gradient-bottom": "#0ba360"
+    "--gradient-top": "#28e677",
+    "--gradient-bottom": "#28e677"
   },
   {
     name: "Flamingo",
     "--primary": "hsl(322.1, 100%, 74%)",
     "--primary-darker": "hsl(322.1, 100%, 70%)",
-    "--gradient-top": "#e2d1c3",
-    "--gradient-bottom": "#fa709a"
+    "--gradient-top": "#e14fad",
+    "--gradient-bottom": "#f9d423"
+  },
+  {
+    name: "Cafe Nouveau",
+    "--primary": "hsl(25, 30%, 55%)",
+    "--primary-darker": "hsl(25, 30%, 51%)",
+    "--gradient-top": "#bcc5ce",
+    "--gradient-bottom": "#7a8f99"
   },
   {
     name: "Deep Sea",
     "--primary": "hsl(211.7,16.2%,44%)",
     "--primary-darker": "hsl(211.7,16.2%,40%)",
-    "--gradient-top": "#537895",
-    "--gradient-bottom": "#09203f"
+    "--gradient-top": "#34495f",
+    "--gradient-bottom": "#22303f"
   }
 ];
 
-export const updateTheme = themeName => {
+export const updateTheme = (themeName = "Open Air") => {
   const newTheme = themes.find(theme => theme.name === themeName);
   if (!newTheme) return;
 

@@ -48,6 +48,7 @@ const EditUser = ({
 
   useEffect(() => {
     if (user) {
+      updateTheme(user.selectedTheme);
       setFormData({
         ...formData,
         name: user.name,
@@ -64,6 +65,10 @@ const EditUser = ({
             : false
       });
     }
+
+    return () => {
+      updateTheme(user.selectedTheme);
+    };
   }, [user]);
 
   const onChange = e =>
@@ -267,6 +272,7 @@ const EditUser = ({
                     <option>Open Air</option>
                     <option>Mint</option>
                     <option>Deep Sea</option>
+                    <option>Cafe Nouveau</option>
                     <option>Flamingo</option>
                     <option>Clean Slate</option>
                   </select>
@@ -283,7 +289,7 @@ const EditUser = ({
           src={user.image ? user.image.link : ""}
         />
 
-        <SubmitButton text="Submit" />
+        <SubmitButton text="Save Changes" />
       </Form>
       <div className="content has-text-centered">
         <p className="">

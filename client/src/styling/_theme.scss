@@ -55,6 +55,13 @@ $css-vars-use-native: true;
       background-color: transparent;
       border-color: var(--primary);
       color: var(--primary);
+
+      &:active,
+      &:focus,
+      &:hover {
+        background-color: var(--primary-darker);
+        border-color: var(--primary-darker);
+      }
     }
   }
 }

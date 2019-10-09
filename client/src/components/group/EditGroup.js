@@ -223,7 +223,7 @@ const EditGroup = ({
           src={group.image ? group.image.link : ""}
         />
 
-        <SubmitButton text="Submit" />
+        <SubmitButton text="Save Changes" />
       </Form>
     </section>
   );

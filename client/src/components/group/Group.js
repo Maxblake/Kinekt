@@ -181,8 +181,8 @@ const Group = ({
                 {document.queryCommandSupported("copy") && (
                   <Fragment>
                     <div
-                      onClick={() => copyHRIDToClipboard()}
                       className="dropdown-item clickable-text"
+                      onClick={() => copyHRIDToClipboard()}
                     >
                       <Tooltip
                         body="Group code copied to clipboard"
@@ -205,21 +205,20 @@ const Group = ({
                 {user._id === group.creator ? (
                   <Fragment>
                     <hr className="dropdown-divider" />
-                    <a
-                      className="dropdown-item"
+                    <div
+                      className="dropdown-item clickable-text"
                       onClick={e => onClickDelete(e)}
                     >
                       Delete Group
-                    </a>
+                    </div>
                   </Fragment>
                 ) : (
-                  <a
-                    href="#"
-                    className="dropdown-item"
+                  <div
+                    className="dropdown-item clickable-text"
                     onClick={() => leaveCurrentGroup()}
                   >
                     Leave Group
-                  </a>
+                  </div>
                 )}
               </Dropdown>
             ) : (

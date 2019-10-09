@@ -177,12 +177,12 @@ class socketHandler {
   }
 
   async leaveCurrentGroup(joiningNewGroup = false) {
-    this.leaveSocket();
-    this.updateCurrentGroup(null, !joiningNewGroup);
-
     const oldGroup = await Group.findOne({
       HRID: this.user.currentGroup.HRID
     });
+
+    this.leaveSocket();
+    this.updateCurrentGroup(null, !joiningNewGroup);
 
     if (!oldGroup || this.user._id.equals(oldGroup.creator)) return;
 

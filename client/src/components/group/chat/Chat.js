@@ -29,7 +29,7 @@ const Chat = ({ auth: { user, socket }, setNewNotice }) => {
   };
 
   const submitMessage = async e => {
-    if (e.keyCode == 13 && e.shiftKey == false) {
+    if (e.keyCode === 13 && e.shiftKey === false) {
       e.preventDefault();
 
       if (messageField.trim() === "") return;

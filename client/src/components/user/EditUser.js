@@ -294,7 +294,14 @@ const EditUser = ({
       </Form>
       <div className="content has-text-centered">
         <p className="">
-          Looking to <a onClick={() => onClickDelete()}>delete</a> your account?
+          Looking to{" "}
+          <span
+            className="clickable-text has-text-link"
+            onClick={() => onClickDelete()}
+          >
+            delete
+          </span>{" "}
+          your account?
         </p>
       </div>
     </section>

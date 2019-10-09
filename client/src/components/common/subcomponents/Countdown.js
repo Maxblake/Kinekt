@@ -22,9 +22,9 @@ const Countdown = ({ totalTime, onTimeout }) => {
 
   const percentage = (currentTime / totalTime) * 100;
   // Size of the enclosing square
-  const sqSize = 48;
+  const sqSize = 45;
   // SVG centers the stroke width on the radius, subtract out so circle fits in square
-  const strokeWidth = 6;
+  const strokeWidth = 7;
   const radius = (sqSize - strokeWidth) / 2;
   // Enclose cicle in a circumscribing square
   const viewBox = `0 0 ${sqSize} ${sqSize}`;
@@ -50,7 +50,7 @@ const Countdown = ({ totalTime, onTimeout }) => {
               cx={sqSize / 2}
               cy={sqSize / 2}
               r={radius}
-              strokeWidth={`${strokeWidth}px`}
+              strokeWidth={`${strokeWidth - 4}px`}
               // Start progress marker at 12 O'Clock
               transform={`rotate(-90 ${sqSize / 2} ${sqSize / 2})`}
               style={{

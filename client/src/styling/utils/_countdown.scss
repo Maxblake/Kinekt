@@ -1,5 +1,9 @@
 .countdown-container {
+  position: relative;
   display: flex;
+  align-items: center;
+  height: 3rem;
+  width: 3rem;
 
   .circle-background,
   .circle-progress {
@@ -23,6 +27,9 @@
 
   .countdown-icon {
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
   .fa-ban {

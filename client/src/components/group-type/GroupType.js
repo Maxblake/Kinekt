@@ -36,7 +36,6 @@ const GroupType = ({
   });
 
   const { sortBy, searchTerms, readyToLoadNewGroups, sortDir } = groupData;
-
   const [isFetching, setIsFetching] = useInfiniteScroll(() => getMoreGroups());
 
   useEffect(() => {
@@ -154,6 +153,10 @@ const GroupType = ({
 
     return classList.join(" ");
   };
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   if (
     !groupType ||

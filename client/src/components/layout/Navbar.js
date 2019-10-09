@@ -104,14 +104,10 @@ const Navbar = ({
             {user ? user.name : "My Account"} &nbsp;
             <i className="fas fa-user-circle" />
           </Link>
-          <a
-            onClick={() => logout()}
-            href="#!"
-            className="button is-dark is-small"
-          >
+          <button onClick={() => logout()} className="button is-dark is-small">
             Log out &nbsp;
             <i className="fas fa-sign-out-alt" />
-          </a>
+          </button>
         </div>
       </div>
     </Fragment>

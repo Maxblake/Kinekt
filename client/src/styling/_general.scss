@@ -73,6 +73,10 @@ body {
   width: 175px;
 }
 
+strong {
+  color: inherit;
+}
+
 @media (max-width: $desktop - 1) {
   .container {
     padding: 0 1em;
@@ -83,8 +87,8 @@ body {
 .App {
   height: 100%;
   height: -moz-available; /* WebKit-based browsers will ignore this. */
-  height: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
-  height: fill-available;
+  height: -webkit-stretch; /* Mozilla-based browsers will ignore this. */
+  height: stretch;
 
   display: flex;
   flex-direction: column;
@@ -144,6 +148,10 @@ body {
 .clickable-text:hover {
   cursor: pointer;
   color: #464646;
+
+  &.dropdown-item {
+    background: whitesmoke;
+  }
 }
 
 .card-image {

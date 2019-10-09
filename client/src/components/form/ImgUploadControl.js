@@ -41,6 +41,8 @@ const ImgUploadControl = ({ label, src, onChange, type }) => {
     case "group":
       figureClass = "is-2by1";
       break;
+    default:
+      break;
   }
 
   return (

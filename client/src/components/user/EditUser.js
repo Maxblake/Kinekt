@@ -14,7 +14,7 @@ import CustomField from "../form/CustomField";
 import ImgUploadControl from "../form/ImgUploadControl";
 import Modal from "../common/subcomponents/Modal";
 
-import { updateTheme } from "../../utils/Theme";
+import { updateTheme } from "../../utils/theme";
 
 const EditUser = ({
   editUser,
@@ -271,9 +271,10 @@ const EditUser = ({
                   >
                     <option>Open Air</option>
                     <option>Mint</option>
-                    <option>Deep Sea</option>
-                    <option>Cafe Nouveau</option>
                     <option>Flamingo</option>
+                    <option>Deep Sea</option>
+                    <option>Deep Earth</option>
+                    <option>Cafe Nouveau</option>
                     <option>Clean Slate</option>
                   </select>
                 </div>

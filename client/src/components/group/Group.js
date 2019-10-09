@@ -180,9 +180,9 @@ const Group = ({
                 </Link>
                 {document.queryCommandSupported("copy") && (
                   <Fragment>
-                    <a
+                    <div
                       onClick={() => copyHRIDToClipboard()}
-                      className="dropdown-item"
+                      className="dropdown-item clickable-text"
                     >
                       <Tooltip
                         body="Group code copied to clipboard"
@@ -198,7 +198,7 @@ const Group = ({
                       <span className="icon">
                         <i className="fas fa-link"></i>
                       </span>
-                    </a>
+                    </div>
                   </Fragment>
                 )}
 

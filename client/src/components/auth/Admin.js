@@ -130,7 +130,7 @@ const Admin = ({
                             ? requestedGroupType.image.link
                             : ""
                         }
-                        alt="No image"
+                        alt="Nothing here"
                       />
                     </td>
                     <td className="col-stretch">
@@ -198,7 +198,7 @@ const Admin = ({
                     <td className="imageCell">
                       <img
                         src={groupType.image ? groupType.image.link : ""}
-                        alt="No image"
+                        alt="Nothing here"
                       />
                     </td>
                     <td className="col-stretch">
@@ -231,6 +231,8 @@ const Admin = ({
           <h2 className="is-size-4">No Group Types in state</h2>
         );
       break;
+    default: {
+    }
   }
 
   return (

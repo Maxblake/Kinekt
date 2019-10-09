@@ -188,6 +188,17 @@
   right: 18px;
 }
 
+// Breadcrumb
+.breadcrumb {
+  .clickable-text {
+    padding: 0 0.75rem;
+  }
+
+  .modal {
+    white-space: normal;
+  }
+}
+
 // Alerts
 .custom-action-alert {
   display: flex;
@@ -234,18 +245,19 @@
 .info-modal {
   max-width: 650px;
   align-items: center;
-  padding: 2rem;
+
+  &.hs-box {
+    padding: 2rem !important;
+  }
 
   .content {
     border-top: 2px solid #dbdbdb;
     margin-top: 1.25rem;
     padding-top: 0.75rem;
     text-align: left;
+    font-size: 0.9rem;
+    font-weight: 500;
   }
-}
-
-.info-icon {
-  color: #4a4a4a;
 }
 
 // Login
@@ -271,6 +283,7 @@
   left: 50%;
   transform: translateX(-50%);
 
+  width: max-content;
   padding: 0.5rem;
   border-radius: 4px;
   color: #fafafa;

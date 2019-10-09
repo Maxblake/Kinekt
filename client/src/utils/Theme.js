@@ -8,8 +8,8 @@ const themes = [
   },
   {
     name: "Clean Slate",
-    "--primary": "hsl(38.4, 85.8%, 50%)",
-    "--primary-darker": "hsl(38.4, 85.8%, 46%)",
+    "--primary": "hsl(38.4, 85.8%, 48%)",
+    "--primary-darker": "hsl(38.4, 85.8%, 44%)",
     "--gradient-top": "#dfe9f3",
     "--gradient-bottom": "#fafafa"
   },
@@ -40,6 +40,13 @@ const themes = [
     "--primary-darker": "hsl(211.7,16.2%,40%)",
     "--gradient-top": "#34495f",
     "--gradient-bottom": "#22303f"
+  },
+  {
+    name: "Deep Earth",
+    "--primary": "hsl(111, 43%, 30%)",
+    "--primary-darker": "hsl(111, 43%, 26%)",
+    "--gradient-top": "#384938",
+    "--gradient-bottom": "#44362b"
   }
 ];
 

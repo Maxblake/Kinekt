@@ -19,7 +19,12 @@ const Modal = ({
 
   return (
     <Fragment>
-      <a onClick={() => toggleModal()}>{trigger}</a>
+      <div
+        className="clickable-text is-inline-block"
+        onClick={() => toggleModal()}
+      >
+        {trigger}
+      </div>
       <div
         className={`modal ${
           isModalActiveOverride || isModalActive ? "is-active" : ""

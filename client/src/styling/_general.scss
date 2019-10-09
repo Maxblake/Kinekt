@@ -110,7 +110,7 @@ body {
   margin: auto;
 
   .hs-box {
-    padding: 2rem 2.5rem;
+    padding: 2.25rem;
     margin-bottom: 0.5rem;
   }
 }
@@ -139,6 +139,11 @@ body {
 
 .ws-nowrap {
   white-space: nowrap;
+}
+
+.clickable-text:hover {
+  cursor: pointer;
+  color: #464646;
 }
 
 .card-image {

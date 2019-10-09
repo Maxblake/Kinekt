@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import setAuthToken from "../utils/setAuthToken";
+import { updateTheme } from "../utils/theme";
 import { handleResponseErrors } from "./helpers/helpers";
 
 import {
@@ -30,6 +31,8 @@ export const loadUser = (checkIfAdmin = false) => async dispatch => {
       type: SET_USER,
       payload: res.data.user
     });
+
+    updateTheme(res.data.user.selectedTheme);
 
     if (checkIfAdmin) {
       return res.data.isAdmin;

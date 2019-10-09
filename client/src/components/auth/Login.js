@@ -88,7 +88,12 @@ const Login = ({
       <div className="content has-text-centered">
         <p className="">
           Don't have an account yet? You can sign up{" "}
-          <a onClick={() => onClickSignup()}>here</a>.
+          <span
+            className="clickable-text has-text-link"
+            onClick={() => onClickSignup()}
+          >
+            here.
+          </span>
         </p>
       </div>
     </section>

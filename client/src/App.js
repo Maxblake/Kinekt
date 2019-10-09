@@ -25,6 +25,7 @@ import NewGroup from "./components/group/NewGroup";
 import EditGroup from "./components/group/EditGroup";
 import Group from "./components/group/Group";
 import Admin from "./components/auth/Admin";
+import FAQ from "./components/static-pages/FAQ";
 
 import "./styling/App.scss";
 
@@ -50,6 +51,7 @@ const App = () => {
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/not-found" component={NotFound} />
+              <Route exact path="/FAQ" component={FAQ} />
               <Route exact path="/k/:groupType" component={GroupType} />
               <PrivateRoute exact path="/account" component={EditUser} />
               <PrivateRoute

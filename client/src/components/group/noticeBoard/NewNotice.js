@@ -67,29 +67,29 @@ const NewNotice = ({
               figureClass="is-square"
             />
           ) : (
-            <span class="icon notice-from-chat-icon">
-              <i class="fas fa-comment-dots"></i>
+            <span className="icon notice-from-chat-icon">
+              <i className="fas fa-comment-dots"></i>
             </span>
           )}
         </div>
-        <div class="media-content">
-          <nav class="level notice-header is-mobile">
-            <div class="level-left">
-              <div class="level-item">
+        <div className="media-content">
+          <nav className="level notice-header is-mobile">
+            <div className="level-left">
+              <div className="level-item">
                 <strong>{newNotice ? newNotice.authorName : user.name}</strong>
               </div>
             </div>
           </nav>
           {newNotice ? (
-            <div class="content">
+            <div className="content">
               <p>{newNotice.body}</p>
             </div>
           ) : (
-            <div class="field">
-              <p class="control">
+            <div className="field">
+              <p className="control">
                 <textarea
                   rows="3"
-                  class="textarea"
+                  className="textarea"
                   placeholder="Add a notice..."
                   name="body"
                   value={body}
@@ -98,18 +98,22 @@ const NewNotice = ({
               </p>
             </div>
           )}
-          <nav class="level is-mobile">
+          <nav className="level is-mobile">
             <div className="level-left"></div>
-            <div class="level-right">
-              <div class="level-item">
-                <a class="button is-light" onClick={() => onCancel()}>
+            <div className="level-right">
+              <div className="level-item">
+                <button className="button is-light" onClick={() => onCancel()}>
                   Cancel
-                </a>
+                </button>
               </div>
-              <div class="level-item">
-                <a class="button is-primary" onClick={() => onSubmit()}>
+              <div className="level-item">
+                <button
+                  className="button is-primary"
+                  onClick={() => onSubmit()}
+                  disabled={!(body.length > 0)}
+                >
                   Add Notice
-                </a>
+                </button>
               </div>
             </div>
           </nav>

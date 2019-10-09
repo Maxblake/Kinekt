@@ -268,22 +268,26 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
                     checked={!isSubmitDisabled}
                   />
                   &nbsp;I have read and agree to the{" "}
-                  <Modal trigger={<a>terms of service</a>}>
+                  <Modal
+                    trigger={
+                      <span className="has-text-link">terms of service</span>
+                    }
+                  >
                     <div className="hs-box info-modal is-vcentered has-rounded-corners">
                       <div className="icon is-large info-icon">
                         <i className="far fa-3x fa-question-circle" />
                       </div>
                       <div className="content">
-                        If you're reading this, thank you for doing your due
-                        diligence and checking out the TOS. At this time,
-                        HappenStack is unreleased and as such has no official
-                        terms of service. All I ask is that you don't use this
-                        platform for anything illicit, and if you do, don't sue
-                        me if you get in trouble for it.
+                        Hey there. If you're reading this, thanks for doing your
+                        part and checking out the terms of service. HappenStack
+                        is unreleased at this time, so there's nothing official
+                        to see here. For now, just please don't do anything
+                        stupid with this software, and if you get caught doing
+                        something stupid with this software, don't sue me.
                         <br />
                         <br />
-                        To better emulate the normal size of this contract,
-                        here's a snippet from the Cars 2 script.
+                        I'd like this modal to look like an actual TOS in the
+                        meantime, so here's a snippet from the Cars 2 script.
                         <br />
                         <br />
                         A sleek British sports car talks directly to us in a
@@ -311,6 +315,8 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
                         <br />
                         He angles our camera view, reveals a PORTHOLE through
                         which we can see flames rising in the distance.
+                        <br />
+                        <br />
                       </div>
                     </div>
                   </Modal>

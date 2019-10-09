@@ -10,7 +10,7 @@ import GroupTypeCard from "../cards/GroupTypeCard";
 import PageTitle from "../layout/page/PageTitle";
 import PageOptions from "../layout/page/PageOptions";
 
-import { useInfiniteScroll } from "../../utils/CustomHooks";
+import { useInfiniteScroll } from "../../utils/customHooks";
 
 const Discover = ({
   getGroupTypes,

@@ -23,13 +23,14 @@ const Message = ({
         {isServer ? (
           <span>{body}</span>
         ) : (
-          <a
+          <span
+            className="clickable-text"
             onClick={() =>
               setNewNotice({ authorName: user.name, authorId: user.id, body })
             }
           >
             <span>{body}</span>
-          </a>
+          </span>
         )}
       </div>
     </div>

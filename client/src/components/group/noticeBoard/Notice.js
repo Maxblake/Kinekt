@@ -63,19 +63,19 @@ const Notice = ({
             figureClass="is-square"
           />
         </div>
-        <div class="media-content">
-          <nav class="level notice-header is-mobile">
-            <div class="level-left">
-              <div class="level-item">
+        <div className="media-content">
+          <nav className="level notice-header is-mobile">
+            <div className="level-left">
+              <div className="level-item">
                 <strong>{notice.authorName}</strong>
               </div>
-              <div class="level-item">
+              <div className="level-item">
                 <small>{getTimeString(notice.creationTimestamp)}</small>
               </div>
             </div>
-            <div class="level-right">
+            <div className="level-right">
               {isCurrentUserAdmin && (
-                <div class="level-item">
+                <div className="level-item">
                   <button
                     className="delete"
                     onClick={() => onClickDelete()}
@@ -84,7 +84,7 @@ const Notice = ({
               )}
             </div>
           </nav>
-          <div class="content">
+          <div className="content">
             <p>{notice.body}</p>
           </div>
           <button
@@ -94,8 +94,8 @@ const Notice = ({
             type="button"
             onClick={() => onClickLike()}
           >
-            <span class="icon is-small">
-              <i class="fas fa-heart"></i>
+            <span className="icon is-small">
+              <i className="fas fa-heart"></i>
             </span>
             {numLikes && numLikes > 0 ? <span>{numLikes}</span> : null}
           </button>

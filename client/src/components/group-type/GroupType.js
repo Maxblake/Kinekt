@@ -14,7 +14,7 @@ import OnlineStatus from "../common/subcomponents/OnlineStatus";
 import PageOptions from "../layout/page/PageOptions";
 import Dropdown from "../common/subcomponents/Dropdown";
 
-import { useInfiniteScroll } from "../../utils/CustomHooks";
+import { useInfiniteScroll } from "../../utils/customHooks";
 
 import defaultGroupTypeImage from "../../resources/default_grouptype_image.jpg";
 
@@ -164,9 +164,9 @@ const GroupType = ({
   }
 
   const options = [
-    <div class="field has-addons">
-      <div class="control is-expanded">
-        <div class="select is-fullwidth">
+    <div className="field has-addons">
+      <div className="control is-expanded">
+        <div className="select is-fullwidth">
           <select name="sortBy" value={sortBy} onChange={e => onChange(e)}>
             <option>New</option>
             <option>Start Time</option>

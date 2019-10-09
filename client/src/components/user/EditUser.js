@@ -14,6 +14,8 @@ import CustomField from "../form/CustomField";
 import ImgUploadControl from "../form/ImgUploadControl";
 import Modal from "../common/subcomponents/Modal";
 
+import { updateTheme } from "../../utils/Theme";
+
 const EditUser = ({
   editUser,
   deleteUser,
@@ -25,10 +27,18 @@ const EditUser = ({
     about: "",
     image: undefined,
     currentLocation: { address: "" },
-    useUsersLocation: false
+    useUsersLocation: false,
+    selectedTheme: ""
   });
 
-  const { name, about, image, currentLocation, useUsersLocation } = formData;
+  const {
+    name,
+    about,
+    image,
+    currentLocation,
+    useUsersLocation,
+    selectedTheme
+  } = formData;
 
   const errName = errors.find(error => error.param === "name");
   const errAbout = errors.find(error => error.param === "about");
@@ -42,6 +52,7 @@ const EditUser = ({
         ...formData,
         name: user.name,
         about: user.about ? user.about : "",
+        selectedTheme: user.selectedTheme ? user.selectedTheme : "",
         currentLocation: user.currentLocation
           ? user.currentLocation
           : currentLocation,
@@ -57,6 +68,11 @@ const EditUser = ({
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const handleThemeSelection = e => {
+    updateTheme(e.target.value);
+    onChange(e);
+  };
 
   const handleImageUpload = imageFile => {
     setFormData({
@@ -127,6 +143,7 @@ const EditUser = ({
       name,
       about,
       image,
+      selectedTheme,
       currentLocationAddress: currentLocation.address,
       currentLocationLat: currentLocation.lat ? currentLocation.lat : "",
       currentLocationLng: currentLocation.lng ? currentLocation.lng : ""
@@ -231,6 +248,29 @@ const EditUser = ({
                   />
                   &nbsp;Use Current
                 </label>
+              </div>
+            </div>
+          }
+        />
+
+        <CustomField
+          label="App Theme"
+          children={
+            <div className="field">
+              <div className="control">
+                <div className="select">
+                  <select
+                    name="selectedTheme"
+                    value={selectedTheme}
+                    onChange={e => handleThemeSelection(e)}
+                  >
+                    <option>Open Air</option>
+                    <option>Mint</option>
+                    <option>Deep Sea</option>
+                    <option>Flamingo</option>
+                    <option>Clean Slate</option>
+                  </select>
+                </div>
               </div>
             </div>
           }

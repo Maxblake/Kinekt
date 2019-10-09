@@ -34,6 +34,9 @@ const UserSchema = new mongoose.Schema({
       type: String
     }
   },
+  selectedTheme: {
+    type: String
+  },
   creationTimestamp: {
     type: Date,
     default: Date.now

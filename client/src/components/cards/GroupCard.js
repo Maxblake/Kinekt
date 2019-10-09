@@ -46,11 +46,11 @@ const GroupCard = ({
   const groupCard = (
     <Fragment>
       <div className="column is-8 groupCard">
+        {accessLevelTag}
         <div className="card-content">
           <div className="group-name">
             <h1 className="title is-size-4">{group.name}</h1>
             <div className="subtitle is-size-6">
-              {accessLevelTag}
               <OnlineStatus
                 users={userNumbers ? userNumbers.users : ""}
                 maxSize={userNumbers ? userNumbers.maxSize : ""}

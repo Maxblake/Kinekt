@@ -102,6 +102,7 @@ const buildUserFields = (req, updating = false) => {
     name,
     email,
     about,
+    selectedTheme,
     currentLocationAddress,
     currentLocationLat,
     currentLocationLng
@@ -111,6 +112,7 @@ const buildUserFields = (req, updating = false) => {
   if (!updating && email) userFields.email = email;
   if (name) userFields.name = name;
   if (about) userFields.about = about;
+  if (selectedTheme) userFields.selectedTheme = selectedTheme;
   if (currentLocationAddress || currentLocationLat)
     userFields.currentLocation = {
       address: currentLocationAddress,

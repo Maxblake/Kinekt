@@ -13,7 +13,7 @@ const { GroupType } = require("../models/GroupType");
 
 const ioServer = app => {
   const server = http.createServer(app);
-  const io = socketIo(server);
+  const io = socketIo(server, { transport: ["websocket"] });
 
   const userStatusMap = {};
 

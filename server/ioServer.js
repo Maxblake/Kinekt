@@ -532,7 +532,7 @@ const expireGroup = (group, io) => {
   };
 
   axios
-    .delete("http://localhost:5000/api/group", config)
+    .delete("http://happenstack.com/api/group", config)
     .catch(err => console.error(err.message));
 
   io.in(`group-${group._id.toString()}`).emit("kickedFromGroup", {

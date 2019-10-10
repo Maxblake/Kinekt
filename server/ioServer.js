@@ -531,7 +531,7 @@ const expireGroup = (group, io) => {
   };
 
   axios
-    .delete("http://happenstack.com/api/group", config)
+    .delete("https://guarded-oasis-93378.herokuapp.com/api/group", config)
     .catch(err => console.error(err.message));
 
   io.in(`group-${group._id.toString()}`).emit("kickedFromGroup", {

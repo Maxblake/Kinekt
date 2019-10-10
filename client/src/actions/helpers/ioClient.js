@@ -11,7 +11,7 @@ import {
 } from "../types";
 
 export const openSocket = () => dispatch => {
-  const socket = socketIOClient("http://happenstack.com/", {
+  const socket = socketIOClient("https://guarded-oasis-93378.herokuapp.com/", {
     transports: ["websocket"]
   });
   dispatch(addSocketActions(socket));

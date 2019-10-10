@@ -11,7 +11,9 @@ import {
 } from "../types";
 
 export const openSocket = () => dispatch => {
-  const socket = socketIOClient("http://happenstack.com/");
+  const socket = socketIOClient("http://happenstack.com/", {
+    transports: ["websocket", "polling", "flashsocket"]
+  });
   dispatch(addSocketActions(socket));
 
   dispatch({

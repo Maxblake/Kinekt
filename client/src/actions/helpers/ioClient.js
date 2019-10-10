@@ -12,7 +12,7 @@ import {
 
 export const openSocket = () => dispatch => {
   const socket = socketIOClient("http://happenstack.com/", {
-    transports: ["websocket", "polling", "flashsocket"]
+    transports: ["websocket"]
   });
   dispatch(addSocketActions(socket));
 

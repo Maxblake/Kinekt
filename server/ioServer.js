@@ -13,7 +13,7 @@ const { GroupType } = require("../models/GroupType");
 
 const ioServer = app => {
   const server = http.createServer(app);
-  const io = socketIo(server, { transport: ["websocket"] });
+  const io = socketIo(server, { origins: "*:*" });
 
   const userStatusMap = {};
 
@@ -22,9 +22,8 @@ const ioServer = app => {
     new socketHandler(io, socket, userStatusMap);
   });
 
-  //scheduleGroupExpirations(io);
-  //setInterval(() => scheduleGroupExpirations(io), 1000 * 60 * 30);
-  setTimeout(() => scheduleGroupExpirations(io), 2000);
+  scheduleGroupExpirations(io);
+  setInterval(() => scheduleGroupExpirations(io), 1000 * 60 * 30);
 
   return server;
 };

@@ -380,8 +380,7 @@ class socketHandler {
         ] = groupTypeNumbers;
       }
     }
-    //TODO uncommented for debug only
-    //this.socket.emit("setGroupAndUserNumbers", groupAndUserNumbers);
+    this.socket.emit("setGroupAndUserNumbers", groupAndUserNumbers);
   }
 
   async kickFromGroup({ userId, isBanned, allUsers }) {
@@ -525,8 +524,7 @@ const scheduleGroupExpirations = async io => {
 };
 
 const expireGroup = (group, io) => {
-  //TODO dev only comment
-  const tempToken = "Bad token"; //getTempUserToken(group.creator.toString());
+  const tempToken = getTempUserToken(group.creator.toString());
   const config = {
     headers: {
       "x-auth-token": tempToken

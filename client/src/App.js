@@ -44,7 +44,7 @@ const App = () => {
       <Router>
         <div className="App">
           <Navbar />
-          <div className="container siteContent">
+          <div className="container site-content">
             <Alert />
             <Switch>
               <Route exact path="/" component={Home} />

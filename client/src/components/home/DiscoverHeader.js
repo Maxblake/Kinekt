@@ -10,7 +10,11 @@ import imgStepTwo from "../../resources/discover_step_two.jpg";
 import imgStepThree from "../../resources/discover_step_three.jpg";
 
 // TODO use a level for this
-const DiscoverHeader = ({ isAuthenticated }) => {
+const DiscoverHeader = ({ auth }) => {
+  const { isAuthenticated, loading } = auth;
+
+  if (loading) return null;
+
   return (
     <Fragment>
       {!isAuthenticated && (
@@ -68,11 +72,11 @@ const DiscoverHeader = ({ isAuthenticated }) => {
 };
 
 DiscoverHeader.propTypes = {
-  isAuthenticated: PropTypes.bool
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  auth: state.auth
 });
 
 export default connect(

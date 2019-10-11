@@ -19,7 +19,7 @@ const PageOptions = ({ options }) => {
         <Dropdown
           trigger={
             <button
-              className="button is-dark"
+              className="button is-dark is-small"
               aria-haspopup="true"
               aria-controls="dropdown-menu"
             >

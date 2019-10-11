@@ -84,6 +84,16 @@ strong {
   }
 }
 
+@media (max-width: $tablet - 1) {
+  body .centered-form .hs-box {
+    padding: 1.75rem;
+  }
+
+  .label {
+    font-size: 0.9rem;
+  }
+}
+
 .App {
   height: 100%;
   height: -moz-available; /* WebKit-based browsers will ignore this. */

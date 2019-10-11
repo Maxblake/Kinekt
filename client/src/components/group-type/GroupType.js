@@ -242,7 +242,7 @@ const GroupType = ({
               </button>
 
               <button
-                className="button is-dark is-hidden-desktop-only"
+                className="button is-dark is-small is-hidden-desktop-only"
                 aria-haspopup="true"
                 aria-controls="dropdown-menu"
               >

@@ -3,7 +3,7 @@
   @extend %is-dark;
   margin-top: 6rem;
   padding-top: 6rem;
-  //padding-top: 6rem;
+  color: #555555;
 
   .centered-logo {
     opacity: 0.1;
@@ -11,7 +11,7 @@
   }
 
   a {
-    color: #fafafa;
+    color: var(--primary);
   }
 
   .column {
@@ -22,6 +22,16 @@
 
   .content {
     font-size: 0.8rem;
+  }
+}
+
+@media (max-width: $tablet - 1) {
+  .footer {
+    padding: 3rem 1.5rem;
+
+    .column {
+      padding: 0.25rem;
+    }
   }
 }
 

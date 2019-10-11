@@ -13,7 +13,7 @@ import NotFound from "../common/NotFound";
 import PageTitle from "../layout/page/PageTitle";
 import Dropdown from "../common/subcomponents/Dropdown";
 
-import defaultGroupTypeImage from "../../resources/default_grouptype_image.jpg";
+import defaultGroupTypeImage from "../../resources/default_grouptype_image.png";
 import Tooltip from "../common/Tooltip";
 
 const Group = ({

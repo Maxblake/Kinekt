@@ -16,7 +16,7 @@ import Dropdown from "../common/subcomponents/Dropdown";
 
 import { useInfiniteScroll } from "../../utils/customHooks";
 
-import defaultGroupTypeImage from "../../resources/default_grouptype_image.jpg";
+import defaultGroupTypeImage from "../../resources/default_grouptype_image.png";
 
 //TODO format date/times with moment
 const GroupType = ({

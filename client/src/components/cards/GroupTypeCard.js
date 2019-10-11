@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Image from "../common/subcomponents/Image";
 import OnlineStatus from "../common/subcomponents/OnlineStatus";
 
-import defaultGroupTypeImage from "../../resources/default_grouptype_image.jpg";
+import defaultGroupTypeImage from "../../resources/default_grouptype_image.png";
 
 const GroupTypeCard = ({
   imgSrc,

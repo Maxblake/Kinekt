@@ -2,7 +2,7 @@
 .footer {
   @extend %is-dark;
   margin-top: 6rem;
-  padding-top: 6rem;
+  padding: 4rem 1.5rem;
   color: #555555;
 
   .centered-logo {
@@ -11,7 +11,7 @@
   }
 
   a {
-    color: var(--primary);
+    color: #555555;
   }
 
   .column {
@@ -27,7 +27,7 @@
 
 @media (max-width: $tablet - 1) {
   .footer {
-    padding: 3rem 1.5rem;
+    padding: 2.5rem 1.5rem;
 
     .column {
       padding: 0.25rem;

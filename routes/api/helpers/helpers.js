@@ -1,7 +1,7 @@
 const { check, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const config = require("config");
-const Filter = require("bad-words-relaxed");
+const Filter = require("bad-words");
 const filter = new Filter();
 
 const runAPISafely = coreFunction => {

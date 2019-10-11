@@ -82,7 +82,7 @@ const Login = ({
         <SubmitButton
           isFullwidth={true}
           buttonClasses={["is-outlined"]}
-          text="I'm back!"
+          text="Let's go!"
         />
       </Form>
       <div className="content has-text-centered">

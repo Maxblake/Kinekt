@@ -43,8 +43,8 @@ const themes = [
   },
   {
     name: "Deep Earth",
-    "--primary": "hsl(.97 65% 39%)",
-    "--primary-darker": "hsl(0.97, 65%, 35%)",
+    "--primary": "hsl(.97 65% 42%)",
+    "--primary-darker": "hsl(0.97, 65%, 38%)",
     "--gradient-top": "#334622",
     "--gradient-bottom": "#334622"
   }

@@ -6,7 +6,7 @@ import Image from "../common/subcomponents/Image";
 const ImgUploadControl = ({ label, src, onChange, type }) => {
   const [imgData, setImgData] = useState({
     error: "",
-    fileName: "",
+    fileName: !!src && src.length > 0 ? "Previewing current image..." : "",
     imgSrc: src
   });
 

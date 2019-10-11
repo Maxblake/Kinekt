@@ -326,7 +326,7 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
           }
         />
 
-        <SubmitButton isDisabled={isSubmitDisabled} text="Submit" />
+        <SubmitButton isDisabled={isSubmitDisabled} text="Let me in!" />
       </Form>
     </section>
   );

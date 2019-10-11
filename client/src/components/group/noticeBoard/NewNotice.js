@@ -110,7 +110,12 @@ const NewNotice = ({
                 <button
                   className="button is-primary"
                   onClick={() => onSubmit()}
-                  disabled={!(body.length > 0)}
+                  disabled={
+                    !(
+                      body.length > 0 ||
+                      (newNotice && newNotice.body.length > 0)
+                    )
+                  }
                 >
                   Add Notice
                 </button>

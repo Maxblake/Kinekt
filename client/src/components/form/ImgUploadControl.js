@@ -6,7 +6,7 @@ import Image from "../common/subcomponents/Image";
 const ImgUploadControl = ({ label, src, onChange, type }) => {
   const [imgData, setImgData] = useState({
     error: "",
-    fileName: !!src && src.length > 0 ? "Previewing current image..." : "",
+    fileName: !!src && src.length > 0 ? "Previewing current image" : "",
     imgSrc: src
   });
 
@@ -50,7 +50,7 @@ const ImgUploadControl = ({ label, src, onChange, type }) => {
       label={label}
       children={
         <div className="field">
-          <div className="file has-name is-primary">
+          <div className="file has-name is-primary is-fullwidth">
             <label className="file-label">
               <input
                 className="file-input"

@@ -238,3 +238,20 @@ strong {
   overflow: hidden;
   max-width: 12rem;
 }
+
+.tab-right {
+  position: fixed;
+  right: 0;
+  top: 7.75rem;
+  z-index: 2;
+
+  .tab-right-button {
+    border-radius: 4px 0 0 4px;
+  }
+}
+
+@media (max-width: $tablet - 1) {
+  .tab-right {
+    top: 5.25rem;
+  }
+}

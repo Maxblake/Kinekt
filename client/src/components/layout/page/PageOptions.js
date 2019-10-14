@@ -15,18 +15,17 @@ const PageOptions = ({ options }) => {
           {option}
         </div>
       ))}
-      <div className="level-item is-hidden-desktop">
+      <div className="level-item is-hidden-desktop tab-right">
         <Dropdown
           trigger={
             <button
-              className="button is-dark is-small"
+              className="button is-dark is-medium tab-right-button"
               aria-haspopup="true"
               aria-controls="dropdown-menu"
             >
-              <span className="icon is-small">
-                <i className="fas fa-search" aria-hidden="true" />
+              <span className="icon is-large">
+                <i className="fas fa-cog" aria-hidden="true" />
               </span>
-              <span>Options</span>
             </button>
           }
         >

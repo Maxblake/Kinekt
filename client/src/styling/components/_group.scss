@@ -353,6 +353,10 @@
       text-align: center;
       margin-bottom: 7px;
 
+      &:not(:first-child) {
+        margin-top: 7px;
+      }
+
       .body {
         background-color: #404040;
         border: none;

@@ -255,7 +255,7 @@ const validateRequest = APImethod => {
       return [
         check("name", "Name is required")
           .exists({ checkFalsy: true })
-          .isLength({ max: 256 })
+          .isLength({ max: 64 })
           .withMessage("Name is too long")
           .custom(name => !filter.isProfane(name))
           .withMessage(
@@ -297,7 +297,7 @@ const validateRequest = APImethod => {
           .optional({ checkFalsy: true })
           .not()
           .isEmpty({ ignore_whitespace: true })
-          .isLength({ max: 256 })
+          .isLength({ max: 64 })
           .withMessage("Name is too long")
           .custom(name => !filter.isProfane(name))
           .withMessage(

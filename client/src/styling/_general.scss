@@ -219,3 +219,22 @@ strong {
   justify-content: center;
   align-items: center;
 }
+
+.max-text-length-1 {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 6rem;
+}
+.max-text-length-2 {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 9rem;
+}
+.max-text-length-3 {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 12rem;
+}

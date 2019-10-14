@@ -90,7 +90,9 @@ const Navbar = ({
               className="button is-primary is-outlined is-small"
               id="btn-current-group"
             >
-              <span>{user.currentGroup.name}</span>
+              <span className="max-text-length-3">
+                {user.currentGroup.name}
+              </span>
               <span className="icon is-small">
                 <i className="fas fa-chalkboard-teacher" />
               </span>
@@ -101,7 +103,10 @@ const Navbar = ({
       <div className="navbar-item">
         <div className="buttons">
           <Link to="/account" className="button is-primary is-small">
-            {user ? user.name : "My Account"} &nbsp;
+            <span className="max-text-length-1">
+              {user ? user.name : "My Account"}
+            </span>{" "}
+            &nbsp;
             <i className="fas fa-user-circle" />
           </Link>
           <button onClick={() => logout()} className="button is-dark is-small">

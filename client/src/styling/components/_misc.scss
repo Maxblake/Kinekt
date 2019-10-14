@@ -104,6 +104,8 @@
 
 // Page Title
 .page-title-container {
+  max-width: 600px;
+
   .page-title {
     @extend %is-dark;
     padding: 0.5rem 0.75rem;

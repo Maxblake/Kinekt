@@ -2,6 +2,8 @@ import React, { useState, useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
+import moment from "moment";
+
 import Message from "./Message";
 
 const Chat = ({ auth: { user, socket }, setNewNotice }) => {
@@ -24,7 +26,7 @@ const Chat = ({ auth: { user, socket }, setNewNotice }) => {
   const receiveMessage = message => {
     setMessageData({
       ...messageData,
-      messages: messages.concat(message)
+      messages: messages.concat({ ...message, time: moment().format("h:mm A") })
     });
   };
 

@@ -31,7 +31,7 @@ const GroupType = ({
   const [groupData, setGroupData] = useState({
     sortBy: "New",
     searchTerms: "",
-    readyToLoadNewGroups: false,
+    readyToLoadNewGroups: true,
     sortDir: "Ascending"
   });
 

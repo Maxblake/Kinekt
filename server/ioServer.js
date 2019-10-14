@@ -90,8 +90,7 @@ class socketHandler {
 
     this.io.in(`group-${this.groupId.toString()}`).emit("receiveMessage", {
       body: message.body,
-      user: { name: user.name, id: user.id },
-      time: moment().format("h:mm A")
+      user: { name: user.name, id: user.id }
     });
   }
 

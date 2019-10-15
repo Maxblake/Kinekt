@@ -23,8 +23,8 @@ const GroupType = ({
   getGroups,
   setTextAlert,
   auth: { user },
-  group: { groups, loading, error },
-  groupType: { groupType },
+  group,
+  groupType: { groupType, loading },
   liveData: { groupNumbersMap, groupTypeNumbersMap },
   match
 }) => {
@@ -37,6 +37,9 @@ const GroupType = ({
 
   const { sortBy, searchTerms, readyToLoadNewGroups, sortDir } = groupData;
   const [isFetching, setIsFetching] = useInfiniteScroll(() => getMoreGroups());
+
+  const { groups, error } = group;
+  const loadingGroups = group.loading;
 
   useEffect(() => {
     const groupTypeParamSpaced = match.params.groupType.split("_").join(" ");
@@ -67,10 +70,10 @@ const GroupType = ({
         readyToLoadNewGroups: false
       });
     }
-    if (!loading && isFetching) {
+    if (!group.loading && isFetching) {
       setIsFetching(false);
     }
-  }, [match.params.groupType, readyToLoadNewGroups, loading]);
+  }, [match.params.groupType, readyToLoadNewGroups, loading, group.loading]);
 
   const onChange = e => {
     if (
@@ -109,7 +112,7 @@ const GroupType = ({
   };
 
   const getMoreGroups = () => {
-    if (isFetching && !loading) {
+    if (isFetching && !loadingGroups) {
       //TODO refactor this
       let queryParams = {
         sortBy,
@@ -154,15 +157,17 @@ const GroupType = ({
     return classList.join(" ");
   };
 
+  if (loading) {
+    return <Spinner isMidpage />;
+  }
+
   if (
-    (!loading && !groupType) ||
+    !groupType ||
     (error &&
       error.groupTypeName === match.params.groupType.split("_").join(" "))
   ) {
     return <NotFound />;
   }
-
-  if (loading) groupType = {};
 
   const options = [
     <div className="field has-addons">
@@ -364,7 +369,7 @@ const GroupType = ({
             ))}
           </Fragment>
         ) : (
-          !loading && (
+          !loadingGroups && (
             <div className="hs-box no-card-notice">
               There are currently no groups here. It may be time to make a new
               one!
@@ -372,7 +377,7 @@ const GroupType = ({
           )
         )}
       </div>
-      {loading && <Spinner />}
+      {loadingGroups && <Spinner />}
     </section>
   );
 };

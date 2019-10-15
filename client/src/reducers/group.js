@@ -15,7 +15,7 @@ import {
 const initialState = {
   groups: null,
   group: null,
-  loading: false,
+  loading: true,
   error: null
 };
 

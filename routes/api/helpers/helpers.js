@@ -196,6 +196,8 @@ const validateRequest = APImethod => {
       return [
         check("name", "Name is required")
           .exists({ checkFalsy: true })
+          .matches(/^[a-z0-9 ]+$/i)
+          .withMessage("Name may only include numbers, letters, and spaces")
           .isLength({ max: 256 })
           .withMessage("Name is too long")
           .custom(name => !filter.isProfane(name))
@@ -227,6 +229,8 @@ const validateRequest = APImethod => {
           .optional({ checkFalsy: true })
           .not()
           .isEmpty({ ignore_whitespace: true })
+          .matches(/^[a-z0-9 ]+$/i)
+          .withMessage("Name may only include numbers, letters, and spaces")
           .isLength({ max: 256 })
           .custom(name => !filter.isProfane(name))
           .withMessage(

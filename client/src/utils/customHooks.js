@@ -3,7 +3,7 @@ import debounce from "lodash.debounce";
 
 export const useInfiniteScroll = callback => {
   const [isFetching, setIsFetching] = useState(false);
-  const [movedSinceFetch, setMovedSinceFetch] = useState(false);
+  const [movedSinceFetch, setMovedSinceFetch] = useState(true);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -22,7 +22,7 @@ export const useInfiniteScroll = callback => {
         : document.documentElement.offsetHeight;
     const body = document.body;
     const html = document.documentElement;
-    const offsetFromBottom = 220;
+    const offsetFromBottom = 200;
     const docHeight =
       Math.max(
         body.scrollHeight,

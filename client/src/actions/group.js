@@ -8,6 +8,7 @@ import { setTextAlert } from "./alert";
 import {
   GROUP_LOADING,
   GROUP_LOADED,
+  GROUPTYPE_LOADING,
   SET_GROUP,
   SET_CURRENT_GROUP,
   SET_GROUPS,
@@ -39,12 +40,12 @@ export const getGroup = (
     const res = await axios.post(`/api/group/HRID`, body, config);
 
     dispatch({
-      type: SET_GROUP,
-      payload: res.data.group
-    });
-    dispatch({
       type: SET_GROUPTYPE,
       payload: res.data.groupType
+    });
+    dispatch({
+      type: SET_GROUP,
+      payload: res.data.group
     });
     dispatch(sendExpirationWarning(res.data.group));
   } catch (err) {
@@ -103,6 +104,11 @@ export const getGroups = (
   const body = JSON.stringify(bodyBuilder);
 
   try {
+    if (seenGroups.length === 0) {
+      dispatch({
+        type: GROUPTYPE_LOADING
+      });
+    }
     dispatch({
       type: GROUP_LOADING
     });

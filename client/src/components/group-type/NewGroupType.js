@@ -64,7 +64,7 @@ const NewGroupType = ({
   };
 
   if (loading) {
-    return <Spinner />;
+    return <Spinner isMidpage />;
   }
 
   return (

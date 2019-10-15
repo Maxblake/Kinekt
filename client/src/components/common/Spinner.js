@@ -1,7 +1,7 @@
 import React from "react";
 
-export default () => (
-  <div className="spinner-container">
+export default ({ isMidpage }) => (
+  <div className={`spinner-container ${isMidpage ? "is-midpage" : ""}`}>
     <div className="hexdots-loader">Loading...</div>
   </div>
 );

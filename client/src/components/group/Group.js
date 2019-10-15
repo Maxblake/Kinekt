@@ -105,7 +105,7 @@ const Group = ({
   };
 
   if (loading) {
-    return <Spinner />;
+    return <Spinner isMidpage />;
   }
 
   if (

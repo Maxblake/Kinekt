@@ -140,7 +140,7 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
   }
 
   if (loading) {
-    return <Spinner />;
+    return <Spinner isMidpage />;
   }
 
   return (

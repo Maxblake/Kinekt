@@ -78,7 +78,7 @@ const EditGroupType = ({
   };
 
   if (loading || group.loading) {
-    return <Spinner />;
+    return <Spinner isMidpage />;
   }
 
   if (!groupType || user._id !== groupType.creator) {

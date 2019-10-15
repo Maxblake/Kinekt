@@ -108,7 +108,7 @@ export const editGroupType = (
     dispatch(clearErrorsAndAlerts());
     dispatch(
       setTextAlert(
-        `Group Type, ${groupTypeFields.name}, has been updated`,
+        `Group Type, ${res.data.name}, has been updated`,
         "is-success"
       )
     );

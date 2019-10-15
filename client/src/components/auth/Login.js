@@ -51,7 +51,7 @@ const Login = ({
   }
 
   if (loading) {
-    return <Spinner />;
+    return <Spinner isMidpage />;
   }
 
   return (

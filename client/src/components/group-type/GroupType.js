@@ -154,17 +154,15 @@ const GroupType = ({
     return classList.join(" ");
   };
 
-  if (loading) {
-    return <Spinner />;
-  }
-
   if (
-    !groupType ||
+    (!loading && !groupType) ||
     (error &&
       error.groupTypeName === match.params.groupType.split("_").join(" "))
   ) {
     return <NotFound />;
   }
+
+  if (loading) groupType = {};
 
   const options = [
     <div className="field has-addons">
@@ -364,15 +362,14 @@ const GroupType = ({
                 }
               />
             ))}
-            <div className="content has-text-centered">
-              <h3>- This is the end. -</h3>
-            </div>
           </Fragment>
         ) : (
-          <div className="hs-box no-card-notice">
-            There are currently no groups here. It may be time to make a new
-            one!
-          </div>
+          !loading && (
+            <div className="hs-box no-card-notice">
+              There are currently no groups here. It may be time to make a new
+              one!
+            </div>
+          )
         )}
       </div>
       {loading && <Spinner />}

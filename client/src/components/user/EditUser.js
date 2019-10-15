@@ -162,7 +162,7 @@ const EditUser = ({
   };
 
   if (loading) {
-    return <Spinner />;
+    return <Spinner isMidpage />;
   }
 
   return (

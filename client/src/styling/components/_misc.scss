@@ -345,5 +345,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    .field {
+      margin-top: 0.5rem;
+    }
   }
 }

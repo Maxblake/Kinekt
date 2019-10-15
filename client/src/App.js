@@ -51,7 +51,6 @@ const App = () => {
             <div className="container site-content">
               <Alert />
               <Switch>
-                <Route exact path="/betaEntry" component={BetaEntry} />
                 <Route exact path="/" component={Home} />
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/login" component={Login} />

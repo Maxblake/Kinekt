@@ -63,7 +63,12 @@ const GroupType = ({
         queryParams.userLocation = user.currentLocation;
       }
 
-      getGroups(groupTypeParamSpaced, queryParams);
+      const seenGroups =
+        !groupTypeParamChanged && groups !== null
+          ? groups.map(group => group._id)
+          : [];
+
+      getGroups(groupTypeParamSpaced, queryParams, seenGroups);
 
       setGroupData({
         ...groupData,

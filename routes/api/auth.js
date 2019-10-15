@@ -66,4 +66,16 @@ router.post("/", validateRequest("login"), (req, res) => {
   });
 });
 
+router.post("/enterBeta", (req, res) => {
+  runAPISafely(async () => {
+    const { entryToken } = req.body;
+
+    if (entryToken === "AARRRRRP") {
+      return res.status(200).json({ entryToken: "Yar" });
+    }
+
+    return res.status(400);
+  });
+});
+
 module.exports = router;

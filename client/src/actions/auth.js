@@ -76,6 +76,24 @@ export const login = (email, password) => async dispatch => {
   }
 };
 
+export const enterBeta = entryToken => async dispatch => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  const body = JSON.stringify({ entryToken });
+
+  try {
+    const res = await axios.post("/api/auth/enterBeta", body, config);
+    console.log("Correct!");
+    localStorage.setItem("entryToken", res.data.entryToken);
+  } catch (err) {
+    console.log("Wrong!");
+  }
+};
+
 // Clear errors / alerts
 export const clearErrorsAndAlerts = () => dispatch => {
   dispatch({

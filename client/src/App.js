@@ -27,6 +27,8 @@ import Group from "./components/group/Group";
 import Admin from "./components/auth/Admin";
 import FAQ from "./components/static-pages/FAQ";
 
+import BetaEntry from "./components/auth/BetaEntry";
+
 import "./styling/App.scss";
 
 if (localStorage.token) {
@@ -40,52 +42,56 @@ const App = () => {
 
   return (
     <Provider store={store}>
+      {localStorage.getItem("entryToken") !== "Yar" && <BetaEntry />}
       <SocketHandler />
-      <Router>
-        <div className="App">
-          <Navbar />
-          <div className="container site-content">
-            <Alert />
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route exact path="/register" component={Register} />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/not-found" component={NotFound} />
-              <Route exact path="/FAQ" component={FAQ} />
-              <Route exact path="/k/:groupType" component={GroupType} />
-              <PrivateRoute exact path="/account" component={EditUser} />
-              <PrivateRoute
-                exact
-                path="/k/:groupType/create"
-                component={NewGroup}
-              />
-              <PrivateRoute
-                exact
-                path="/k/:groupType/group/:groupCode/edit"
-                component={EditGroup}
-              />
-              <PrivateRoute
-                exact
-                path="/k/:groupType/group/:groupCode"
-                component={Group}
-              />
-              <PrivateRoute
-                exact
-                path="/request-grouptype"
-                component={NewGroupType}
-              />
-              <PrivateRoute
-                exact
-                path="/k/:groupType/edit"
-                component={EditGroupType}
-              />
-              <PrivateRoute exact path="/admin" component={Admin} />
-              <Route component={NotFound} />
-            </Switch>
+      {localStorage.getItem("entryToken") === "Yar" && (
+        <Router>
+          <div className="App">
+            <Navbar />
+            <div className="container site-content">
+              <Alert />
+              <Switch>
+                <Route exact path="/betaEntry" component={BetaEntry} />
+                <Route exact path="/" component={Home} />
+                <Route exact path="/register" component={Register} />
+                <Route exact path="/login" component={Login} />
+                <Route exact path="/not-found" component={NotFound} />
+                <Route exact path="/FAQ" component={FAQ} />
+                <Route exact path="/k/:groupType" component={GroupType} />
+                <PrivateRoute exact path="/account" component={EditUser} />
+                <PrivateRoute
+                  exact
+                  path="/k/:groupType/create"
+                  component={NewGroup}
+                />
+                <PrivateRoute
+                  exact
+                  path="/k/:groupType/group/:groupCode/edit"
+                  component={EditGroup}
+                />
+                <PrivateRoute
+                  exact
+                  path="/k/:groupType/group/:groupCode"
+                  component={Group}
+                />
+                <PrivateRoute
+                  exact
+                  path="/request-grouptype"
+                  component={NewGroupType}
+                />
+                <PrivateRoute
+                  exact
+                  path="/k/:groupType/edit"
+                  component={EditGroupType}
+                />
+                <PrivateRoute exact path="/admin" component={Admin} />
+                <Route component={NotFound} />
+              </Switch>
+            </div>
+            <Footer />
           </div>
-          <Footer />
-        </div>
-      </Router>
+        </Router>
+      )}
     </Provider>
   );
 };

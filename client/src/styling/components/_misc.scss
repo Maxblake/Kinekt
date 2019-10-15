@@ -263,6 +263,10 @@
       }
     }
   }
+
+  .modal-content .info-modal.hs-box {
+    padding: 1.5rem !important;
+  }
 }
 
 // Info modal
@@ -322,5 +326,24 @@
     opacity: 1;
 
     transition: opacity 0.2s;
+  }
+}
+
+// Beta Entry
+.beta-entry-container {
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+  position: fixed;
+  z-index: 100;
+
+  .hs-box {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 }

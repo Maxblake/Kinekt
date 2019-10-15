@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 
 const FormControl = ({
   label,
+  customLabel,
   name,
   value,
   error,
@@ -18,6 +19,9 @@ const FormControl = ({
         <label className="label form-label">{`${label}${
           required ? " *" : ""
         }`}</label>
+      )}
+      {customLabel !== undefined && (
+        <label className="label form-label">{customLabel}</label>
       )}
       <div className="field">
         <div className="control">

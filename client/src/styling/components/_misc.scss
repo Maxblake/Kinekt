@@ -307,13 +307,14 @@
 .hs-tooltip {
   z-index: 1;
   position: absolute;
-  top: -2.5rem;
+  top: -2rem;
   left: 50%;
   transform: translateX(-50%);
 
   width: max-content;
-  padding: 0.5rem;
-  border-radius: 4px;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 14px;
   color: #fafafa;
   background-color: rgba(20, 20, 20, 0.8);
   visibility: hidden;

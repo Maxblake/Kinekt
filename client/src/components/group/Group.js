@@ -153,64 +153,61 @@ const Group = ({
     pageOptions.unshift(
       <Link
         to={`/k/${groupTypeNameSnaked}/group/${group.HRID}/edit`}
-        className="button is-dark"
+        className="button is-dark is-fullwidth-touch"
       >
-        <span>Edit Group</span>
+        <span>Edit</span>
+        <span className="icon is-small">
+          <i className="fas fa-edit" aria-hidden="true" />
+        </span>
       </Link>
-    );
-
-    if (document.queryCommandSupported("copy")) {
-      pageOptions.unshift(
-        <button
-          className="button is-dark"
-          onClick={() => copyHRIDToClipboard()}
-        >
-          <Tooltip
-            body="Group code copied to clipboard"
-            isVisible={showCopyHRIDTooltip}
-            setIsVisible={isVisible =>
-              setGroupState({
-                ...groupState,
-                showCopyHRIDTooltip: isVisible
-              })
-            }
-          />
-          <span>{group.HRID}</span>
-          <span className="icon">
-            <i className="fas fa-link"></i>
-          </span>
-        </button>
-      );
-    }
-
-    pageOptions.unshift(
-      user._id === group.creator ? (
-        <button className="button is-dark" onClick={e => onClickDelete(e)}>
-          Delete Group
-        </button>
-      ) : (
-        <button className="button is-dark" onClick={() => leaveCurrentGroup()}>
-          <span>Leave group</span>
-          <span className="icon is-small">
-            <i className="fas fa-sign-out-alt" aria-hidden="true" />
-          </span>
-        </button>
-      )
     );
   }
 
   if (user._id === group.creator) {
     pageOptions.unshift(
-      <button className="button is-dark" onClick={e => onClickDelete(e)}>
-        Delete Group
+      <button
+        className="button is-danger is-fullwidth-touch"
+        onClick={e => onClickDelete(e)}
+      >
+        <span>Delete</span>
+        <span className="icon is-small">
+          <i className="fas fa-trash-alt" aria-hidden="true" />
+        </span>
       </button>
     );
   } else {
     pageOptions.unshift(
-      <button className="button is-dark" onClick={() => leaveCurrentGroup()}>
+      <button
+        className="button is-dark is-fullwidth-touch"
+        onClick={() => leaveCurrentGroup()}
+      >
         <span>Leave group</span>
         <span className="icon is-small">
           <i className="fas fa-sign-out-alt" aria-hidden="true" />
+        </span>
+      </button>
+    );
+  }
+
+  if (document.queryCommandSupported("copy")) {
+    pageOptions.push(
+      <button
+        className="button is-primary is-fullwidth-touch"
+        onClick={() => copyHRIDToClipboard()}
+      >
+        <Tooltip
+          body="Group code copied to clipboard"
+          isVisible={showCopyHRIDTooltip}
+          setIsVisible={isVisible =>
+            setGroupState({
+              ...groupState,
+              showCopyHRIDTooltip: isVisible
+            })
+          }
+        />
+        <span>{group.HRID}</span>
+        <span className="icon">
+          <i className="fas fa-link"></i>
         </span>
       </button>
     );

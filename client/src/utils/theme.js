@@ -17,8 +17,8 @@ const themes = [
     name: "Mint",
     "--primary": "hsl(143.9, 85.7%, 41%)",
     "--primary-darker": "hsl(143.9, 85.7%, 37%)",
-    "--gradient-top": "#28e677",
-    "--gradient-bottom": "#28e677"
+    "--gradient-top": "#80ffa1",
+    "--gradient-bottom": "#80ff97"
   },
   {
     name: "Flamingo",
@@ -43,8 +43,8 @@ const themes = [
   },
   {
     name: "Deep Earth",
-    "--primary": "hsl(.97 65% 42%)",
-    "--primary-darker": "hsl(0.97, 65%, 38%)",
+    "--primary": "hsl(360 52% 44%)",
+    "--primary-darker": "hsl(360, 52%, 40%)",
     "--gradient-top": "#334622",
     "--gradient-bottom": "#334622"
   }

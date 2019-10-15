@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
@@ -11,10 +11,10 @@ import GroupMembers from "./GroupMembers";
 import GroupConsole from "./GroupConsole";
 import NotFound from "../common/NotFound";
 import PageTitle from "../layout/page/PageTitle";
-import Dropdown from "../common/subcomponents/Dropdown";
 
 import defaultGroupTypeImage from "../../resources/default_grouptype_image.png";
 import Tooltip from "../common/Tooltip";
+import PageOptions from "../layout/page/PageOptions";
 
 const Group = ({
   history,
@@ -147,6 +147,75 @@ const Group = ({
       }
     : null;
 
+  const pageOptions = [];
+
+  if (isCurrentUserAdmin) {
+    pageOptions.unshift(
+      <Link
+        to={`/k/${groupTypeNameSnaked}/group/${group.HRID}/edit`}
+        className="button is-dark"
+      >
+        <span>Edit Group</span>
+      </Link>
+    );
+
+    if (document.queryCommandSupported("copy")) {
+      pageOptions.unshift(
+        <button
+          className="button is-dark"
+          onClick={() => copyHRIDToClipboard()}
+        >
+          <Tooltip
+            body="Group code copied to clipboard"
+            isVisible={showCopyHRIDTooltip}
+            setIsVisible={isVisible =>
+              setGroupState({
+                ...groupState,
+                showCopyHRIDTooltip: isVisible
+              })
+            }
+          />
+          <span>{group.HRID}</span>
+          <span className="icon">
+            <i className="fas fa-link"></i>
+          </span>
+        </button>
+      );
+    }
+
+    pageOptions.unshift(
+      user._id === group.creator ? (
+        <button className="button is-dark" onClick={e => onClickDelete(e)}>
+          Delete Group
+        </button>
+      ) : (
+        <button className="button is-dark" onClick={() => leaveCurrentGroup()}>
+          <span>Leave group</span>
+          <span className="icon is-small">
+            <i className="fas fa-sign-out-alt" aria-hidden="true" />
+          </span>
+        </button>
+      )
+    );
+  }
+
+  if (user._id === group.creator) {
+    pageOptions.unshift(
+      <button className="button is-dark" onClick={e => onClickDelete(e)}>
+        Delete Group
+      </button>
+    );
+  } else {
+    pageOptions.unshift(
+      <button className="button is-dark" onClick={() => leaveCurrentGroup()}>
+        <span>Leave group</span>
+        <span className="icon is-small">
+          <i className="fas fa-sign-out-alt" aria-hidden="true" />
+        </span>
+      </button>
+    );
+  }
+
   return (
     <section className="group">
       <nav className="level" id="page-nav">
@@ -155,85 +224,9 @@ const Group = ({
           subtitle={
             <Link to={`/k/${groupTypeNameSnaked}`}>{groupType.name}</Link>
           }
+          hasPageOptions
         />
-        <div className="level-right">
-          <div className="level-item">
-            {isCurrentUserAdmin ? (
-              <Dropdown
-                trigger={
-                  <button
-                    className="button is-dark"
-                    aria-haspopup="true"
-                    aria-controls="dropdown-menu"
-                  >
-                    <span className="icon is-small">
-                      <i className="fas fa-cog" aria-hidden="true" />
-                    </span>
-                  </button>
-                }
-              >
-                <Link
-                  to={`/k/${groupTypeNameSnaked}/group/${group.HRID}/edit`}
-                  className="dropdown-item"
-                >
-                  <span>Edit Group</span>
-                </Link>
-                {document.queryCommandSupported("copy") && (
-                  <Fragment>
-                    <div
-                      className="dropdown-item clickable-text"
-                      onClick={() => copyHRIDToClipboard()}
-                    >
-                      <Tooltip
-                        body="Group code copied to clipboard"
-                        isVisible={showCopyHRIDTooltip}
-                        setIsVisible={isVisible =>
-                          setGroupState({
-                            ...groupState,
-                            showCopyHRIDTooltip: isVisible
-                          })
-                        }
-                      />
-                      <span>{group.HRID}</span>
-                      <span className="icon">
-                        <i className="fas fa-link"></i>
-                      </span>
-                    </div>
-                  </Fragment>
-                )}
-
-                {user._id === group.creator ? (
-                  <Fragment>
-                    <hr className="dropdown-divider" />
-                    <div
-                      className="dropdown-item clickable-text"
-                      onClick={e => onClickDelete(e)}
-                    >
-                      Delete Group
-                    </div>
-                  </Fragment>
-                ) : (
-                  <div
-                    className="dropdown-item clickable-text"
-                    onClick={() => leaveCurrentGroup()}
-                  >
-                    Leave Group
-                  </div>
-                )}
-              </Dropdown>
-            ) : (
-              <button
-                className="button is-dark"
-                onClick={() => leaveCurrentGroup()}
-              >
-                <span>Leave group</span>
-                <span className="icon is-small">
-                  <i className="fas fa-sign-out-alt" aria-hidden="true" />
-                </span>
-              </button>
-            )}
-          </div>
-        </div>
+        <PageOptions options={pageOptions} />
       </nav>
       <GroupMembers
         users={group.users}

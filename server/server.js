@@ -1,4 +1,5 @@
 const express = require("express");
+const enforce = require("express-sslify");
 const connectDB = require("../config/db");
 const ioServer = require("./ioServer");
 const path = require("path");
@@ -23,6 +24,8 @@ app.use("/api/admin", require("../routes/api/admin"));
 
 // Serve static assets in prod
 if (process.env.NODE_ENV === "production") {
+  app.use(enforce.HTTPS({ trustProtoHeader: true }));
+
   // Set static folder
   app.use(express.static(path.resolve("client", "build")));
 

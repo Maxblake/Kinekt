@@ -113,7 +113,6 @@ const Group = ({
     !groupType ||
     (error && error.HRID === match.params.groupCode)
   ) {
-    console.log({ group, groupType });
     return <NotFound />;
   }
 

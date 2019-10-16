@@ -90,7 +90,6 @@ class socketHandler {
   }
 
   async sendMessage(message) {
-    //TODO validate user token, maybe check for profanity
     const user = await User.findById(message.user).select("name id");
 
     this.io.in(`group-${this.groupId.toString()}`).emit("receiveMessage", {
@@ -208,9 +207,7 @@ class socketHandler {
     if (!this.groupId) return;
 
     if (!!this.user && !!this.userStatusMap[this.groupId]) {
-      console.log(this.userStatusMap[this.groupId]);
       delete this.userStatusMap[this.groupId][this.user._id];
-      console.log(this.userStatusMap[this.groupId]);
     }
 
     this.socket.leave(`group-${this.groupId.toString()}`);
@@ -330,15 +327,19 @@ class socketHandler {
       let groupTypeNumbersMap = {};
 
       for (const groupType of groupTypes) {
-        const groups = await Group.find({
-          _id: { $in: groupType.groups }
-        })
-          .select("users")
-          .lean();
-
         let users = 0;
-        for (const group of groups) {
-          users += group.users.length;
+        let groups = [];
+
+        if (!!groupType.groups) {
+          groups = await Group.find({
+            _id: { $in: groupType.groups }
+          })
+            .select("users")
+            .lean();
+
+          for (const group of groups) {
+            users += group.users.length;
+          }
         }
 
         groupTypeNumbersMap[groupType._id] = {

@@ -87,11 +87,11 @@ export const enterBeta = entryToken => async dispatch => {
 
   try {
     const res = await axios.post("/api/auth/enterBeta", body, config);
-    console.log("Correct!");
+    alert("That's correct. Welcome!");
     localStorage.setItem("entryToken", res.data.entryToken);
     window.location.reload();
   } catch (err) {
-    console.log("Wrong!");
+    alert("Wrong!");
   }
 };
 

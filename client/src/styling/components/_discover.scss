@@ -28,8 +28,8 @@
       color: $off-black;
 
       margin: 1.25rem 0.75rem 0 0.75rem;
-      padding: 0.5rem 0.75rem;
-      border: 2px solid;
+      padding: 0.5rem 0.25rem;
+      border-bottom: 4px solid var(--primary);
     }
 
     .step-image {

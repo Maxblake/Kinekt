@@ -80,10 +80,10 @@ class socketHandler {
 
     this.socket.join(`user-${user._id.toString()}`);
 
-    if (this.user.currentGroup) {
+    if (!!this.user.currentGroup) {
       const currentGroup = await Group.findOne({
         HRID: this.user.currentGroup.HRID
-      }).select("");
+      }).select("_id");
 
       if (!!currentGroup) {
         this.groupId = currentGroup._id;

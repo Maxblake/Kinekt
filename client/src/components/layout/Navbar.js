@@ -150,7 +150,7 @@ const Navbar = ({
       <div id="navMenu" className="navbar-menu">
         <div className="navbar-end">
           <div className="navbar-item">
-            <form onSubmit={e => redirectToGroup(e, groupCode)}>
+            <form onSubmit={e => redirectToGroup(e, groupCode.toLowerCase())}>
               <div className="field has-addons">
                 <div className="control is-expanded">
                   <input

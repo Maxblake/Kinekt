@@ -35,7 +35,7 @@ export const register = userFields => async dispatch => {
 
     dispatch(clearErrorsAndAlerts());
     dispatch(
-      setTextAlert(`Welcome to HappenStack, ${userFields.name}`, "is-success")
+      setTextAlert(`Welcome to HappenStack, ${userFields.name}!`, "is-success")
     );
     dispatch(loadUser());
   } catch (err) {

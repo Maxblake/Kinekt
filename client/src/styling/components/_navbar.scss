@@ -43,6 +43,12 @@
       max-height: 1.85rem;
     }
   }
+
+  .navbar-brand,
+  .navbar-burger {
+    min-height: 2.75rem;
+    height: 2.75rem;
+  }
 }
 
 @media (max-width: $desktop - 1) {

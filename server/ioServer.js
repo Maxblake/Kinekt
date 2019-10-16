@@ -86,6 +86,7 @@ class socketHandler {
       }).select("");
 
       this.groupId = currentGroup ? currentGroup._id : null;
+      this.socket.join(`group-${this.groupId.toString()}`);
     }
   }
 
@@ -363,15 +364,17 @@ class socketHandler {
         .select("groups")
         .lean();
 
-      const groups = await Group.find({
-        _id: { $in: groupType.groups }
-      })
-        .select("users")
-        .lean();
-
       let users = 0;
-      for (const group of groups) {
-        users += group.users.length;
+      if (!!groupType.groups) {
+        const groups = await Group.find({
+          _id: { $in: groupType.groups }
+        })
+          .select("users")
+          .lean();
+
+        for (const group of groups) {
+          users += group.users.length;
+        }
       }
 
       const groupTypeNumbers = {

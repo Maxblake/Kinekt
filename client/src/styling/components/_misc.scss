@@ -63,6 +63,7 @@
 // Notifications / Alerts
 .notification {
   padding: 1rem 2.25rem 1rem 1.25rem;
+  z-index: 3;
   &:first-child {
     margin-top: 1.5rem;
   }

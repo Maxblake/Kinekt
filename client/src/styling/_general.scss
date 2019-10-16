@@ -169,6 +169,12 @@ strong {
   }
 }
 
+.title {
+  .clickable-text:hover {
+    color: inherit;
+  }
+}
+
 .card-image {
   position: relative;
   border: 7px solid #fafafa;

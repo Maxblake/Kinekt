@@ -240,7 +240,7 @@ const Group = ({
       <IdleTimer
         element={document}
         onAction={() => setUserStatus("active")}
-        throttle={1000 * 30}
+        throttle={1000 * 20}
       />
     </section>
   );

@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { getGroups } from "../../actions/group";
 import { setTextAlert } from "../../actions/alert";
 
+import Modal from "../common/subcomponents/Modal";
 import Spinner from "../common/Spinner";
 import NotFound from "../common/NotFound";
 import GroupCard from "../cards/GroupCard";
@@ -323,7 +324,18 @@ const GroupType = ({
     <section className="groupType">
       <nav className="level" id="page-nav">
         <PageTitle
-          title={match.params.groupType.split("_").join(" ")}
+          title={
+            <Modal trigger={match.params.groupType.split("_").join(" ")}>
+              <div className="hs-box info-modal has-text-left has-rounded-corners">
+                <h3 className="title is-spaced is-size-3 is-size-4-mobile">
+                  {match.params.groupType.split("_").join(" ")}
+                </h3>
+                <div className="content has-text-header">
+                  {groupType.description}
+                </div>
+              </div>
+            </Modal>
+          }
           subtitle={
             <div className="group-type-subtitle">
               <OnlineStatus

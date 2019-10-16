@@ -19,7 +19,12 @@ const ioServer = app => {
 
   io.on("connection", socket => {
     console.log("New client connected");
-    new socketHandler(io, socket, userStatusMap);
+    const handler = new socketHandler(io, socket, userStatusMap);
+
+    socket.on("disconnect", () => {
+      console.log("Client disconnected");
+      handler.logout();
+    });
   });
 
   scheduleGroupExpirations(io);
@@ -201,6 +206,12 @@ class socketHandler {
 
   leaveSocket() {
     if (!this.groupId) return;
+
+    if (!!this.user && !!this.userStatusMap[this.groupId]) {
+      console.log(this.userStatusMap[this.groupId]);
+      delete this.userStatusMap[this.groupId][this.user._id];
+      console.log(this.userStatusMap[this.groupId]);
+    }
 
     this.socket.leave(`group-${this.groupId.toString()}`);
   }
@@ -474,7 +485,7 @@ class socketHandler {
       clearTimeout(this.userStatusTimeout);
       this.userStatusTimeout = setTimeout(
         () => this.setUserStatus("idle"),
-        1000 * 60 * 2
+        1000 * 60
       );
     }
 
@@ -497,7 +508,7 @@ class socketHandler {
     this.groupId = null;
     this.isAuthenticated = false;
     this.user = null;
-    this.userStatusTimeout = null;
+    clearTimeout(this.userStatusTimeout);
   }
 }
 

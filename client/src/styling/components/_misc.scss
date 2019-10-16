@@ -297,6 +297,10 @@
     text-align: left;
     font-size: 0.9rem;
     font-weight: 500;
+
+    &.has-text-header {
+      margin-top: 0;
+    }
   }
 }
 

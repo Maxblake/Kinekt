@@ -68,10 +68,10 @@ const sendExpirationWarning = group => dispatch => {
   const currentTime = moment();
   const expirationTime = moment(group.creationTimestamp).add(24, "hours");
 
-  const diff = currentTime.diff(expirationTime);
+  const diff = expirationTime.diff(currentTime);
   const diffDuration = moment.duration(diff);
 
-  if (diffDuration.hours() >= -1) {
+  if (diffDuration.hours() <= 1) {
     dispatch(
       setTextAlert(
         `Heads up! '${group.name}' expires on ${expirationTime.format(

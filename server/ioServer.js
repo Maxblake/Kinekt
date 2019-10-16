@@ -85,8 +85,10 @@ class socketHandler {
         HRID: this.user.currentGroup.HRID
       }).select("");
 
-      this.groupId = currentGroup ? currentGroup._id : null;
-      this.socket.join(`group-${this.groupId.toString()}`);
+      if (!!currentGroup) {
+        this.groupId = currentGroup._id;
+        this.socket.join(`group-${this.groupId.toString()}`);
+      }
     }
   }
 

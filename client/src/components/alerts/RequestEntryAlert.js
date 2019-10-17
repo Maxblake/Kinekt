@@ -56,7 +56,7 @@ const RequestEntryAlert = ({
           <i className="fas fa-2x fa-check-circle"></i>
         </span>
       ) : (
-        <Countdown totalTime={45} onTimeout={() => onTimeout()} />
+        <Countdown totalTime={60 * 5} onTimeout={() => onTimeout()} />
       )}
       <div className="alert-items">
         <h3>

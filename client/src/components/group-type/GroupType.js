@@ -172,7 +172,7 @@ const GroupType = ({
     return classList.join(" ");
   };
 
-  if (loading) {
+  if (loading || readyToLoadNewGroups) {
     return <Spinner isMidpage />;
   }
 

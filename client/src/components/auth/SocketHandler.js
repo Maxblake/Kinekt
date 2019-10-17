@@ -116,8 +116,6 @@ const SocketHandler = ({
         : undefined
     };
 
-    console.log(groupAndGroupTypeIds);
-
     socket.emit("getGroupAndUserNumbers", groupAndGroupTypeIds);
   };
 

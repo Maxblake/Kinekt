@@ -9,6 +9,7 @@ import {
   GROUP_LOADING,
   GROUP_LOADED,
   GROUPTYPE_LOADING,
+  GROUPTYPE_LOADED,
   SET_GROUP,
   SET_CURRENT_GROUP,
   SET_GROUPS,
@@ -132,6 +133,11 @@ export const getGroups = (
         groupTypeName
       }
     });
+    if (seenGroups.length === 0) {
+      dispatch({
+        type: GROUPTYPE_LOADED
+      });
+    }
   }
 };
 

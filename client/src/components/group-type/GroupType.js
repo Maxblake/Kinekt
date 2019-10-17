@@ -48,7 +48,10 @@ const GroupType = ({
       groupType && groupType.name !== groupTypeParamSpaced;
 
     if (
+      (!error ||
+        error.groupTypeName !== match.params.groupType.split("_").join(" ")) &&
       !loading &&
+      !group.loading &&
       (!groupType ||
         groupTypeParamChanged ||
         readyToLoadNewGroups ||
@@ -79,7 +82,13 @@ const GroupType = ({
     if (!group.loading && isFetching) {
       setIsFetching(false);
     }
-  }, [match.params.groupType, readyToLoadNewGroups, loading, group.loading]);
+  }, [
+    match.params.groupType,
+    readyToLoadNewGroups,
+    loading,
+    group.loading,
+    error
+  ]);
 
   const onChange = e => {
     if (

@@ -32,10 +32,14 @@ const EntryRequestReceivedAlert = ({
       <Countdown totalTime={45} onTimeout={() => onTimeout()} />
       <div className="alert-items">
         <h3>
-          <Modal trigger={userInfo.name}>
+          <Modal
+            trigger={<span className="is-underlined">{userInfo.name}</span>}
+          >
             <UserInfo user={userInfo} />
-          </Modal>{" "}
-          would like to join your group
+          </Modal>
+          {` would like to join your group ${
+            isActive ? "" : "(Request timed out)"
+          }`}
         </h3>
         <div className="field is-grouped is-grouped-right">
           <div className="control">

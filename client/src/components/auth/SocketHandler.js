@@ -36,7 +36,10 @@ const SocketHandler = ({
       }
     }
 
-    if ((groups && groups.length > 0) || groupType || groupTypes.length > 0) {
+    if (
+      !interval &&
+      ((groups && groups.length > 0) || groupType || groupTypes.length > 0)
+    ) {
       onActive();
     }
 
@@ -67,7 +70,7 @@ const SocketHandler = ({
   };
 
   const entryRequestReceived = userInfo => {
-    if (group.users) {
+    if (!!group && group.users) {
       const groupUser = group.users.find(
         groupUser => groupUser._id === user._id
       );

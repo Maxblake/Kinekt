@@ -156,13 +156,16 @@ strong {
   width: 100px;
 }
 
+.is-underlined {
+  text-decoration: underline;
+}
+
 .ws-nowrap {
   white-space: nowrap;
 }
 
 .clickable-text:hover {
   cursor: pointer;
-  color: #464646;
 
   &.dropdown-item {
     background: whitesmoke;

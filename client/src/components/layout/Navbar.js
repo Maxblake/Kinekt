@@ -14,7 +14,8 @@ const Navbar = ({
   history,
   getGroup,
   logout,
-  auth: { isAuthenticated, loading, user }
+  auth: { isAuthenticated, loading, user },
+  group
 }) => {
   const [navData, setNavData] = useState({
     groupCode: ""
@@ -53,6 +54,15 @@ const Navbar = ({
       typewriter.stop();
     });
   }, []);
+
+  useEffect(() => {
+    if (!group && !!user && !!user.currentGroup) {
+      getGroup({
+        HRID: user.currentGroup.HRID,
+        userCurrentGroupHRID: user.currentGroup.HRID
+      });
+    }
+  }, [user]);
 
   const onChange = e =>
     setNavData({ ...navData, [e.target.name]: e.target.value });
@@ -196,11 +206,13 @@ const Navbar = ({
 Navbar.propTypes = {
   logout: PropTypes.func.isRequired,
   getGroup: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  group: PropTypes.object
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  group: state.group.group
 });
 
 export default connect(

@@ -25,11 +25,12 @@
     flex: 1;
 
     .step-description {
-      color: $off-black;
+      color: #fafafa;
 
       margin: 1.25rem 0.75rem 0 0.75rem;
-      padding: 0.5rem 0.25rem;
-      border-bottom: 4px solid var(--primary);
+      padding: 0.5rem 1rem;
+      background: var(--primary);
+      border-radius: 4px;
     }
 
     .step-image {

@@ -47,11 +47,11 @@ const GroupType = ({
     const groupTypeParamChanged =
       groupType && groupType.name !== groupTypeParamSpaced;
 
+    // TODO should this also check for !group.loading?
     if (
       (!error ||
         error.groupTypeName !== match.params.groupType.split("_").join(" ")) &&
       !loading &&
-      !group.loading &&
       (!groupType ||
         groupTypeParamChanged ||
         readyToLoadNewGroups ||

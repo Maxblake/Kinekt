@@ -23,7 +23,11 @@ const SocketHandler = ({
 }) => {
   const [interval, setIntervalState] = useState(undefined);
 
+  let stateRef = React.useRef(null);
+
   useEffect(() => {
+    stateRef.current = { group, groups, groupType, groupTypes };
+
     if (!socket) {
       openSocket();
     } else {
@@ -36,10 +40,7 @@ const SocketHandler = ({
       }
     }
 
-    if (
-      !interval &&
-      ((groups && groups.length > 0) || groupType || groupTypes.length > 0)
-    ) {
+    if ((groups && groups.length > 0) || groupType || groupTypes.length > 0) {
       onActive();
     }
 
@@ -103,15 +104,19 @@ const SocketHandler = ({
   const getGroupAndUserNumbers = () => {
     const groupAndGroupTypeIds = {
       groups:
-        groups && groups.length > 0
-          ? groups.map(group => group._id)
+        stateRef.current.groups && stateRef.current.groups.length > 0
+          ? stateRef.current.groups.map(group => group._id)
           : undefined,
       groupTypes:
-        groupTypes.length > 0
-          ? groupTypes.map(groupType => groupType._id)
+        stateRef.current.groupTypes.length > 0
+          ? stateRef.current.groupTypes.map(groupType => groupType._id)
           : undefined,
-      groupType: !!groupType ? groupType._id : undefined
+      groupType: !!stateRef.current.groupType
+        ? stateRef.current.groupType._id
+        : undefined
     };
+
+    console.log(groupAndGroupTypeIds);
 
     socket.emit("getGroupAndUserNumbers", groupAndGroupTypeIds);
   };

@@ -1,10 +1,11 @@
 import React, { useState, Fragment } from "react";
 import { connect } from "react-redux";
-
 import { enterBeta } from "../../actions/auth";
 
 import Form from "../form/Form";
 import FormControl from "../form/FormControl";
+
+import logo from "../../resources/logo_vertical_black.png";
 
 const BetaEntry = ({ enterBeta }) => {
   const [formData, setFormData] = useState({
@@ -18,10 +19,25 @@ const BetaEntry = ({ enterBeta }) => {
 
   const onSubmit = e => {
     e.preventDefault();
-    enterBeta(entryToken);
+    //enterBeta(entryToken);
 
     setFormData({ entryToken: "" });
   };
+
+  if (true) {
+    return (
+      <div className="beta-entry-container has-text-centered">
+        <div className="hs-box">
+          <span>
+            I'm not ready!
+            <br /> If you're here to join this week's beta test (Beginning
+            Thursday, 10/24/2019), you can
+            <a href="https://forms.gle/MFm6vnZMpLAimQSB8"> sign up here.</a>
+          </span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="beta-entry-container has-text-centered">

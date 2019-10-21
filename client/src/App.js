@@ -16,6 +16,7 @@ import Alert from "./components/alerts/Alert";
 import Login from "./components/auth/Login";
 import Register from "./components/user/Register";
 import EditUser from "./components/user/EditUser";
+import GroupLocks from "./components/user/GroupLocks";
 import NotFound from "./components/common/NotFound";
 import Home from "./components/home/Home";
 import NewGroupType from "./components/group-type/NewGroupType";
@@ -60,6 +61,7 @@ const App = () => {
                 <Route exact path="/FAQ" component={FAQ} />
                 <Route exact path="/k/:groupType" component={GroupType} />
                 <PrivateRoute exact path="/account" component={EditUser} />
+                <PrivateRoute exact path="/grouplocks" component={GroupLocks} />
                 <PrivateRoute
                   exact
                   path="/k/:groupType/create"

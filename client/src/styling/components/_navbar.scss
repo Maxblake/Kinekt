@@ -24,7 +24,7 @@
   }
 }
 
-#btn-current-group {
+.button.is-primary.is-outlined.outlined-nav-button {
   color: #fafafa;
 }
 
@@ -52,7 +52,7 @@
 }
 
 @media (max-width: $desktop - 1) {
-  #btn-current-group {
+  .button.is-primary.is-outlined.outlined-nav-button {
     background-color: var(--primary);
   }
 

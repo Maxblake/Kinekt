@@ -96,3 +96,5 @@ export const deleteUser = () => async dispatch => {
     }
   }
 };
+
+export const buyLocks = () => async dispatch => {};

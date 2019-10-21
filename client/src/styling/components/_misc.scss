@@ -237,6 +237,11 @@
   }
 }
 
+// Radio button
+.field.is-grouped > .control.hs-radio-btn-control:not(:last-child) {
+  margin-right: 0.5rem;
+}
+
 // Alerts
 .custom-action-alert {
   display: flex;

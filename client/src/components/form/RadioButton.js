@@ -4,6 +4,7 @@ export default function RadioButton({
   handleClick,
   valueKey,
   value,
+  customLabel,
   selectedValue
 }) {
   const getClassName = isSelected => {
@@ -24,7 +25,7 @@ export default function RadioButton({
         valueKey ? handleClick(value, valueKey) : handleClick(value)
       }
     >
-      {value}
+      {customLabel ? customLabel : value}
     </button>
   );
 }

@@ -212,7 +212,7 @@ const NewGroup = ({
           required={true}
           children={
             <div className="field is-grouped is-grouped-multiline">
-              <div className="control">
+              <div className="control hs-radio-btn-control">
                 <RadioButton
                   selectedValue={timeContext}
                   value="Now"
@@ -244,14 +244,14 @@ const NewGroup = ({
                   />
                 </Modal>
               </div>
-              <div className="control">
+              <div className="control hs-radio-btn-control">
                 <RadioButton
                   selectedValue={timeContext}
                   value="Today"
                   handleClick={handleTimeContextChange}
                 />
               </div>
-              <div className="control">
+              <div className="control hs-radio-btn-control">
                 <RadioButton
                   selectedValue={timeContext}
                   value="Tomorrow"
@@ -282,7 +282,38 @@ const NewGroup = ({
         />
 
         <CustomField
-          label="Access Level"
+          label={
+            <span>
+              Access Level&nbsp;
+              <Modal
+                trigger={
+                  <span className="icon info-icon">
+                    <i className="far fa-question-circle" />
+                  </span>
+                }
+              >
+                <div className="hs-box info-modal is-vcentered has-rounded-corners">
+                  <div className="icon is-large info-icon">
+                    <i className="far fa-3x fa-question-circle" />
+                  </div>
+                  <div className="content">
+                    <strong>Public</strong> groups show up on group type feeds.
+                    Users can join freely.
+                    <br />
+                    <br />
+                    <strong>Protected</strong> groups show up on group type
+                    feeds. Users can request to join and any of the group's
+                    admins can answer the request.
+                    <br />
+                    <br />
+                    <strong>Private</strong> groups do not show up in feeds and
+                    cannot be searched for. Users can request to join via group
+                    code and any of the group's admins can answer the request.
+                  </div>
+                </div>
+              </Modal>
+            </span>
+          }
           children={
             <div className="field is-grouped is-grouped-multiline">
               <div className="control">

@@ -34,6 +34,11 @@ const UserSchema = new mongoose.Schema({
       type: String
     }
   },
+  groupLocks: {
+    type: Number,
+    default: 0,
+    required: true
+  },
   selectedTheme: {
     type: String
   },

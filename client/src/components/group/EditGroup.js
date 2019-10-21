@@ -182,21 +182,21 @@ const EditGroup = ({
           label="Access Level"
           children={
             <div className="field is-grouped">
-              <div className="control">
+              <div className="control hs-radio-btn-control">
                 <RadioButton
                   selectedValue={accessLevel}
                   value="Public"
                   handleClick={handleAccessLevelChange}
                 />
               </div>
-              <div className="control">
+              <div className="control hs-radio-btn-control">
                 <RadioButton
                   selectedValue={accessLevel}
                   value="Protected"
                   handleClick={handleAccessLevelChange}
                 />
               </div>
-              <div className="control">
+              <div className="control hs-radio-btn-control">
                 <RadioButton
                   selectedValue={accessLevel}
                   value="Private"

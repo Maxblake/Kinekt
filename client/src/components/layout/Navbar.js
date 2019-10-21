@@ -92,21 +92,33 @@ const Navbar = ({
 
   const authLinks = (
     <Fragment>
-      {user && user.currentGroup && (
+      {user && (
         <div className="navbar-item">
           <div className="buttons">
-            <button
-              onClick={e => redirectToGroup(e, user.currentGroup.HRID)}
-              className="button is-primary is-outlined is-small"
-              id="btn-current-group"
+            {user.currentGroup && (
+              <button
+                onClick={e => redirectToGroup(e, user.currentGroup.HRID)}
+                className="button outlined-nav-button is-primary is-outlined is-small"
+              >
+                <span className="max-text-length-3">
+                  {user.currentGroup.name}
+                </span>
+                <span className="icon is-small">
+                  <i className="fas fa-chalkboard-teacher" />
+                </span>
+              </button>
+            )}
+            <Link
+              to="/grouplocks"
+              className="button outlined-nav-button is-primary is-outlined is-small"
             >
               <span className="max-text-length-3">
-                {user.currentGroup.name}
+                {user && user.groupLocks ? user.groupLocks : "~"}
               </span>
               <span className="icon is-small">
-                <i className="fas fa-chalkboard-teacher" />
+                <i className="fas fa-lock" />
               </span>
-            </button>
+            </Link>
           </div>
         </div>
       )}

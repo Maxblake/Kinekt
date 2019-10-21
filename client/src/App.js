@@ -42,9 +42,11 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      {localStorage.getItem("entryToken") !== "Yar" && <BetaEntry />}
+      {localStorage.getItem("entryToken") !== "KJYA6yuNClsfFdAHTiHC" && (
+        <BetaEntry />
+      )}
       <SocketHandler />
-      {localStorage.getItem("entryToken") === "Yar" && (
+      {localStorage.getItem("entryToken") === "KJYA6yuNClsfFdAHTiHC" && (
         <Router>
           <div className="App">
             <Navbar />

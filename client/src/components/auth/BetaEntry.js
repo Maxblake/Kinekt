@@ -5,8 +5,6 @@ import { enterBeta } from "../../actions/auth";
 import Form from "../form/Form";
 import FormControl from "../form/FormControl";
 
-import logo from "../../resources/logo_vertical_black.png";
-
 const BetaEntry = ({ enterBeta }) => {
   const [formData, setFormData] = useState({
     entryToken: ""
@@ -30,7 +28,7 @@ const BetaEntry = ({ enterBeta }) => {
         <div className="hs-box">
           <span>
             I'm not ready!
-            <br /> If you're here to join this week's beta test (Beginning
+            <br /> If you're here to join this week's beta test (beginning
             Thursday, 10/24/2019), you can
             <a href="https://forms.gle/MFm6vnZMpLAimQSB8"> sign up here.</a>
           </span>

@@ -71,7 +71,7 @@ router.post("/enterBeta", (req, res) => {
     const { entryToken } = req.body;
 
     if (entryToken === "AARRRRRP") {
-      return res.status(200).json({ entryToken: "Yar" });
+      return res.status(200).json({ entryToken: "KJYA6yuNClsfFdAHTiHC" });
     }
 
     return res.status(400);

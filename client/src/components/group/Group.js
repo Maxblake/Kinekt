@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
 
 import { getGroup } from "../../actions/group";
+import { copyToClipboard } from "../../utils/utils";
 
 import IdleTimer from "react-idle-timer";
 import Spinner from "../common/Spinner";
@@ -94,13 +95,8 @@ const Group = ({
     socket.emit("setUserStatus", userStatus);
   };
 
-  const copyHRIDToClipboard = e => {
-    var tempInputEl = document.createElement("input");
-    document.body.appendChild(tempInputEl);
-    tempInputEl.setAttribute("value", group.HRID);
-    tempInputEl.select();
-    document.execCommand("copy");
-    document.body.removeChild(tempInputEl);
+  const copyHRIDToClipboard = () => {
+    copyToClipboard(group.HRID);
     setGroupState({ ...groupState, showCopyHRIDTooltip: true });
   };
 

@@ -3,49 +3,87 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import { buyLocks } from "../../actions/user";
+import { copyToClipboard } from "../../utils/utils";
 
 import Spinner from "../common/Spinner";
 import PageTitle from "../layout/page/PageTitle";
 import Form from "../form/Form";
-import FormControl from "../form/FormControl";
 import SubmitButton from "../form/SubmitButton";
 import CustomField from "../form/CustomField";
 import RadioButton from "../form/RadioButton";
 import Modal from "../common/subcomponents/Modal";
+import Tooltip from "../common/Tooltip";
 
 const GroupLocks = ({ buyLocks, errors, auth: { user, loading } }) => {
   const [formData, setFormData] = useState({
-    groupLocks: 0
+    groupLocks: 0,
+    pricingDetails: {},
+    referralCode: "",
+    showCopyRefTooltip: false
   });
 
-  const { groupLocks } = formData;
+  const {
+    groupLocks,
+    pricingDetails,
+    referralCode,
+    showCopyRefTooltip
+  } = formData;
 
   //const errName = errors.find(error => error.param === "name");
 
-  useEffect(() => {
-    if (user) {
-      setFormData({
-        ...formData,
-        groupLocks: user.groupLocks
-      });
-    }
-  }, [user]);
-
-  const onChange = e => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
+  useEffect(() => {}, []);
 
   const handleGroupLocksChange = groupLocks => {
-    setFormData({ ...formData, groupLocks });
+    setFormData({
+      ...formData,
+      groupLocks,
+      pricingDetails: getPricingDetails(groupLocks)
+    });
   };
 
   const onSubmit = e => {
     e.preventDefault();
 
     buyLocks(groupLocks);
+  };
+
+  const onChange = e =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const getPricingDetails = groupLocks => {
+    const rateMap = {
+      3: 90,
+      8: 81,
+      21: 72,
+      55: 63
+    };
+
+    const basePrice = (groupLocks * 90) / 100;
+    const discountedPrice = (groupLocks * rateMap[groupLocks]) / 100;
+    const discount = basePrice - discountedPrice;
+
+    return {
+      basePrice,
+      basePriceUSD: basePrice.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD"
+      }),
+      discountedPrice,
+      discountedPriceUSD: discountedPrice.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD"
+      }),
+      discount,
+      discountUSD: discount.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD"
+      })
+    };
+  };
+
+  const copyRefToClipboard = e => {
+    copyToClipboard("1234567");
+    setFormData({ ...formData, showCopyRefTooltip: true });
   };
 
   if (loading) {
@@ -65,7 +103,7 @@ const GroupLocks = ({ buyLocks, errors, auth: { user, loading } }) => {
 
       <Form onSubmit={onSubmit}>
         <CustomField
-          label="Buy More"
+          label="Select Quantity"
           children={
             <div className="field is-grouped is-grouped-multiline">
               <div className="control hs-radio-btn-control">
@@ -141,7 +179,107 @@ const GroupLocks = ({ buyLocks, errors, auth: { user, loading } }) => {
           }
         />
 
-        <SubmitButton text="Save Changes" />
+        <CustomField
+          label={
+            <span>
+              Referral Code&nbsp;
+              <Modal
+                trigger={
+                  <span className="icon info-icon">
+                    <i className="far fa-question-circle" />
+                  </span>
+                }
+              >
+                <div className="hs-box info-modal is-vcentered has-rounded-corners">
+                  <div className="icon is-large info-icon">
+                    <i className="far fa-3x fa-question-circle" />
+                  </div>
+                  <div className="content">
+                    Enter a friend's referral code here and both of you will
+                    receive extra group locks after checkout. The number of
+                    locks recieved ranges from 1-5 depending on the amount
+                    purchased.
+                    <br />
+                    <br />
+                    Your personal referral code is &nbsp;
+                    {document.queryCommandSupported("copy") && (
+                      <div
+                        className="is-inline is-relative clickable-text has-text-link"
+                        onClick={e => copyRefToClipboard(e)}
+                      >
+                        <Tooltip
+                          body="Referral code copied to clipboard"
+                          isVisible={showCopyRefTooltip}
+                          setIsVisible={isVisible =>
+                            setFormData({
+                              ...formData,
+                              showCopyRefTooltip: isVisible
+                            })
+                          }
+                        />
+                        <span>1234567</span>
+                        <span className="icon">
+                          <i className="fas fa-link"></i>
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </Modal>
+            </span>
+          }
+          children={
+            <div className="field is-grouped is-grouped-multiline">
+              <div className="control">
+                <input
+                  className="input"
+                  type="text"
+                  placeholder="Enter referral code"
+                  name="referralCode"
+                  value={referralCode}
+                  onChange={e => onChange(e)}
+                />
+              </div>
+              <div className="control">
+                <button className="button is-dark">
+                  Log out &nbsp;
+                  <i className="fas fa-sign-out-alt" />
+                </button>
+              </div>
+            </div>
+          }
+        />
+
+        {pricingDetails.basePriceUSD && (
+          <div className="checkout-container">
+            <ul>
+              <li>
+                <span className="has-text-weight-bold">Base price: </span>
+                <span className="">{pricingDetails.basePriceUSD}</span>
+              </li>
+              <li>
+                <span className="has-text-weight-bold">Discount: </span>
+                <span className="">-{pricingDetails.discountUSD}</span>
+              </li>
+              <li>
+                <span className="has-text-weight-bold">Total price: </span>
+                <span className="has-text-weight-bold">
+                  {pricingDetails.discountedPriceUSD}
+                </span>
+              </li>
+            </ul>
+          </div>
+        )}
+
+        <SubmitButton
+          isFullwidth={true}
+          isDisabled={groupLocks === 0}
+          text={
+            groupLocks > 0
+              ? `Buy ${groupLocks} group locks for ${pricingDetails.discountedPriceUSD}`
+              : "No quantity selected"
+          }
+        />
       </Form>
     </section>
   );

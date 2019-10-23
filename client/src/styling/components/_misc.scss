@@ -352,6 +352,31 @@
   }
 }
 
+// Checkout
+.checkout-container {
+  margin: 1.25rem 5rem 0.75rem;
+  border: 2px solid var(--primary);
+  border-radius: 4px;
+
+  ul {
+    padding: 1.25rem 2.25rem;
+
+    li {
+      display: flex;
+
+      & :first-child {
+        flex-grow: 1;
+      }
+
+      &:last-child {
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+        border-top: 1px solid #404040;
+      }
+    }
+  }
+}
+
 // Beta Entry
 .beta-entry-container {
   height: 100%;

@@ -113,7 +113,9 @@ const Navbar = ({
               className="button outlined-nav-button is-primary is-outlined is-small"
             >
               <span className="max-text-length-3">
-                {user && user.groupLocks ? user.groupLocks : "~"}
+                {user && typeof user.groupLocks !== "number"
+                  ? "~"
+                  : user.groupLocks}
               </span>
               <span className="icon is-small">
                 <i className="fas fa-lock" />

@@ -39,6 +39,10 @@ const UserSchema = new mongoose.Schema({
     default: 0,
     required: true
   },
+  referralCode: {
+    type: String,
+    required: true
+  },
   selectedTheme: {
     type: String
   },

@@ -16,6 +16,7 @@ import FormControl from "../form/FormControl";
 import SubmitButton from "../form/SubmitButton";
 import CustomField from "../form/CustomField";
 import ImgUploadControl from "../form/ImgUploadControl";
+import Modal from "../common/subcomponents/Modal";
 
 const EditGroup = ({
   match,
@@ -56,10 +57,10 @@ const EditGroup = ({
     if (group && errors.length === 0) {
       setFormData({
         ...formData,
-        description: group.description,
+        description: group.description ? group.description : description,
         place: group.place,
         accessLevel: group.accessLevel,
-        maxSize: group.maxSize
+        maxSize: group.maxSize ? group.maxSize : maxSize
       });
     }
     return () => {
@@ -97,6 +98,16 @@ const EditGroup = ({
 
   const onSubmit = e => {
     e.preventDefault();
+
+    if (
+      group.accessLevel === "Public" &&
+      accessLevel !== "Public" &&
+      !window.confirm(
+        `Changing to a ${accessLevel.toLowerCase()} group will use 1 group lock. Are you sure would like to proceed?`
+      )
+    ) {
+      return;
+    }
 
     const groupFields = {
       description,
@@ -179,7 +190,38 @@ const EditGroup = ({
         />
 
         <CustomField
-          label="Access Level"
+          label={
+            <span>
+              Access Level&nbsp;
+              <Modal
+                trigger={
+                  <span className="icon info-icon">
+                    <i className="far fa-question-circle" />
+                  </span>
+                }
+              >
+                <div className="hs-box info-modal is-vcentered has-rounded-corners">
+                  <div className="icon is-large info-icon">
+                    <i className="far fa-3x fa-question-circle" />
+                  </div>
+                  <div className="content">
+                    <strong>Public</strong> groups show up on group type feeds.
+                    Users can join freely.
+                    <br />
+                    <br />
+                    <strong>Protected</strong> groups show up on group type
+                    feeds. Users can request to join and any of the group's
+                    admins can answer the request.
+                    <br />
+                    <br />
+                    <strong>Private</strong> groups do not show up in feeds and
+                    cannot be searched for. Users can request to join via group
+                    code and any of the group's admins can answer the request.
+                  </div>
+                </div>
+              </Modal>
+            </span>
+          }
           children={
             <div className="field is-grouped">
               <div className="control hs-radio-btn-control">

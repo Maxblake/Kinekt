@@ -9,6 +9,7 @@ import Spinner from "../common/Spinner";
 import PageTitle from "../layout/page/PageTitle";
 import Form from "../form/Form";
 import SubmitButton from "../form/SubmitButton";
+import FormControl from "../form/FormControl";
 import CustomField from "../form/CustomField";
 import RadioButton from "../form/RadioButton";
 import Modal from "../common/subcomponents/Modal";
@@ -44,7 +45,9 @@ const GroupLocks = ({ buyLocks, errors, auth: { user, loading } }) => {
   const onSubmit = e => {
     e.preventDefault();
 
-    buyLocks(groupLocks);
+    console.log(referralCode);
+
+    buyLocks(groupLocks, referralCode);
   };
 
   const onChange = e =>
@@ -90,10 +93,23 @@ const GroupLocks = ({ buyLocks, errors, auth: { user, loading } }) => {
     return <Spinner isMidpage />;
   }
 
-  /*             <option>3 group locks ($2.40 USD)</option>
-            <option>8 group locks ($5.76 USD) 10% off</option>
-            <option>21 group locks ($13.44 USD) 20% off</option>
-            <option>55 group locks ($30.80 USD) 30% off</option> */
+  const submitBtnTxt =
+    groupLocks > 0 ? (
+      <Fragment>
+        <span className="is-hidden-touch">{`Buy ${groupLocks} group locks for ${pricingDetails.discountedPriceUSD}`}</span>
+        <span className="is-hidden-desktop">
+          {`Buy ${groupLocks} `}
+          &nbsp;
+          <span className="icon is-small">
+            <i className="fas fa-sm fa-lock" />
+          </span>
+          &nbsp;
+          {` (${pricingDetails.discountedPriceUSD})`}
+        </span>
+      </Fragment>
+    ) : (
+      "No quantity selected"
+    );
 
   return (
     <section className="centered-form">
@@ -179,6 +195,27 @@ const GroupLocks = ({ buyLocks, errors, auth: { user, loading } }) => {
           }
         />
 
+        {pricingDetails.basePriceUSD && (
+          <div className="checkout-container">
+            <ul>
+              <li>
+                <span className="has-text-weight-bold">Base price: </span>
+                <span className="">{pricingDetails.basePriceUSD}</span>
+              </li>
+              <li>
+                <span className="has-text-weight-bold">Discount: </span>
+                <span className="">-{pricingDetails.discountUSD}</span>
+              </li>
+              <li>
+                <span className="has-text-weight-bold">Total price: </span>
+                <span className="has-text-weight-bold">
+                  {pricingDetails.discountedPriceUSD}
+                </span>
+              </li>
+            </ul>
+          </div>
+        )}
+
         <CustomField
           label={
             <span>
@@ -229,55 +266,23 @@ const GroupLocks = ({ buyLocks, errors, auth: { user, loading } }) => {
             </span>
           }
           children={
-            <div className="field is-grouped is-grouped-multiline">
+            <div className="field has-addons">
               <div className="control">
                 <input
                   className="input"
-                  type="text"
-                  placeholder="Enter referral code"
                   name="referralCode"
                   value={referralCode}
                   onChange={e => onChange(e)}
+                  placeholder="Enter referral code"
                 />
               </div>
-              <div className="control">
-                <button className="button is-dark">
-                  Log out &nbsp;
-                  <i className="fas fa-sign-out-alt" />
-                </button>
-              </div>
+              <SubmitButton
+                isAddon
+                isFullwidth={true}
+                isDisabled={groupLocks === 0}
+                text={submitBtnTxt}
+              />
             </div>
-          }
-        />
-
-        {pricingDetails.basePriceUSD && (
-          <div className="checkout-container">
-            <ul>
-              <li>
-                <span className="has-text-weight-bold">Base price: </span>
-                <span className="">{pricingDetails.basePriceUSD}</span>
-              </li>
-              <li>
-                <span className="has-text-weight-bold">Discount: </span>
-                <span className="">-{pricingDetails.discountUSD}</span>
-              </li>
-              <li>
-                <span className="has-text-weight-bold">Total price: </span>
-                <span className="has-text-weight-bold">
-                  {pricingDetails.discountedPriceUSD}
-                </span>
-              </li>
-            </ul>
-          </div>
-        )}
-
-        <SubmitButton
-          isFullwidth={true}
-          isDisabled={groupLocks === 0}
-          text={
-            groupLocks > 0
-              ? `Buy ${groupLocks} group locks for ${pricingDetails.discountedPriceUSD}`
-              : "No quantity selected"
           }
         />
       </Form>

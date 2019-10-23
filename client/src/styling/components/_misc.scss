@@ -93,6 +93,10 @@
 
 .submit-control {
   padding-top: 1.25rem;
+
+  .has-addons & {
+    padding-top: 0;
+  }
 }
 
 @media (max-width: $tablet - 1) {
@@ -235,6 +239,10 @@
   .modal {
     white-space: normal;
   }
+
+  & li + li::before {
+    color: inherit;
+  }
 }
 
 // Radio button
@@ -354,7 +362,7 @@
 
 // Checkout
 .checkout-container {
-  margin: 1.25rem 5rem 0.75rem;
+  margin: 1.5rem 3.5rem;
   border: 2px solid var(--primary);
   border-radius: 4px;
 
@@ -374,6 +382,12 @@
         border-top: 1px solid #404040;
       }
     }
+  }
+}
+
+@media (max-width: $tablet - 1) {
+  .checkout-container {
+    margin: 1.5rem 0;
   }
 }
 

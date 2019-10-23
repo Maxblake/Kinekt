@@ -126,6 +126,15 @@ const NewGroup = ({
   const onSubmit = e => {
     e.preventDefault();
 
+    if (
+      accessLevel !== "Public" &&
+      !window.confirm(
+        `Creating a ${accessLevel.toLowerCase()} group will use 1 group lock. Are you sure would like to proceed?`
+      )
+    ) {
+      return;
+    }
+
     const groupFields = {
       name,
       description,

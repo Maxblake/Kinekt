@@ -345,6 +345,18 @@ const updateGroup = async (req, groupFields, errors) => {
     return;
   }
 
+  const updatingUser = await User.findById(req.user.id);
+  if (updatingUser.groupLocks < 1) {
+    errors.addError(
+      `You need at least 1 group lock in order to create a ${groupFields.accessLevel.toLowerCase()} group`,
+      "alert"
+    );
+    return;
+  } else {
+    updatingUser.groupLocks = updatingUser.groupLocks - 1;
+    await updatingUser.save();
+  }
+
   for (const key of Object.keys(groupFields)) {
     group[key] = groupFields[key];
   }
@@ -360,6 +372,15 @@ const createGroup = async (req, groupFields, errors) => {
   if (!!(await Group.findOne({ creator: req.user.id }))) {
     errors.addError(
       "Unable to create group: User already has an active group",
+      "alert"
+    );
+    return;
+  }
+
+  const creator = await User.findById(req.user.id);
+  if (creator.groupLocks < 1) {
+    errors.addError(
+      `You need at least 1 group lock in order to create a ${groupFields.accessLevel.toLowerCase()} group`,
       "alert"
     );
     return;
@@ -423,6 +444,7 @@ const handleGroupCreationSideEffects = async (
     return;
   }
   creator.currentGroup = { HRID: group.HRID, name: group.name };
+  creator.groupLocks = creator.groupLocks - 1;
   await creator.save();
 };
 

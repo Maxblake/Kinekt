@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require("../../middleware/auth");
 const bcrypt = require("bcryptjs");
 const multer = require("multer");
+const shortid = require("shortid");
 const upload = multer({ storage: multer.memoryStorage() });
 const { updateImage, uploadImage, deleteImage } = require("./external/imgur");
 const {
@@ -43,6 +44,7 @@ router.post(
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(req.body.password, salt);
 
+      await assignUniqueRefCode(user, errors);
       await handleImageUpload(user, req, errors, false);
 
       if (errors.isNotEmpty()) {
@@ -55,6 +57,27 @@ router.post(
     });
   }
 );
+
+const assignUniqueRefCode = async (user, errors) => {
+  let i = 0;
+  let uniqueRefCodeFound = false;
+  let referralCode = "";
+
+  while (i < 50 && !uniqueRefCodeFound) {
+    referralCode = shortid.generate();
+    if (await User.findOne({ referralCode })) {
+      i += 1;
+      continue;
+    }
+    uniqueRefCodeFound = true;
+  }
+
+  if (!uniqueRefCodeFound) {
+    errors.addError("Unable to generate unique referral code");
+  }
+
+  user.referralCode = referralCode;
+};
 
 // @route   PUT api/user
 // @desc    Update a user
@@ -109,6 +132,7 @@ const buildUserFields = (req, updating = false) => {
   } = req.body;
   let userFields = {};
 
+  if (!updating) userFields.groupLocks = 3;
   if (!updating && email) userFields.email = email;
   if (name) userFields.name = name;
   if (about) userFields.about = about;
@@ -182,5 +206,31 @@ const handleUserDeletionSideEffects = async (user, errors) => {
     }
   }
 };
+
+// @route   PUT api/user/is-rc-valid
+// @desc    Check if a referral code is valid
+// @access  Private
+router.put("/is-rc-valid", auth, async (req, res) => {
+  const errors = new APIerrors();
+
+  runAPISafely(async () => {
+    const { referralCode } = req.body;
+    const user = await User.findOne({ referralCode });
+
+    if (!user) {
+      errors.addError("Invalid referral code", "referralCode");
+    }
+
+    if (user && user._id.equals(req.user.id)) {
+      errors.addError("Referring yourself won't work", "referralCode");
+    }
+
+    if (errors.isNotEmpty()) {
+      return errors.sendErrorResponse(res);
+    }
+
+    res.status(200).json({ msg: "Referral code is valid" });
+  });
+});
 
 module.exports = router;

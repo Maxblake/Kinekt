@@ -97,4 +97,28 @@ export const deleteUser = () => async dispatch => {
   }
 };
 
-export const buyLocks = () => async dispatch => {};
+export const buyLocks = (groupLocks, referralCode) => async dispatch => {
+  if (await dispatch(isReferralCodeValid(referralCode))) {
+    console.log("buying!");
+  }
+};
+
+const isReferralCodeValid = referralCode => async dispatch => {
+  if (referralCode === "") return true;
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  const body = JSON.stringify({ referralCode });
+
+  try {
+    await axios.put("/api/user/is-rc-valid", body, config);
+    return true;
+  } catch (err) {
+    dispatch(handleResponseErrors(err));
+    return false;
+  }
+};

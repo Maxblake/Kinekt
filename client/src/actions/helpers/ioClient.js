@@ -11,8 +11,12 @@ import {
 } from "../types";
 
 export const openSocket = () => dispatch => {
-  const socket = socketIOClient("http://localhost:5000/", {
-    /* const socket = socketIOClient("https://guarded-oasis-93378.herokuapp.com/", { */
+  const url =
+    process.env.NODE_ENV === "production"
+      ? "https://guarded-oasis-93378.herokuapp.com/"
+      : "http://localhost:5000/";
+
+  const socket = socketIOClient(url, {
     transports: ["websocket"]
   });
   dispatch(addSocketActions(socket));

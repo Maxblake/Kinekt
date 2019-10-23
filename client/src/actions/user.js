@@ -104,7 +104,10 @@ export const buyLocks = (groupLocks, referralCode) => async dispatch => {
 };
 
 const isReferralCodeValid = referralCode => async dispatch => {
-  if (referralCode === "") return true;
+  if (referralCode === "") {
+    dispatch(clearErrorsAndAlerts());
+    return true;
+  }
 
   const config = {
     headers: {
@@ -116,6 +119,7 @@ const isReferralCodeValid = referralCode => async dispatch => {
 
   try {
     await axios.put("/api/user/is-rc-valid", body, config);
+    dispatch(clearErrorsAndAlerts());
     return true;
   } catch (err) {
     dispatch(handleResponseErrors(err));

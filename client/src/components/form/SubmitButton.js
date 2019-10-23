@@ -7,25 +7,29 @@ const SubmitButton = ({
   isDisabled,
   buttonClasses
 }) => {
-  const btnControl = (
-    <div
-      className={`control submit-control ${isFullwidth ? "is-expanded" : ""}`}
+  const submitButton = (
+    <button
+      disabled={isDisabled}
+      className={`button is-primary ${isFullwidth ? "is-fullwidth" : ""} ${
+        buttonClasses !== undefined ? buttonClasses.join(" ") : ""
+      }`}
+      type="submit"
     >
-      <button
-        disabled={isDisabled}
-        className={`button is-primary ${isFullwidth ? "is-fullwidth" : ""} ${
-          buttonClasses !== undefined ? buttonClasses.join(" ") : ""
-        }`}
-        type="submit"
-      >
-        {isAddon ? text : <Fragment>&nbsp;&nbsp;{text}&nbsp;&nbsp;</Fragment>}
-      </button>
-    </div>
+      {isAddon ? text : <Fragment>&nbsp;&nbsp;{text}&nbsp;&nbsp;</Fragment>}
+    </button>
   );
 
-  if (isAddon) return btnControl;
+  if (isAddon) return submitButton;
 
-  return <div className="field is-grouped is-grouped-right">{btnControl}</div>;
+  return (
+    <div className="field is-grouped is-grouped-right">
+      <div
+        className={`control submit-control ${isFullwidth ? "is-expanded" : ""}`}
+      >
+        {submitButton}
+      </div>
+    </div>
+  );
 };
 
 export default SubmitButton;

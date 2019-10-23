@@ -32,6 +32,7 @@
     "request": "^2.88.0",
     "shortid": "^2.2.15",
     "socket.io": "^2.2.0",
+    "stripe": "^7.10.0",
     "validator": "^10.11.0"
   },
   "devDependencies": {

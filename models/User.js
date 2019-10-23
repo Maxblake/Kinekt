@@ -40,8 +40,7 @@ const UserSchema = new mongoose.Schema({
     required: true
   },
   referralCode: {
-    type: String,
-    required: true
+    type: String
   },
   selectedTheme: {
     type: String

@@ -14,6 +14,9 @@ import CustomField from "../form/CustomField";
 import RadioButton from "../form/RadioButton";
 import Modal from "../common/subcomponents/Modal";
 import Tooltip from "../common/Tooltip";
+import StripeCheckout from "react-stripe-checkout";
+
+import logo from "../../resources/logo_icon_black.png";
 
 const GroupLocks = ({ buyLocks, errors, auth: { user, loading } }) => {
   const [formData, setFormData] = useState({
@@ -30,7 +33,7 @@ const GroupLocks = ({ buyLocks, errors, auth: { user, loading } }) => {
     showCopyRefTooltip
   } = formData;
 
-  //const errName = errors.find(error => error.param === "name");
+  const errRefCode = errors.find(error => error.param === "referralCode");
 
   useEffect(() => {}, []);
 
@@ -89,6 +92,10 @@ const GroupLocks = ({ buyLocks, errors, auth: { user, loading } }) => {
     setFormData({ ...formData, showCopyRefTooltip: true });
   };
 
+  const onToken = token => {
+    console.log(token);
+  };
+
   if (loading) {
     return <Spinner isMidpage />;
   }
@@ -112,7 +119,7 @@ const GroupLocks = ({ buyLocks, errors, auth: { user, loading } }) => {
     );
 
   return (
-    <section className="centered-form">
+    <section className="centered-form grouplocks-section">
       <nav className="level" id="page-nav">
         <PageTitle title="Manage Group Locks" />
       </nav>
@@ -266,23 +273,42 @@ const GroupLocks = ({ buyLocks, errors, auth: { user, loading } }) => {
             </span>
           }
           children={
-            <div className="field has-addons">
-              <div className="control">
-                <input
-                  className="input"
-                  name="referralCode"
-                  value={referralCode}
-                  onChange={e => onChange(e)}
-                  placeholder="Enter referral code"
-                />
+            <Fragment>
+              <div className="field has-addons">
+                <div className="control is-expanded">
+                  <input
+                    className="input is-fullwidth"
+                    name="referralCode"
+                    value={referralCode}
+                    onChange={e => onChange(e)}
+                    placeholder="Enter referral code"
+                  />
+                </div>
+
+                <StripeCheckout
+                  stripeKey="pk_test_GigRsjhZ4K4ocwecpPvMDQ5Y000ozEPzR3"
+                  token={onToken}
+                  name="HappenStack" // the pop-in header title
+                  description="Groups on the fly" // the pop-in header subtitle
+                  image={logo}
+                  ComponentClass={({ children, ...props }) => (
+                    <div className="control" {...props}>
+                      {children}
+                    </div>
+                  )}
+                  amount={pricingDetails.discountedPrice * 100} // cents
+                  currency="USD"
+                  locale="auto"
+                >
+                  <SubmitButton
+                    isAddon
+                    isDisabled={groupLocks === 0}
+                    text={submitBtnTxt}
+                  />
+                </StripeCheckout>
               </div>
-              <SubmitButton
-                isAddon
-                isFullwidth={true}
-                isDisabled={groupLocks === 0}
-                text={submitBtnTxt}
-              />
-            </div>
+              {errRefCode && <p className="help is-danger">{errRefCode.msg}</p>}
+            </Fragment>
           }
         />
       </Form>

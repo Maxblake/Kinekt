@@ -97,13 +97,24 @@ export const deleteUser = () => async dispatch => {
   }
 };
 
-export const buyLocks = (groupLocks, referralCode) => async dispatch => {
-  if (await dispatch(isReferralCodeValid(referralCode))) {
-    console.log("buying!");
+export const buyLocks = token => async dispatch => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  const body = JSON.stringify({ token });
+
+  try {
+    const res = await axios.post("/api/auth/post-stripe-payment", body, config);
+    console.log(res.data);
+  } catch (err) {
+    console.error(err);
   }
 };
 
-const isReferralCodeValid = referralCode => async dispatch => {
+export const isReferralCodeValid = referralCode => async dispatch => {
   if (referralCode === "") {
     dispatch(clearErrorsAndAlerts());
     return true;

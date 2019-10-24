@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/auth");
-const { check } = require("express-validator");
 const config = require("config");
+const stripe = require("stripe")(config.get("stripeSecret"));
 const bcrypt = require("bcryptjs");
 const {
   runAPISafely,
@@ -15,7 +15,7 @@ const User = require("../../models/User");
 
 // @route   GET api/auth/:checkIfAdmin
 // @desc    Given JSON Web Token, return user object
-// @access  Public
+// @access  Private
 router.get("/:checkIfAdmin", auth, (req, res) => {
   const errors = new APIerrors();
 
@@ -75,6 +75,25 @@ router.post("/enterBeta", (req, res) => {
     }
 
     return res.status(400);
+  });
+});
+
+const postStripeCharge = res => (stripeErr, stripeRes) => {
+  if (stripeErr) {
+    res.status(500).send({ error: stripeErr });
+  } else {
+    res.json({ success: stripeRes });
+  }
+};
+
+// @route   POST api/auth/post-stripe-payment
+// @desc    Post a payment to stripe
+// @access  Private
+router.post("/post-stripe-payment", auth, (req, res) => {
+  runAPISafely(async () => {
+    const { token } = req.body;
+    //stripe.charges.create(token, postStripeCharge(res));
+    res.status(200);
   });
 });
 

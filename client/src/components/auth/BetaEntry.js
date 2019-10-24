@@ -17,12 +17,12 @@ const BetaEntry = ({ enterBeta }) => {
 
   const onSubmit = e => {
     e.preventDefault();
-    //enterBeta(entryToken);
+    enterBeta(entryToken);
 
     setFormData({ entryToken: "" });
   };
 
-  if (true) {
+  /*   if (true) {
     return (
       <div className="beta-entry-container has-text-centered">
         <div className="hs-box">
@@ -35,7 +35,7 @@ const BetaEntry = ({ enterBeta }) => {
         </div>
       </div>
     );
-  }
+  } */
 
   return (
     <div className="beta-entry-container has-text-centered">

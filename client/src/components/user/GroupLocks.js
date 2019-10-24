@@ -1,8 +1,8 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useState, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import { buyLocks } from "../../actions/user";
+import { isReferralCodeValid, buyLocks } from "../../actions/user";
 import { copyToClipboard } from "../../utils/utils";
 
 import Spinner from "../common/Spinner";
@@ -18,24 +18,29 @@ import StripeCheckout from "react-stripe-checkout";
 
 import logo from "../../resources/logo_icon_black.png";
 
-const GroupLocks = ({ buyLocks, errors, auth: { user, loading } }) => {
+const GroupLocks = ({
+  isReferralCodeValid,
+  buyLocks,
+  errors,
+  auth: { user, loading }
+}) => {
   const [formData, setFormData] = useState({
     groupLocks: 0,
     pricingDetails: {},
     referralCode: "",
-    showCopyRefTooltip: false
+    showCopyRefTooltip: false,
+    checkRefCodeTimeout: null
   });
 
   const {
     groupLocks,
     pricingDetails,
     referralCode,
-    showCopyRefTooltip
+    showCopyRefTooltip,
+    checkRefCodeTimeout
   } = formData;
 
   const errRefCode = errors.find(error => error.param === "referralCode");
-
-  useEffect(() => {}, []);
 
   const handleGroupLocksChange = groupLocks => {
     setFormData({
@@ -47,14 +52,15 @@ const GroupLocks = ({ buyLocks, errors, auth: { user, loading } }) => {
 
   const onSubmit = e => {
     e.preventDefault();
-
-    console.log(referralCode);
-
-    buyLocks(groupLocks, referralCode);
+    //TODO probably get rid of this
   };
 
-  const onChange = e =>
+  const onChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (e.target.name === "referralCode") {
+      isReferralCodeValid(e.target.value);
+    }
+  };
 
   const getPricingDetails = groupLocks => {
     const rateMap = {
@@ -94,6 +100,7 @@ const GroupLocks = ({ buyLocks, errors, auth: { user, loading } }) => {
 
   const onToken = token => {
     console.log(token);
+    buyLocks(token);
   };
 
   if (loading) {
@@ -302,7 +309,7 @@ const GroupLocks = ({ buyLocks, errors, auth: { user, loading } }) => {
                 >
                   <SubmitButton
                     isAddon
-                    isDisabled={groupLocks === 0}
+                    isDisabled={!!errRefCode || groupLocks === 0}
                     text={submitBtnTxt}
                   />
                 </StripeCheckout>
@@ -317,6 +324,7 @@ const GroupLocks = ({ buyLocks, errors, auth: { user, loading } }) => {
 };
 
 GroupLocks.propTypes = {
+  isReferralCodeValid: PropTypes.func.isRequired,
   buyLocks: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.array.isRequired
@@ -329,5 +337,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { buyLocks }
+  { isReferralCodeValid, buyLocks }
 )(GroupLocks);

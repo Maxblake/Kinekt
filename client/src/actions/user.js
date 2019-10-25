@@ -10,7 +10,8 @@ import {
   AUTH_LOADED,
   UPDATE_USER,
   AUTH_SUCCESS,
-  AUTH_ERROR
+  AUTH_ERROR,
+  SET_USER
 } from "./types";
 
 // Register User
@@ -97,18 +98,21 @@ export const deleteUser = () => async dispatch => {
   }
 };
 
-export const buyLocks = token => async dispatch => {
+export const buyLocks = (charge, opts) => async dispatch => {
   const config = {
     headers: {
       "Content-Type": "application/json"
     }
   };
 
-  const body = JSON.stringify({ token });
+  const body = JSON.stringify({ charge, opts });
 
   try {
     const res = await axios.post("/api/auth/post-stripe-payment", body, config);
-    console.log(res.data);
+    dispatch({
+      type: SET_USER,
+      payload: res.data.user
+    });
   } catch (err) {
     console.error(err);
   }

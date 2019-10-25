@@ -9,7 +9,6 @@ import Spinner from "../common/Spinner";
 import PageTitle from "../layout/page/PageTitle";
 import Form from "../form/Form";
 import SubmitButton from "../form/SubmitButton";
-import FormControl from "../form/FormControl";
 import CustomField from "../form/CustomField";
 import RadioButton from "../form/RadioButton";
 import Modal from "../common/subcomponents/Modal";
@@ -28,19 +27,18 @@ const GroupLocks = ({
     groupLocks: 0,
     pricingDetails: {},
     referralCode: "",
-    showCopyRefTooltip: false,
-    checkRefCodeTimeout: null
+    showCopyRefTooltip: false
   });
 
   const {
     groupLocks,
     pricingDetails,
     referralCode,
-    showCopyRefTooltip,
-    checkRefCodeTimeout
+    showCopyRefTooltip
   } = formData;
 
   const errRefCode = errors.find(error => error.param === "referralCode");
+  const checkRefCodeTimeout = React.useRef(null);
 
   const handleGroupLocksChange = groupLocks => {
     setFormData({
@@ -56,9 +54,15 @@ const GroupLocks = ({
   };
 
   const onChange = e => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const newVal = e.target.value;
+
+    setFormData({ ...formData, [e.target.name]: newVal });
     if (e.target.name === "referralCode") {
-      isReferralCodeValid(e.target.value);
+      clearTimeout(checkRefCodeTimeout.current);
+      checkRefCodeTimeout.current = setTimeout(
+        () => isReferralCodeValid(newVal),
+        200
+      );
     }
   };
 
@@ -99,8 +103,19 @@ const GroupLocks = ({
   };
 
   const onToken = token => {
-    console.log(token);
-    buyLocks(token);
+    const charge = {
+      amount: pricingDetails.discountedPrice * 100,
+      currency: "usd",
+      description: `${groupLocks} group locks - HappenStack`,
+      source: token.id
+    };
+
+    const opts = {
+      groupLocks,
+      referralCode
+    };
+
+    buyLocks(charge, opts);
   };
 
   if (loading) {

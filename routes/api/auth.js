@@ -78,23 +78,62 @@ router.post("/enterBeta", (req, res) => {
   });
 });
 
-const postStripeCharge = res => (stripeErr, stripeRes) => {
-  if (stripeErr) {
-    res.status(500).send({ error: stripeErr });
-  } else {
-    res.json({ success: stripeRes });
-  }
-};
-
 // @route   POST api/auth/post-stripe-payment
 // @desc    Post a payment to stripe
 // @access  Private
 router.post("/post-stripe-payment", auth, (req, res) => {
   runAPISafely(async () => {
-    const { token } = req.body;
-    //stripe.charges.create(token, postStripeCharge(res));
-    res.status(200);
+    const { charge, opts } = req.body;
+
+    stripe.charges
+      .create(charge)
+      .then(async charge => {
+        onChargeSuccess({ ...opts, userId: req.user.id }, res);
+      })
+      .catch(err => console.log(err));
   });
 });
+
+const onChargeSuccess = async (opts, res) => {
+  const { referralCode, userId } = opts;
+  const groupLocks = Number(opts.groupLocks);
+
+  const getNumExtraLocksWithReferral = groupLocks => {
+    switch (groupLocks) {
+      case 3: {
+        return 1;
+      }
+      case 8: {
+        return 2;
+      }
+      case 21: {
+        return 3;
+      }
+      case 55: {
+        return 5;
+      }
+      default: {
+        return groupLocks;
+      }
+    }
+  };
+
+  const user = await User.findById(userId).select("-password");
+
+  const referredUser = await User.findOne({ referralCode });
+
+  if (!!referredUser) {
+    user.groupLocks =
+      user.groupLocks + groupLocks + getNumExtraLocksWithReferral(groupLocks);
+    referredUser.groupLocks =
+      referredUser.groupLocks + getNumExtraLocksWithReferral(groupLocks);
+    referredUser.save();
+  } else {
+    user.groupLocks = user.groupLocks + groupLocks;
+  }
+
+  await user.save();
+  res.status(200).json({ user });
+};
 
 module.exports = router;

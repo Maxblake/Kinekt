@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import debounce from "lodash.debounce";
 
 import moment from "moment";
 
@@ -10,18 +11,27 @@ const Chat = ({ auth: { user, socket }, setNewNotice }) => {
   const [messageData, setMessageData] = useState({
     messageField: "",
     messages: [],
-    showChat: false
+    showChat: false,
+    showNewMsgTab: false
   });
 
-  const { messageField, messages, showChat } = messageData;
+  const { messageField, messages, showChat, showNewMsgTab } = messageData;
+  let messagesDiv = React.useRef(null);
 
   useEffect(() => {
     socket.on("receiveMessage", receiveMessage);
+    checkShouldShowNewMsgTab(true);
+
+    if (isScrollMostlyAtBottom()) {
+      if (messagesDiv.current) {
+        messagesDiv.current.scrollTop = messagesDiv.current.scrollHeight;
+      }
+    }
 
     return () => {
       socket.off("receiveMessage");
     };
-  }, [messageData]);
+  }, [messages]);
 
   const receiveMessage = message => {
     setMessageData({
@@ -57,6 +67,24 @@ const Chat = ({ auth: { user, socket }, setNewNotice }) => {
     });
   };
 
+  const isScrollMostlyAtBottom = () => {
+    if (messagesDiv.current) {
+      return (
+        messagesDiv.current.offsetHeight + messagesDiv.current.scrollTop + 41 >=
+        messagesDiv.current.scrollHeight
+      );
+    }
+    return false;
+  };
+
+  const checkShouldShowNewMsgTab = newMsgReceived => {
+    if (!isScrollMostlyAtBottom()) {
+      setMessageData({ ...messageData, showNewMsgTab: newMsgReceived });
+    } else {
+      setMessageData({ ...messageData, showNewMsgTab: false });
+    }
+  };
+
   return (
     <Fragment>
       <div className="chat">
@@ -64,7 +92,9 @@ const Chat = ({ auth: { user, socket }, setNewNotice }) => {
           Chat
         </div>
         <div
+          ref={messagesDiv}
           className={`messages kScroll ${showChat ? "" : "is-hidden-touch"}`}
+          onScroll={debounce(() => checkShouldShowNewMsgTab(showNewMsgTab), 50)}
         >
           {messages.map((message, index) => {
             return (
@@ -84,15 +114,6 @@ const Chat = ({ auth: { user, socket }, setNewNotice }) => {
               />
             );
           })}
-          <div className="footer-tab clickable-text">
-            <span>{`3 new messages`}</span>
-            <span className="icon is-small">
-              <i
-                className="fas fa-sm fa-long-arrow-alt-down"
-                aria-hidden="true"
-              />
-            </span>
-          </div>
         </div>
 
         <div
@@ -100,6 +121,17 @@ const Chat = ({ auth: { user, socket }, setNewNotice }) => {
             showChat ? "" : "is-hidden-touch"
           }`}
         >
+          {showNewMsgTab && (
+            <div className="footer-tab clickable-text">
+              <span>new messages</span>
+              <span className="icon is-small">
+                <i
+                  className="fas fa-sm fa-long-arrow-alt-down"
+                  aria-hidden="true"
+                />
+              </span>
+            </div>
+          )}
           <textarea
             className="textarea has-fixed-size"
             placeholder="Enter a message"

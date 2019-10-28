@@ -175,7 +175,7 @@
 .footer-tab {
   z-index: 1;
   position: absolute;
-  bottom: 0;
+  top: -1.5rem;
   left: 50%;
   transform: translateX(-50%);
 
@@ -315,7 +315,6 @@
   }
 
   .messages {
-    position: relative;
     background-color: $off-black;
     border: 2px solid var(--primary);
     overflow-y: auto;
@@ -382,6 +381,7 @@
     }
   }
   .message-input-container {
+    position: relative;
     padding: 10px 5px;
     background: var(--primary);
   }

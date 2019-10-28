@@ -52,57 +52,62 @@ const Alert = ({ alerts, errors, removeAlert }) => {
   };
 
   if (alertsAndErrors.length > 0) {
-    return alertsAndErrors.map(alert => {
-      let alertBody = null;
+    return (
+      <div className="notification-container">
+        {alertsAndErrors.map(alert => {
+          let alertBody = null;
 
-      switch (alert.alertType) {
-        case "entryRequestReceived": {
-          alertBody = (
-            <EntryRequestReceivedAlert
-              {...alert.props}
-              closeAlert={() => closeAlertAndClearSettings(alert.id)}
-              showCloseButton={() => showCloseButton(alert.id)}
-            />
+          switch (alert.alertType) {
+            case "entryRequestReceived": {
+              alertBody = (
+                <EntryRequestReceivedAlert
+                  {...alert.props}
+                  closeAlert={() => closeAlertAndClearSettings(alert.id)}
+                  showCloseButton={() => showCloseButton(alert.id)}
+                />
+              );
+              break;
+            }
+            case "requestEntry": {
+              alertBody = (
+                <RequestEntryAlert
+                  {...alert.props}
+                  closeAlert={() => closeAlertAndClearSettings(alert.id)}
+                  showCloseButton={() => showCloseButton(alert.id)}
+                />
+              );
+              break;
+            }
+            case "text":
+            default: {
+              alertBody = alert.msg;
+            }
+          }
+
+          const currentAlertSettings =
+            alertState.find(alertSettings => alertSettings.id === alert.id) ||
+            {};
+
+          return (
+            <div
+              key={alert.id}
+              className={`notification has-text-centered ${
+                alert.alertStatus ? alert.alertStatus : ""
+              }`}
+            >
+              {(alert.alertType === "text" ||
+                currentAlertSettings.showCloseButton) && (
+                <button
+                  className="delete"
+                  onClick={() => closeAlertAndClearSettings(alert.id)}
+                />
+              )}
+              {alertBody}
+            </div>
           );
-          break;
-        }
-        case "requestEntry": {
-          alertBody = (
-            <RequestEntryAlert
-              {...alert.props}
-              closeAlert={() => closeAlertAndClearSettings(alert.id)}
-              showCloseButton={() => showCloseButton(alert.id)}
-            />
-          );
-          break;
-        }
-        case "text":
-        default: {
-          alertBody = alert.msg;
-        }
-      }
-
-      const currentAlertSettings =
-        alertState.find(alertSettings => alertSettings.id === alert.id) || {};
-
-      return (
-        <div
-          key={alert.id}
-          className={`notification has-text-centered ${
-            alert.alertStatus ? alert.alertStatus : ""
-          }`}
-        >
-          {(alert.alertType === "text" ||
-            currentAlertSettings.showCloseButton) && (
-            <button
-              className="delete"
-              onClick={() => closeAlertAndClearSettings(alert.id)}
-            />
-          )}
-          {alertBody}
-        </div>
-      );
-    });
+        })}
+      </div>
+    );
   }
   return null;
 };

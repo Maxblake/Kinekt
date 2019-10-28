@@ -173,7 +173,7 @@ const Discover = ({
   return (
     <section className="discover">
       <nav className="level is-mobile" id="page-nav">
-        <PageTitle title="Explore" hasPageOptions />
+        <PageTitle title="Explore Group Types" hasPageOptions />
         <PageOptions options={options} />
       </nav>
       {groupTypeCards}

@@ -61,15 +61,28 @@
 }
 
 // Notifications / Alerts
-.notification {
-  padding: 1rem 2.25rem 1rem 1.25rem;
-  z-index: 3;
-  &:first-child {
-    margin-top: 1.5rem;
-  }
+.notification-container {
+  position: fixed;
+  width: 80%;
+  left: 10%;
+  top: 3.5rem;
+  z-index: 30;
 
-  &:not(:last-child) {
-    margin-bottom: 0.5rem;
+  .notification {
+    @extend %has-shadow;
+    padding: 1rem 2.25rem 1rem 1.25rem;
+
+    &:not(:last-child) {
+      margin-bottom: 0.25rem;
+    }
+  }
+}
+
+@media (max-width: $tablet - 1) {
+  .notification-container {
+    width: calc(100% - 0.5rem);
+    top: 0.25rem;
+    left: 0.25rem;
   }
 }
 

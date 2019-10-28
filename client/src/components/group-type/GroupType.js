@@ -30,7 +30,7 @@ const GroupType = ({
   match
 }) => {
   const [groupData, setGroupData] = useState({
-    sortBy: "New",
+    sortBy: "Sort by",
     searchTerms: "",
     readyToLoadNewGroups: true,
     sortDir: "Ascending"
@@ -58,7 +58,7 @@ const GroupType = ({
         groups === null)
     ) {
       let queryParams = {
-        sortBy,
+        sortBy: sortBy === "Sort by" ? "New" : sortBy,
         sortDir,
         searchTerms
       };
@@ -130,7 +130,7 @@ const GroupType = ({
     if (isFetching && !loadingGroups) {
       //TODO refactor this
       let queryParams = {
-        sortBy,
+        sortBy: sortBy === "Sort by" ? "New" : sortBy,
         sortDir,
         searchTerms
       };
@@ -189,7 +189,10 @@ const GroupType = ({
       <div className="control is-expanded">
         <div className="select is-fullwidth">
           <select name="sortBy" value={sortBy} onChange={e => onChange(e)}>
-            <option>New</option>
+            <option disabled selected hidden>
+              Sort by
+            </option>
+            <option>Newest</option>
             <option>Start Time</option>
             <option>Spots left</option>
             <option>Nearby</option>

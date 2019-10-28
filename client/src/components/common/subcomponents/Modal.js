@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 
 const Modal = ({
   children,
@@ -9,7 +9,25 @@ const Modal = ({
 }) => {
   const [isModalActive, setIsModalActive] = useState(false);
 
-  const toggleModal = e => {
+  useEffect(() => {
+    document.addEventListener("keydown", toggleOnEscape, false);
+    return () => {
+      document.removeEventListener("keydown", toggleOnEscape, false);
+    };
+  }, [isModalActive, isModalActiveOverride]);
+
+  const toggleOnEscape = e => {
+    if (e.keyCode === 27) {
+      if (
+        isModalActiveOverride ||
+        (isModalActiveOverride === undefined && isModalActive)
+      ) {
+        toggleModal();
+      }
+    }
+  };
+
+  const toggleModal = () => {
     if (isModalActiveOverride !== undefined) {
       modalToggleOverride();
     } else {
@@ -38,6 +56,11 @@ const Modal = ({
         >
           {children}
         </div>
+        <div
+          class="modal-close is-large"
+          aria-label="close"
+          onClick={() => toggleModal()}
+        ></div>
       </div>
     </Fragment>
   );

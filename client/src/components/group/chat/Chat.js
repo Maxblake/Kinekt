@@ -84,6 +84,15 @@ const Chat = ({ auth: { user, socket }, setNewNotice }) => {
               />
             );
           })}
+          <div className="footer-tab clickable-text">
+            <span>{`3 new messages`}</span>
+            <span className="icon is-small">
+              <i
+                className="fas fa-sm fa-long-arrow-alt-down"
+                aria-hidden="true"
+              />
+            </span>
+          </div>
         </div>
 
         <div

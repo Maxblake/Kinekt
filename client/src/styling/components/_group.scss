@@ -172,6 +172,22 @@
   }
 }
 
+.footer-tab {
+  z-index: 1;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+
+  background-color: var(--primary);
+  color: ghostwhite;
+  padding: 4px 16px;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
+
+  white-space: nowrap;
+}
+
 #group-console {
   align-items: stretch;
   margin-bottom: 1.25rem;
@@ -299,6 +315,7 @@
   }
 
   .messages {
+    position: relative;
     background-color: $off-black;
     border: 2px solid var(--primary);
     overflow-y: auto;
@@ -367,6 +384,10 @@
   .message-input-container {
     padding: 10px 5px;
     background: var(--primary);
+  }
+
+  .footer-tab .icon {
+    justify-content: flex-end;
   }
 }
 

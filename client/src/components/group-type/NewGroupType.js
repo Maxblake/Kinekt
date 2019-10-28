@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { withRouter, Prompt } from "react-router-dom";
 
 import { requestGroupType } from "../../actions/groupType";
 import { clearErrors } from "../../actions/auth";
@@ -40,6 +40,28 @@ const NewGroupType = ({
     };
   }, []);
 
+  const hasUnsavedChanges = () => {
+    if (!loading) {
+      const initialState = {
+        name: "",
+        description: "",
+        category: "",
+        image: undefined
+      };
+
+      if (
+        name !== initialState.name ||
+        description !== initialState.description ||
+        category !== initialState.category ||
+        image !== initialState.image
+      ) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -69,6 +91,15 @@ const NewGroupType = ({
 
   return (
     <section className="centered-form">
+      <Prompt
+        when={true}
+        message={
+          hasUnsavedChanges()
+            ? "You have unsaved changes. Are you sure you would like to leave this page?"
+            : null
+        }
+      />
+
       <nav className="level" id="page-nav">
         <PageTitle title="Request a New Group Type" />
       </nav>

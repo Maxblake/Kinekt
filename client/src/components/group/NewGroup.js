@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter, Link, Prompt } from "react-router-dom";
 import moment from "moment";
 import Geosuggest from "react-geosuggest";
 
@@ -71,6 +71,36 @@ const NewGroup = ({
       clearErrors();
     };
   }, []);
+
+  const hasUnsavedChanges = () => {
+    if (!loading) {
+      const initialState = {
+        name: "",
+        description: "",
+        place: { address: "" },
+        timeContext: "Now",
+        accessLevel: "Public",
+        time: { formatted: moment().format("h:mm A") },
+        displayTimepicker: false,
+        maxSize: "",
+        image: undefined
+      };
+
+      if (
+        name !== initialState.name ||
+        description !== initialState.description ||
+        place.address !== initialState.place.address ||
+        timeContext !== initialState.timeContext ||
+        accessLevel !== initialState.accessLevel ||
+        maxSize !== initialState.maxSize ||
+        image !== initialState.image
+      ) {
+        return true;
+      }
+    }
+
+    return false;
+  };
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -174,6 +204,15 @@ const NewGroup = ({
 
   return (
     <section className="centered-form">
+      <Prompt
+        when={true}
+        message={
+          hasUnsavedChanges()
+            ? "You have unsaved changes. Are you sure you would like to leave this page?"
+            : null
+        }
+      />
+
       <nav className="level" id="page-nav">
         <PageTitle
           title="Create a group"

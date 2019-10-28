@@ -137,12 +137,11 @@ const buildUserFields = (req, updating = false) => {
   if (name) userFields.name = name;
   if (about) userFields.about = about;
   if (selectedTheme) userFields.selectedTheme = selectedTheme;
-  if (currentLocationAddress || currentLocationLat)
-    userFields.currentLocation = {
-      address: currentLocationAddress,
-      lat: currentLocationLat,
-      lng: currentLocationLng
-    };
+  userFields.currentLocation = {
+    address: currentLocationAddress,
+    lat: currentLocationLat,
+    lng: currentLocationLng
+  };
 
   return userFields;
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Link, withRouter } from "react-router-dom";
+import { Link, withRouter, Prompt } from "react-router-dom";
 
 import { editGroupType } from "../../actions/groupType";
 import { getGroups } from "../../actions/group";
@@ -43,7 +43,7 @@ const EditGroupType = ({
 
     if (!groupType || groupTypeParamChanged) {
       getGroups(groupTypeParamSpaced);
-    } else if (groupType && errors.length === 0) {
+    } else if (!!groupType && errors.length === 0) {
       setFormData({
         ...formData,
         description: groupType.description,
@@ -54,6 +54,26 @@ const EditGroupType = ({
       clearErrors();
     };
   }, [groupType]);
+
+  const hasUnsavedChanges = () => {
+    if (!!groupType) {
+      const initialState = {
+        description: groupType.description ? groupType.description : "",
+        category: groupType.category,
+        image: undefined
+      };
+
+      if (
+        description !== initialState.description ||
+        category !== initialState.category ||
+        image !== initialState.image
+      ) {
+        return true;
+      }
+    }
+
+    return false;
+  };
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -87,6 +107,15 @@ const EditGroupType = ({
 
   return (
     <section className="centered-form">
+      <Prompt
+        when={true}
+        message={
+          hasUnsavedChanges()
+            ? "You have unsaved changes. Are you sure you would like to leave this page?"
+            : null
+        }
+      />
+
       <nav className="level" id="page-nav">
         <PageTitle
           title="Edit Group Type"

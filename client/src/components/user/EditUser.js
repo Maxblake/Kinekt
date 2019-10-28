@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { Prompt } from "react-router-dom";
 import Geosuggest from "react-geosuggest";
 
 import { editUser, deleteUser } from "../../actions/user";
@@ -47,7 +48,7 @@ const EditUser = ({
   );
 
   useEffect(() => {
-    if (user) {
+    if (!!user) {
       updateTheme(user.selectedTheme);
       setFormData({
         ...formData,
@@ -59,7 +60,7 @@ const EditUser = ({
           : currentLocation,
         useUsersLocation:
           user.currentLocation &&
-          user.currentLocation.lat !== undefined &&
+          !!user.currentLocation.lat &&
           user.currentLocation.address === ""
             ? true
             : false
@@ -70,6 +71,39 @@ const EditUser = ({
       updateTheme(user.selectedTheme);
     };
   }, [user]);
+
+  const hasUnsavedChanges = () => {
+    if (!!user) {
+      const initialState = {
+        name: user.name,
+        about: user.about ? user.about : "",
+        selectedTheme: user.selectedTheme ? user.selectedTheme : "",
+        currentLocation: user.currentLocation
+          ? user.currentLocation
+          : { address: "" },
+        useUsersLocation:
+          user.currentLocation &&
+          !!user.currentLocation.lat &&
+          user.currentLocation.address === ""
+            ? true
+            : false,
+        image: undefined
+      };
+
+      if (
+        name !== initialState.name ||
+        about !== initialState.about ||
+        currentLocation.address !== initialState.currentLocation.address ||
+        useUsersLocation !== initialState.useUsersLocation ||
+        selectedTheme !== initialState.selectedTheme ||
+        image !== initialState.image
+      ) {
+        return true;
+      }
+    }
+
+    return false;
+  };
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -154,6 +188,13 @@ const EditUser = ({
       currentLocationLng: currentLocation.lng ? currentLocation.lng : ""
     };
 
+    if (currentLocation.address === "" && !useUsersLocation) {
+      userFields.currentLocationLat = "";
+      userFields.currentLocationLng = "";
+    }
+
+    console.log(userFields);
+
     editUser(userFields);
   };
 
@@ -167,6 +208,15 @@ const EditUser = ({
 
   return (
     <section className="centered-form">
+      <Prompt
+        when={true}
+        message={
+          hasUnsavedChanges()
+            ? "You have unsaved changes. Are you sure you would like to leave this page?"
+            : null
+        }
+      />
+
       <nav className="level" id="page-nav">
         <PageTitle title="Account Settings" />
       </nav>

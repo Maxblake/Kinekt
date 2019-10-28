@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter, Link, Prompt } from "react-router-dom";
 import Geosuggest from "react-geosuggest";
 
 import { editGroup, getGroup } from "../../actions/group";
@@ -54,7 +54,7 @@ const EditGroup = ({
       });
     }
 
-    if (group && errors.length === 0) {
+    if (!!group && errors.length === 0) {
       setFormData({
         ...formData,
         description: group.description ? group.description : description,
@@ -67,6 +67,30 @@ const EditGroup = ({
       clearErrors();
     };
   }, [isAuthenticated, group, match.params.groupCode]);
+
+  const hasUnsavedChanges = () => {
+    if (!!group) {
+      const initialState = {
+        description: group.description ? group.description : "",
+        place: group.place,
+        accessLevel: group.accessLevel,
+        maxSize: group.maxSize ? group.maxSize : "",
+        image: undefined
+      };
+
+      if (
+        description !== initialState.description ||
+        place.address !== initialState.place.address ||
+        accessLevel !== initialState.accessLevel ||
+        maxSize !== initialState.maxSize ||
+        image !== initialState.image
+      ) {
+        return true;
+      }
+    }
+
+    return false;
+  };
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -115,6 +139,7 @@ const EditGroup = ({
       placeLat: place.lat ? place.lat : "",
       placeLng: place.lng ? place.lng : "",
       accessLevel,
+      maxSize,
       image
     };
 
@@ -137,6 +162,15 @@ const EditGroup = ({
 
   return (
     <section className="centered-form">
+      <Prompt
+        when={true}
+        message={
+          hasUnsavedChanges()
+            ? "You have unsaved changes. Are you sure you would like to leave this page?"
+            : null
+        }
+      />
+
       <nav className="level" id="page-nav">
         <PageTitle
           title="Edit Group"

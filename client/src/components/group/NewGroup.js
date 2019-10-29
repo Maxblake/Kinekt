@@ -64,15 +64,18 @@ const NewGroup = ({
     const groupTypeParamChanged =
       groupType && groupType.name !== groupTypeParamSpaced;
 
+    console.log({ loading });
+
     if (!groupType || groupTypeParamChanged) {
       getGroups(match.params.groupType.split("_").join(" "));
     }
     return () => {
       clearErrors();
     };
-  }, []);
+  }, [loading]);
 
   const hasUnsavedChanges = () => {
+    console.log("checking for changes");
     if (!loading) {
       const initialState = {
         name: "",
@@ -205,12 +208,10 @@ const NewGroup = ({
   return (
     <section className="centered-form">
       <Prompt
-        when={true}
-        message={
-          hasUnsavedChanges()
-            ? "You have unsaved changes. Are you sure you would like to leave this page?"
-            : null
-        }
+        message={(location, action) => {
+          if (hasUnsavedChanges())
+            return "You have unsaved changes. Are you sure you would like to leave this page?";
+        }}
       />
 
       <nav className="level" id="page-nav">

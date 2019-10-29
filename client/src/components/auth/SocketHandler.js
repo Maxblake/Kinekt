@@ -40,7 +40,10 @@ const SocketHandler = ({
       }
     }
 
-    if ((groups && groups.length > 0) || groupType || groupTypes.length > 0) {
+    if (
+      !interval &&
+      ((groups && groups.length > 0) || groupType || groupTypes.length > 0)
+    ) {
       onActive();
     }
 

@@ -57,7 +57,7 @@ const Modal = ({
           {children}
         </div>
         <div
-          class="modal-close is-large"
+          className="modal-close is-large"
           aria-label="close"
           onClick={() => toggleModal()}
         ></div>

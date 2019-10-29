@@ -156,6 +156,12 @@ export const createGroup = (groupFields, history) => async dispatch => {
 
     const res = await axios.post("/api/group", formData);
 
+    history.push(
+      `/k/${res.data.groupType.name.split(" ").join("_")}/group/${
+        res.data.group.HRID
+      }`
+    );
+
     dispatch(clearErrorsAndAlerts());
     dispatch(
       setTextAlert(
@@ -174,12 +180,6 @@ export const createGroup = (groupFields, history) => async dispatch => {
         HRID: res.data.group.HRID
       }
     });
-
-    history.push(
-      `/k/${res.data.groupType.name.split(" ").join("_")}/group/${
-        res.data.group.HRID
-      }`
-    );
   } catch (err) {
     dispatch(handleResponseErrors(err));
     dispatch({

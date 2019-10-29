@@ -254,7 +254,7 @@
         display: block;
       }
 
-      .messages {
+      .messages-scroll-container {
         height: 380px;
       }
     }
@@ -314,13 +314,18 @@
     font-weight: bold;
   }
 
-  .messages {
+  .messages-scroll-container {
     background-color: $off-black;
     border: 2px solid var(--primary);
     overflow-y: auto;
-    padding: 5px 12px;
     height: 280px;
     flex: 1 0 1;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .messages {
+    padding: 5px 12px;
     display: flex;
     flex-direction: column;
 

@@ -189,7 +189,7 @@ const GroupType = ({
       <div className="control is-expanded">
         <div className="select is-fullwidth">
           <select name="sortBy" value={sortBy} onChange={e => onChange(e)}>
-            <option disabled selected hidden>
+            <option disabled defaultValue hidden>
               Sort by
             </option>
             <option>Newest</option>

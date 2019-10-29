@@ -485,7 +485,7 @@ class socketHandler {
 
   async setUserStatus(userStatus) {
     const group = await Group.findById(this.groupId);
-    if (!group) return;
+    if (!this.user || !group) return;
 
     if (userStatus === "active") {
       clearTimeout(this.userStatusTimeout);

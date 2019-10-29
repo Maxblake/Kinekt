@@ -11,29 +11,24 @@ const Chat = ({ auth: { user, socket }, setNewNotice }) => {
   const [messageData, setMessageData] = useState({
     messageField: "",
     messages: [],
-    showChat: false,
-    showNewMsgTab: false
+    showChat: false
   });
 
-  const { messageField, messages, showChat, showNewMsgTab } = messageData;
+  const { messageField, messages, showChat } = messageData;
   let messagesDiv = React.useRef(null);
+  let showNewMsgTab = React.useRef(false);
 
   useEffect(() => {
     socket.on("receiveMessage", receiveMessage);
-    checkShouldShowNewMsgTab(true);
-
-    if (isScrollMostlyAtBottom()) {
-      if (messagesDiv.current) {
-        messagesDiv.current.scrollTop = messagesDiv.current.scrollHeight;
-      }
-    }
 
     return () => {
       socket.off("receiveMessage");
     };
-  }, [messages]);
+  }, [messageData]);
 
   const receiveMessage = message => {
+    checkShouldShowNewMsgTab(true);
+
     setMessageData({
       ...messageData,
       messages: messages.concat({ ...message, time: moment().format("h:mm A") })
@@ -67,11 +62,17 @@ const Chat = ({ auth: { user, socket }, setNewNotice }) => {
     });
   };
 
+  const scrollToBottom = () => {
+    messagesDiv.current.scrollTop =
+      messagesDiv.current.scrollHeight - messagesDiv.current.offsetHeight + 4;
+  };
+
   const isScrollMostlyAtBottom = () => {
     if (messagesDiv.current) {
       return (
-        messagesDiv.current.offsetHeight + messagesDiv.current.scrollTop + 41 >=
-        messagesDiv.current.scrollHeight
+        messagesDiv.current.scrollHeight -
+          (messagesDiv.current.offsetHeight + messagesDiv.current.scrollTop) <
+        5
       );
     }
     return false;
@@ -79,10 +80,14 @@ const Chat = ({ auth: { user, socket }, setNewNotice }) => {
 
   const checkShouldShowNewMsgTab = newMsgReceived => {
     if (!isScrollMostlyAtBottom()) {
-      setMessageData({ ...messageData, showNewMsgTab: newMsgReceived });
+      showNewMsgTab.current = newMsgReceived
+        ? newMsgReceived
+        : showNewMsgTab.current;
     } else {
-      setMessageData({ ...messageData, showNewMsgTab: false });
+      showNewMsgTab.current = false;
     }
+
+    setMessageData({ ...messageData });
   };
 
   return (
@@ -92,28 +97,32 @@ const Chat = ({ auth: { user, socket }, setNewNotice }) => {
           Chat
         </div>
         <div
+          className={`messages-scroll-container kScroll ${
+            showChat ? "" : "is-hidden-touch"
+          }`}
           ref={messagesDiv}
-          className={`messages kScroll ${showChat ? "" : "is-hidden-touch"}`}
-          onScroll={debounce(() => checkShouldShowNewMsgTab(showNewMsgTab), 50)}
+          onScroll={debounce(() => checkShouldShowNewMsgTab(), 50)}
         >
-          {messages.map((message, index) => {
-            return (
-              <Message
-                key={index}
-                isSelf={message.user.id === user._id}
-                isServer={message.user.id === 0}
-                headerHidden={
-                  index > 0 && messages[index - 1].user.id === message.user.id
-                    ? true
-                    : false
-                }
-                user={message.user}
-                body={message.body}
-                time={message.time}
-                setNewNotice={setNewNotice}
-              />
-            );
-          })}
+          <div className="messages">
+            {messages.map((message, index) => {
+              return (
+                <Message
+                  key={index}
+                  isSelf={message.user.id === user._id}
+                  isServer={message.user.id === 0}
+                  headerHidden={
+                    index > 0 && messages[index - 1].user.id === message.user.id
+                      ? true
+                      : false
+                  }
+                  user={message.user}
+                  body={message.body}
+                  time={message.time}
+                  setNewNotice={setNewNotice}
+                />
+              );
+            })}
+          </div>
         </div>
 
         <div
@@ -121,8 +130,11 @@ const Chat = ({ auth: { user, socket }, setNewNotice }) => {
             showChat ? "" : "is-hidden-touch"
           }`}
         >
-          {showNewMsgTab && (
-            <div className="footer-tab clickable-text">
+          {showNewMsgTab.current && (
+            <div
+              className="footer-tab clickable-text"
+              onClick={() => scrollToBottom()}
+            >
               <span>new messages</span>
               <span className="icon is-small">
                 <i

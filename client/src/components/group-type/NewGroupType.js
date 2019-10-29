@@ -92,12 +92,10 @@ const NewGroupType = ({
   return (
     <section className="centered-form">
       <Prompt
-        when={true}
-        message={
-          hasUnsavedChanges()
-            ? "You have unsaved changes. Are you sure you would like to leave this page?"
-            : null
-        }
+        message={(location, action) => {
+          if (hasUnsavedChanges())
+            return "You have unsaved changes. Are you sure you would like to leave this page?";
+        }}
       />
 
       <nav className="level" id="page-nav">

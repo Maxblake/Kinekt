@@ -257,6 +257,12 @@ strong {
   overflow: hidden;
   max-width: 12rem;
 }
+.max-text-length-4 {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 15rem;
+}
 
 .tab-right {
   position: fixed;

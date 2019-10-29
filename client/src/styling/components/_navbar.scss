@@ -53,7 +53,7 @@
 
 @media (max-width: $desktop - 1) {
   .button.is-primary.is-outlined.outlined-nav-button {
-    background-color: var(--primary);
+    //: var(--primary);
   }
 
   .navbar.is-fixed-top {
@@ -66,24 +66,42 @@
     background-color: $off-black;
   }
   .navbar-menu {
+    -webkit-box-shadow: 0px 7px 20px -7px rgba(20, 20, 20, 0.3);
+    box-shadow: 0px 7px 20px -7px rgba(20, 20, 20, 0.3);
     margin-left: auto;
     padding: 0;
-    background-color: #fafafa; // rgba(0, 0, 0, 0.6);
-    border-bottom-left-radius: 6px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-bottom-left-radius: 4px;
 
     .navbar-end {
-      padding: 0 1.25rem;
+      padding: 0 0.75rem;
+      width: 15rem;
     }
 
     .navbar-item {
       padding: 0.75rem 0;
       &:not(:last-child) {
-        border-bottom: 2px solid #dbdbdb;
+        //border-bottom: 2px solid var(--primary);
+        padding-bottom: 0;
       }
     }
 
     .buttons .button {
       flex-grow: 1;
+      margin-bottom: 0.5rem;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+      background-color: transparent;
+      border: none;
+      border-left: 4px solid var(--primary);
+
+      &:not(:last-child):not(.is-fullwidth) {
+        margin-right: 0;
+      }
+
+      .icon {
+        margin-right: 0.25rem;
+      }
     }
   }
 }

@@ -91,14 +91,14 @@ const Navbar = ({
   };
 
   const authLinks = (
-    <Fragment>
-      {user && (
-        <div className="navbar-item">
-          <div className="buttons">
+    <div className="navbar-item">
+      <div className="buttons">
+        {user && (
+          <Fragment>
             {user.currentGroup && (
               <button
                 onClick={e => redirectToGroup(e, user.currentGroup.HRID)}
-                className="button outlined-nav-button is-primary is-outlined is-small"
+                className="button is-fullwidth-touch outlined-nav-button is-primary is-outlined is-small"
               >
                 <span className="max-text-length-3">
                   {user.currentGroup.name}
@@ -110,9 +110,9 @@ const Navbar = ({
             )}
             <Link
               to="/grouplocks"
-              className="button outlined-nav-button is-primary is-outlined is-small"
+              className="button is-fullwidth-touch outlined-nav-button is-primary is-outlined is-small"
             >
-              <span className="max-text-length-3">
+              <span className="max-text-length-2">
                 {user && typeof user.groupLocks !== "number"
                   ? "~"
                   : user.groupLocks}
@@ -121,34 +121,45 @@ const Navbar = ({
                 <i className="fas fa-lock" />
               </span>
             </Link>
-          </div>
-        </div>
-      )}
-      <div className="navbar-item">
-        <div className="buttons">
-          <Link to="/account" className="button is-primary is-small">
-            <span className="max-text-length-1">
-              {user ? user.name : "My Account"}
-            </span>{" "}
-            &nbsp;
+          </Fragment>
+        )}
+        <Link
+          to="/account"
+          className="button is-fullwidth-touch is-primary is-small"
+        >
+          <span className="max-text-length-2">
+            {user ? user.name : "My Account"}
+          </span>{" "}
+          <span className="icon is-small">
             <i className="fas fa-user-circle" />
-          </Link>
-          <button onClick={() => logout()} className="button is-dark is-small">
-            Log out &nbsp;
+          </span>
+        </Link>
+        <button
+          onClick={() => logout()}
+          className="button is-fullwidth-touch is-dark is-small"
+        >
+          <span className="max-text-length-2">Log out</span>
+          <span className="icon is-small">
             <i className="fas fa-sign-out-alt" />
-          </button>
-        </div>
+          </span>
+        </button>
       </div>
-    </Fragment>
+    </div>
   );
 
   const guestLinks = (
     <div className="navbar-item">
       <div className="buttons">
-        <Link to="/login" className="button is-dark is-small">
+        <Link
+          to="/login"
+          className="button is-fullwidth-touch is-dark is-small"
+        >
           Log in
         </Link>
-        <Link to="/register" className="button is-primary is-small">
+        <Link
+          to="/register"
+          className="button is-fullwidth-touch is-primary is-small"
+        >
           Sign up
         </Link>
       </div>

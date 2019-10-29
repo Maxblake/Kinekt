@@ -56,7 +56,7 @@ const RequestEntryAlert = ({
           <i className="fas fa-2x fa-check-circle"></i>
         </span>
       ) : (
-        <Countdown totalTime={60 * 5} onTimeout={() => onTimeout()} />
+        <Countdown totalTime={60 * 15} onTimeout={() => onTimeout()} />
       )}
       <div className="alert-items">
         <h3>
@@ -76,7 +76,7 @@ const RequestEntryAlert = ({
                 className="button is-light is-outlined"
                 to={`/k/k/group/${HRID}`}
               >
-                <span>{groupName}</span>
+                <span className="max-text-length-3">{groupName}</span>
                 <span className="icon is-small">
                   <i className="fas fa-chalkboard-teacher" />
                 </span>

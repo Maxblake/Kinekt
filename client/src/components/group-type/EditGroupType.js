@@ -53,7 +53,7 @@ const EditGroupType = ({
     return () => {
       clearErrors();
     };
-  }, [groupType]);
+  }, [groupType, match.params.groupType, errors, formData]);
 
   const hasUnsavedChanges = () => {
     if (!!groupType) {

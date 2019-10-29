@@ -62,7 +62,7 @@ const Navbar = ({
         userCurrentGroupHRID: user.currentGroup.HRID
       });
     }
-  }, [user]);
+  }, [user, group]);
 
   const onChange = e =>
     setNavData({ ...navData, [e.target.name]: e.target.value });

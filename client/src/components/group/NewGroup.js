@@ -72,7 +72,7 @@ const NewGroup = ({
     return () => {
       clearErrors();
     };
-  }, [loading]);
+  }, [loading, match.params.groupType, groupType]);
 
   const hasUnsavedChanges = () => {
     console.log("checking for changes");

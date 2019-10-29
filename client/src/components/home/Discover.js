@@ -48,7 +48,7 @@ const Discover = ({
     if (!loading && isFetching) {
       setIsFetching(false);
     }
-  }, [readyToLoadNewTypes, loading]);
+  }, [readyToLoadNewTypes, loading, groupTypeData, isFetching]);
 
   const onChange = e => {
     setgroupTypeData({

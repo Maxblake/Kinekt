@@ -87,7 +87,8 @@ const GroupType = ({
     readyToLoadNewGroups,
     loading,
     group.loading,
-    error
+    error,
+    groupData
   ]);
 
   const onChange = e => {

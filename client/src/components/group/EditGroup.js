@@ -66,7 +66,7 @@ const EditGroup = ({
     return () => {
       clearErrors();
     };
-  }, [isAuthenticated, group, match.params.groupCode]);
+  }, [isAuthenticated, group, match.params.groupCode, user, errors]);
 
   const hasUnsavedChanges = () => {
     if (!!group) {

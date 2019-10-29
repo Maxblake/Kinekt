@@ -29,7 +29,7 @@ const EntryRequestReceivedAlert = ({
 
   return (
     <div className="custom-action-alert">
-      <Countdown totalTime={60 * 5} onTimeout={() => onTimeout()} />
+      <Countdown totalTime={60 * 15} onTimeout={() => onTimeout()} />
       <div className="alert-items">
         <h3>
           <Modal

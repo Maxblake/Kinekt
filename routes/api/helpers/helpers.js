@@ -12,6 +12,7 @@ const runAPISafely = coreFunction => {
     const errors = new APIerrors();
 
     if (err.kind == "ObjectId") {
+      //TODO why not pass res here?
       return errors.addErrAndSendResponse(res, "Invalid Object ID");
     }
 

@@ -109,6 +109,7 @@ export const buyLocks = (charge, opts) => async dispatch => {
 
   try {
     const res = await axios.post("/api/auth/post-stripe-payment", body, config);
+    console.log(res.data.payment);
     dispatch({
       type: SET_USER,
       payload: res.data.user

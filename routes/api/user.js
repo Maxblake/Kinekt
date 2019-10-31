@@ -101,7 +101,7 @@ router.put(
         req.user.id,
         { $set: userFields },
         { new: true }
-      ).select("-password");
+      ).select("-password -email -creationTimestamp");
 
       if (!user) {
         return errors.addErrAndSendResponse(res, "Unable to find user");

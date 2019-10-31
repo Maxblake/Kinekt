@@ -12,6 +12,7 @@ const {
 } = require("./helpers/helpers");
 
 const User = require("../../models/User");
+const Payment = require("../../models/Payment");
 
 // @route   GET api/auth/:checkIfAdmin
 // @desc    Given JSON Web Token, return user object
@@ -21,7 +22,7 @@ router.get("/:checkIfAdmin", auth, (req, res) => {
 
   runAPISafely(async () => {
     const user = await User.findById(req.user.id)
-      .select("-password")
+      .select("-password -email -creationTimestamp")
       .lean();
 
     if (!user) {
@@ -88,37 +89,39 @@ router.post("/post-stripe-payment", auth, (req, res) => {
     stripe.charges
       .create(charge)
       .then(async charge => {
-        onChargeSuccess({ ...opts, userId: req.user.id }, res);
+        onChargeSuccess({ ...opts, userId: req.user.id, charge }, res);
       })
       .catch(err => console.log(err));
   });
 });
 
+const getNumExtraLocksWithReferral = groupLocks => {
+  switch (groupLocks) {
+    case 3: {
+      return 1;
+    }
+    case 8: {
+      return 2;
+    }
+    case 21: {
+      return 3;
+    }
+    case 55: {
+      return 5;
+    }
+    default: {
+      return groupLocks;
+    }
+  }
+};
+
 const onChargeSuccess = async (opts, res) => {
-  const { referralCode, userId } = opts;
+  const { referralCode, userId, charge } = opts;
   const groupLocks = Number(opts.groupLocks);
 
-  const getNumExtraLocksWithReferral = groupLocks => {
-    switch (groupLocks) {
-      case 3: {
-        return 1;
-      }
-      case 8: {
-        return 2;
-      }
-      case 21: {
-        return 3;
-      }
-      case 55: {
-        return 5;
-      }
-      default: {
-        return groupLocks;
-      }
-    }
-  };
-
-  const user = await User.findById(userId).select("-password");
+  const user = await User.findById(userId).select(
+    "-password -email -creationTimestamp"
+  );
 
   const referredUser = await User.findOne({ referralCode });
 
@@ -132,8 +135,29 @@ const onChargeSuccess = async (opts, res) => {
     user.groupLocks = user.groupLocks + groupLocks;
   }
 
+  const payment = await logPayment(user, groupLocks, referredUser, charge);
   await user.save();
-  res.status(200).json({ user });
+  res.status(200).json({ user, payment });
+};
+
+const logPayment = async (user, groupLocks, referredUser, charge) => {
+  const paymentfields = {
+    payingUser: user._id,
+    amountPaid: charge.amount,
+    currencyUsed: charge.currency,
+    groupLocksPurchased: groupLocks,
+    groupLocksReceived: !!referredUser
+      ? groupLocks + getNumExtraLocksWithReferral(groupLocks)
+      : groupLocks,
+    userTotalGroupLocks: user.groupLocks,
+    stripeResponse: JSON.stringify(charge)
+  };
+  if (!!referredUser) paymentfields.referredUser = referredUser._id;
+
+  const payment = new Payment(paymentfields);
+  await payment.save();
+  //TODO email user a receipt
+  return payment;
 };
 
 module.exports = router;

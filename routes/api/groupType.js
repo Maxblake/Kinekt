@@ -180,7 +180,7 @@ router.put(
         req.params.id,
         { $set: groupTypeFields },
         { new: true }
-      );
+      ).select("-groups");
 
       if (!groupType) {
         return errors.addErrAndSendResponse(res, "Unable to find group type");

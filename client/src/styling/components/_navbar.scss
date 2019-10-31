@@ -1,6 +1,14 @@
 // Navbar
 .navbar.is-fixed-top {
+  @extend %has-shadow;
+
   background: $off-black;
+
+  background-image: url("../resources/navbar_background.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-blend-mode: overlay;
 }
 
 .navbar-brand {
@@ -57,17 +65,31 @@
   }
 
   .navbar.is-fixed-top {
+    box-shadow: none;
     display: flex;
     flex-wrap: wrap;
     background-color: transparent;
+    background-image: none;
+    background-size: inherit;
   }
   .navbar-brand {
+    -webkit-box-shadow: 0px 5px 18px -1px rgba(20, 20, 20, 0.4);
+    -moz-box-shadow: 0px 5px 18px -1px rgba(20, 20, 20, 0.4);
+    box-shadow: 0px 5px 18px -1px rgba(20, 20, 20, 0.4);
+
     min-width: 100%;
     background-color: $off-black;
+
+    background-image: url("../resources/navbar_background.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-blend-mode: overlay;
   }
   .navbar-menu {
-    -webkit-box-shadow: 0px 7px 20px -7px rgba(20, 20, 20, 0.3);
-    box-shadow: 0px 7px 20px -7px rgba(20, 20, 20, 0.3);
+    -webkit-box-shadow: 0px 5px 18px -1px rgba(20, 20, 20, 0.4);
+    -moz-box-shadow: 0px 5px 18px -1px rgba(20, 20, 20, 0.4);
+    box-shadow: 0px 5px 18px -1px rgba(20, 20, 20, 0.4);
     margin-left: auto;
     padding: 0;
     background-color: rgba(0, 0, 0, 0.8);

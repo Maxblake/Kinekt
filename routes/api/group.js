@@ -68,6 +68,7 @@ const getGroups = async query => {
       score: { $meta: "textScore" }
     })
     .limit(8)
+    .select("-notices -creationTimestamp -users")
     .lean();
 
   if (!!query.$text) {
@@ -163,7 +164,9 @@ router.post("/HRID", auth, (req, res) => {
       return errors.sendErrorResponse(res);
     }
 
-    const groupType = await GroupType.findById(group.groupType);
+    const groupType = await GroupType.findById(group.groupType).select(
+      "-groups"
+    );
     if (!groupType) {
       return errors.addErrAndSendResponse(
         res,
@@ -270,9 +273,13 @@ const createOrUpdateGroup = async (req, res, updating) => {
 
     if (updating) {
       group = await updateGroup(req, groupFields, errors);
-      groupType = group ? await GroupType.findById(group.groupType) : null;
+      groupType = group
+        ? await GroupType.findById(group.groupType).select("-groups")
+        : null;
     } else {
-      groupType = await GroupType.findById(groupFields.groupType);
+      groupType = await GroupType.findById(groupFields.groupType).select(
+        "-groups"
+      );
       group = await createGroup(req, groupFields, errors);
     }
 

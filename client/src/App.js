@@ -50,6 +50,9 @@ const App = () => {
       {localStorage.getItem("entryToken") === "KJYA6yuNClsfFdAHTiHC" && (
         <Router>
           <div className="App">
+            <div className="background">
+              <div className="background-image"></div>
+            </div>
             <Navbar />
             <div className="container site-content">
               <Alert />

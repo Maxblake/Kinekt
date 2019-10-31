@@ -188,7 +188,7 @@ const Group = ({
   if (document.queryCommandSupported("copy")) {
     pageOptions.push(
       <button
-        className="button is-primary is-fullwidth-touch"
+        className="button is-dark is-fullwidth-touch"
         onClick={() => copyHRIDToClipboard()}
       >
         <Tooltip

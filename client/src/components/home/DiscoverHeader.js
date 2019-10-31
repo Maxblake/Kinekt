@@ -10,11 +10,11 @@ import imgStepThree from "../../resources/discover_step_three.jpg";
 // TODO use a level for this
 const DiscoverHeader = () => {
   return (
-    <div className="discover-header ">
-      <h2 className="header-welcome">
-        <span className="ws-nowrap">New around here?</span>{" "}
-        <span className="ws-nowrap">Getting started is</span>{" "}
-        <span className="ws-nowrap">pretty dang easy.</span>
+    <div className="discover-header kScroll">
+      <h2 className="header-welcome is-size-1">
+        <span className="ws-nowrap"><strong>New</strong> around here?</span><br/>{" "}
+        <span className="ws-nowrap is-size-3">Sweet, getting started</span>{" "}
+        <span className="ws-nowrap is-size-3">is pretty dang easy.</span>
       </h2>
       <div className="header-step">
         <div className="step-image">
@@ -24,8 +24,12 @@ const DiscoverHeader = () => {
             imageClass="is-rounded"
           />
         </div>
-        <Link to="/register" className="step-description has-text-centered">
-          1. Click here for a free account.
+        <Link to="/register" className="step-description">
+          <h2 className="is-size-3">Create a free account</h2>
+          <p>
+            Creating and joining public groups will always be free. HappenStack is
+            supported by those who create protected and private groups :)
+          </p>
         </Link>
       </div>
       <div className="header-step">
@@ -36,8 +40,13 @@ const DiscoverHeader = () => {
             imageClass="is-rounded"
           />
         </div>
-        <div className="step-description has-text-centered">
-          2. Find groups that interest you.
+        <div className="step-description">
+          <h2 className="is-size-3">Find groups that <span className="ws-nowrap">interest you</span></h2>
+          <p>
+            On HappenStack, groups 'live' inside of group types. If you can't
+            find a group type that suits your fancy, you can always request a
+            new one!
+          </p>
         </div>
       </div>
       <div className="header-step">
@@ -48,8 +57,11 @@ const DiscoverHeader = () => {
             imageClass="is-rounded"
           />
         </div>
-        <div className="step-description has-text-centered">
-          3. Join and participate on the fly!
+        <div className="step-description">
+          <h2 className="is-size-3">Join and participate <span className="ws-nowrap">on the fly</span></h2>
+          <p>
+          Our philosophy is <i>now.</i> Groups should be made for things happening either now or in the near future. Groups automatically expire after 24 hours.
+          </p>
         </div>
       </div>
     </div>

@@ -70,6 +70,11 @@ const Login = ({
           value={email}
           onChange={onChange}
           error={errEmail ? errEmail.msg : undefined}
+          iconLeft={
+            <span class="icon is-small is-left">
+              <i class="fas fa-envelope"></i>
+            </span>
+          }
         />
         <FormControl
           placeholder="Password"
@@ -78,6 +83,11 @@ const Login = ({
           type="password"
           onChange={onChange}
           error={errPassword ? errPassword.msg : undefined}
+          iconLeft={
+            <span class="icon is-small is-left">
+              <i class="fas fa-lock"></i>
+            </span>
+          }
         />
         <SubmitButton
           isFullwidth={true}

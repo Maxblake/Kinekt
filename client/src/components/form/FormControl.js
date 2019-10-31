@@ -11,7 +11,8 @@ const FormControl = ({
   placeholder,
   required,
   readonly,
-  isSmall
+  isSmall,
+  iconLeft
 }) => {
   return (
     <Fragment>
@@ -24,16 +25,23 @@ const FormControl = ({
         <label className="label form-label">{customLabel}</label>
       )}
       <div className="field">
-        <div className="control">
+        <div
+          className={`control ${
+            iconLeft !== undefined ? "has-icons-left" : ""
+          }`}
+        >
           <input
             className={`input ${isSmall ? "small-input" : ""}`}
             name={name}
             value={value}
             onChange={e => onChange(e)}
             type={type ? type : "text"}
-            placeholder={placeholder ? placeholder : ""}
+            placeholder={
+              placeholder ? `${placeholder} ${required ? "*" : ""}` : ""
+            }
             readOnly={readonly}
           />
+          {iconLeft !== undefined ? iconLeft : null}
         </div>
         {error && <p className="help is-danger">{error}</p>}
       </div>

@@ -4,11 +4,11 @@
 
   background: $off-black;
 
-  background-image: url("../resources/navbar_background.png");
+  /*   background-image: url("../resources/navbar_background.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: 50% 50%;
-  background-blend-mode: overlay;
+  background-blend-mode: overlay; */
 }
 
 .navbar-brand {
@@ -80,11 +80,11 @@
     min-width: 100%;
     background-color: $off-black;
 
-    background-image: url("../resources/navbar_background.png");
+    /*     background-image: url("../resources/navbar_background.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 50% 50%;
-    background-blend-mode: overlay;
+    background-blend-mode: overlay; */
   }
   .navbar-menu {
     -webkit-box-shadow: 0px 5px 18px -1px rgba(20, 20, 20, 0.4);

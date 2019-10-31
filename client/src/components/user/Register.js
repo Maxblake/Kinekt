@@ -151,31 +151,46 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
 
       <Form onSubmit={onSubmit}>
         <FormControl
-          label="Email"
+          placeholder="Email"
           name="email"
           value={email}
           onChange={onChange}
           error={errEmail ? errEmail.msg : undefined}
           required={true}
+          iconLeft={
+            <span class="icon is-small is-left">
+              <i class="fas fa-envelope"></i>
+            </span>
+          }
         />
 
         <FormControl
-          label="Password"
+          placeholder="Password"
           name="password"
           value={password}
           type="password"
           onChange={onChange}
           error={errPassword ? errPassword.msg : undefined}
           required={true}
+          iconLeft={
+            <span class="icon is-small is-left">
+              <i class="fas fa-lock"></i>
+            </span>
+          }
         />
 
         <FormControl
-          label="Display Name"
+          placeholder="Display Name"
           name="name"
           value={name}
           onChange={onChange}
           error={errName ? errName.msg : undefined}
           required={true}
+          iconLeft={
+            <span class="icon is-small is-left">
+              <i class="fas fa-user-circle"></i>
+            </span>
+          }
         />
 
         <CustomField

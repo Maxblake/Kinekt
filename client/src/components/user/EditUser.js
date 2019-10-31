@@ -221,12 +221,17 @@ const EditUser = ({
 
       <Form onSubmit={onSubmit}>
         <FormControl
-          label="Display Name"
+          placeholder="Display Name"
           name="name"
           value={name}
           onChange={onChange}
           error={errName ? errName.msg : undefined}
           required={true}
+          iconLeft={
+            <span class="icon is-small is-left">
+              <i class="fas fa-user-circle"></i>
+            </span>
+          }
         />
 
         <CustomField

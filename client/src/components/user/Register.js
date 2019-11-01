@@ -151,7 +151,7 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
 
       <Form onSubmit={onSubmit}>
         <FormControl
-          placeholder="Email"
+          label="Email"
           name="email"
           value={email}
           onChange={onChange}
@@ -165,7 +165,7 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
         />
 
         <FormControl
-          placeholder="Password"
+          label="Password"
           name="password"
           value={password}
           type="password"
@@ -180,7 +180,7 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
         />
 
         <FormControl
-          placeholder="Display Name"
+          label="Display Name"
           name="name"
           value={name}
           onChange={onChange}

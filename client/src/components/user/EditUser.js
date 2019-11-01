@@ -221,7 +221,7 @@ const EditUser = ({
 
       <Form onSubmit={onSubmit}>
         <FormControl
-          placeholder="Display Name"
+          label="Display Name"
           name="name"
           value={name}
           onChange={onChange}

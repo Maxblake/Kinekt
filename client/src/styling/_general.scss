@@ -82,6 +82,10 @@ strong {
 }
 
 @media (max-width: $desktop - 1) {
+  .is-size-4-touch {
+    font-size: 1.5rem !important;
+  }
+  
   .container {
     padding: 0 1em;
     margin: 0;
@@ -231,7 +235,7 @@ strong {
 .control {
   .icon.is-left {
     color: #404040;
-    opacity: 0.8;
+    opacity: 0.6;
   }
   .input {
     &::placeholder {

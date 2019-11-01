@@ -91,7 +91,6 @@ const Login = ({
         />
         <SubmitButton
           isFullwidth={true}
-          buttonClasses={["is-outlined"]}
           text="Let's go!"
         />
       </Form>

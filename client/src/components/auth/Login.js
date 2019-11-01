@@ -71,8 +71,8 @@ const Login = ({
           onChange={onChange}
           error={errEmail ? errEmail.msg : undefined}
           iconLeft={
-            <span class="icon is-small is-left">
-              <i class="fas fa-envelope"></i>
+            <span className="icon is-small is-left">
+              <i className="fas fa-envelope"></i>
             </span>
           }
         />
@@ -84,15 +84,12 @@ const Login = ({
           onChange={onChange}
           error={errPassword ? errPassword.msg : undefined}
           iconLeft={
-            <span class="icon is-small is-left">
-              <i class="fas fa-lock"></i>
+            <span className="icon is-small is-left">
+              <i className="fas fa-lock"></i>
             </span>
           }
         />
-        <SubmitButton
-          isFullwidth={true}
-          text="Let's go!"
-        />
+        <SubmitButton isFullwidth={true} text="Let's go!" />
       </Form>
       <div className="content has-text-centered">
         <p className="">

@@ -182,7 +182,7 @@ const EditGroupType = ({
           src={groupType.image ? groupType.image.link : ""}
         />
 
-        <SubmitButton text="Save Changes" />
+        <SubmitButton isFullwidth={true} text="Save Changes" />
       </Form>
     </section>
   );

@@ -85,7 +85,7 @@ strong {
   .is-size-4-touch {
     font-size: 1.5rem !important;
   }
-  
+
   .container {
     padding: 0 1em;
     margin: 0;
@@ -129,7 +129,7 @@ strong {
 }
 
 .centered-form {
-  max-width: 525px;
+  max-width: 500px;
   margin: auto;
 
   .hs-box {
@@ -245,9 +245,12 @@ strong {
   }
 }
 
-.label.form-label:not(:last-child) {
-  margin-bottom: 0;
-  padding: 0.25rem 0;
+.label {
+  font-weight: 500;
+  &.form-label:not(:last-child) {
+    margin-bottom: 0.05rem;
+    padding: 0.2rem 0;
+  }
 }
 
 .centered-logo {

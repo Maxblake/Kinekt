@@ -167,7 +167,7 @@ const NewGroupType = ({
           type="groupType"
         />
 
-        <SubmitButton text="Submit" />
+        <SubmitButton isFullwidth={true} text="Submit" />
       </Form>
     </section>
   );

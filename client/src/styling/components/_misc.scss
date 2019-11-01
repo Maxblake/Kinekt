@@ -5,7 +5,7 @@
   padding: 4rem 1.5rem;
   color: #555555;
 
-/*   background-image: url("../resources/footer_background.png");
+  /*   background-image: url("../resources/footer_background.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: 50% 50%;
@@ -223,7 +223,7 @@
 
       &:not(:last-child) {
         margin-bottom: 0.5rem;
-        border-bottom: 2px solid #dbdbdb;
+        border-bottom: 1px solid #dbdbdb;
       }
     }
 
@@ -329,7 +329,7 @@
   }
 
   .content {
-    border-top: 2px solid #dbdbdb;
+    border-top: 1px solid #dbdbdb;
     margin-top: 1.25rem;
     padding-top: 0.75rem;
     text-align: left;
@@ -355,6 +355,12 @@
     padding-bottom: 1.75rem;
     margin: auto;
   }
+}
+
+// Register
+.field.tos-field {
+  margin-bottom: -0.5rem;
+  padding-top: 0.5rem;
 }
 
 // Tooltip
@@ -440,6 +446,29 @@
 
     .field {
       margin-top: 0.5rem;
+    }
+  }
+}
+
+// FAQ
+.FAQ-container {
+  .FAQ-question {
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    border-top: 4px solid var(--primary);
+    margin-bottom: 0.5rem;
+    .FAQ-question-header {
+      display: flex;
+
+      h3 {
+        font-size: 1.2rem;
+        flex: 1;
+      }
+    }
+    p {
+      border-top: 1px solid #dbdbdb;
+      padding: 0.75rem 0 .5rem 0;
+      margin-top: .25rem;
     }
   }
 }

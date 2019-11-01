@@ -297,7 +297,7 @@ const EditGroup = ({
           src={group.image ? group.image.link : ""}
         />
 
-        <SubmitButton text="Save Changes" />
+        <SubmitButton isFullwidth={true} text="Save Changes" />
       </Form>
     </section>
   );

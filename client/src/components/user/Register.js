@@ -158,8 +158,8 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
           error={errEmail ? errEmail.msg : undefined}
           required={true}
           iconLeft={
-            <span class="icon is-small is-left">
-              <i class="fas fa-envelope"></i>
+            <span className="icon is-small is-left">
+              <i className="fas fa-envelope"></i>
             </span>
           }
         />
@@ -173,8 +173,8 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
           error={errPassword ? errPassword.msg : undefined}
           required={true}
           iconLeft={
-            <span class="icon is-small is-left">
-              <i class="fas fa-lock"></i>
+            <span className="icon is-small is-left">
+              <i className="fas fa-lock"></i>
             </span>
           }
         />
@@ -187,8 +187,8 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
           error={errName ? errName.msg : undefined}
           required={true}
           iconLeft={
-            <span class="icon is-small is-left">
-              <i class="fas fa-user-circle"></i>
+            <span className="icon is-small is-left">
+              <i className="fas fa-user-circle"></i>
             </span>
           }
         />
@@ -274,7 +274,7 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
 
         <CustomField
           children={
-            <div className="field">
+            <div className="field tos-field">
               <div className="control">
                 <label className="checkbox">
                   <input
@@ -341,7 +341,11 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
           }
         />
 
-        <SubmitButton isDisabled={isSubmitDisabled} text="Let me in!" />
+        <SubmitButton
+          isFullwidth={true}
+          isDisabled={isSubmitDisabled}
+          text="Let me in!"
+        />
       </Form>
     </section>
   );

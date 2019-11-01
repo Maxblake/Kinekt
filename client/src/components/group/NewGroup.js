@@ -405,7 +405,7 @@ const NewGroup = ({
           type="group"
         />
 
-        <SubmitButton text="Submit" />
+        <SubmitButton isFullwidth={true} text="Submit" />
       </Form>
     </section>
   );

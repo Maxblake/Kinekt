@@ -26,7 +26,7 @@ import NewGroup from "./components/group/NewGroup";
 import EditGroup from "./components/group/EditGroup";
 import Group from "./components/group/Group";
 import Admin from "./components/auth/Admin";
-import FAQ from "./components/static-pages/FAQ";
+import FAQ from "./components/static-pages/FAQ/FAQ";
 
 import BetaEntry from "./components/auth/BetaEntry";
 

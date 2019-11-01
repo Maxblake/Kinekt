@@ -228,8 +228,8 @@ const EditUser = ({
           error={errName ? errName.msg : undefined}
           required={true}
           iconLeft={
-            <span class="icon is-small is-left">
-              <i class="fas fa-user-circle"></i>
+            <span className="icon is-small is-left">
+              <i className="fas fa-user-circle"></i>
             </span>
           }
         />
@@ -343,7 +343,7 @@ const EditUser = ({
           src={user.image ? user.image.link : ""}
         />
 
-        <SubmitButton text="Save Changes" />
+        <SubmitButton isFullwidth={true} text="Save Changes" />
       </Form>
       <div className="content has-text-centered">
         <p className="">

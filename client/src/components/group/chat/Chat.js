@@ -7,10 +7,22 @@ import moment from "moment";
 
 import Message from "./Message";
 
-const Chat = ({ auth: { user, socket }, setNewNotice }) => {
+const Chat = ({
+  auth: { user, socket },
+  setNewNotice,
+  isCurrentUserAdmin,
+  chat
+}) => {
   const [messageData, setMessageData] = useState({
     messageField: "",
-    messages: [],
+    messages: chat
+      ? chat.map(message => ({
+          ...message,
+          time: moment(message.time)
+            .local()
+            .format("h:mm A")
+        }))
+      : [],
     showChat: false
   });
 
@@ -29,9 +41,16 @@ const Chat = ({ auth: { user, socket }, setNewNotice }) => {
   const receiveMessage = message => {
     checkShouldShowNewMsgTab(true);
 
+    console.log(message.time);
+
     setMessageData({
       ...messageData,
-      messages: messages.concat({ ...message, time: moment().format("h:mm A") })
+      messages: messages.concat({
+        ...message,
+        time: moment(message.time)
+          .local()
+          .format("h:mm A")
+      })
     });
   };
 
@@ -110,6 +129,7 @@ const Chat = ({ auth: { user, socket }, setNewNotice }) => {
                   key={index}
                   isSelf={message.user.id === user._id}
                   isServer={message.user.id === 0}
+                  isCurrentUserAdmin={isCurrentUserAdmin}
                   headerHidden={
                     index > 0 && messages[index - 1].user.id === message.user.id
                       ? true

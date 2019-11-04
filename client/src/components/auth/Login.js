@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Redirect, withRouter } from "react-router-dom";
 
-import { login } from "../../actions/auth";
+import { login, clearErrors } from "../../actions/auth";
 
 import PageTitle from "../layout/page/PageTitle";
 import Form from "../form/Form";
@@ -18,7 +18,8 @@ const Login = ({
   history,
   errors,
   auth: { isAuthenticated, loading, user },
-  login
+  login,
+  clearErrors
 }) => {
   const [formData, setFormData] = useState({
     email: "",
@@ -28,6 +29,12 @@ const Login = ({
   const { email, password } = formData;
   const errEmail = errors.find(error => error.param === "email");
   const errPassword = errors.find(error => error.param === "password");
+
+  useEffect(() => {
+    return () => {
+      clearErrors();
+    };
+  }, []);
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -120,5 +127,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { login }
+  { login, clearErrors }
 )(withRouter(Login));

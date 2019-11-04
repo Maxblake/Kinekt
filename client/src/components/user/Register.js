@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import Geosuggest from "react-geosuggest";
 
 import { register } from "../../actions/user";
+import { clearErrors } from "../../actions/auth";
 
 import Spinner from "../common/Spinner";
 import PageTitle from "../layout/page/PageTitle";
@@ -15,7 +16,7 @@ import CustomField from "../form/CustomField";
 import ImgUploadControl from "../form/ImgUploadControl";
 import Modal from "../common/subcomponents/Modal";
 
-const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
+const Register = ({ register, clearErrors, errors, auth: { isAuthenticated, loading } }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -45,6 +46,13 @@ const Register = ({ register, errors, auth: { isAuthenticated, loading } }) => {
   const errCurrentLocation = errors.find(
     error => error.param === "currentLocationAddress"
   );
+
+  useEffect(() => {
+    return () => {
+      clearErrors();
+    };
+  }, []);
+
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -365,5 +373,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { register }
+  { register, clearErrors }
 )(Register);

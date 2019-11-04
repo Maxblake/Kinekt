@@ -116,6 +116,7 @@ const getNumExtraLocksWithReferral = groupLocks => {
 };
 
 const onChargeSuccess = async (opts, res) => {
+  try {
   const { referralCode, userId, charge } = opts;
   const groupLocks = Number(opts.groupLocks);
 
@@ -138,6 +139,10 @@ const onChargeSuccess = async (opts, res) => {
   const payment = await logPayment(user, groupLocks, referredUser, charge);
   await user.save();
   res.status(200).json({ user, payment });
+} catch (err) {
+  console.error(err.message); //DEV DEBUG ONLY
+  res.status(400);
+}
 };
 
 const logPayment = async (user, groupLocks, referredUser, charge) => {

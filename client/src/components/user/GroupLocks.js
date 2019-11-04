@@ -267,10 +267,11 @@ const GroupLocks = ({
                     purchased.
                     <br />
                     <br />
-                    Your personal referral code is &nbsp;
+                    Your personal referral code is:
+                    <br />
                     {document.queryCommandSupported("copy") && (
                       <div
-                        className="is-inline is-relative clickable-text has-text-link"
+                        className="is-fullwidth has-text-centered is-relative clickable-text has-text-link"
                         onClick={e => copyRefToClipboard(e)}
                       >
                         <Tooltip
@@ -283,9 +284,11 @@ const GroupLocks = ({
                             })
                           }
                         />
-                        <span>1234567</span>
+                        <span className="ws-nowrap">
+                        <span>{user.referralCode}</span>
                         <span className="icon">
                           <i className="fas fa-link"></i>
+                        </span>
                         </span>
                       </div>
                     )}

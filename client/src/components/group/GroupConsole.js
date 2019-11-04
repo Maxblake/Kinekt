@@ -18,7 +18,11 @@ const GroupConsole = ({ user, isCurrentUserAdmin, group, imgSrc }) => {
   return (
     <div className="is-flex" id="group-console">
       <div className="group-chat">
-        <Chat setNewNotice={setNewNotice} />
+        <Chat
+          setNewNotice={setNewNotice}
+          isCurrentUserAdmin={isCurrentUserAdmin}
+          chat={group.chat}
+        />
         <div className="corner-fill"></div>
       </div>
       <div className="group-details-and-nb flex-row-wrap">

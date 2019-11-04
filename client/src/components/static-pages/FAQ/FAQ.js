@@ -23,16 +23,15 @@ const FAQ = () => {
       cannot be searched for. Users can request to join via group
       code, and any of the group's admins can answer the request.
       <br />
-      While public groups are free to create and join, creating a private or protected group will use up one group lock (more info on these in the group lock FAQ section)
       <br />
-      <br />
+      While public groups are free to create and join, creating a private or protected group will use up one group lock (more info on these in the group lock FAQ section).
       All groups expire 24 hours after creation, though it's recommended that users delete their groups as soon as the task they were created for is completed.
       </Fragment>)
     },
     {
       questionText: "What are group codes and group locks?",
-      answerText:   (<Fragment><strong>Group codes</strong> are unique identifiers for each group. They're meant to be passed around and exchanged so that others can locate and join your group easily. You can find your group's group code in the upper right corner of the group console, and you can join a group via group code using the navbar field at the top of any page. <br />
-      <br /><strong>Group locks</strong> are used to create private and protected groups. If you run out, you can restock by following the navbar button with the lock on it at the top of any page. Don't forget to use a friend's referral code in order to earn both of you extra group locks on checkout! This is how HappenStack keeps its servers running, so thank you to users who take advantage of this feature!</Fragment>)
+      answerText:   (<Fragment><strong>Group codes</strong> are unique identifiers for each group. They're meant to be passed around and exchanged so that others can locate and join your group quickly and easily. You can find your group's group code in the upper right corner of the group console, and you can join a group via group code using the navbar field at the top of any page. <br />
+      <br /><strong>Group locks</strong> are used to create private and protected groups. If you run out, you can restock by following the navbar button with the lock on it at the top of any page. Don't forget to use a friend's referral code in order to earn both of you extra group locks on checkout! This is how HappenStack keeps its servers running; thank you to users who take advantage of this feature!</Fragment>)
     },
   ];
 

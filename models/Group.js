@@ -83,9 +83,27 @@ const GroupSchema = new mongoose.Schema({
       }
     }
   ],
+  chat: [
+    {body: {
+      type: String,
+      required: true
+    },
+    user: {
+      name: {
+        type: String
+      },
+      id: {
+        type: String,
+      required: true
+      }
+    },
+    creationTimestamp: {
+      type: Date,
+      default: Date.now
+    }}
+  ],
   creationTimestamp: {
-    type: Date,
-    default: Date.now
+    type: Date
   }
 });
 

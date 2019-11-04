@@ -192,7 +192,7 @@ const Group = ({
         onClick={() => copyHRIDToClipboard()}
       >
         <Tooltip
-          body="Group code copied to clipboard"
+          body={`'${group.HRID}' copied to clipboard`}
           isVisible={showCopyHRIDTooltip}
           setIsVisible={isVisible =>
             setGroupState({
@@ -201,7 +201,7 @@ const Group = ({
             })
           }
         />
-        <span>{group.HRID}</span>
+        <span>Copy group code</span>
         <span className="icon">
           <i className="fas fa-link"></i>
         </span>

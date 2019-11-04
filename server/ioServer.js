@@ -94,11 +94,16 @@ class socketHandler {
 
   async sendMessage(message) {
     const user = await User.findById(message.user).select("name id");
-
-    this.io.in(`group-${this.groupId.toString()}`).emit("receiveMessage", {
+    const msgFields = {
       body: message.body,
-      user: { name: user.name, id: user.id }
-    });
+      user: { name: user.name, id: user.id },
+      time: moment.utc()
+    };
+
+    this.io
+      .in(`group-${this.groupId.toString()}`)
+      .emit("receiveMessage", msgFields);
+    await Group.findByIdAndUpdate(this.groupId, { $push: { chat: msgFields } });
   }
 
   async joinGroup(groupId) {
@@ -141,12 +146,19 @@ class socketHandler {
     this.socket.join(`group-${this.groupId.toString()}`);
 
     if (this.user.currentGroup.HRID !== newGroup.HRID) {
-      this.io.in(`group-${this.groupId.toString()}`).emit("receiveMessage", {
+      const msgFields = {
         body: `${this.user.name} has joined the group.`,
         user: { id: 0 },
-        time: moment().format("h:mm A")
-      });
+        time: moment.utc()
+      };
 
+      this.io
+        .in(`group-${this.groupId.toString()}`)
+        .emit("receiveMessage", msgFields);
+
+      await Group.findByIdAndUpdate(this.groupId, {
+        $push: { chat: msgFields }
+      });
       this.updateCurrentGroup(newGroup);
     }
 
@@ -197,12 +209,17 @@ class socketHandler {
 
     await oldGroup.save();
 
-    this.io.in(`group-${oldGroup._id.toString()}`).emit("receiveMessage", {
+    const msgFields = {
       body: `${this.user.name} has left the group.`,
       user: { id: 0 },
-      time: moment().format("h:mm A")
-    });
+      time: moment.utc()
+    };
 
+    this.io
+      .in(`group-${oldGroup._id.toString()}`)
+      .emit("receiveMessage", msgFields);
+
+    await Group.findByIdAndUpdate(oldGroup._id, { $push: { chat: msgFields } });
     this.updateGroupMembers(oldGroup);
   }
 
@@ -443,12 +460,20 @@ class socketHandler {
       this.handleKickSideEffects(group, user);
       this.updateGroupMembers(group);
 
-      this.io.in(`group-${this.groupId.toString()}`).emit("receiveMessage", {
+      const msgFields = {
         body: `${user.name} has been ${
           isBanned ? "banned" : "kicked"
         } from the group.`,
         user: { id: 0 },
-        time: moment().format("h:mm A")
+        time: moment.utc()
+      };
+
+      this.io
+        .in(`group-${this.groupId.toString()}`)
+        .emit("receiveMessage", msgFields);
+
+      await Group.findByIdAndUpdate(this.groupId, {
+        $push: { chat: msgFields }
       });
     }
   }

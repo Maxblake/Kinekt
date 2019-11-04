@@ -72,7 +72,7 @@
   position: fixed;
   width: 70%;
   left: 15%;
-  top: 3.5rem;
+  top: 3.75rem;
   z-index: 30;
 
   .notification {
@@ -180,6 +180,7 @@
 .modal-content {
   text-align: center;
   width: fit-content;
+  overflow-y: auto;
 }
 
 @media (max-width: $tablet - 1) {

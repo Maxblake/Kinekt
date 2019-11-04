@@ -6,6 +6,7 @@ const Message = ({
   user,
   isSelf,
   isServer,
+  isCurrentUserAdmin,
   headerHidden,
   setNewNotice
 }) => {
@@ -20,7 +21,7 @@ const Message = ({
         <span className="header-time">{time}</span>
       </div>
       <div className="body">
-        {isServer ? (
+        {isServer || !isCurrentUserAdmin ? (
           <span>{body}</span>
         ) : (
           <span

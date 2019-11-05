@@ -27,7 +27,6 @@ export default function(state = initialState, action) {
       return [];
     }
     case CLEAR_ERRORS_AND_ALERTS: {
-      console.log(state);
       return state.filter(alert => alert.alertType !== "text");
     }
     default:

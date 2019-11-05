@@ -109,7 +109,6 @@ export const buyLocks = (charge, opts) => async dispatch => {
 
   try {
     const res = await axios.post("/api/auth/post-stripe-payment", body, config);
-    console.log(res.data.payment);
     dispatch(
       setTextAlert(
         `Success! Your payment has been processed and ${res.data.payment.groupLocksReceived} group locks have been added to your account. Thank you!`,

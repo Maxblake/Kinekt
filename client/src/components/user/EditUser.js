@@ -193,8 +193,6 @@ const EditUser = ({
       userFields.currentLocationLng = "";
     }
 
-    console.log(userFields);
-
     editUser(userFields);
   };
 

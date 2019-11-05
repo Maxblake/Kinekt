@@ -84,23 +84,25 @@ const GroupSchema = new mongoose.Schema({
     }
   ],
   chat: [
-    {body: {
-      type: String,
-      required: true
-    },
-    user: {
-      name: {
-        type: String
-      },
-      id: {
+    {
+      body: {
         type: String,
-      required: true
+        required: true
+      },
+      user: {
+        name: {
+          type: String
+        },
+        id: {
+          type: String,
+          required: true
+        }
+      },
+      creationTimestamp: {
+        type: Date,
+        default: Date.now
       }
-    },
-    creationTimestamp: {
-      type: Date,
-      default: Date.now
-    }}
+    }
   ],
   creationTimestamp: {
     type: Date
@@ -111,5 +113,7 @@ GroupSchema.index(
   { name: "text", description: "text" },
   { weights: { name: 2, description: 1 } }
 );
+
+GroupSchema.index({ HRID: 1 });
 
 module.exports = Group = mongoose.model("group", GroupSchema);

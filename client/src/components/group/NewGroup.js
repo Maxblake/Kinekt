@@ -271,7 +271,7 @@ const NewGroup = ({
               <div className="control textonly-control">
                 <h3>-or-</h3>
               </div>
-              <div className="control">
+              <div className="control hs-radio-btn-control">
                 <Modal
                   additionalClasses="time-keeper"
                   modalToggleOverride={toggleTimekeeper}
@@ -293,18 +293,20 @@ const NewGroup = ({
                   />
                 </Modal>
               </div>
-              <div className="control hs-radio-btn-control">
+              <div className="control is-expanded hs-radio-btn-control">
                 <RadioButton
                   selectedValue={timeContext}
                   value="Today"
                   handleClick={handleTimeContextChange}
+                  isFullwidth
                 />
               </div>
-              <div className="control hs-radio-btn-control">
+              <div className="control is-expanded hs-radio-btn-control">
                 <RadioButton
                   selectedValue={timeContext}
                   value="Tomorrow"
                   handleClick={handleTimeContextChange}
+                  isFullwidth
                 />
               </div>
             </div>
@@ -365,25 +367,28 @@ const NewGroup = ({
           }
           children={
             <div className="field is-grouped is-grouped-multiline">
-              <div className="control">
+              <div className="control is-expanded hs-radio-btn-control">
                 <RadioButton
                   selectedValue={accessLevel}
                   value="Public"
                   handleClick={handleAccessLevelChange}
+                  isFullwidth
                 />
               </div>
-              <div className="control">
+              <div className="control is-expanded hs-radio-btn-control">
                 <RadioButton
                   selectedValue={accessLevel}
                   value="Protected"
                   handleClick={handleAccessLevelChange}
+                  isFullwidth
                 />
               </div>
-              <div className="control">
+              <div className="control is-expanded hs-radio-btn-control">
                 <RadioButton
                   selectedValue={accessLevel}
                   value="Private"
                   handleClick={handleAccessLevelChange}
+                  isFullwidth
                 />
               </div>
             </div>

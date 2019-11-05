@@ -95,6 +95,13 @@ const SocketHandler = ({
   };
 
   const onActive = () => {
+    console.log("active", socket.connected);
+    if (!!socket && !socket.connected) {
+      console.log("reconnecting");
+      console.log(socket.socket);
+
+      socket.open();
+    }
     clearInterval(interval);
     getGroupAndUserNumbers();
     setIntervalState(setInterval(() => getGroupAndUserNumbers(), 8000));
@@ -127,7 +134,7 @@ const SocketHandler = ({
       element={document}
       onActive={() => onActive()}
       onIdle={() => onIdle()}
-      timeout={1000 * 60 * 1}
+      timeout={1000 * 2 * 1}
     />
   );
 };

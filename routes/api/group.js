@@ -462,11 +462,13 @@ const handleImageUpload = async (group, req, errors, updating = false) => {
     if (updating && group.image && !!group.image.deleteHash) {
       const updateImageResponse = await updateImage(
         req.file,
-        group.image.deleteHash
+        group.image.deleteHash,
+        353,
+        706
       );
       uploadResponse = updateImageResponse.uploadResponse;
     } else {
-      uploadResponse = await uploadImage(req.file);
+      uploadResponse = await uploadImage(req.file, 353, 706);
     }
 
     if (uploadResponse.error) {

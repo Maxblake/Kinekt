@@ -153,11 +153,13 @@ const handleImageUpload = async (user, req, errors, updating = false) => {
     if (updating && user.image && !!user.image.deleteHash) {
       const updateImageResponse = await updateImage(
         req.file,
-        user.image.deleteHash
+        user.image.deleteHash,
+        343,
+        343
       );
       uploadResponse = updateImageResponse.uploadResponse;
     } else {
-      uploadResponse = await uploadImage(req.file);
+      uploadResponse = await uploadImage(req.file, 343, 343);
     }
 
     if (uploadResponse.error) {

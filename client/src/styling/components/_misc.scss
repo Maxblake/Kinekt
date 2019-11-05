@@ -271,6 +271,17 @@
   margin-right: 0.5rem;
 }
 
+@media (max-width: $tablet - 1) {
+  .field.is-grouped > .control.hs-radio-btn-control {
+    &.is-expanded {
+      flex-grow: 0;
+    }
+    .is-fullwidth {
+      width: initial;
+    }
+  }
+}
+
 // Alerts
 .custom-action-alert {
   display: flex;
@@ -468,8 +479,8 @@
     }
     p {
       border-top: 1px solid #dbdbdb;
-      padding: 0.75rem 0 .5rem 0;
-      margin-top: .25rem;
+      padding: 0.75rem 0 0.5rem 0;
+      margin-top: 0.25rem;
     }
   }
 }

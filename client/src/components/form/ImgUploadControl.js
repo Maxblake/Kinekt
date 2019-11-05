@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
+import { useDropzone } from "react-dropzone";
 
 import CustomField from "./CustomField";
 import Image from "../common/subcomponents/Image";
@@ -11,18 +12,23 @@ const ImgUploadControl = ({ label, src, onChange, type }) => {
   });
 
   const { error, fileName, imgSrc } = imgData;
+  const maxSize = 1048576 * 2;
   let figureClass = "";
   let imageClass = "";
 
-  const handleImageUpload = e => {
-    const imageFile = e.target.files[0];
+  useEffect(() => {
+    return () => {
+      window.URL.revokeObjectURL(imgSrc);
+    };
+  }, [imgSrc]);
+
+  const onDrop = useCallback(acceptedFiles => {
+    const imageFile = acceptedFiles[0];
 
     if (!imageFile) return;
 
-    if (
-      imageFile.size > e.target.attributes.getNamedItem("data-max-size").value
-    ) {
-      setImgData({ error: "Image file must be smaller than 10MB" });
+    if (imageFile.size > maxSize) {
+      setImgData({ error: "Image file must be smaller than 2MB" });
       return;
     }
 
@@ -31,7 +37,21 @@ const ImgUploadControl = ({ label, src, onChange, type }) => {
       imgSrc: URL.createObjectURL(imageFile)
     });
     onChange(imageFile);
-  };
+  }, []);
+
+  const {
+    isDragActive,
+    getRootProps,
+    getInputProps,
+    rejectedFiles
+  } = useDropzone({
+    onDrop,
+    maxSize,
+    accept: "image/jpeg, image/png"
+  });
+
+  const isFileTooLarge =
+    rejectedFiles.length > 0 && rejectedFiles[0].size > maxSize;
 
   switch (type) {
     case "profile":
@@ -45,19 +65,20 @@ const ImgUploadControl = ({ label, src, onChange, type }) => {
       break;
   }
 
+  //onChange={e => handleImageUpload(e)}
+
   return (
     <CustomField
       label={label}
       children={
         <div className="field">
           <div className="file has-name is-primary is-fullwidth">
-            <label className="file-label">
+            <div className="file-label" {...getRootProps()}>
               <input
                 className="file-input"
                 type="file"
-                accept="image/*"
-                data-max-size="10485760"
-                onChange={e => handleImageUpload(e)}
+                accept="image/png, image/jpg, image/jpeg"
+                {...getInputProps()}
               />
               <span className="file-cta">
                 <span className="icon">
@@ -65,9 +86,17 @@ const ImgUploadControl = ({ label, src, onChange, type }) => {
                 </span>
               </span>
               <span className="file-name">
-                {fileName ? fileName : "No image selected.."}
+                {isFileTooLarge
+                  ? "That one's too big for this ship!"
+                  : isDragActive
+                  ? "Drop 'er here, captain!"
+                  : rejectedFiles.length > 0
+                  ? "Wrong type of fish, throw 'er back!"
+                  : fileName
+                  ? fileName
+                  : "No image selected.."}
               </span>
-            </label>
+            </div>
           </div>
           {imgSrc && (
             <div className="image-preview">

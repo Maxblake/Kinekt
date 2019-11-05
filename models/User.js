@@ -51,4 +51,6 @@ const UserSchema = new mongoose.Schema({
   }
 });
 
+UserSchema.index({ referralCode: 1 });
+
 module.exports = User = mongoose.model("user", UserSchema);

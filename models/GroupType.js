@@ -39,6 +39,8 @@ GroupTypeSchema.index(
   { weights: { name: 2, description: 1 } }
 );
 
+GroupTypeSchema.index({ name: 1 });
+
 GroupTypeSchema.pre("save", function(next) {
   this.nameLower = this.name.toLowerCase();
   next();

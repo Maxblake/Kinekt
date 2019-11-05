@@ -1,10 +1,11 @@
 const request = require("request");
 const config = require("config");
+const sharp = require("sharp");
 const imgurClientId = config.get("imgurClientId");
 
-const updateImage = async (imageFile, deleteHash) => {
+const updateImage = async (imageFile, deleteHash, cropWidth, cropHeight) => {
   const deletePromise = deleteImage(deleteHash);
-  const uploadPromise = uploadImage(imageFile);
+  const uploadPromise = uploadImage(imageFile, cropWidth, cropHeight);
   const [deleteResponse, uploadResponse] = await Promise.all([
     deletePromise,
     uploadPromise
@@ -35,15 +36,22 @@ const deleteImage = async deleteHash => {
   });
 };
 
-const uploadImage = async imageFile => {
-  return new Promise(resolve => {
+const uploadImage = async (imageFile, cropWidth, cropHeight) => {
+  return new Promise(async resolve => {
+    const imageBuffer =
+      !cropHeight && !cropWidth
+        ? imageFile.buffer
+        : await sharp(imageFile.buffer)
+            .resize(cropWidth, cropHeight)
+            .toBuffer();
+
     const uploadResponse = {};
     const options = {
       url: "https://api.imgur.com/3/upload",
       method: "POST",
       headers: { Authorization: `Client-ID ${imgurClientId}` },
       formData: {
-        image: imageFile.buffer
+        image: imageBuffer
       },
       json: true
     };

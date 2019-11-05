@@ -5,10 +5,15 @@ export default function RadioButton({
   valueKey,
   value,
   customLabel,
-  selectedValue
+  selectedValue,
+  isFullwidth
 }) {
-  const getClassName = isSelected => {
+  const getClassName = (isSelected, isFullwidth) => {
     const classList = ["button"];
+
+    if (isFullwidth) {
+      classList.push("is-fullwidth");
+    }
 
     if (isSelected) {
       classList.push("is-primary");
@@ -20,7 +25,7 @@ export default function RadioButton({
   return (
     <button
       type="button"
-      className={getClassName(selectedValue === value)}
+      className={getClassName(selectedValue === value, isFullwidth)}
       onClick={() =>
         valueKey ? handleClick(value, valueKey) : handleClick(value)
       }

@@ -169,11 +169,11 @@ const Navbar = ({
   return (
     <nav className="navbar is-black is-fixed-top">
       <div className="navbar-brand">
-        <Link to="/" className="is-size-4">
+        <Link to="/" className="is-size-5">
           <div className="navbar-item">
             <img src={logo} alt="" />{" "}
             <span id="logo-text">HappenStack&nbsp;</span>
-            <div id="logo-typewriter" className="is-size-4" />
+            <div id="logo-typewriter" className="is-size-5" />
           </div>
         </Link>
         <span className="navbar-burger burger" data-target="navMenu">

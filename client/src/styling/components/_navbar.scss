@@ -1,4 +1,11 @@
 // Navbar
+.navbar,
+.navbar.is-fixed-top,
+.navbar-brand,
+.navbar-burger {
+  height: 2.9rem;
+  min-height: 2.85rem;
+}
 .navbar.is-fixed-top {
   @extend %has-shadow;
 
@@ -13,8 +20,7 @@
 
 .navbar-brand {
   img {
-    max-height: 2.15rem;
-    margin-right: 0.35rem;
+    margin-right: 0.25rem;
   }
 
   #logo-typewriter {
@@ -46,16 +52,6 @@
     .navbar-item {
       height: 100%;
     }
-
-    img {
-      max-height: 1.85rem;
-    }
-  }
-
-  .navbar-brand,
-  .navbar-burger {
-    min-height: 2.75rem;
-    height: 2.75rem;
   }
 }
 

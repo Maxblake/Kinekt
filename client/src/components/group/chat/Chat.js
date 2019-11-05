@@ -18,7 +18,7 @@ const Chat = ({
     messages: chat
       ? chat.map(message => ({
           ...message,
-          time: moment(message.time)
+          time: moment(message.creationTimestamp)
             .local()
             .format("h:mm A")
         }))
@@ -40,8 +40,6 @@ const Chat = ({
 
   const receiveMessage = message => {
     checkShouldShowNewMsgTab(true);
-
-    console.log(message.time);
 
     setMessageData({
       ...messageData,

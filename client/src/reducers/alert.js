@@ -23,9 +23,12 @@ export default function(state = initialState, action) {
     }
     case REMOVE_ALERT:
       return state.filter(alert => alert.id !== payload);
-    case LOGOUT:
-    case CLEAR_ERRORS_AND_ALERTS: {
+    case LOGOUT: {
       return [];
+    }
+    case CLEAR_ERRORS_AND_ALERTS: {
+      console.log(state);
+      return state.filter(alert => alert.alertType !== "text");
     }
     default:
       return state;

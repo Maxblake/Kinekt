@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import { handleResponseErrors } from "./helpers/helpers";
-import { clearErrorsAndAlerts, logout, loadUser } from "./auth";
+import { clearErrorsAndAlerts, clearErrors, logout, loadUser } from "./auth";
 import { setTextAlert } from "./alert";
 import { deleteGroup } from "./group";
 
@@ -111,7 +111,10 @@ export const buyLocks = (charge, opts) => async dispatch => {
     const res = await axios.post("/api/auth/post-stripe-payment", body, config);
     console.log(res.data.payment);
     dispatch(
-      setTextAlert(`Success! Your payment has been processed and ${res.data.payment.groupLocksReceived} group locks have been added to your account. Thank you!`, "is-success")
+      setTextAlert(
+        `Success! Your payment has been processed and ${res.data.payment.groupLocksReceived} group locks have been added to your account. Thank you!`,
+        "is-success"
+      )
     );
     dispatch({
       type: SET_USER,
@@ -127,7 +130,7 @@ export const buyLocks = (charge, opts) => async dispatch => {
 
 export const isReferralCodeValid = referralCode => async dispatch => {
   if (referralCode === "") {
-    dispatch(clearErrorsAndAlerts());
+    dispatch(clearErrors());
     return true;
   }
 
@@ -141,7 +144,7 @@ export const isReferralCodeValid = referralCode => async dispatch => {
 
   try {
     await axios.put("/api/user/is-rc-valid", body, config);
-    dispatch(clearErrorsAndAlerts());
+    dispatch(clearErrors());
     return true;
   } catch (err) {
     dispatch(handleResponseErrors(err));

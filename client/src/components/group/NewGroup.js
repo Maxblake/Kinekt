@@ -64,18 +64,18 @@ const NewGroup = ({
     const groupTypeParamChanged =
       groupType && groupType.name !== groupTypeParamSpaced;
 
-    console.log({ loading });
-
     if (!groupType || groupTypeParamChanged) {
       getGroups(match.params.groupType.split("_").join(" "));
     }
+  }, [match.params.groupType, groupType]);
+
+  useEffect(() => {
     return () => {
       clearErrors();
     };
-  }, [loading, match.params.groupType, groupType]);
+  }, []);
 
   const hasUnsavedChanges = () => {
-    console.log("checking for changes");
     if (!loading) {
       const initialState = {
         name: "",

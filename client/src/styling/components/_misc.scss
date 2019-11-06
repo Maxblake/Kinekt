@@ -291,6 +291,10 @@
     min-width: 3rem;
   }
 
+  .icon {
+    margin-right: 0.5rem;
+  }
+
   .alert-items {
     display: flex;
     align-items: center;
@@ -310,6 +314,10 @@
 @media (max-width: $tablet - 1) {
   .custom-action-alert {
     align-items: flex-start;
+
+    .icon {
+      margin-top: 0.2rem;
+    }
 
     .alert-items {
       align-items: flex-start;

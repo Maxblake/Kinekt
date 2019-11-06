@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
@@ -14,6 +14,18 @@ const EntryRequestReceivedAlert = ({
 }) => {
   const [isActive, setIsActive] = useState(true);
 
+  useEffect(() => {
+    socket.on("entryRequestAnswered", userId => {
+      if (userId === userInfo.id) {
+        closeAlert();
+      }
+    });
+
+    return () => {
+      socket.off("entryRequestAnswered");
+    };
+  }, []);
+
   const onTimeout = () => {
     setIsActive(false);
     showCloseButton();
@@ -27,9 +39,13 @@ const EntryRequestReceivedAlert = ({
     closeAlert();
   };
 
+  //<Countdown totalTime={60 * 15} onTimeout={() => onTimeout()} />
+
   return (
     <div className="custom-action-alert">
-      <Countdown totalTime={60 * 15} onTimeout={() => onTimeout()} />
+      <span className="icon">
+        <i className="fas fa-paper-plane"></i>
+      </span>
       <div className="alert-items">
         <h3>
           <Modal

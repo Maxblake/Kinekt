@@ -11,7 +11,7 @@ const RequestEntryAlert = ({
   getGroup,
   groupName,
   HRID,
-  socket,
+  auth: { socket, user },
   closeAlert,
   showCloseButton
 }) => {
@@ -24,6 +24,7 @@ const RequestEntryAlert = ({
     );
 
     return () => {
+      socket.emit("cancelEntryRequest", { HRID, userId: user._id });
       socket.off("entryRequestAnswered");
     };
   }, []);
@@ -45,6 +46,13 @@ const RequestEntryAlert = ({
     showCloseButton();
   };
 
+  const cancelRequest = () => {
+    socket.emit("cancelEntryRequest", { HRID, userId: user._id });
+    closeAlert();
+  };
+
+  //<Countdown totalTime={60 * 15} onTimeout={() => onTimeout()} />
+
   return (
     <div className="custom-action-alert">
       {entryRequestAnswer === "Rejected" ? (
@@ -56,7 +64,9 @@ const RequestEntryAlert = ({
           <i className="fas fa-2x fa-check-circle"></i>
         </span>
       ) : (
-        <Countdown totalTime={60 * 15} onTimeout={() => onTimeout()} />
+        <span className="icon">
+          <i className="fas fa-paper-plane"></i>
+        </span>
       )}
       <div className="alert-items">
         <h3>
@@ -68,20 +78,31 @@ const RequestEntryAlert = ({
             ? `Request to join '${groupName}' is denied`
             : `Request to join '${groupName}' is pending`}
         </h3>
-        {entryRequestAnswer === "Accepted" && (
+        {entryRequestAnswer !== "Rejected" && (
           <div className="field is-grouped is-grouped-right">
-            <div className="control">
-              <Link
-                onClick={() => closeAlert()}
-                className="button is-light is-outlined"
-                to={`/k/k/group/${HRID}`}
-              >
-                <span className="max-text-length-3">{groupName}</span>
-                <span className="icon is-small">
-                  <i className="fas fa-chalkboard-teacher" />
-                </span>
-              </Link>
-            </div>
+            {entryRequestAnswer === "Accepted" ? (
+              <div className="control">
+                <Link
+                  onClick={() => closeAlert()}
+                  className="button is-light is-outlined"
+                  to={`/k/k/group/${HRID}`}
+                >
+                  <span className="max-text-length-3">{groupName}</span>
+                  <span className="icon is-small">
+                    <i className="fas fa-chalkboard-teacher" />
+                  </span>
+                </Link>
+              </div>
+            ) : (
+              <div className="control">
+                <button
+                  onClick={() => cancelRequest()}
+                  className="button is-light is-outlined"
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -90,12 +111,12 @@ const RequestEntryAlert = ({
 };
 
 RequestEntryAlert.propTypes = {
-  socket: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired,
   getGroup: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  socket: state.auth.socket
+  auth: state.auth
 });
 
 export default connect(

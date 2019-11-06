@@ -51,6 +51,9 @@ class socketHandler {
     this.socket.on("answerEntryRequest", ({ answer, userId }) =>
       this.answerEntryRequest(answer, userId)
     );
+    this.socket.on("cancelEntryRequest", ({ HRID, userId }) =>
+      this.cancelEntryRequest(HRID, userId)
+    );
     this.socket.on("kickFromGroup", payload => this.kickFromGroup(payload));
     this.socket.on("toggleGroupAdmin", userId => this.toggleGroupAdmin(userId));
     this.socket.on("setUserStatus", userStatus =>
@@ -191,6 +194,18 @@ class socketHandler {
     this.socket
       .to(`user-${userId}`)
       .emit("entryRequestAnswered", { answer, joinKey, HRID: group.HRID });
+
+    this.io
+      .in(`group-${this.groupId.toString()}`)
+      .emit("entryRequestAnswered", userId);
+  }
+
+  async cancelEntryRequest(HRID, userId) {
+    const group = await Group.findOne({ HRID }).select("id");
+
+    this.io
+      .in(`group-${group._id.toString()}`)
+      .emit("entryRequestAnswered", userId);
   }
 
   async leaveCurrentGroup(joiningNewGroup = false) {

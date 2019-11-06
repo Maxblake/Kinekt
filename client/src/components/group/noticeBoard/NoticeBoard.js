@@ -65,7 +65,7 @@ const NoticeBoard = ({
                 />
               ))
           : newNoticeHidden && (
-              <div className="notice has-text-centered">
+              <div className="has-text-centered">
                 There's nothing to see here
               </div>
             )}

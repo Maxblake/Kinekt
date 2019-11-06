@@ -129,7 +129,7 @@ const Chat = ({
                 <Message
                   key={index}
                   isSelf={message.user.id === user._id}
-                  isServer={message.user.id === "0"}
+                  isServer={message.user.id.toString() === "0"}
                   isCurrentUserAdmin={isCurrentUserAdmin}
                   headerHidden={
                     index > 0 && messages[index - 1].user.id === message.user.id

@@ -150,6 +150,7 @@
   }
   .is-away {
     border-color: #fafafa;
+    opacity: 0.6;
   }
 }
 
@@ -241,15 +242,22 @@
 
 @media (max-width: $desktop - 1) {
   #group-console {
+    .group-details-and-nb {
+      padding-bottom: 1.5rem;
+    }
+
     .group-chat {
       background-color: transparent;
       padding: 0;
 
       position: fixed;
       z-index: 2;
-      width: 90%;
-      left: 5%;
+      left: 50%;
       bottom: 0;
+      transform: translateX(-50%);
+      max-width: 390px;
+      width: 100%;
+      padding: 0 0.25rem;
 
       .corner-fill {
         display: none;
@@ -297,6 +305,11 @@
     .noticeboard {
       flex: 1 100%;
       order: 3;
+
+      .notice .media-left {
+        width: 45px;
+        margin-right: 0.75rem;
+      }
     }
   }
 }
@@ -304,7 +317,7 @@
 // Chat
 .chat {
   min-width: 220px;
-  max-width: 520px;
+  max-width: 390px;
   margin: auto;
 
   display: flex;
@@ -354,7 +367,7 @@
         font-size: 0.9rem;
         border-radius: 4px;
         padding: 4px 9px;
-        margin-bottom: 7px;
+        margin-bottom: 0.25rem;
         background-color: transparent;
         border: 1px solid #fafafa;
         color: #fafafa;
@@ -439,12 +452,17 @@
     }
   }
 
+  .has-text-centered {
+    color: #505050;
+  }
+
   .notices {
     height: 100%;
 
     .notice {
       position: relative;
       box-shadow: none;
+      border-left: 4px solid var(--primary);
 
       &.hs-box {
         padding: 0.5rem 0.75rem;

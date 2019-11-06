@@ -105,7 +105,8 @@ const GroupSchema = new mongoose.Schema({
     }
   ],
   creationTimestamp: {
-    type: Date
+    type: Date,
+    default: Date.now
   }
 });
 

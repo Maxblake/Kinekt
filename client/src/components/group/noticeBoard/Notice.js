@@ -55,7 +55,10 @@ const Notice = ({
   };
 
   return (
-    <div className="notice new-notice hs-box">
+    <div className="notice hs-box">
+      {isCurrentUserAdmin && (
+        <button className="delete" onClick={() => onClickDelete()}></button>
+      )}
       <div className="media">
         <div className="media-left">
           <Image
@@ -72,16 +75,6 @@ const Notice = ({
               <div className="level-item">
                 <small>{getTimeString(notice.creationTimestamp)}</small>
               </div>
-            </div>
-            <div className="level-right">
-              {isCurrentUserAdmin && (
-                <div className="level-item">
-                  <button
-                    className="delete"
-                    onClick={() => onClickDelete()}
-                  ></button>
-                </div>
-              )}
             </div>
           </nav>
           <div className="content">

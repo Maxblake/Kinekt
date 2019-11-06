@@ -51,16 +51,19 @@ const NoticeBoard = ({
           />
         )}
         {notices && notices.length > 0
-          ? notices.map(notice => (
-              <Notice
-                notice={notice}
-                key={notice._id}
-                groupId={groupId}
-                isCurrentUserAdmin={isCurrentUserAdmin}
-                isLiked={notice.likes.includes(user._id)}
-                numLikes={notice.likes.length}
-              />
-            ))
+          ? notices
+              .slice(0)
+              .reverse()
+              .map(notice => (
+                <Notice
+                  notice={notice}
+                  key={notice._id}
+                  groupId={groupId}
+                  isCurrentUserAdmin={isCurrentUserAdmin}
+                  isLiked={notice.likes.includes(user._id)}
+                  numLikes={notice.likes.length}
+                />
+              ))
           : newNoticeHidden && (
               <div className="notice has-text-centered">
                 There's nothing to see here

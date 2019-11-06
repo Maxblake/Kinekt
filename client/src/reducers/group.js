@@ -7,6 +7,7 @@ import {
   SET_CURRENT_GROUP,
   SET_GROUP_MEMBERS,
   SET_GROUP_NOTICES,
+  SET_NEW_GROUP_CHAT,
   GROUP_ERROR,
   GROUP_DELETED,
   LOGOUT
@@ -79,6 +80,14 @@ export default function(state = initialState, action) {
       return {
         ...state,
         group: { ...state.group, notices: payload }
+      };
+    }
+    case SET_NEW_GROUP_CHAT: {
+      if (!state.group) return state;
+
+      return {
+        ...state,
+        group: { ...state.group, chat: [...state.group.chat, payload] }
       };
     }
     case GROUP_ERROR: {

@@ -17,7 +17,8 @@ const Chat = ({
     messageField: "",
     messages: chat
       ? chat.map(message => ({
-          ...message,
+          body: message.body,
+          user: message.user,
           time: moment(message.creationTimestamp)
             .local()
             .format("h:mm A")
@@ -31,26 +32,28 @@ const Chat = ({
   let showNewMsgTab = React.useRef(false);
 
   useEffect(() => {
-    socket.on("receiveMessage", receiveMessage);
+    const newMessages = [];
+    let numNewMessages = chat.length - messages.length;
 
-    return () => {
-      socket.off("receiveMessage");
-    };
-  }, [messageData]);
+    if (numNewMessages > 0) {
+      checkShouldShowNewMsgTab(true);
 
-  const receiveMessage = message => {
-    checkShouldShowNewMsgTab(true);
+      for (; numNewMessages > 0; numNewMessages--) {
+        const newMessage = {
+          ...chat[chat.length - numNewMessages],
+          time: moment(chat[chat.length - numNewMessages].time)
+            .local()
+            .format("h:mm A")
+        };
+        newMessages.push(newMessage);
+      }
 
-    setMessageData({
-      ...messageData,
-      messages: messages.concat({
-        ...message,
-        time: moment(message.time)
-          .local()
-          .format("h:mm A")
-      })
-    });
-  };
+      setMessageData({
+        ...messageData,
+        messages: messages.concat(newMessages)
+      });
+    }
+  }, [chat]);
 
   const submitMessage = async e => {
     if (e.keyCode === 13 && e.shiftKey === false) {
@@ -126,7 +129,7 @@ const Chat = ({
                 <Message
                   key={index}
                   isSelf={message.user.id === user._id}
-                  isServer={message.user.id === 0}
+                  isServer={message.user.id === "0"}
                   isCurrentUserAdmin={isCurrentUserAdmin}
                   headerHidden={
                     index > 0 && messages[index - 1].user.id === message.user.id

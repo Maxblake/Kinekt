@@ -6,6 +6,7 @@ import {
   SET_GROUP_AND_USER_NUMBERS,
   SET_GROUP_MEMBERS,
   SET_GROUP_NOTICES,
+  SET_NEW_GROUP_CHAT,
   SET_GROUP,
   SET_GROUPTYPE
 } from "../types";
@@ -42,6 +43,8 @@ export const adjustStateForKickedUser = () => dispatch => {
   });
 };
 
+//TODO shouldn't these actions be removed on unmount?
+
 const addSocketActions = socket => dispatch => {
   socket.on("updateGroupMembers", updatedMembers => {
     dispatch({
@@ -68,6 +71,13 @@ const addSocketActions = socket => dispatch => {
     dispatch({
       type: SET_GROUP_AND_USER_NUMBERS,
       payload: groupAndUserNumbers
+    })
+  );
+
+  socket.on("receiveMessage", message =>
+    dispatch({
+      type: SET_NEW_GROUP_CHAT,
+      payload: message
     })
   );
 };

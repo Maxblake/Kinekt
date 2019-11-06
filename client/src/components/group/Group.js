@@ -29,7 +29,12 @@ const Group = ({
   const { showCopyHRIDTooltip } = groupState;
 
   useEffect(() => {
-    if (isAuthenticated && (!group || group.HRID !== match.params.groupCode)) {
+    if (
+      isAuthenticated &&
+      (!group ||
+        group.HRID !== match.params.groupCode ||
+        (groupType && group.groupType !== groupType._id))
+    ) {
       const userCurrentGroupHRID = user.currentGroup
         ? user.currentGroup.HRID
         : "";

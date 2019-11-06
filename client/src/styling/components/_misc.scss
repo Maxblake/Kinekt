@@ -335,6 +335,7 @@
 .info-modal {
   max-width: 650px;
   align-items: center;
+  border-radius: 4px;
 
   &.hs-box {
     padding: 2rem !important;
@@ -410,7 +411,7 @@
 }
 
 .checkout-container {
-  margin: 1.5rem 3.5rem;
+  margin: 1rem 3.5rem;
   border: 2px solid var(--primary);
   border-radius: 4px;
 
@@ -435,7 +436,7 @@
 
 @media (max-width: $tablet - 1) {
   .checkout-container {
-    margin: 1.5rem 0;
+    margin: 1rem 0;
   }
 }
 

@@ -16,7 +16,12 @@ import CustomField from "../form/CustomField";
 import ImgUploadControl from "../form/ImgUploadControl";
 import Modal from "../common/subcomponents/Modal";
 
-const Register = ({ register, clearErrors, errors, auth: { isAuthenticated, loading } }) => {
+const Register = ({
+  register,
+  clearErrors,
+  errors,
+  auth: { isAuthenticated, loading }
+}) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -52,7 +57,6 @@ const Register = ({ register, clearErrors, errors, auth: { isAuthenticated, load
       clearErrors();
     };
   }, []);
-
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -237,7 +241,7 @@ const Register = ({ register, clearErrors, errors, auth: { isAuthenticated, load
                   </span>
                 }
               >
-                <div className="hs-box info-modal is-vcentered has-rounded-corners">
+                <div className="hs-box info-modal is-vcentered">
                   <div className="icon is-large info-icon">
                     <i className="far fa-3x fa-question-circle" />
                   </div>
@@ -296,7 +300,7 @@ const Register = ({ register, clearErrors, errors, auth: { isAuthenticated, load
                       <span className="has-text-link">terms of service</span>
                     }
                   >
-                    <div className="hs-box info-modal is-vcentered has-rounded-corners">
+                    <div className="hs-box info-modal is-vcentered">
                       <div className="icon is-large info-icon">
                         <i className="far fa-3x fa-question-circle" />
                       </div>

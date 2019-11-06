@@ -339,7 +339,7 @@ const GroupType = ({
         <PageTitle
           title={
             <Modal trigger={match.params.groupType.split("_").join(" ")}>
-              <div className="hs-box info-modal has-text-left has-rounded-corners">
+              <div className="hs-box info-modal has-text-left">
                 <h3 className="title is-spaced is-size-3 is-size-4-mobile">
                   {match.params.groupType.split("_").join(" ")}
                 </h3>

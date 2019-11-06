@@ -14,7 +14,7 @@ export default function Footer() {
             <ul>
               <li>
                 <Modal trigger="Terms of Service">
-                  <div className="hs-box info-modal is-vcentered has-rounded-corners">
+                  <div className="hs-box info-modal is-vcentered">
                     <div className="icon is-large info-icon">
                       <i className="far fa-3x fa-question-circle" />
                     </div>

@@ -256,7 +256,7 @@ const GroupLocks = ({
                   </span>
                 }
               >
-                <div className="hs-box info-modal is-vcentered has-rounded-corners">
+                <div className="hs-box info-modal is-vcentered">
                   <div className="icon is-large info-icon">
                     <i className="far fa-3x fa-question-circle" />
                   </div>
@@ -285,10 +285,10 @@ const GroupLocks = ({
                           }
                         />
                         <span className="ws-nowrap">
-                        <span>{user.referralCode}</span>
-                        <span className="icon">
-                          <i className="fas fa-link"></i>
-                        </span>
+                          <span>{user.referralCode}</span>
+                          <span className="icon">
+                            <i className="fas fa-link"></i>
+                          </span>
                         </span>
                       </div>
                     )}

@@ -90,6 +90,11 @@ const Navbar = ({
     history.push(`/k/k/group/${HRID}`);
   };
 
+  const onLogoutClicked = () => {
+    logout();
+    history.push("/login");
+  };
+
   const authLinks = (
     <div className="navbar-item">
       <div className="buttons">
@@ -135,7 +140,7 @@ const Navbar = ({
           </span>
         </Link>
         <button
-          onClick={() => logout()}
+          onClick={() => onLogoutClicked()}
           className="button is-fullwidth-touch is-dark is-small"
         >
           <span className="max-text-length-2">Log out</span>

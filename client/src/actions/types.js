@@ -6,7 +6,7 @@ export const CLEAR_ERRORS_AND_ALERTS = "CLEAR_ERRORS_AND_ALERTS";
 
 export const LOGOUT = "LOGOUT";
 
-export const AUTH_LOADED = "GET_AUTH";
+export const AUTH_LOADED = "AUTH_LOADED";
 export const AUTH_LOADING = "AUTH_LOADING";
 export const AUTH_ERROR = "AUTH_ERROR";
 export const AUTH_SUCCESS = "AUTH_SUCCESS";

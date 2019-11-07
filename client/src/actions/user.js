@@ -35,10 +35,12 @@ export const register = userFields => async dispatch => {
     });
 
     dispatch(clearErrorsAndAlerts());
-    dispatch(
+
+    //TODO set this alert after verification
+    /*     dispatch(
       setTextAlert(`Welcome to HappenStack, ${userFields.name}!`, "is-success")
-    );
-    dispatch(loadUser());
+    ); */
+    dispatch(loadUser(false, true));
   } catch (err) {
     dispatch(handleResponseErrors(err));
 

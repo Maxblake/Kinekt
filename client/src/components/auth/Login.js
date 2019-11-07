@@ -84,7 +84,7 @@ const Login = ({
                 we've emailed you
               </p>
             </div>
-            <SubmitButton isFullwidth={true} text="Resend Verification Email" />{" "}
+            <SubmitButton isFullwidth={true} text="Resend verification email" />{" "}
           </Fragment>
         ) : (
           <Fragment>

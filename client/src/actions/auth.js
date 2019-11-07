@@ -7,6 +7,7 @@ import { setTextAlert } from "./alert";
 
 import {
   AUTH_LOADING,
+  AUTH_LOADED,
   SET_USER,
   AUTH_ERROR,
   AUTH_SUCCESS,
@@ -16,9 +17,13 @@ import {
 } from "./types";
 
 // Load User
-export const loadUser = (checkIfAdmin = false) => async dispatch => {
+export const loadUser = (
+  checkIfAdmin = false,
+  isNewUser = false
+) => async dispatch => {
   if (localStorage.token) {
     setAuthToken(localStorage.token);
+    if (isNewUser) dispatch(sendEmailConfirmation());
   }
 
   try {
@@ -86,8 +91,14 @@ export const login = (email, password) => async dispatch => {
 
 export const sendEmailConfirmation = () => async dispatch => {
   try {
+    dispatch({
+      type: AUTH_LOADING
+    });
     await axios.post("/api/auth/sendEmailConfirmation");
 
+    dispatch({
+      type: AUTH_LOADED
+    });
     dispatch(
       setTextAlert(
         "Our fastest email messenger falcon is on the way. Please check your email inbox and follow the instructions we've sent to finish setting up your account",
@@ -96,6 +107,9 @@ export const sendEmailConfirmation = () => async dispatch => {
     );
   } catch (err) {
     dispatch(handleResponseErrors(err));
+    dispatch({
+      type: AUTH_LOADED
+    });
   }
 };
 

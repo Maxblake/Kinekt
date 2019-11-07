@@ -4,6 +4,8 @@ const auth = require("../../middleware/auth");
 const config = require("config");
 const stripe = require("stripe")(config.get("stripeSecret"));
 const bcrypt = require("bcryptjs");
+const shortid = require("shortid");
+const nodemailer = require("nodemailer");
 const {
   runAPISafely,
   signUserToken,
@@ -13,6 +15,7 @@ const {
 
 const User = require("../../models/User");
 const Payment = require("../../models/Payment");
+const VerificationToken = require("../../models/VerificationToken");
 
 // @route   GET api/auth/:checkIfAdmin
 // @desc    Given JSON Web Token, return user object
@@ -69,8 +72,6 @@ router.post("/", validateRequest("login"), (req, res) => {
   });
 });
 
-//"Our email messenger falcon couldn't find you, did you sign up with a valid email?",
-
 // @route   GET api/auth/sendEmailConfirmation
 // @desc    Send a new user email confirmation to verify his/her account
 // @access  Private
@@ -95,11 +96,70 @@ router.post("/sendEmailConfirmation", auth, (req, res) => {
       );
     }
 
-    console.log(user.email);
+    await VerificationToken.deleteMany({ verifyingUser: user._id });
+
+    const token = await assignUniqueToken(user._id.toString());
+    const verificationToken = new VerificationToken({
+      verifyingUser: user._id,
+      token
+    });
+
+    await verificationToken.save();
+    const isEmailSent = await sendEmailConfirmation(user.email, token);
+
+    if (!isEmailSent) {
+      return errors.addErrAndSendResponse(
+        res,
+        "Our email messenger falcon couldn't find you, did you sign up with a valid email?",
+        "alert"
+      );
+    }
 
     return res.sendStatus(200);
   });
 });
+
+const sendEmailConfirmation = async email => {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "happenstackhelp@gmail.com",
+      pass: config.get("emailPW")
+    }
+  });
+
+  const mailOptions = {
+    from: "happenstackhelp@gmail.com",
+    to: email,
+    subject: "Confirm your HappenStack account",
+    text:
+      "Hey friend,\n\n" +
+      "Please verify your HappenStack account by clicking this link: \nhttp://localhost:3000/login/" +
+      token +
+      ".\n"
+  };
+};
+
+const assignUniqueToken = async userId => {
+  let i = 0;
+  let uniqueTokenFound = false;
+  let token = "";
+
+  while (i < 50 && !uniqueTokenFound) {
+    token = shortid.generate();
+    if (await VerificationToken.findOne({ token })) {
+      i += 1;
+      continue;
+    }
+    uniqueTokenFound = true;
+  }
+
+  if (!uniqueTokenFound) {
+    token = userId;
+  }
+
+  return token;
+};
 
 router.post("/enterBeta", (req, res) => {
   runAPISafely(async () => {

@@ -14,7 +14,7 @@ const Navbar = ({
   history,
   getGroup,
   logout,
-  auth: { isAuthenticated, loading, user },
+  auth: { isAuthenticated, loading, user, token },
   group
 }) => {
   const [navData, setNavData] = useState({
@@ -171,6 +171,22 @@ const Navbar = ({
     </div>
   );
 
+  const verifyingLinks = (
+    <div className="navbar-item">
+      <div className="buttons">
+        <button
+          onClick={() => onLogoutClicked()}
+          className="button is-fullwidth-touch is-dark is-small"
+        >
+          <span className="max-text-length-2">Log out</span>
+          <span className="icon is-small">
+            <i className="fas fa-sign-out-alt" />
+          </span>
+        </button>
+      </div>
+    </div>
+  );
+
   return (
     <nav className="navbar is-black is-fixed-top">
       <div className="navbar-brand">
@@ -189,43 +205,51 @@ const Navbar = ({
       </div>
       <div id="navMenu" className="navbar-menu">
         <div className="navbar-end">
-          <div className="navbar-item">
-            <form onSubmit={e => redirectToGroup(e, groupCode.toLowerCase())}>
-              <div className="field has-addons">
-                <div className="control is-expanded">
-                  <input
-                    className="input is-small"
-                    type="text"
-                    placeholder="Enter group code"
-                    name="groupCode"
-                    value={groupCode}
-                    onChange={e => onChange(e)}
-                  />
+          {!loading && (isAuthenticated || !token) && (
+            <div className="navbar-item">
+              <form onSubmit={e => redirectToGroup(e, groupCode.toLowerCase())}>
+                <div className="field has-addons">
+                  <div className="control is-expanded">
+                    <input
+                      className="input is-small"
+                      type="text"
+                      placeholder="Enter group code"
+                      name="groupCode"
+                      value={groupCode}
+                      onChange={e => onChange(e)}
+                    />
+                  </div>
+                  <div className="control">
+                    {groupCode !== "" ? (
+                      <button
+                        className="button is-primary is-small"
+                        type="submit"
+                      >
+                        Join Group
+                      </button>
+                    ) : (
+                      <button
+                        className="button is-primary is-small"
+                        type="submit"
+                        disabled
+                      >
+                        Join Group
+                      </button>
+                    )}
+                  </div>
                 </div>
-                <div className="control">
-                  {groupCode !== "" ? (
-                    <button
-                      className="button is-primary is-small"
-                      type="submit"
-                    >
-                      Join Group
-                    </button>
-                  ) : (
-                    <button
-                      className="button is-primary is-small"
-                      type="submit"
-                      disabled
-                    >
-                      Join Group
-                    </button>
-                  )}
-                </div>
-              </div>
-            </form>
-          </div>
+              </form>
+            </div>
+          )}
 
           {!loading && (
-            <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
+            <Fragment>
+              {isAuthenticated
+                ? authLinks
+                : !!token
+                ? verifyingLinks
+                : guestLinks}
+            </Fragment>
           )}
         </div>
       </div>

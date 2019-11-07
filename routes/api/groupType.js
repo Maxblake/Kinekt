@@ -104,7 +104,7 @@ router.post(
       }
 
       await requestedGroupType.save();
-      res.status(200).send("OK");
+      res.sendStatus(200);
     });
   }
 );

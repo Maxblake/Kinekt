@@ -30,7 +30,7 @@ const getTempUserToken = userId => {
   return jwt.sign(payload, config.get("jwtSecret"), { expiresIn: 60 });
 };
 
-const signUserToken = (res, userId) => {
+const signUserToken = (res, userId, isVerified) => {
   const errors = new APIerrors();
   const payload = {
     user: {
@@ -46,7 +46,7 @@ const signUserToken = (res, userId) => {
       if (err) {
         return errors.addErrAndSendResponse(res, err, "console", 500);
       }
-      res.json({ token });
+      res.json({ token, isVerified });
     }
   );
 };

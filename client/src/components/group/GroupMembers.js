@@ -13,7 +13,7 @@ const GroupMembers = ({ users, maxSize, adminOptions }) => {
               users={`${users.length}${maxSize ? `/${maxSize}` : ""} users`}
             />
           </div>
-          <div id="group-members" className="kScroll">
+          <div id="group-members" className="k-scroll">
             {users.map((user, index) => {
               return (
                 <GroupMember

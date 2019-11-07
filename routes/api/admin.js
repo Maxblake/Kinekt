@@ -40,7 +40,7 @@ router.post("/process-requested-group-types", auth, (req, res) => {
       await requestedGroupType.remove();
     }
 
-    res.status(200).send("OK");
+    res.sendStatus(200);
   });
 });
 

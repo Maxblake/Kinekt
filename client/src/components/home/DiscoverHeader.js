@@ -11,7 +11,7 @@ import elephant from "../../resources/elephant.png";
 // TODO use a level for this
 const DiscoverHeader = () => {
   return (
-    <div className="discover-header kScroll">
+    <div className="discover-header k-scroll">
       <h2 className="header-welcome is-size-1 is-size-3-touch">
         <span className="ws-nowrap">
           <strong>New</strong> around here?

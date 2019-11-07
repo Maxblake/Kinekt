@@ -117,7 +117,7 @@ const Chat = ({
           Chat
         </div>
         <div
-          className={`messages-scroll-container kScroll ${
+          className={`messages-scroll-container k-scroll ${
             showChat ? "" : "is-hidden-touch"
           }`}
           ref={messagesDiv}

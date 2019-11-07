@@ -48,6 +48,10 @@ const UserSchema = new mongoose.Schema({
   creationTimestamp: {
     type: Date,
     default: Date.now
+  },
+  isVerified: {
+    type: Boolean,
+    default: false
   }
 });
 

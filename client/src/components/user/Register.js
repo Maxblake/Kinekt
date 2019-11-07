@@ -20,7 +20,7 @@ const Register = ({
   register,
   clearErrors,
   errors,
-  auth: { isAuthenticated, loading }
+  auth: { isAuthenticated, loading, token }
 }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -149,6 +149,8 @@ const Register = ({
 
   if (isAuthenticated) {
     return <Redirect to="/" />;
+  } else if (!!token) {
+    return <Redirect to="/login" />;
   }
 
   if (loading) {

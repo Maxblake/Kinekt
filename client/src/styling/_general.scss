@@ -296,6 +296,42 @@ strong {
   }
 }
 
+.k-scroll {
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+    background-color: #404040;
+  }
+
+  &::-webkit-scrollbar {
+    width: 12px;
+    background-color: $off-black;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: var(--primary);
+  }
+}
+
+@media (min-width: $tablet) {
+  .k-scroll-desktop {
+    &::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+      background-color: #404040;
+    }
+
+    &::-webkit-scrollbar {
+      width: 12px;
+      background-color: $off-black;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      background-color: var(--primary);
+    }
+  }
+}
+
 @media (max-width: $tablet - 1) {
   .tab-right {
     top: 5.25rem;

@@ -29,6 +29,8 @@ router.get("/:checkIfAdmin", auth, (req, res) => {
       return errors.addErrAndSendResponse(res, "Invalid User ID");
     }
 
+    if (!user.isVerified) return res.json({ user: { isVerified: false } });
+
     const authResponse = { user };
 
     if (req.params.checkIfAdmin === "true") {
@@ -63,7 +65,39 @@ router.post("/", validateRequest("login"), (req, res) => {
       return errors.addErrAndSendResponse(res, "Invalid Credentials", "alert");
     }
 
-    signUserToken(res, user.id);
+    signUserToken(res, user.id, user.isVerified);
+  });
+});
+
+//"Our email messenger falcon couldn't find you, did you sign up with a valid email?",
+
+// @route   GET api/auth/sendEmailConfirmation
+// @desc    Send a new user email confirmation to verify his/her account
+// @access  Private
+router.post("/sendEmailConfirmation", auth, (req, res) => {
+  console.log("here");
+  const errors = new APIerrors();
+
+  runAPISafely(async () => {
+    const user = await User.findById(req.user.id)
+      .select("email isVerified")
+      .lean();
+
+    if (!user) {
+      return errors.addErrAndSendResponse(res, "Invalid User ID");
+    }
+
+    if (user.isVerified) {
+      return errors.addErrAndSendResponse(
+        res,
+        "You're already verified, go forth and get stacking!",
+        "alert"
+      );
+    }
+
+    console.log(user.email);
+
+    return res.sendStatus(200);
   });
 });
 
@@ -75,7 +109,7 @@ router.post("/enterBeta", (req, res) => {
       return res.status(200).json({ entryToken: "KJYA6yuNClsfFdAHTiHC" });
     }
 
-    return res.status(400);
+    return res.sendStatus(400);
   });
 });
 
@@ -117,32 +151,32 @@ const getNumExtraLocksWithReferral = groupLocks => {
 
 const onChargeSuccess = async (opts, res) => {
   try {
-  const { referralCode, userId, charge } = opts;
-  const groupLocks = Number(opts.groupLocks);
+    const { referralCode, userId, charge } = opts;
+    const groupLocks = Number(opts.groupLocks);
 
-  const user = await User.findById(userId).select(
-    "-password -email -creationTimestamp"
-  );
+    const user = await User.findById(userId).select(
+      "-password -email -creationTimestamp"
+    );
 
-  const referredUser = await User.findOne({ referralCode });
+    const referredUser = await User.findOne({ referralCode });
 
-  if (!!referredUser) {
-    user.groupLocks =
-      user.groupLocks + groupLocks + getNumExtraLocksWithReferral(groupLocks);
-    referredUser.groupLocks =
-      referredUser.groupLocks + getNumExtraLocksWithReferral(groupLocks);
-    referredUser.save();
-  } else {
-    user.groupLocks = user.groupLocks + groupLocks;
+    if (!!referredUser) {
+      user.groupLocks =
+        user.groupLocks + groupLocks + getNumExtraLocksWithReferral(groupLocks);
+      referredUser.groupLocks =
+        referredUser.groupLocks + getNumExtraLocksWithReferral(groupLocks);
+      referredUser.save();
+    } else {
+      user.groupLocks = user.groupLocks + groupLocks;
+    }
+
+    const payment = await logPayment(user, groupLocks, referredUser, charge);
+    await user.save();
+    res.status(200).json({ user, payment });
+  } catch (err) {
+    console.error(err.message); //DEV DEBUG ONLY
+    res.sendStatus(400);
   }
-
-  const payment = await logPayment(user, groupLocks, referredUser, charge);
-  await user.save();
-  res.status(200).json({ user, payment });
-} catch (err) {
-  console.error(err.message); //DEV DEBUG ONLY
-  res.status(400);
-}
 };
 
 const logPayment = async (user, groupLocks, referredUser, charge) => {

@@ -3,6 +3,7 @@ import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import { updateTheme } from "../utils/theme";
 import { handleResponseErrors } from "./helpers/helpers";
+import { setTextAlert } from "./alert";
 
 import {
   AUTH_LOADING,
@@ -27,15 +28,22 @@ export const loadUser = (checkIfAdmin = false) => async dispatch => {
 
     const res = await axios.get(`/api/auth/${checkIfAdmin}`);
 
-    dispatch({
-      type: SET_USER,
-      payload: res.data.user
-    });
+    if (res.data.user.isVerified) {
+      dispatch({
+        type: SET_USER,
+        payload: res.data.user
+      });
 
-    updateTheme(res.data.user.selectedTheme);
+      updateTheme(res.data.user.selectedTheme);
 
-    if (checkIfAdmin) {
-      return res.data.isAdmin;
+      if (checkIfAdmin) {
+        return res.data.isAdmin;
+      }
+    } else {
+      dispatch({
+        type: AUTH_ERROR,
+        payload: { isVerifying: true }
+      });
     }
   } catch (err) {
     dispatch({
@@ -73,6 +81,21 @@ export const login = (email, password) => async dispatch => {
     dispatch({
       type: AUTH_ERROR
     });
+  }
+};
+
+export const sendEmailConfirmation = () => async dispatch => {
+  try {
+    await axios.post("/api/auth/sendEmailConfirmation");
+
+    dispatch(
+      setTextAlert(
+        "Our fastest email messenger falcon is on the way. Please check your email inbox and follow the instructions we've sent to finish setting up your account",
+        "is-success"
+      )
+    );
+  } catch (err) {
+    dispatch(handleResponseErrors(err));
   }
 };
 

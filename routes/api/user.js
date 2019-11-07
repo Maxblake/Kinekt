@@ -53,7 +53,7 @@ router.post(
 
       await user.save();
 
-      signUserToken(res, user.id);
+      signUserToken(res, user.id, false);
     });
   }
 );

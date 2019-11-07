@@ -62,11 +62,19 @@ export default function(state = initialState, action) {
       localStorage.setItem("token", payload.token);
       return {
         ...state,
-        ...payload,
-        isAuthenticated: true,
+        token: payload.token,
+        isAuthenticated: payload.isVerified,
         loading: false
       };
     case AUTH_ERROR:
+      if (!!payload && payload.isVerifying) {
+        return {
+          ...state,
+          isAuthenticated: false,
+          loading: false,
+          user: null
+        };
+      }
     case LOGOUT:
       localStorage.removeItem("token");
       state.socket.emit("logout");

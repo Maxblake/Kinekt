@@ -53,7 +53,7 @@ const Alert = ({ alerts, errors, removeAlert }) => {
 
   if (alertsAndErrors.length > 0) {
     return (
-      <div className="notification-container">
+      <div className="notification-container k-scroll-desktop">
         {alertsAndErrors.map(alert => {
           let alertBody = null;
 

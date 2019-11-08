@@ -58,14 +58,14 @@ export const loadUser = (
 };
 
 // Verify User
-export const verifyUser = (token, history) => async dispatch => {
+export const verifyUser = (token, JSWT, history) => async dispatch => {
   const config = {
     headers: {
       "Content-Type": "application/json"
     }
   };
 
-  const body = JSON.stringify({ token });
+  const body = JSON.stringify({ JSWT });
 
   try {
     dispatch({
@@ -86,7 +86,7 @@ export const verifyUser = (token, history) => async dispatch => {
         )
       );
       updateTheme(res.data.user.selectedTheme);
-      history.push("/");
+      return history.push("/");
     }
     //TODO this should never occur..
     history.push("/login");
@@ -144,7 +144,7 @@ export const sendEmailConfirmation = () => async dispatch => {
     });
     dispatch(
       setTextAlert(
-        "Our fastest email messenger falcon is on the way. Please check your email inbox and follow the instructions we've sent to finish setting up your account",
+        "Our fastest email messenger falcon is on the way. Please check your email inbox (and spam folder) and follow the instructions we've sent to finish setting up your account",
         "is-success"
       )
     );

@@ -40,13 +40,21 @@ const Login = ({
   const isVerifying = !isAuthenticated && !!token;
 
   useEffect(() => {
-    if (!!match.params.verificationToken) {
-      verifyUser(match.params.verificationToken, history);
-    }
     return () => {
       clearErrors();
     };
   }, []);
+
+  useEffect(() => {
+    if (!!match.params.verificationToken && !isAuthenticated && !!token) {
+      console.log("calling verify", {
+        isAuthenticated,
+        verifToken: match.params.verificationToken,
+        token
+      });
+      verifyUser(match.params.verificationToken, token, history);
+    }
+  }, [token, isAuthenticated]);
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -91,7 +99,8 @@ const Login = ({
               <h3 className="is-size-4">Halt, dear traveller!</h3>
               <p>
                 In order to verify your acount, please click the activation link
-                we've emailed you
+                we've emailed you <br />
+                <strong>(be sure to check your spam folder)</strong>
               </p>
             </div>
             <SubmitButton isFullwidth={true} text="Resend verification email" />{" "}

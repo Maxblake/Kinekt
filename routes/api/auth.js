@@ -6,6 +6,7 @@ const stripe = require("stripe")(config.get("stripeSecret"));
 const bcrypt = require("bcryptjs");
 const shortid = require("shortid");
 const sgMail = require("@sendgrid/mail");
+const jwt = require("jsonwebtoken");
 sgMail.setApiKey(config.get("sgMailKey"));
 
 const {
@@ -121,18 +122,21 @@ router.post("/sendEmailConfirmation", auth, (req, res) => {
 });
 
 const sendEmailConfirmation = async (email, token) => {
+  const domain =
+    process.env.NODE_ENV === "production"
+      ? "https://happenstack.com"
+      : "http://localhost:3000";
+
   const msg = {
     to: email,
-    from: "happenstackhelp@gmail.com",
-    subject: "Welcome to HappenStack! Please Confirm Your Account",
-    text:
-      "Hey friend,\n\n" +
-      "Please verify your HappenStack account by clicking this link: \nhttp://localhost:3000/login/" +
-      token +
-      ".\n"
+    from: "admin@happenstack.com",
+    templateId: "d-bbb110aa3d9048129d94aa9f65699f6c",
+    dynamic_template_data: {
+      verifyURL: `${domain}/login/${token}`
+    }
   };
-  sgResponse = await sgMail.send(msg);
   console.log(email);
+  await sgMail.send(msg);
   return true;
 };
 
@@ -160,10 +164,14 @@ const assignUniqueToken = async userId => {
 // @route   GET api/auth/verifyUser
 // @desc    Called when a user clicks the link sent to them for account verification via email
 // @access  Private
-router.post("/verifyUser/:token", auth, (req, res) => {
+router.post("/verifyUser/:token", (req, res) => {
   const errors = new APIerrors();
 
   runAPISafely(async () => {
+    const JSWT = req.body.JSWT ? req.body.JSWT : "yolo";
+    const decoded = jwt.verify(JSWT, config.get("jwtSecret"));
+    req.user = decoded.user;
+
     const user = await User.findById(req.user.id).select(
       "-password -email -creationTimestamp"
     );

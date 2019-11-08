@@ -35,7 +35,6 @@ export const register = userFields => async dispatch => {
     });
 
     dispatch(clearErrorsAndAlerts());
-
     dispatch(loadUser(false, true));
   } catch (err) {
     dispatch(handleResponseErrors(err));

@@ -586,8 +586,13 @@ const expireGroup = (group, io) => {
     }
   };
 
+  const domain =
+    process.env.NODE_ENV === "production"
+      ? "https://guarded-oasis-93378.herokuapp.com"
+      : "http://localhost:3000";
+
   axios
-    .delete("https://guarded-oasis-93378.herokuapp.com/api/group", config)
+    .delete(`${domain}/api/group`, config)
     .catch(err => console.error(err.message));
 
   io.in(`group-${group._id.toString()}`).emit("kickedFromGroup", {

@@ -3,7 +3,12 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Redirect, withRouter } from "react-router-dom";
 
-import { login, clearErrors, sendEmailConfirmation } from "../../actions/auth";
+import {
+  login,
+  clearErrors,
+  sendEmailConfirmation,
+  verifyUser
+} from "../../actions/auth";
 
 import PageTitle from "../layout/page/PageTitle";
 import Form from "../form/Form";
@@ -19,8 +24,10 @@ const Login = ({
   errors,
   auth: { isAuthenticated, loading, user, token },
   login,
+  verifyUser,
   sendEmailConfirmation,
-  clearErrors
+  clearErrors,
+  match
 }) => {
   const [formData, setFormData] = useState({
     email: "",
@@ -33,6 +40,9 @@ const Login = ({
   const isVerifying = !isAuthenticated && !!token;
 
   useEffect(() => {
+    if (!!match.params.verificationToken) {
+      verifyUser(match.params.verificationToken, history);
+    }
     return () => {
       clearErrors();
     };
@@ -139,6 +149,7 @@ const Login = ({
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
+  verifyUser: PropTypes.func.isRequired,
   sendEmailConfirmation: PropTypes.func.isRequired,
   clearErrors: PropTypes.func.isRequired,
   errors: PropTypes.array.isRequired,
@@ -153,5 +164,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { login, clearErrors, sendEmailConfirmation }
+  { login, clearErrors, sendEmailConfirmation, verifyUser }
 )(withRouter(Login));

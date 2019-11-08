@@ -60,6 +60,11 @@ const App = () => {
                 <Route exact path="/" component={Home} />
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/login" component={Login} />
+                <Route
+                  exact
+                  path="/login/:verificationToken"
+                  component={Login}
+                />
                 <Route exact path="/not-found" component={NotFound} />
                 <Route exact path="/FAQ" component={FAQ} />
                 <Route exact path="/k/:groupType" component={GroupType} />

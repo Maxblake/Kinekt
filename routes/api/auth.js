@@ -5,7 +5,9 @@ const config = require("config");
 const stripe = require("stripe")(config.get("stripeSecret"));
 const bcrypt = require("bcryptjs");
 const shortid = require("shortid");
-const nodemailer = require("nodemailer");
+const sgMail = require("@sendgrid/mail");
+sgMail.setApiKey(config.get("sgMailKey"));
+
 const {
   runAPISafely,
   signUserToken,
@@ -76,7 +78,6 @@ router.post("/", validateRequest("login"), (req, res) => {
 // @desc    Send a new user email confirmation to verify his/her account
 // @access  Private
 router.post("/sendEmailConfirmation", auth, (req, res) => {
-  console.log("here");
   const errors = new APIerrors();
 
   runAPISafely(async () => {
@@ -92,7 +93,7 @@ router.post("/sendEmailConfirmation", auth, (req, res) => {
       return errors.addErrAndSendResponse(
         res,
         "You're already verified, go forth and get stacking!",
-        "alert"
+        "alert-warning"
       );
     }
 
@@ -119,25 +120,20 @@ router.post("/sendEmailConfirmation", auth, (req, res) => {
   });
 });
 
-const sendEmailConfirmation = async email => {
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: "happenstackhelp@gmail.com",
-      pass: config.get("emailPW")
-    }
-  });
-
-  const mailOptions = {
-    from: "happenstackhelp@gmail.com",
+const sendEmailConfirmation = async (email, token) => {
+  const msg = {
     to: email,
-    subject: "Confirm your HappenStack account",
+    from: "happenstackhelp@gmail.com",
+    subject: "Welcome to HappenStack! Please Confirm Your Account",
     text:
       "Hey friend,\n\n" +
       "Please verify your HappenStack account by clicking this link: \nhttp://localhost:3000/login/" +
       token +
       ".\n"
   };
+  sgResponse = await sgMail.send(msg);
+  console.log(email);
+  return true;
 };
 
 const assignUniqueToken = async userId => {
@@ -160,6 +156,57 @@ const assignUniqueToken = async userId => {
 
   return token;
 };
+
+// @route   GET api/auth/verifyUser
+// @desc    Called when a user clicks the link sent to them for account verification via email
+// @access  Private
+router.post("/verifyUser/:token", auth, (req, res) => {
+  const errors = new APIerrors();
+
+  runAPISafely(async () => {
+    const user = await User.findById(req.user.id).select(
+      "-password -email -creationTimestamp"
+    );
+
+    if (!user) {
+      return errors.addErrAndSendResponse(
+        res,
+        "You must be logged in to confirm your account",
+        "alert-warning"
+      );
+    }
+
+    if (user.isVerified) {
+      return errors.addErrAndSendResponse(
+        res,
+        "You're already verified, go forth and get stacking!",
+        "alert-warning"
+      );
+    }
+
+    const token = await VerificationToken.findOne({ token: req.params.token });
+    if (!token) {
+      return errors.addErrAndSendResponse(
+        res,
+        "Your confirmation token has expired, please click the resend button from the login page and try again",
+        "alert-warning"
+      );
+    }
+
+    if (!user._id.equals(token.verifyingUser)) {
+      return errors.addErrAndSendResponse(
+        res,
+        "Your confirmation token appears to be invalid, please click the resend button from the login page and try again",
+        "alert-warning"
+      );
+    }
+
+    user.isVerified = true;
+    await Promise.all([user.save(), token.remove()]);
+
+    return res.json({ user });
+  });
+});
 
 router.post("/enterBeta", (req, res) => {
   runAPISafely(async () => {

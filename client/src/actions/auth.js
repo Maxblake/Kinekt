@@ -57,6 +57,49 @@ export const loadUser = (
   }
 };
 
+// Verify User
+export const verifyUser = (token, history) => async dispatch => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  const body = JSON.stringify({ token });
+
+  try {
+    dispatch({
+      type: AUTH_LOADING
+    });
+
+    const res = await axios.post(`/api/auth/verifyUser/${token}`, body, config);
+
+    if (res.data.user.isVerified) {
+      dispatch({
+        type: SET_USER,
+        payload: res.data.user
+      });
+      dispatch(
+        setTextAlert(
+          `Welcome to HappenStack, ${res.data.user.name}!`,
+          "is-success"
+        )
+      );
+      updateTheme(res.data.user.selectedTheme);
+      history.push("/");
+    }
+    //TODO this should never occur..
+    history.push("/login");
+    console.error("Verification API returned 'OK' but user was not verified");
+  } catch (err) {
+    dispatch(handleResponseErrors(err));
+    dispatch({
+      type: AUTH_LOADED
+    });
+    history.push("/login");
+  }
+};
+
 // Login User
 export const login = (email, password) => async dispatch => {
   const config = {

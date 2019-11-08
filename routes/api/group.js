@@ -68,7 +68,7 @@ const getGroups = async query => {
       score: { $meta: "textScore" }
     })
     .limit(8)
-    .select("-notices -creationTimestamp -users")
+    .select("-notices -users")
     .lean();
 
   if (!!query.$text) {

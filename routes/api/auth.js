@@ -4,7 +4,7 @@ const auth = require("../../middleware/auth");
 const config = require("config");
 const stripe = require("stripe")(config.get("stripeSecret"));
 const bcrypt = require("bcryptjs");
-const shortid = require("shortid");
+const nanoid = require("nanoid");
 const sgMail = require("@sendgrid/mail");
 const jwt = require("jsonwebtoken");
 sgMail.setApiKey(config.get("sgMailKey"));
@@ -19,6 +19,7 @@ const {
 const User = require("../../models/User");
 const Payment = require("../../models/Payment");
 const VerificationToken = require("../../models/VerificationToken");
+const ResetToken = require("../../models/ResetToken");
 
 // @route   GET api/auth/:checkIfAdmin
 // @desc    Given JSON Web Token, return user object
@@ -140,14 +141,14 @@ const sendEmailConfirmation = async (email, token) => {
   return true;
 };
 
-const assignUniqueToken = async userId => {
+const assignUniqueToken = async (model, userId) => {
   let i = 0;
   let uniqueTokenFound = false;
   let token = "";
 
   while (i < 50 && !uniqueTokenFound) {
-    token = shortid.generate();
-    if (await VerificationToken.findOne({ token })) {
+    token = nanoid();
+    if (await model.findOne({ token })) {
       i += 1;
       continue;
     }
@@ -215,6 +216,103 @@ router.post("/verifyUser/:token", (req, res) => {
     return res.json({ user });
   });
 });
+
+// @route   GET api/auth/sendResetInstructions
+// @desc    Send a user an email with a link to reset his/her password
+// @access  Public
+router.post("/sendResetInstructions", (req, res) => {
+  runAPISafely(async () => {
+    const user = await User.findOne({ email: req.body.email })
+      .select("email")
+      .lean();
+
+    if (!user) {
+      return res.sendStatus(200);
+    }
+
+    await ResetToken.deleteMany({ resettingUser: user._id });
+
+    const token = await assignUniqueToken(user._id.toString());
+    const resetToken = new VerificationToken({
+      resettingUser: user._id,
+      token
+    });
+
+    await resetToken.save();
+    await sendResetInstructions(user.email, token);
+
+    return res.sendStatus(200);
+  });
+});
+
+const sendResetInstructions = async (email, token) => {
+  const domain =
+    process.env.NODE_ENV === "production"
+      ? "https://happenstack.com"
+      : "http://localhost:3000";
+
+  const msg = {
+    to: email,
+    from: "admin@happenstack.com",
+    templateId: "d-bbb110aa3d9048129d94aa9f65699f6c",
+    dynamic_template_data: {
+      verifyURL: `${domain}/login/${token}`
+    }
+  };
+  console.log(email);
+  await sgMail.send(msg);
+  return true;
+};
+
+// @route   GET api/auth/verifyUser
+// @desc    Called when a user clicks the link sent to them for password reset via email, then follows the prompt on the password reset page
+// @access  Public
+router.post(
+  "/resetPassword/:token",
+  validateRequest("resetPassword"),
+  (req, res) => {
+    const errors = new APIerrors();
+
+    if (errors.addExpressValidationResult(req))
+      return errors.sendErrorResponse(res);
+
+    runAPISafely(async () => {
+      const user = await User.findOne({ email: req.body.email });
+
+      if (!user) {
+        return errors.addErrAndSendResponse(
+          res,
+          "Provided email does not match primary email on the account",
+          "email"
+        );
+      }
+
+      const token = await ResetToken.findOne({ token: req.params.token });
+      if (!token) {
+        return errors.addErrAndSendResponse(
+          res,
+          "Your password reset token has expired, please follow the password reset prompt from the login page and try again",
+          "alert-warning"
+        );
+      }
+
+      if (!user._id.equals(token.resettingUser)) {
+        return errors.addErrAndSendResponse(
+          res,
+          "Provided email does not match primary email on the account",
+          "email"
+        );
+      }
+
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(req.body.newPassword, salt);
+
+      await Promise.all([user.save(), token.remove()]);
+
+      return res.sendStatus(200);
+    });
+  }
+);
 
 router.post("/enterBeta", (req, res) => {
   runAPISafely(async () => {

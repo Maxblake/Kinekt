@@ -14,6 +14,7 @@ import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import Alert from "./components/alerts/Alert";
 import Login from "./components/auth/Login";
+import ResetPassword from "./components/auth/ResetPassword";
 import Register from "./components/user/Register";
 import EditUser from "./components/user/EditUser";
 import GroupLocks from "./components/user/GroupLocks";
@@ -64,6 +65,12 @@ const App = () => {
                   exact
                   path="/login/:verificationToken"
                   component={Login}
+                />
+                <Route exact path="/reset-password" component={ResetPassword} />
+                <Route
+                  exact
+                  path="/reset-password/:resetToken"
+                  component={ResetPassword}
                 />
                 <Route exact path="/not-found" component={NotFound} />
                 <Route exact path="/FAQ" component={FAQ} />

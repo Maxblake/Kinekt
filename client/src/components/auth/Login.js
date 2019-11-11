@@ -47,11 +47,6 @@ const Login = ({
 
   useEffect(() => {
     if (!!match.params.verificationToken && !isAuthenticated && !!token) {
-      console.log("calling verify", {
-        isAuthenticated,
-        verifToken: match.params.verificationToken,
-        token
-      });
       verifyUser(match.params.verificationToken, token, history);
     }
   }, [token, isAuthenticated]);
@@ -71,6 +66,10 @@ const Login = ({
 
   const onClickSignup = () => {
     history.push("/register");
+  };
+
+  const onClickResetPassword = () => {
+    history.push("/reset-password");
   };
 
   if (isAuthenticated && user) {
@@ -95,7 +94,7 @@ const Login = ({
       <Form onSubmit={onSubmit}>
         {isVerifying ? (
           <Fragment>
-            <div className="verify-message">
+            <div className="login-form-message">
               <h3 className="is-size-4">Halt, dear traveller!</h3>
               <p>
                 In order to verify your acount, please click the activation link
@@ -136,18 +135,29 @@ const Login = ({
               }
             />
             <SubmitButton isFullwidth={true} text="Let's go!" />{" "}
+            <div className="reset-password-container">
+              <span
+                className="clickable-text"
+                onClick={() => onClickResetPassword()}
+              >
+                Forgot your password?
+              </span>
+            </div>
           </Fragment>
         )}
       </Form>
       {!isVerifying && (
         <div className="content has-text-centered">
           <p className="">
-            Don't have an account yet? You can sign up{" "}
-            <span
-              className="clickable-text has-text-link"
-              onClick={() => onClickSignup()}
-            >
-              here.
+            Don't have an account yet?{" "}
+            <span className="ws-nowrap">
+              Sign up{" "}
+              <span
+                className="clickable-text has-text-link"
+                onClick={() => onClickSignup()}
+              >
+                here.
+              </span>
             </span>
           </p>
         </div>

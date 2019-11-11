@@ -296,6 +296,29 @@ const validateRequest = APImethod => {
           )
       ];
     }
+    case "resetPassword": {
+      return [
+        check("email", "Email address is invalid")
+          .exists({ checkFalsy: true })
+          .isEmail()
+          .normalizeEmail(),
+        check(
+          "newPassword",
+          "Password must be between 6 and 32 ASCII characters"
+        )
+          .exists({ checkFalsy: true })
+          .isAscii()
+          .isLength({
+            min: 6,
+            max: 32
+          }),
+        check("confirmNewPassword", "Passwords do not match")
+          .exists({ checkFalsy: true })
+          .custom((confirmNewPassword, { req }) => {
+            return confirmNewPassword === req.body.newPassword;
+          })
+      ];
+    }
     case "updateUser": {
       return [
         check("name", "Name is too long")

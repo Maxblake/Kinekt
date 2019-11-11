@@ -132,6 +132,78 @@ export const login = (email, password) => async dispatch => {
   }
 };
 
+// Reset password
+export const resetPassword = (
+  email,
+  newPassword,
+  confirmNewPassword,
+  token
+) => async dispatch => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  const body = JSON.stringify({
+    email,
+    newPassword,
+    confirmNewPassword
+  });
+
+  try {
+    dispatch({
+      type: AUTH_LOADING
+    });
+
+    await axios.post(`/api/auth/resetPassword/${token}`, body, config);
+
+    dispatch(
+      setTextAlert("Your password has successfully been reset", "is-success")
+    );
+    dispatch({
+      type: AUTH_LOADED
+    });
+    dispatch(clearErrorsAndAlerts());
+  } catch (err) {
+    dispatch(handleResponseErrors(err));
+    dispatch({
+      type: AUTH_LOADED
+    });
+  }
+};
+
+export const sendResetInstructions = email => async dispatch => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  const body = JSON.stringify({
+    email
+  });
+
+  dispatch({
+    type: AUTH_LOADING
+  });
+  try {
+    await axios.post("/api/auth/sendResetInstructions", body, config);
+  } catch (err) {
+    //TODO this should never occur
+    console.error(err);
+  }
+  dispatch({
+    type: AUTH_LOADED
+  });
+  dispatch(
+    setTextAlert(
+      "Our fastest email messenger falcon is on the way. Please check your email inbox (and spam folder) and follow the instructions we've sent to finish resetting your password",
+      "is-success"
+    )
+  );
+};
+
 export const sendEmailConfirmation = () => async dispatch => {
   try {
     dispatch({

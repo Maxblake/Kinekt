@@ -375,16 +375,18 @@
 
 // Login
 .centered-form.login-form {
-  max-width: 400px;
+  max-width: 370px;
 
   .hs-box {
     background-color: #141414;
   }
 
-  .verify-message {
+  .login-form-message {
     color: #808080;
     h3 {
       color: ghostwhite;
+      line-height: 2rem;
+      margin-bottom: 0.25rem;
     }
     margin-bottom: 0.75rem;
   }
@@ -393,6 +395,22 @@
     max-width: 300px;
     padding-bottom: 1.75rem;
     margin: auto;
+  }
+
+  .field.is-grouped.is-grouped-right {
+    margin-bottom: 0;
+  }
+
+  .reset-password-container {
+    margin-top: 0.25rem;
+    width: 100%;
+    text-align: center;
+    color: var(--primary);
+    font-size: 0.8rem;
+  }
+
+  .label {
+    color: ghostwhite;
   }
 }
 

@@ -319,6 +319,14 @@ const validateRequest = APImethod => {
           })
       ];
     }
+    case "normalizeEmail": {
+      return [
+        check("email", "Email address is invalid")
+          .exists({ checkFalsy: true })
+          .isEmail()
+          .normalizeEmail()
+      ];
+    }
     case "updateUser": {
       return [
         check("name", "Name is too long")

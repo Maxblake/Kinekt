@@ -52,7 +52,7 @@ const App = () => {
         <Router>
           <div className="App">
             <div className="background">
-              <div className="background-image"></div>
+              {true && <div className="background-image"></div>}
             </div>
             <Navbar />
             <div className="container site-content">

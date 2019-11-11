@@ -28,7 +28,9 @@ const ioServer = app => {
   });
 
   scheduleGroupExpirations(io);
+  deleteStaleUsers();
   setInterval(() => scheduleGroupExpirations(io), 1000 * 60 * 30);
+  setInterval(() => deleteStaleUsers(), 1000 * 60 * 60 * 12);
 
   return server;
 };
@@ -557,6 +559,36 @@ class socketHandler {
     clearTimeout(this.userStatusTimeout);
   }
 }
+const deleteStaleUsers = async () => {
+  const staleUsers = await User.find({
+    isVerified: false,
+    creationTimestamp: { $lt: moment().subtract(7, "days") }
+  })
+    .select("id")
+    .lean();
+
+  staleUsers.forEach(user => {
+    deleteUser(user);
+  });
+};
+
+const deleteUser = user => {
+  const tempToken = getTempUserToken(user._id);
+  const config = {
+    headers: {
+      "x-auth-token": tempToken
+    }
+  };
+
+  const domain =
+    process.env.NODE_ENV === "production"
+      ? "https://guarded-oasis-93378.herokuapp.com"
+      : "http://localhost:3000";
+
+  axios
+    .delete(`${domain}/api/user`, config)
+    .catch(err => console.error(err.message));
+};
 
 const scheduleGroupExpirations = async io => {
   const expiringGroups = await Group.find({

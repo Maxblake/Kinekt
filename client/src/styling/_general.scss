@@ -129,6 +129,12 @@ strong {
   justify-content: center;
 }
 
+.input,
+.textarea,
+.select select {
+  background-color: rgb(240, 245, 252);
+}
+
 .centered-form {
   max-width: 500px;
   margin: auto;
@@ -136,7 +142,24 @@ strong {
   .hs-box {
     padding: 2.25rem;
     margin-bottom: 0.5rem;
+
+    .input,
+    .textarea,
+    .select select,
+    .file-name {
+      background-color: rgb(240, 245, 252);
+      border: none;
+      border-bottom: 1px solid #dbdbdb;
+      box-shadow: none;
+      border-radius: 0;
+    }
   }
+}
+
+input:-internal-autofill-selected {
+  background-color: initial !important;
+  background-image: none !important;
+  color: rgb(0, 0, 0) !important;
 }
 
 .grouped-control-margin {
@@ -235,12 +258,13 @@ strong {
 
 .control {
   .icon.is-left {
-    color: #404040;
+    color: #707070;
     opacity: 0.6;
   }
-  .input {
+  .input,
+  .textarea {
     &::placeholder {
-      color: #404040;
+      color: #707070;
       opacity: 0.8;
     }
   }

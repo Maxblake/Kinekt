@@ -63,13 +63,21 @@ router.post("/", validateRequest("login"), (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return errors.addErrAndSendResponse(res, "Invalid Credentials", "alert");
+      return errors.addErrAndSendResponse(
+        res,
+        "Your email or password is invalid",
+        "alert"
+      );
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return errors.addErrAndSendResponse(res, "Invalid Credentials", "alert");
+      return errors.addErrAndSendResponse(
+        res,
+        "Your email or password is invalid",
+        "alert"
+      );
     }
 
     signUserToken(res, user.id, user.isVerified);
@@ -101,7 +109,10 @@ router.post("/sendEmailConfirmation", auth, (req, res) => {
 
     await VerificationToken.deleteMany({ verifyingUser: user._id });
 
-    const token = await assignUniqueToken(user._id.toString());
+    const token = await assignUniqueToken(
+      VerificationToken,
+      user._id.toString()
+    );
     const verificationToken = new VerificationToken({
       verifyingUser: user._id,
       token
@@ -130,7 +141,7 @@ const sendEmailConfirmation = async (email, token) => {
 
   const msg = {
     to: email,
-    from: "admin@happenstack.com",
+    from: "HappenStack@happenstack.com",
     templateId: "d-bbb110aa3d9048129d94aa9f65699f6c",
     dynamic_template_data: {
       verifyURL: `${domain}/login/${token}`
@@ -220,30 +231,37 @@ router.post("/verifyUser/:token", (req, res) => {
 // @route   GET api/auth/sendResetInstructions
 // @desc    Send a user an email with a link to reset his/her password
 // @access  Public
-router.post("/sendResetInstructions", (req, res) => {
-  runAPISafely(async () => {
-    const user = await User.findOne({ email: req.body.email })
-      .select("email")
-      .lean();
+router.post(
+  "/sendResetInstructions",
+  validateRequest("normalizeEmail"),
+  (req, res) => {
+    const errors = new APIerrors();
+    errors.addExpressValidationResult(req);
 
-    if (!user) {
+    runAPISafely(async () => {
+      const user = await User.findOne({ email: req.body.email })
+        .select("email")
+        .lean();
+
+      if (!user) {
+        return res.sendStatus(200);
+      }
+
+      await ResetToken.deleteMany({ resettingUser: user._id });
+
+      const token = await assignUniqueToken(ResetToken, user._id.toString());
+      const resetToken = new ResetToken({
+        resettingUser: user._id,
+        token
+      });
+
+      await resetToken.save();
+      await sendResetInstructions(user.email, token);
+
       return res.sendStatus(200);
-    }
-
-    await ResetToken.deleteMany({ resettingUser: user._id });
-
-    const token = await assignUniqueToken(user._id.toString());
-    const resetToken = new VerificationToken({
-      resettingUser: user._id,
-      token
     });
-
-    await resetToken.save();
-    await sendResetInstructions(user.email, token);
-
-    return res.sendStatus(200);
-  });
-});
+  }
+);
 
 const sendResetInstructions = async (email, token) => {
   const domain =
@@ -253,10 +271,10 @@ const sendResetInstructions = async (email, token) => {
 
   const msg = {
     to: email,
-    from: "admin@happenstack.com",
-    templateId: "d-bbb110aa3d9048129d94aa9f65699f6c",
+    from: "HappenStack@happenstack.com",
+    templateId: "d-a2502111a9e0460f9079fb6c0ce2d137",
     dynamic_template_data: {
-      verifyURL: `${domain}/login/${token}`
+      resetURL: `${domain}/reset-password/${token}`
     }
   };
   console.log(email);

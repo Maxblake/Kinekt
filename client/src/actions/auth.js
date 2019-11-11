@@ -51,6 +51,7 @@ export const loadUser = (
       });
     }
   } catch (err) {
+    setAuthToken();
     dispatch({
       type: AUTH_ERROR
     });
@@ -137,7 +138,8 @@ export const resetPassword = (
   email,
   newPassword,
   confirmNewPassword,
-  token
+  token,
+  history
 ) => async dispatch => {
   const config = {
     headers: {
@@ -158,13 +160,14 @@ export const resetPassword = (
 
     await axios.post(`/api/auth/resetPassword/${token}`, body, config);
 
-    dispatch(
-      setTextAlert("Your password has successfully been reset", "is-success")
-    );
     dispatch({
       type: AUTH_LOADED
     });
-    dispatch(clearErrorsAndAlerts());
+    dispatch(clearErrors());
+    dispatch(
+      setTextAlert("Your password has successfully been reset", "is-success")
+    );
+    history.push("/login");
   } catch (err) {
     dispatch(handleResponseErrors(err));
     dispatch({
@@ -263,6 +266,7 @@ export const clearErrors = () => dispatch => {
 
 // Logout
 export const logout = () => dispatch => {
+  setAuthToken();
   dispatch({
     type: LOGOUT
   });

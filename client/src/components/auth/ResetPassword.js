@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Redirect, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 import {
   resetPassword,
@@ -15,10 +15,7 @@ import FormControl from "../form/FormControl";
 import SubmitButton from "../form/SubmitButton";
 import Spinner from "../common/Spinner";
 
-import logo from "../../resources/logo_vertical_md.png";
-
 const ResetPassword = ({
-  location,
   history,
   errors,
   auth: { loading },
@@ -52,12 +49,13 @@ const ResetPassword = ({
   const onSubmit = e => {
     e.preventDefault();
 
-    if (!!match.params.verificationToken) {
+    if (!!match.params.resetToken) {
       resetPassword(
         email,
         newPassword,
         confirmNewPassword,
-        match.params.verificationToken
+        match.params.resetToken,
+        history
       );
     } else {
       sendResetInstructions(email);
@@ -69,21 +67,22 @@ const ResetPassword = ({
   }
 
   return (
-    <section className="centered-form login-form">
+    <section className="centered-form reset-password-form">
       <nav className="level" id="page-nav">
         <PageTitle title="Reset Password" />
       </nav>
 
       <Form onSubmit={onSubmit}>
-        {!match.params.verificationToken ? (
+        {!match.params.resetToken ? (
           <Fragment>
             <div className="login-form-message">
               <h3 className="is-size-4">
-                No password? <span className="ws-nowrap">No worries.</span>
+                No password? <br />
+                <span className="ws-nowrap">No worries.</span>
               </h3>
               <p>
-                Simply provide the email you currently use to log in, and we'll
-                send you further instructions <br />
+                Simply provide your login email, and we'll send you further
+                instructions <br />
                 <strong>(be sure to check your spam folder)</strong>
               </p>
             </div>
@@ -99,12 +98,17 @@ const ResetPassword = ({
                 </span>
               }
             />
-            <SubmitButton isFullwidth={true} text="Send Reset Instructions" />{" "}
+            <SubmitButton
+              isDisabled={email.length < 3 || email.indexOf("@") === -1}
+              isFullwidth={true}
+              text="Send Reset Instructions"
+            />{" "}
           </Fragment>
         ) : (
           <Fragment>
             <FormControl
               label="Current Email"
+              placeholder="Email"
               name="email"
               value={email}
               onChange={onChange}
@@ -115,35 +119,37 @@ const ResetPassword = ({
                 </span>
               }
             />
-            <FormControl
-              label="New Password"
-              placeholder="Password"
-              name="newPassword"
-              value={newPassword}
-              type="password"
-              onChange={onChange}
-              error={errNewPassword ? errNewPassword.msg : undefined}
-              iconLeft={
-                <span className="icon is-small is-left">
-                  <i className="fas fa-lock"></i>
-                </span>
-              }
-            />
-            <FormControl
-              placeholder="Confirm Password"
-              name="confirmNewPassword"
-              value={confirmNewPassword}
-              type="password"
-              onChange={onChange}
-              error={
-                errConfirmNewPassword ? errConfirmNewPassword.msg : undefined
-              }
-              iconLeft={
-                <span className="icon is-small is-left">
-                  <i className="fas fa-lock"></i>
-                </span>
-              }
-            />
+            <div className="login-styled-input-container">
+              <FormControl
+                label="New Password"
+                placeholder="Password"
+                name="newPassword"
+                value={newPassword}
+                type="password"
+                onChange={onChange}
+                error={errNewPassword ? errNewPassword.msg : undefined}
+                iconLeft={
+                  <span className="icon is-small is-left">
+                    <i className="fas fa-lock"></i>
+                  </span>
+                }
+              />
+              <FormControl
+                placeholder="Confirm Password"
+                name="confirmNewPassword"
+                value={confirmNewPassword}
+                type="password"
+                onChange={onChange}
+                error={
+                  errConfirmNewPassword ? errConfirmNewPassword.msg : undefined
+                }
+                iconLeft={
+                  <span className="icon is-small is-left">
+                    <i className="fas fa-lock"></i>
+                  </span>
+                }
+              />
+            </div>
             <SubmitButton isFullwidth={true} text="Confirm Password Reset" />{" "}
           </Fragment>
         )}
@@ -155,7 +161,6 @@ const ResetPassword = ({
 ResetPassword.propTypes = {
   resetPassword: PropTypes.func.isRequired,
   sendResetInstructions: PropTypes.func.isRequired,
-  verifyUser: PropTypes.func.isRequired,
   clearErrors: PropTypes.func.isRequired,
   errors: PropTypes.array.isRequired,
   auth: PropTypes.object.isRequired,

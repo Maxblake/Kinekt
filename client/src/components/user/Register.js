@@ -15,6 +15,8 @@ import SubmitButton from "../form/SubmitButton";
 import CustomField from "../form/CustomField";
 import ImgUploadControl from "../form/ImgUploadControl";
 import Modal from "../common/subcomponents/Modal";
+import TermsOfService from "../common/TermsOfService";
+import PrivacyPolicy from "../common/PrivacyPolicy";
 
 const Register = ({
   register,
@@ -297,58 +299,17 @@ const Register = ({
                     checked={!isSubmitDisabled}
                   />
                   &nbsp;I have read and agree to the{" "}
-                  <Modal
+                  <TermsOfService
                     trigger={
-                      <span className="has-text-link">terms of service</span>
+                      <span className="has-text-link">terms of use</span>
                     }
-                  >
-                    <div className="hs-box info-modal is-vcentered">
-                      <div className="icon is-large info-icon">
-                        <i className="far fa-3x fa-question-circle" />
-                      </div>
-                      <div className="content">
-                        Hey there. If you're reading this, thanks for doing your
-                        part and checking out the terms of service. HappenStack
-                        is unreleased at this time, so there's nothing official
-                        to see here. For now, just please don't do anything
-                        stupid with this software, and if you get caught doing
-                        something stupid with this software, don't sue me.
-                        <br />
-                        <br />
-                        I'd like this modal to look like an actual TOS in the
-                        meantime, so here's a snippet from the Cars 2 script.
-                        <br />
-                        <br />
-                        A sleek British sports car talks directly to us in a
-                        pixilated, garbled video. He's OUT OF BREATH. Crates are
-                        visible behind him. We're in the shadowy bowels of a
-                        steel room.
-                        <br />
-                        <br />
-                        LELAND TURBO This is Agent Leland Turbo. I have a flash
-                        transmission for Agent Finn McMissile.
-                        <br />
-                        <br />
-                        SUPERIMPOSE OVER BLACK: WALT DISNEY PICTURES PRESENTS
-                        <br />
-                        <br />
-                        LELAND TURBO Finn. My cover's been compromised.
-                        Everything's gone pear-shaped.
-                        <br />
-                        <br />
-                        SUPERIMPOSE OVER BLACK: A PIXAR ANIMATION STUDIOS FILM
-                        <br />
-                        <br />
-                        LELAND TURBO You won't believe what I've found out here.
-                        <br />
-                        <br />
-                        He angles our camera view, reveals a PORTHOLE through
-                        which we can see flames rising in the distance.
-                        <br />
-                        <br />
-                      </div>
-                    </div>
-                  </Modal>
+                  />{" "}
+                  and{" "}
+                  <PrivacyPolicy
+                    trigger={
+                      <span className="has-text-link">privacy policy</span>
+                    }
+                  />
                 </label>
               </div>
             </div>

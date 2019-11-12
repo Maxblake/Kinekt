@@ -4,10 +4,10 @@
   color: #fafafa;
   position: fixed;
   z-index: 1;
-  top: 0;
+  top: 2.9rem;
   left: 0;
   right: 0;
-  height: 100%;
+  bottom: 0;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -15,7 +15,7 @@
   padding: 0 20rem;
 
   .header-welcome {
-    margin: 14rem 0 12rem 0;
+    margin: 12rem 0 12rem 0;
     text-align: center;
 
     line-height: 1.75rem;
@@ -114,7 +114,7 @@
     padding: 0 9%;
 
     .header-welcome {
-      margin: 10rem 0 14rem 0;
+      margin: 7rem 0 14rem 0;
       line-height: 1.5rem;
 
       & :first-child {

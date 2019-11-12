@@ -35,6 +35,16 @@
       color: var(--primary);
       background-color: transparent;
     }
+
+    position: relative;
+    &::before {
+      content: "[beta]";
+      position: absolute;
+      bottom: 1.25rem;
+      right: 0.15rem;
+      color: #808080;
+      font-size: 0.6rem;
+    }
   }
 }
 

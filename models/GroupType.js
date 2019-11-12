@@ -31,6 +31,10 @@ const GroupTypeSchema = new mongoose.Schema({
     deleteHash: {
       type: String
     }
+  },
+  creationTimestamp: {
+    type: Date,
+    default: Date.now
   }
 });
 

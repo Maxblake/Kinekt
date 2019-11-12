@@ -68,7 +68,7 @@ const Admin = ({
         groupTypeDecisions: groupTypeDecisionsBuilder
       });
     }
-  }, [isAdmin, requestedGroupTypes]);
+  }, [isAdmin, requestedGroupTypes.length]);
 
   const onChange = e => {
     setAdminState({

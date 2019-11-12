@@ -45,7 +45,8 @@ const getGroupTypes = async query => {
   })
     .select("-groups")
     .sort({
-      score: { $meta: "textScore" }
+      score: { $meta: "textScore" },
+      creationTimestamp: -1
     })
     .limit(12)
     .lean();

@@ -39,6 +39,14 @@
     .column {
       padding: 0.25rem;
     }
+
+    .breadcrumb {
+      font-size: 0.8rem;
+    }
+
+    .centered-logo {
+      max-width: 225px;
+    }
   }
 }
 
@@ -105,10 +113,8 @@
 
 // Cards
 .no-card-notice {
-  border-radius: 4px;
   text-align: center;
   margin-top: 1.5rem;
-  font-size: 1.1rem;
 }
 
 // Page nav
@@ -263,8 +269,9 @@
 
 // Breadcrumb
 .breadcrumb {
-  .clickable-text {
-    padding: 0 0.75rem;
+  .clickable-text,
+  a {
+    padding: 0 0.5rem;
   }
 
   .modal {
@@ -396,6 +403,16 @@
     max-width: 92%;
     padding-bottom: 2rem;
     margin: auto;
+
+    position: relative;
+    &::before {
+      content: "[beta]";
+      position: absolute;
+      bottom: 4.75rem;
+      right: 0;
+      color: #808080;
+      font-size: 0.8rem;
+    }
   }
 
   .field.is-grouped.is-grouped-right {

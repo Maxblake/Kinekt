@@ -32,7 +32,9 @@ export default function Footer() {
         </div>
         <div className="column">
           <div className="content has-text-centered">
-            <p>Copyright &copy; {new Date().getFullYear()} HappenStack</p>
+            <p>
+              Copyright &copy; {new Date().getFullYear()} HappenStack (beta)
+            </p>
           </div>
         </div>
       </nav>

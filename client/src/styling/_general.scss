@@ -133,7 +133,16 @@ strong {
 .textarea,
 .select select {
   background-color: rgb(240, 245, 252);
-  border-color: var(--primary);
+  border-color: ghostwhite;
+}
+
+.input,
+.textarea,
+.select select,
+.button,
+.file-cta,
+.file-name {
+  font-size: 0.88rem;
 }
 
 .centered-form {
@@ -171,24 +180,18 @@ input:-internal-autofill-selected {
   padding-top: 0.25rem;
 }
 
-.button-tag-right {
-  position: relative;
-  left: 6px;
-  margin-left: -4px;
-}
-
 @media (max-width: $desktop - 1) {
   .is-fullwidth-touch {
     width: 100%;
   }
 
   .is-dark.button {
-    border-color: var(--primary) !important;
+    border-color: ghostwhite !important;
   }
 }
 
-.col-stretch {
-  width: 99%;
+.columns.is-fullwidth {
+  width: 100%;
 }
 
 .small-input {
@@ -211,9 +214,20 @@ input:-internal-autofill-selected {
   }
 }
 
-.dropdown.is-right .dropdown-content {
+.dropdown .dropdown-content {
   background-color: rgba(0, 0, 0, 0.8);
-  border-radius: 4px 0 0 4px;
+
+  .dropdown-item {
+    color: ghostwhite;
+
+    &:hover {
+      background: #505050;
+    }
+  }
+
+  .tab-right & {
+    border-radius: 4px 0 0 4px;
+  }
 }
 
 .title {

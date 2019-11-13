@@ -494,10 +494,33 @@
   .field.has-addons {
     margin-bottom: 0;
   }
+
+  .field.field.is-grouped {
+    margin-bottom: 1.75rem;
+  }
+
+  .hs-radio-btn-control {
+    position: relative;
+    flex: 1;
+
+    .button {
+      padding: 0.25rem;
+      width: 100%;
+      font-size: 0.88rem;
+    }
+
+    .tag {
+      background: transparent;
+      position: absolute;
+      bottom: -1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
 }
 
 .checkout-container {
-  margin: 1rem 3.5rem;
+  margin: 1.5rem 3.5rem;
   border: 2px solid var(--primary);
   border-radius: 4px;
 
@@ -522,7 +545,7 @@
 
 @media (max-width: $tablet - 1) {
   .checkout-container {
-    margin: 1rem 0;
+    margin: 1.25rem 0;
   }
 }
 

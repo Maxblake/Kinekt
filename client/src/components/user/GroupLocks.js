@@ -176,7 +176,7 @@ const GroupLocks = ({
                       <span className="icon is-small">
                         <i className="fas fa-sm fa-lock" />
                       </span>
-                      <span className="tag has-text-weight-bold has-text-success button-tag-right">
+                      <span className="tag has-text-weight-bold has-text-success">
                         10% off
                       </span>
                     </Fragment>
@@ -194,7 +194,7 @@ const GroupLocks = ({
                       <span className="icon is-small">
                         <i className="fas fa-sm fa-lock" />
                       </span>
-                      <span className="tag has-text-weight-bold has-text-success button-tag-right">
+                      <span className="tag has-text-weight-bold has-text-success">
                         20% off
                       </span>
                     </Fragment>
@@ -212,7 +212,7 @@ const GroupLocks = ({
                       <span className="icon is-small">
                         <i className="fas fa-sm fa-lock" />
                       </span>
-                      <span className="tag has-text-weight-bold has-text-success button-tag-right">
+                      <span className="tag has-text-weight-bold has-text-success">
                         30% off
                       </span>
                     </Fragment>
@@ -229,11 +229,13 @@ const GroupLocks = ({
             <ul>
               <li>
                 <span className="has-text-weight-bold">Base price: </span>
-                <span className="">{pricingDetails.basePriceUSD}</span>
+                <span>{pricingDetails.basePriceUSD}</span>
               </li>
               <li>
                 <span className="has-text-weight-bold">Discount: </span>
-                <span className="">-{pricingDetails.discountUSD}</span>
+                <span className="has-text-weight-bold has-text-success">
+                  -{pricingDetails.discountUSD}
+                </span>
               </li>
               <li>
                 <span className="has-text-weight-bold">Total price: </span>
@@ -302,7 +304,7 @@ const GroupLocks = ({
               <div className="field has-addons">
                 <div className="control is-expanded">
                   <input
-                    className="input is-fullwidth"
+                    className="input is-smallish is-fullwidth"
                     name="referralCode"
                     value={referralCode}
                     onChange={e => onChange(e)}
@@ -326,6 +328,7 @@ const GroupLocks = ({
                   locale="auto"
                 >
                   <SubmitButton
+                    buttonClasses={["is-smallish"]}
                     isAddon
                     isDisabled={!!errRefCode || groupLocks === 0}
                     text={submitBtnTxt}
@@ -353,7 +356,6 @@ const mapStateToProps = state => ({
   errors: state.error
 });
 
-export default connect(
-  mapStateToProps,
-  { isReferralCodeValid, buyLocks }
-)(GroupLocks);
+export default connect(mapStateToProps, { isReferralCodeValid, buyLocks })(
+  GroupLocks
+);

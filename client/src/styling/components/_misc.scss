@@ -161,7 +161,22 @@
 
   .page-title {
     @extend %is-dark;
+    position: relative;
     padding: 0.5rem 0.75rem;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    z-index: 1;
+    overflow: hidden;
+    &::before {
+      content: "";
+      width: 76px;
+      height: 76px;
+      background: var(--primary);
+      position: absolute;
+      left: -57px;
+      bottom: -57px;
+      border-radius: 38px;
+    }
   }
 
   .page-subtitle {

@@ -106,7 +106,7 @@ const Discover = ({
 
   const options = [
     <div className="field">
-      <div className="select is-fullwidth-touch">
+      <div className="select  is-smallish is-fullwidth-touch">
         <select
           className="is-fullwidth-touch"
           name="category"
@@ -127,7 +127,7 @@ const Discover = ({
       <div className="field has-addons">
         <p className="control search-control">
           <input
-            className="input"
+            className="input is-smallish"
             type="text"
             placeholder="Search group types"
             name="searchTerms"
@@ -136,7 +136,7 @@ const Discover = ({
           />
         </p>
         <p className="control">
-          <button className="button is-dark" type="submit">
+          <button className="button is-smallish is-dark" type="submit">
             <span className="icon is-small">
               <i className="fas fa-search" />
             </span>
@@ -151,7 +151,7 @@ const Discover = ({
       <Fragment>
         <Link
           to="/request-grouptype"
-          className="button is-dark is-hidden-touch is-hidden-widescreen"
+          className="button is-dark  is-smallish is-hidden-touch is-hidden-widescreen"
         >
           <span className="icon">
             <i className="fas fa-plus" />
@@ -159,7 +159,7 @@ const Discover = ({
         </Link>
         <Link
           to="/request-grouptype"
-          className="button is-dark is-fullwidth-touch is-hidden-desktop-only"
+          className="button is-dark is-smallish is-fullwidth-touch is-hidden-desktop-only"
         >
           <span className="icon">
             <i className="fas fa-plus" />

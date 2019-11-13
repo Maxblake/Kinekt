@@ -270,6 +270,11 @@ input:-internal-autofill-selected {
   }
 }
 
+.is-smallish {
+  font-size: 0.88rem;
+  border-radius: 3px;
+}
+
 .label {
   font-weight: 500;
   &.form-label:not(:last-child) {

@@ -188,7 +188,7 @@ const GroupType = ({
   const options = [
     <div className="field has-addons">
       <div className="control is-expanded">
-        <div className="select is-fullwidth">
+        <div className="select is-smallish is-fullwidth">
           <select name="sortBy" value={sortBy} onChange={e => onChange(e)}>
             <option disabled defaultValue hidden>
               Sort by
@@ -202,7 +202,7 @@ const GroupType = ({
       </div>
       <div className="control">
         <button
-          className="button is-dark"
+          className="button is-smallish is-dark"
           type="button"
           onClick={() =>
             setGroupData({
@@ -227,7 +227,7 @@ const GroupType = ({
       <div className="field has-addons">
         <p className="control search-control">
           <input
-            className="input"
+            className="input is-smallish"
             type="text"
             placeholder="Search groups"
             name="searchTerms"
@@ -236,7 +236,7 @@ const GroupType = ({
           />
         </p>
         <p className="control">
-          <button className="button is-dark" type="submit">
+          <button className="button is-smallish is-dark" type="submit">
             <span className="icon is-small">
               <i className="fas fa-search" />
             </span>
@@ -254,7 +254,7 @@ const GroupType = ({
           trigger={
             <Fragment>
               <button
-                className="button is-dark is-hidden-touch is-hidden-widescreen"
+                className="button is-dark is-smallish is-hidden-touch is-hidden-widescreen"
                 aria-haspopup="true"
                 aria-controls="dropdown-menu"
               >
@@ -264,7 +264,7 @@ const GroupType = ({
               </button>
 
               <button
-                className="button is-dark is-hidden-desktop-only"
+                className="button is-dark is-smallish is-hidden-desktop-only"
                 aria-haspopup="true"
                 aria-controls="dropdown-menu"
               >
@@ -291,7 +291,7 @@ const GroupType = ({
         </Dropdown>
         <Link
           to={`/k/${match.params.groupType}/create`}
-          className="button is-dark is-fullwidth-touch is-hidden-desktop"
+          className="button is-dark is-smallish is-fullwidth-touch is-hidden-desktop"
         >
           <span className="icon">
             <i className="fas fa-plus" />
@@ -304,7 +304,7 @@ const GroupType = ({
     options.unshift(
       <Link
         to={`/k/${match.params.groupType}/edit`}
-        className="button is-dark is-fullwidth-touch is-hidden-desktop"
+        className="button is-dark is-smallish is-fullwidth-touch is-hidden-desktop"
       >
         <span>Edit Group Type</span>
       </Link>
@@ -314,7 +314,7 @@ const GroupType = ({
       <Fragment>
         <Link
           to={`/k/${match.params.groupType}/create`}
-          className="button is-dark  is-hidden-touch is-hidden-widescreen"
+          className="button is-dark is-smallish is-hidden-touch is-hidden-widescreen"
         >
           <span className="icon">
             <i className="fas fa-plus" />
@@ -322,7 +322,7 @@ const GroupType = ({
         </Link>
         <Link
           to={`/k/${match.params.groupType}/create`}
-          className="button is-dark is-fullwidth-touch is-hidden-desktop-only"
+          className="button is-dark is-smallish is-fullwidth-touch is-hidden-desktop-only"
         >
           <span className="icon">
             <i className="fas fa-plus" />

@@ -154,7 +154,7 @@ const Group = ({
     pageOptions.unshift(
       <Link
         to={`/k/${groupTypeNameSnaked}/group/${group.HRID}/edit`}
-        className="button is-dark is-fullwidth-touch"
+        className="button is-smallish is-dark is-fullwidth-touch"
       >
         <span>Edit</span>
         <span className="icon is-small">
@@ -167,7 +167,7 @@ const Group = ({
   if (user._id === group.creator) {
     pageOptions.unshift(
       <button
-        className="button is-danger is-fullwidth-touch"
+        className="button is-smallish is-danger is-fullwidth-touch"
         onClick={e => onClickDelete(e)}
       >
         <span>Delete</span>
@@ -179,7 +179,7 @@ const Group = ({
   } else {
     pageOptions.unshift(
       <button
-        className="button is-dark is-fullwidth-touch"
+        className="button is-smallish is-dark is-fullwidth-touch"
         onClick={() => leaveCurrentGroup()}
       >
         <span>Leave group</span>
@@ -193,7 +193,7 @@ const Group = ({
   if (document.queryCommandSupported("copy")) {
     pageOptions.push(
       <button
-        className="button is-dark is-fullwidth-touch"
+        className="button is-smallish is-dark is-fullwidth-touch"
         onClick={() => copyHRIDToClipboard()}
       >
         <Tooltip
@@ -259,7 +259,4 @@ const mapStateToProps = state => ({
   groupType: state.groupType
 });
 
-export default connect(
-  mapStateToProps,
-  { getGroup }
-)(Group);
+export default connect(mapStateToProps, { getGroup })(Group);

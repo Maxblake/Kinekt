@@ -102,13 +102,16 @@ const NewNotice = ({
             <div className="level-left"></div>
             <div className="level-right">
               <div className="level-item">
-                <button className="button is-light" onClick={() => onCancel()}>
+                <button
+                  className="button is-smallish is-light"
+                  onClick={() => onCancel()}
+                >
                   Cancel
                 </button>
               </div>
               <div className="level-item">
                 <button
-                  className="button is-primary"
+                  className="button is-smallish is-primary"
                   onClick={() => onSubmit()}
                   disabled={
                     !(
@@ -132,7 +135,4 @@ NewNotice.propTypes = {
   addNotice: PropTypes.func.isRequired
 };
 
-export default connect(
-  null,
-  { addNotice }
-)(NewNotice);
+export default connect(null, { addNotice })(NewNotice);

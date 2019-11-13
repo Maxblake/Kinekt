@@ -51,6 +51,10 @@
   .group-description {
     flex: 1;
     padding-bottom: 1rem;
+
+    .label {
+      font-weight: 700;
+    }
   }
 }
 
@@ -78,8 +82,6 @@
   }
 
   .group-image {
-    position: relative;
-
     &::after {
       content: "";
       position: absolute;
@@ -87,6 +89,7 @@
       left: 0;
       width: 100%;
       height: 100%;
+      border-radius: 4px;
 
       /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&0.05+1,0.15+50,0.75+100 */
       background: -moz-linear-gradient(
@@ -113,6 +116,10 @@
       filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0d000000', endColorstr='#bf000000',GradientType=0 ); /* IE6-9 */
     }
   }
+
+  .group-details-and-nb .noticeboard .header-tab .new-notice-tab {
+    left: 10.25rem;
+  }
 }
 
 // Group page
@@ -120,7 +127,7 @@
   background: $off-black;
   position: relative;
   padding: 3rem 10px 1.25rem 10px;
-  margin-bottom: 0;
+  margin-bottom: -1px;
   border-radius: 4px 4px 0 0;
 
   #group-members {
@@ -228,10 +235,14 @@
     border-radius: 4px 0 0 4px;
   }
   .group-image {
+    position: relative;
     flex: 1;
+    border-radius: 0 4px 4px 0;
+    border: 8px solid ghostwhite;
+    background: ghostwhite;
 
     img {
-      border-radius: 0 4px 4px 0;
+      border-radius: 4px;
     }
   }
   .noticeboard {
@@ -243,7 +254,7 @@
 @media (max-width: $desktop - 1) {
   #group-console {
     .group-details-and-nb {
-      padding-bottom: 1.5rem;
+      padding: 1.5rem 0.5rem;
     }
 
     .group-chat {
@@ -257,7 +268,7 @@
       transform: translateX(-50%);
       max-width: 390px;
       width: 100%;
-      padding: 0 0.25rem;
+      padding: 0;
 
       .corner-fill {
         display: none;
@@ -298,9 +309,7 @@
     .group-image {
       flex: 1 100%;
       order: 1;
-      img {
-        border-radius: 4px 4px 0 0;
-      }
+      border-radius: 4px 4px 0 0;
     }
     .noticeboard {
       flex: 1 100%;
@@ -447,7 +456,7 @@
     .notice {
       position: relative;
       box-shadow: none;
-      border-left: 4px solid var(--primary);
+      //border-left: 4px solid var(--primary);
 
       &.hs-box {
         padding: 0.5rem 0.75rem;

@@ -46,7 +46,6 @@ const GroupCard = ({
   const groupCard = (
     <Fragment>
       <div className="column is-8 groupCard">
-        {accessLevelTag}
         <div className="card-content">
           <div className="group-name">
             <h1 className="title is-size-4">{group.name}</h1>
@@ -61,6 +60,7 @@ const GroupCard = ({
         </div>
       </div>
       <div className="column is-4 card-image">
+        {accessLevelTag}
         <Image
           figureClass="is-2by1"
           src={group.image ? group.image.link : defaultImg}

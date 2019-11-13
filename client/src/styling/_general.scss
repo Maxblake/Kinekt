@@ -87,7 +87,7 @@ strong {
   }
 
   .container {
-    padding: 0 1em;
+    padding: 0 0.5rem;
     margin: 0;
   }
 }
@@ -133,6 +133,7 @@ strong {
 .textarea,
 .select select {
   background-color: rgb(240, 245, 252);
+  border-color: var(--primary);
 }
 
 .centered-form {
@@ -180,6 +181,10 @@ input:-internal-autofill-selected {
   .is-fullwidth-touch {
     width: 100%;
   }
+
+  .is-dark.button {
+    border-color: var(--primary) !important;
+  }
 }
 
 .col-stretch {
@@ -206,6 +211,11 @@ input:-internal-autofill-selected {
   }
 }
 
+.dropdown.is-right .dropdown-content {
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 4px 0 0 4px;
+}
+
 .title {
   .clickable-text:hover {
     color: inherit;
@@ -214,7 +224,8 @@ input:-internal-autofill-selected {
 
 .card-image {
   position: relative;
-  border: 7px solid #fafafa;
+  border: 8px solid #fafafa;
+  border-radius: 4px;
 
   figure,
   img {
@@ -321,7 +332,8 @@ input:-internal-autofill-selected {
   z-index: 2;
 
   .tab-right-button {
-    border-radius: 14px 0 0 14px;
+    border-radius: 4px 0 0 4px;
+    border-right: none;
   }
 }
 

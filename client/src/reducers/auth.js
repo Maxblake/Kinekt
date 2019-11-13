@@ -10,6 +10,7 @@ import {
   SET_CURRENT_GROUP,
   GET_GROUP_NOTICES,
   SET_GROUP,
+  SET_GROUPLOCKS,
   REQUEST_ENTRY
 } from "../actions/types";
 
@@ -52,6 +53,12 @@ export default function(state = initialState, action) {
         ...state,
         user: payload,
         loading: false
+      };
+    case SET_GROUPLOCKS:
+      if (!state.user || !payload) return state;
+      return {
+        ...state,
+        user: { ...state.user, groupLocks: payload }
       };
     case SET_CURRENT_GROUP:
       return {

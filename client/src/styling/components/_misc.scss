@@ -230,7 +230,7 @@
   width: 350px;
 
   &.hs-box {
-    padding: 1.5rem 1.75rem;
+    padding: 1.75rem;
   }
 
   .header-tab {
@@ -243,7 +243,7 @@
 
   img {
     @extend %has-shadow;
-    border: 7px solid ghostwhite;
+    border: 8px solid ghostwhite;
   }
 
   .content {
@@ -278,8 +278,8 @@
 .tag.card-tag {
   z-index: 1;
   position: absolute;
-  top: 16px;
-  right: 18px;
+  top: 8px;
+  right: 8px;
 }
 
 // Breadcrumb

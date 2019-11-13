@@ -11,7 +11,8 @@ import {
   UPDATE_USER,
   AUTH_SUCCESS,
   AUTH_ERROR,
-  SET_USER
+  SET_USER,
+  SET_GROUPLOCKS
 } from "./types";
 
 // Register User
@@ -113,8 +114,8 @@ export const buyLocks = (charge, opts) => async dispatch => {
       )
     );
     dispatch({
-      type: SET_USER,
-      payload: res.data.user
+      type: SET_GROUPLOCKS,
+      payload: res.data.groupLocks
     });
   } catch (err) {
     dispatch(

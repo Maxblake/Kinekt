@@ -17,7 +17,8 @@ import {
   SET_GROUPTYPE,
   GROUP_ERROR,
   GROUP_DELETED,
-  GET_GROUP_NOTICES
+  GET_GROUP_NOTICES,
+  SET_GROUPLOCKS
 } from "./types";
 
 // Get group by HRID (human readable id)
@@ -180,6 +181,10 @@ export const createGroup = (groupFields, history) => async dispatch => {
         HRID: res.data.group.HRID
       }
     });
+    dispatch({
+      type: SET_GROUPLOCKS,
+      payload: res.data.groupLocks
+    });
   } catch (err) {
     dispatch(handleResponseErrors(err));
     dispatch({
@@ -206,6 +211,10 @@ export const editGroup = (groupFields, groupId) => async dispatch => {
     dispatch({
       type: SET_GROUP,
       payload: res.data.group
+    });
+    dispatch({
+      type: SET_GROUPLOCKS,
+      payload: res.data.groupLocks
     });
 
     dispatch(clearErrorsAndAlerts());

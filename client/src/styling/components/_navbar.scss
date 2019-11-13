@@ -116,15 +116,16 @@
 
     .buttons .button {
       flex-grow: 1;
-      margin-bottom: 0.5rem;
       flex-direction: row-reverse;
       justify-content: flex-end;
       background-color: transparent;
       border: none;
       border-left: 4px solid var(--primary);
+      border-radius: 0;
 
       &:not(:last-child):not(.is-fullwidth) {
         margin-right: 0;
+        margin-bottom: 0.75rem;
       }
 
       .icon {

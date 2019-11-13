@@ -403,7 +403,7 @@ const onChargeSuccess = async (opts, res) => {
 
     const payment = await logPayment(user, groupLocks, referredUser, charge);
     await user.save();
-    res.status(200).json({ user, payment });
+    res.status(200).json({ groupLocks: user.groupLocks, payment });
   } catch (err) {
     console.error(err.message); //DEV DEBUG ONLY
     res.sendStatus(400);

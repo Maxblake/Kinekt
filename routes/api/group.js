@@ -270,9 +270,10 @@ const createOrUpdateGroup = async (req, res, updating) => {
     const groupFields = buildGroupFields(req, updating);
     let group = null;
     let groupType = null;
+    let user = null;
 
     if (updating) {
-      group = await updateGroup(req, groupFields, errors);
+      [group, user] = await updateGroup(req, groupFields, errors);
       groupType = group
         ? await GroupType.findById(group.groupType).select("-groups")
         : null;
@@ -280,7 +281,7 @@ const createOrUpdateGroup = async (req, res, updating) => {
       groupType = await GroupType.findById(groupFields.groupType).select(
         "-groups"
       );
-      group = await createGroup(req, groupFields, errors);
+      [group, user] = await createGroup(req, groupFields, errors);
     }
 
     if (!updating && !groupType) {
@@ -291,7 +292,7 @@ const createOrUpdateGroup = async (req, res, updating) => {
       return errors.sendErrorResponse(res);
     }
 
-    return res.json({ group, groupType });
+    return res.json({ group, groupType, groupLocks: user.groupLocks });
   });
 };
 
@@ -332,7 +333,7 @@ const updateGroup = async (req, groupFields, errors) => {
 
   if (!group) {
     errors.addError("Invalid Group ID");
-    return;
+    return [null, null];
   }
 
   if (groupFields.maxSize && group.users.length > groupFields.maxSize) {
@@ -340,7 +341,7 @@ const updateGroup = async (req, groupFields, errors) => {
       "Max group size cannot be smaller than the current number of members",
       "maxSize"
     );
-    return;
+    return [null, null];
   }
 
   const currentUser = group.users.filter(groupUser => {
@@ -349,19 +350,21 @@ const updateGroup = async (req, groupFields, errors) => {
 
   if (!currentUser || currentUser.memberType !== "admin") {
     errors.addError("You do not have permission to update this group", "alert");
-    return;
+    return [null, null];
   }
 
   const updatingUser = await User.findById(req.user.id);
-  if (updatingUser.groupLocks < 1) {
-    errors.addError(
-      `You need at least 1 group lock in order to create a ${groupFields.accessLevel.toLowerCase()} group`,
-      "alert"
-    );
-    return;
-  } else {
-    updatingUser.groupLocks = updatingUser.groupLocks - 1;
-    await updatingUser.save();
+  if (group.accessLevel === "Public" && groupFields.accessLevel !== "Public") {
+    if (updatingUser.groupLocks < 1) {
+      errors.addError(
+        `You need at least 1 group lock in order to create a ${groupFields.accessLevel.toLowerCase()} group`,
+        "alert"
+      );
+      return [null, null];
+    } else {
+      updatingUser.groupLocks = updatingUser.groupLocks - 1;
+      await updatingUser.save();
+    }
   }
 
   for (const key of Object.keys(groupFields)) {
@@ -369,10 +372,10 @@ const updateGroup = async (req, groupFields, errors) => {
   }
 
   await handleImageUpload(group, req, errors, true);
-  if (errors.isNotEmpty()) return;
+  if (errors.isNotEmpty()) return [null, null];
 
   await group.save();
-  return group;
+  return [group, updatingUser];
 };
 
 const createGroup = async (req, groupFields, errors) => {
@@ -381,16 +384,16 @@ const createGroup = async (req, groupFields, errors) => {
       "Unable to create group: User already has an active group",
       "alert"
     );
-    return;
+    return [null, null];
   }
 
   const creator = await User.findById(req.user.id);
-  if (creator.groupLocks < 1) {
+  if (groupFields.accessLevel !== "Public" && creator.groupLocks < 1) {
     errors.addError(
       `You need at least 1 group lock in order to create a ${groupFields.accessLevel.toLowerCase()} group`,
       "alert"
     );
-    return;
+    return [null, null];
   }
 
   const group = new Group(groupFields);
@@ -403,11 +406,11 @@ const createGroup = async (req, groupFields, errors) => {
   await handleGroupCreationSideEffects(group, req, groupFields, errors);
   await handleImageUpload(group, req, errors, false);
 
-  if (errors.isNotEmpty()) return;
+  if (errors.isNotEmpty()) return [null, null];
 
   await group.save();
 
-  return group;
+  return [group, creator];
 };
 
 const assignUniqueHRID = async (group, errors) => {
@@ -451,7 +454,9 @@ const handleGroupCreationSideEffects = async (
     return;
   }
   creator.currentGroup = { HRID: group.HRID, name: group.name };
-  creator.groupLocks = creator.groupLocks - 1;
+  if (groupFields.accessLevel !== "Public") {
+    creator.groupLocks = creator.groupLocks - 1;
+  }
   await creator.save();
 };
 

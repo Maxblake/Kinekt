@@ -29,6 +29,12 @@ const GroupConsole = ({ user, isCurrentUserAdmin, group, imgSrc }) => {
         <GroupDetails group={group} />
 
         <div className="group-image">
+          <div className="tag card-tag">
+            <span className="icon">
+              <i className="fas fa-lock" />
+            </span>
+            <span>Protected</span>
+          </div>
           <Image figureClass="is-2by1" src={imgSrc} alt="Placeholder image" />
         </div>
         <NoticeBoard

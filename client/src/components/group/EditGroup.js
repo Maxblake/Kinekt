@@ -43,7 +43,11 @@ const EditGroup = ({
   const errMaxSize = errors.find(error => error.param === "maxSize");
 
   useEffect(() => {
-    if (isAuthenticated && (!group || group.HRID !== match.params.groupCode)) {
+    if (
+      !loading &&
+      isAuthenticated &&
+      (!group || group.HRID !== match.params.groupCode)
+    ) {
       const userCurrentGroupHRID = user.currentGroup
         ? user.currentGroup.HRID
         : "";
@@ -66,7 +70,14 @@ const EditGroup = ({
     return () => {
       clearErrors();
     };
-  }, [isAuthenticated, group, match.params.groupCode, user, errors]);
+  }, [
+    isAuthenticated,
+    group,
+    match.params.groupCode,
+    user,
+    errors.length,
+    loading
+  ]);
 
   const hasUnsavedChanges = () => {
     if (!!group) {
@@ -128,6 +139,16 @@ const EditGroup = ({
       accessLevel !== "Public" &&
       !window.confirm(
         `Changing to a ${accessLevel.toLowerCase()} group will use 1 group lock. Are you sure would like to proceed?`
+      )
+    ) {
+      return;
+    }
+
+    if (
+      group.accessLevel !== "Public" &&
+      accessLevel === "Public" &&
+      !window.confirm(
+        `If you later decide to swap back to a private or protected group after going public, you will use 1 group lock. Are you sure would like to proceed?`
       )
     ) {
       return;
@@ -323,7 +344,6 @@ const mapStateToProps = state => ({
   errors: state.error
 });
 
-export default connect(
-  mapStateToProps,
-  { editGroup, getGroup, clearErrors }
-)(withRouter(EditGroup));
+export default connect(mapStateToProps, { editGroup, getGroup, clearErrors })(
+  withRouter(EditGroup)
+);

@@ -13,6 +13,7 @@ export const AUTH_SUCCESS = "AUTH_SUCCESS";
 export const SET_USER = "SET_USER";
 export const SET_SOCKET = "SET_SOCKET";
 export const UPDATE_USER = "UPDATE_USER";
+export const SET_GROUPLOCKS = "SET_GROUPLOCKS";
 export const SET_CURRENT_GROUP = "SET_CURRENT_GROUP";
 
 export const GROUP_LOADING = "GROUP_LOADING";

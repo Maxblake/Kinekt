@@ -47,14 +47,14 @@ const GroupTypeCard = ({
       className="card group-type-card"
     >
       <div className="card-image">
+        <span className={getClassName(groupTypeCategory)}>
+          {groupTypeCategory}
+        </span>
         <Image
           figureClass="is-2by1"
           src={imgSrc !== "" ? imgSrc : defaultGroupTypeImage}
         />
       </div>
-      <span className={getClassName(groupTypeCategory)}>
-        {groupTypeCategory}
-      </span>
       <div className="card-content">
         <h1 className="title is-size-5">{name}</h1>
         <div className="subtitle is-size-6">

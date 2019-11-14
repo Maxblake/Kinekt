@@ -1,19 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import EntryRequestReceivedAlert from "./EntryRequestReceivedAlert";
 import RequestEntryAlert from "./RequestEntryAlert";
 
-import { removeAlert } from "../../actions/alert";
+import { removeAlert, setAlertReset } from "../../actions/alert";
 
-const Alert = ({ alerts, errors, removeAlert }) => {
+const Alert = ({ alerts, errors, removeAlert, setAlertReset }) => {
   const [alertState, setAlertState] = useState([]);
 
   let alertsAndErrors = [];
 
   alerts.forEach(alert => {
     alertsAndErrors.push({
+      shouldResetAlert: alert.shouldResetAlert,
       id: alert.id,
       alertStatus: alert.alertStatus,
       msg: alert.msg,
@@ -72,6 +73,8 @@ const Alert = ({ alerts, errors, removeAlert }) => {
               alertBody = (
                 <RequestEntryAlert
                   {...alert.props}
+                  shouldResetAlert={alert.shouldResetAlert}
+                  setAlertReset={() => setAlertReset(alert.id)}
                   closeAlert={() => closeAlertAndClearSettings(alert.id)}
                   showCloseButton={() => showCloseButton(alert.id)}
                 />
@@ -115,7 +118,8 @@ const Alert = ({ alerts, errors, removeAlert }) => {
 Alert.propTypes = {
   alerts: PropTypes.array.isRequired,
   errors: PropTypes.array.isRequired,
-  removeAlert: PropTypes.func.isRequired
+  removeAlert: PropTypes.func.isRequired,
+  setAlertReset: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -123,7 +127,4 @@ const mapStateToProps = state => ({
   errors: state.error
 });
 
-export default connect(
-  mapStateToProps,
-  { removeAlert }
-)(Alert);
+export default connect(mapStateToProps, { removeAlert, setAlertReset })(Alert);

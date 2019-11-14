@@ -27,14 +27,29 @@ const GroupConsole = ({ user, isCurrentUserAdmin, group, imgSrc }) => {
       </div>
       <div className="group-details-and-nb flex-row-wrap">
         <GroupDetails group={group} />
-
         <div className="group-image">
-          <div className="tag card-tag">
-            <span className="icon">
-              <i className="fas fa-lock" />
-            </span>
-            <span>Protected</span>
-          </div>
+          {group.accessLevel === "Protected" ? (
+            <div className="tag card-tag">
+              <span className="icon">
+                <i className="fas fa-lock" />
+              </span>
+              <span>Protected</span>
+            </div>
+          ) : group.accessLevel === "Private" ? (
+            <div className="tag card-tag">
+              <span className="icon">
+                <i className="fas fa-lock" />
+              </span>
+              <span>Private</span>
+            </div>
+          ) : (
+            <div className="tag card-tag">
+              <span className="icon">
+                <i className="fas fa-door-open" />
+              </span>
+              <span>Public</span>
+            </div>
+          )}
           <Image figureClass="is-2by1" src={imgSrc} alt="Placeholder image" />
         </div>
         <NoticeBoard

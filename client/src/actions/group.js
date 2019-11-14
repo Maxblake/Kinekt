@@ -18,7 +18,8 @@ import {
   GROUP_ERROR,
   GROUP_DELETED,
   GET_GROUP_NOTICES,
-  SET_GROUPLOCKS
+  SET_GROUPLOCKS,
+  SET_BANNED_STATE
 } from "./types";
 
 // Get group by HRID (human readable id)
@@ -51,19 +52,28 @@ export const getGroup = (
     });
     dispatch(sendExpirationWarning(res.data.group));
   } catch (err) {
-    dispatch(handleResponseErrors(err));
-    dispatch({
-      type: GROUP_ERROR,
-      payload: {
-        msg: err.response.statusText,
-        status: err.response.status,
-        HRID
-      }
-    });
     if (!!history) {
       history.goBack();
     }
+    dispatch(handleResponseErrors(err));
+    if (!!err.response) {
+      dispatch({
+        type: GROUP_ERROR,
+        payload: {
+          msg: err.response.statusText,
+          status: err.response.status,
+          HRID
+        }
+      });
+    }
   }
+};
+
+export const setBannedState = (HRID, userId) => dispatch => {
+  dispatch({
+    type: SET_BANNED_STATE,
+    payload: { HRID, userId }
+  });
 };
 
 const sendExpirationWarning = group => dispatch => {
@@ -126,14 +136,16 @@ export const getGroups = (
       payload: res.data.groupType
     });
   } catch (err) {
-    dispatch({
-      type: GROUP_ERROR,
-      payload: {
-        msg: err.response.statusText,
-        status: err.response.status,
-        groupTypeName
-      }
-    });
+    if (!!err.response) {
+      dispatch({
+        type: GROUP_ERROR,
+        payload: {
+          msg: err.response.statusText,
+          status: err.response.status,
+          groupTypeName
+        }
+      });
+    }
     if (seenGroups.length === 0) {
       dispatch({
         type: GROUPTYPE_LOADED
@@ -187,10 +199,12 @@ export const createGroup = (groupFields, history) => async dispatch => {
     });
   } catch (err) {
     dispatch(handleResponseErrors(err));
-    dispatch({
-      type: GROUP_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    if (!!err.response) {
+      dispatch({
+        type: GROUP_ERROR,
+        payload: { msg: err.response.statusText, status: err.response.status }
+      });
+    }
   }
 };
 
@@ -247,10 +261,12 @@ export const deleteGroup = groupId => async dispatch => {
     });
     dispatch(setTextAlert(`Group deleted`, "is-warning"));
   } catch (err) {
-    dispatch({
-      type: GROUP_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
-    });
+    if (!!err.response) {
+      dispatch({
+        type: GROUP_ERROR,
+        payload: { msg: err.response.statusText, status: err.response.status }
+      });
+    }
   }
 };
 

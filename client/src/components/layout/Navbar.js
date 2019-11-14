@@ -269,7 +269,6 @@ const mapStateToProps = state => ({
   group: state.group.group
 });
 
-export default connect(
-  mapStateToProps,
-  { logout, getGroup }
-)(withRouter(Navbar));
+export default connect(mapStateToProps, { logout, getGroup })(
+  withRouter(Navbar)
+);

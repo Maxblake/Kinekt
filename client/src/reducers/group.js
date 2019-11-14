@@ -10,13 +10,14 @@ import {
   SET_NEW_GROUP_CHAT,
   GROUP_ERROR,
   GROUP_DELETED,
+  SET_BANNED_STATE,
   LOGOUT
 } from "../actions/types";
 
 const initialState = {
   groups: null,
   group: null,
-  loading: true,
+  loading: false,
   error: null
 };
 
@@ -104,6 +105,19 @@ export default function(state = initialState, action) {
         groups: state.groups.filter(group => group._id !== payload),
         group: null,
         loading: false
+      };
+    }
+    case SET_BANNED_STATE: {
+      return {
+        ...state,
+        groups: state.groups.map(group => {
+          if (group.HRID === payload.HRID)
+            return {
+              ...group,
+              bannedUsers: [payload.userId].concat(group.bannedUsers)
+            };
+          return group;
+        })
       };
     }
     case LOGOUT: {

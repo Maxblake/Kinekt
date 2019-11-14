@@ -1,4 +1,4 @@
-import { SET_ALERT, REMOVE_ALERT } from "./types";
+import { SET_ALERT, SET_ALERT_RESET, REMOVE_ALERT } from "./types";
 import uuid from "uuid";
 
 export const setTextAlert = (msg, alertStatus) => dispatch => {
@@ -28,6 +28,13 @@ export const setCustomAlert = (
       alertType,
       alertStatus
     }
+  });
+};
+
+export const setAlertReset = id => dispatch => {
+  dispatch({
+    type: SET_ALERT_RESET,
+    payload: id
   });
 };
 

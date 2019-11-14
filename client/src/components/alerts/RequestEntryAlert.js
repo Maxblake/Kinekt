@@ -3,17 +3,20 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { getGroup } from "../../actions/group";
+import { getGroup, setBannedState } from "../../actions/group";
 
 import Countdown from "../common/subcomponents/Countdown";
 
 const RequestEntryAlert = ({
   getGroup,
+  setBannedState,
   groupName,
   HRID,
   auth: { socket, user },
   closeAlert,
-  showCloseButton
+  showCloseButton,
+  shouldResetAlert,
+  setAlertReset
 }) => {
   const [isActive, setIsActive] = useState(true);
   const [entryRequestAnswer, setEntryRequestAnswer] = useState("");
@@ -29,6 +32,14 @@ const RequestEntryAlert = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (shouldResetAlert) {
+      setIsActive(true);
+      setEntryRequestAnswer("");
+      setAlertReset();
+    }
+  }, [shouldResetAlert]);
+
   const onTimeout = () => {
     setIsActive(false);
     showCloseButton();
@@ -41,6 +52,8 @@ const RequestEntryAlert = ({
 
     if (answer === "Accepted") {
       getGroup({ HRID, joinKey });
+    } else if (answer === "Banned") {
+      setBannedState(HRID, user._id);
     }
 
     showCloseButton();
@@ -59,6 +72,10 @@ const RequestEntryAlert = ({
         <span className="icon is-large">
           <i className="fas fa-2x fa-times-circle"></i>
         </span>
+      ) : entryRequestAnswer === "Banned" ? (
+        <span className="icon is-large">
+          <i className="fas fa-2x fa-ban"></i>
+        </span>
       ) : entryRequestAnswer === "Accepted" ? (
         <span className="icon is-large">
           <i className="fas fa-2x fa-check-circle"></i>
@@ -74,11 +91,12 @@ const RequestEntryAlert = ({
             ? `Request to join '${groupName}'has timed out`
             : entryRequestAnswer === "Accepted"
             ? `Request to join '${groupName}' is approved`
-            : entryRequestAnswer === "Rejected"
+            : entryRequestAnswer === "Rejected" ||
+              entryRequestAnswer === "Banned"
             ? `Request to join '${groupName}' is denied`
             : `Request to join '${groupName}' is pending`}
         </h3>
-        {entryRequestAnswer !== "Rejected" && (
+        {entryRequestAnswer !== "Rejected" && entryRequestAnswer !== "Banned" && (
           <div className="field is-grouped is-grouped-right">
             {entryRequestAnswer === "Accepted" ? (
               <div className="control">
@@ -112,14 +130,14 @@ const RequestEntryAlert = ({
 
 RequestEntryAlert.propTypes = {
   auth: PropTypes.object.isRequired,
-  getGroup: PropTypes.func.isRequired
+  getGroup: PropTypes.func.isRequired,
+  setBannedState: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(
-  mapStateToProps,
-  { getGroup }
-)(RequestEntryAlert);
+export default connect(mapStateToProps, { getGroup, setBannedState })(
+  RequestEntryAlert
+);

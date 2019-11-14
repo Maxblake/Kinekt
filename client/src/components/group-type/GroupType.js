@@ -52,6 +52,7 @@ const GroupType = ({
       (!error ||
         error.groupTypeName !== match.params.groupType.split("_").join(" ")) &&
       !loading &&
+      !group.loading &&
       (!groupType ||
         groupTypeParamChanged ||
         readyToLoadNewGroups ||
@@ -140,7 +141,11 @@ const GroupType = ({
         queryParams.userLocation = user.currentLocation;
       }
 
-      getGroups(groupType.name, queryParams, groups.map(group => group._id));
+      getGroups(
+        groupType.name,
+        queryParams,
+        groups.map(group => group._id)
+      );
     }
   };
 
@@ -428,7 +433,4 @@ const mapStateToProps = state => ({
   liveData: state.liveData
 });
 
-export default connect(
-  mapStateToProps,
-  { getGroups, setTextAlert }
-)(GroupType);
+export default connect(mapStateToProps, { getGroups, setTextAlert })(GroupType);

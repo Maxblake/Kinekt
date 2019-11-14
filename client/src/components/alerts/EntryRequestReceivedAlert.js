@@ -8,7 +8,7 @@ import UserInfo from "../user/UserInfo";
 
 const EntryRequestReceivedAlert = ({
   userInfo,
-  socket,
+  auth: { socket, user },
   closeAlert,
   showCloseButton
 }) => {
@@ -16,7 +16,7 @@ const EntryRequestReceivedAlert = ({
 
   useEffect(() => {
     socket.on("entryRequestAnswered", userId => {
-      if (userId === userInfo.id) {
+      if (userId === userInfo._id) {
         closeAlert();
       }
     });
@@ -34,9 +34,26 @@ const EntryRequestReceivedAlert = ({
   const answerEntryRequest = answer => {
     socket.emit("answerEntryRequest", {
       answer,
-      userId: userInfo.id
+      userId: userInfo._id
     });
     closeAlert();
+  };
+
+  const banFromGroup = userId => {
+    if (
+      window.confirm(
+        "Are you sure you would like to ban this user? This cannot be undone."
+      )
+    ) {
+      socket.emit("kickFromGroup", { userId, isBanned: true });
+      answerEntryRequest("Banned");
+    }
+  };
+
+  const adminOptions = {
+    currentUser: user,
+    groupCreator: null,
+    banFromGroup
   };
 
   //<Countdown totalTime={60 * 15} onTimeout={() => onTimeout()} />
@@ -51,7 +68,7 @@ const EntryRequestReceivedAlert = ({
           <Modal
             trigger={<span className="is-underlined">{userInfo.name}</span>}
           >
-            <UserInfo user={userInfo} />
+            <UserInfo user={userInfo} adminOptions={adminOptions} />
           </Modal>
           {` would like to join your group ${
             isActive ? "" : "(Request timed out)"
@@ -85,14 +102,11 @@ const EntryRequestReceivedAlert = ({
 };
 
 EntryRequestReceivedAlert.propTypes = {
-  socket: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  socket: state.auth.socket
+  auth: state.auth
 });
 
-export default connect(
-  mapStateToProps,
-  null
-)(EntryRequestReceivedAlert);
+export default connect(mapStateToProps, null)(EntryRequestReceivedAlert);

@@ -176,7 +176,7 @@ class socketHandler {
     this.user = await User.findById(this.user._id);
 
     this.io.in(`group-${groupId}`).emit("entryRequestReceived", {
-      id: this.user._id,
+      _id: this.user._id,
       name: this.user.name,
       about: this.user.about,
       image: this.user.image

@@ -14,35 +14,43 @@ const UserInfo = ({ user, adminOptions }) => {
   ) {
     adminOptionButtons = (
       <div className="buttons has-addons is-centered">
-        <button
-          onClick={() => adminOptions.kickFromGroup(user._id)}
-          className="button is-dark"
-        >
-          <span className="icon is-small">
-            <i className="fas fa-sign-out-alt" />
-          </span>
-          <span>Kick</span>
-        </button>
-
-        <button
-          onClick={() => adminOptions.banFromGroup(user._id)}
-          className="button is-dark"
-        >
-          <span className="icon is-small">
-            <i className="fas fa-user-slash" />
-          </span>
-          <span>Ban</span>
-        </button>
-
-        <button
-          onClick={() => adminOptions.toggleGroupAdmin(user._id)}
-          className="button is-dark"
-        >
-          <span className="icon is-small">
-            <i className="fas fa-user-shield" />
-          </span>
-          <span>{user.memberType === "admin" ? "Unadminify" : "Adminify"}</span>
-        </button>
+        {typeof adminOptions.kickFromGroup === "function" && (
+          <button
+            onClick={() => adminOptions.kickFromGroup(user._id)}
+            className="button is-dark"
+          >
+            <span className="icon is-small">
+              <i className="fas fa-sign-out-alt" />
+            </span>
+            <span>Kick</span>
+          </button>
+        )}
+        {typeof adminOptions.banFromGroup === "function" && (
+          <button
+            onClick={() => {
+              adminOptions.banFromGroup(user._id);
+            }}
+            className="button is-dark"
+          >
+            <span className="icon is-small">
+              <i className="fas fa-user-slash" />
+            </span>
+            <span>Ban</span>
+          </button>
+        )}{" "}
+        {typeof adminOptions.toggleGroupAdmin === "function" && (
+          <button
+            onClick={() => adminOptions.toggleGroupAdmin(user._id)}
+            className="button is-dark"
+          >
+            <span className="icon is-small">
+              <i className="fas fa-user-shield" />
+            </span>
+            <span>
+              {user.memberType === "admin" ? "Unadminify" : "Adminify"}
+            </span>
+          </button>
+        )}
       </div>
     );
   }

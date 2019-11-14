@@ -147,7 +147,6 @@ const sendEmailConfirmation = async (email, token) => {
       verifyURL: `${domain}/login/${token}`
     }
   };
-  console.log(email);
   await sgMail.send(msg);
   return true;
 };
@@ -277,7 +276,6 @@ const sendResetInstructions = async (email, token) => {
       resetURL: `${domain}/reset-password/${token}`
     }
   };
-  console.log(email);
   await sgMail.send(msg);
   return true;
 };

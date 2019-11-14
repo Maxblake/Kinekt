@@ -1,4 +1,5 @@
 export const SET_ALERT = "SET_ALERT";
+export const SET_ALERT_RESET = "SET_ALERT_RESET";
 export const REMOVE_ALERT = "REMOVE_ALERT";
 
 export const SET_ERRORS = "SET_ERRORS";
@@ -27,6 +28,7 @@ export const GET_GROUP_NOTICES = "GET_GROUP_NOTICES";
 export const SET_NEW_GROUP_CHAT = "SET_NEW_GROUP_CHAT";
 export const GROUP_ERROR = "GROUP_ERROR";
 export const GROUP_DELETED = "GROUP_DELETED";
+export const SET_BANNED_STATE = "SET_BANNED_STATE";
 
 export const GROUPTYPE_LOADING = "GROUPTYPE_LOADING";
 export const GROUPTYPE_LOADED = "GROUPTYPE_LOADED";

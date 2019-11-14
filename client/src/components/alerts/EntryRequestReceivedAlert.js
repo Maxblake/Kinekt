@@ -40,6 +40,7 @@ const EntryRequestReceivedAlert = ({
   };
 
   const banFromGroup = userId => {
+    console.log(userId);
     if (
       window.confirm(
         "Are you sure you would like to ban this user? This cannot be undone."

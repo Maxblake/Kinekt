@@ -46,7 +46,7 @@ router.get("/:checkIfAdmin", auth, (req, res) => {
     }
 
     res.json(authResponse);
-  });
+  }, res);
 });
 
 // @route   POST api/auth
@@ -81,7 +81,7 @@ router.post("/", validateRequest("login"), (req, res) => {
     }
 
     signUserToken(res, user.id, user.isVerified);
-  });
+  }, res);
 });
 
 // @route   GET api/auth/sendEmailConfirmation
@@ -130,7 +130,7 @@ router.post("/sendEmailConfirmation", auth, (req, res) => {
     }
 
     return res.sendStatus(200);
-  });
+  }, res);
 });
 
 const sendEmailConfirmation = async (email, token) => {
@@ -224,7 +224,7 @@ router.post("/verifyUser/:token", (req, res) => {
     await Promise.all([user.save(), token.remove()]);
 
     return res.json({ user });
-  });
+  }, res);
 });
 
 // @route   GET api/auth/sendResetInstructions
@@ -258,7 +258,7 @@ router.post(
       await sendResetInstructions(user.email, token);
 
       return res.sendStatus(200);
-    });
+    }, res);
   }
 );
 
@@ -326,7 +326,7 @@ router.post(
       await Promise.all([user.save(), token.remove()]);
 
       return res.sendStatus(200);
-    });
+    }, res);
   }
 );
 
@@ -339,7 +339,7 @@ router.post("/enterBeta", (req, res) => {
     }
 
     return res.sendStatus(400);
-  });
+  }, res);
 });
 
 // @route   POST api/auth/post-stripe-payment
@@ -355,7 +355,7 @@ router.post("/post-stripe-payment", auth, (req, res) => {
         onChargeSuccess({ ...opts, userId: req.user.id, charge }, res);
       })
       .catch(err => console.log(err));
-  });
+  }, res);
 });
 
 const getNumExtraLocksWithReferral = groupLocks => {
@@ -378,13 +378,14 @@ const getNumExtraLocksWithReferral = groupLocks => {
   }
 };
 
+//TODO Make sure this never errors out
 const onChargeSuccess = async (opts, res) => {
   try {
     const { referralCode, userId, charge } = opts;
     const groupLocks = Number(opts.groupLocks);
 
     const user = await User.findById(userId).select(
-      "-password -email -creationTimestamp"
+      "-password -creationTimestamp"
     );
 
     const referredUser = await User.findOne({ referralCode });
@@ -399,8 +400,8 @@ const onChargeSuccess = async (opts, res) => {
       user.groupLocks = user.groupLocks + groupLocks;
     }
 
-    const payment = await logPayment(user, groupLocks, referredUser, charge);
     await user.save();
+    const payment = await logPayment(user, groupLocks, referredUser, charge);
     res.status(200).json({ groupLocks: user.groupLocks, payment });
   } catch (err) {
     console.error(err.message); //DEV DEBUG ONLY
@@ -424,8 +425,25 @@ const logPayment = async (user, groupLocks, referredUser, charge) => {
 
   const payment = new Payment(paymentfields);
   await payment.save();
-  //TODO email user a receipt
+  await sendPaymentReceipt(
+    user.email,
+    groupLocks,
+    `${(charge.amount / 100).toFixed(2)} ${charge.currency.toUpperCase()}`
+  );
   return payment;
+};
+
+const sendPaymentReceipt = async (email, groupLocks, payment) => {
+  const msg = {
+    to: email,
+    from: "HappenStack@happenstack.com",
+    templateId: "d-2b4c058eef7b4273bfabb1e8d73203ee",
+    dynamic_template_data: {
+      groupLocks,
+      payment
+    }
+  };
+  await sgMail.send(msg);
 };
 
 module.exports = router;

@@ -50,7 +50,6 @@ const GroupLocks = ({
 
   const onSubmit = e => {
     e.preventDefault();
-    //TODO probably get rid of this
   };
 
   const onChange = e => {

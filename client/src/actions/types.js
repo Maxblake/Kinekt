@@ -37,7 +37,6 @@ export const SET_GROUPTYPES = "SET_GROUPTYPES";
 export const CONCAT_GROUPTYPES = "CONCAT_GROUPTYPES";
 export const GROUPTYPE_ERROR = "GROUPTYPE_ERROR";
 
-//TODO move all socket related actions to seperate reducer
 export const REQUEST_ENTRY = "REQUEST_ENTRY";
 
 export const SET_GROUP_AND_USER_NUMBERS = "SET_GROUP_AND_USER_NUMBERS";

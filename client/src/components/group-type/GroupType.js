@@ -19,7 +19,6 @@ import { useInfiniteScroll } from "../../utils/customHooks";
 
 import defaultGroupTypeImage from "../../resources/default_grouptype_image.png";
 
-//TODO format date/times with moment
 const GroupType = ({
   getGroups,
   setTextAlert,
@@ -47,7 +46,6 @@ const GroupType = ({
     const groupTypeParamChanged =
       groupType && groupType.name !== groupTypeParamSpaced;
 
-    // TODO should this also check for !group.loading?
     if (
       (!error ||
         error.groupTypeName !== match.params.groupType.split("_").join(" ")) &&
@@ -130,7 +128,6 @@ const GroupType = ({
 
   const getMoreGroups = () => {
     if (isFetching && !loadingGroups) {
-      //TODO refactor this
       let queryParams = {
         sortBy: sortBy === "Sort by" ? "New" : sortBy,
         sortDir,

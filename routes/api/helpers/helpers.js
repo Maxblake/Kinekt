@@ -4,7 +4,7 @@ const config = require("config");
 const Filter = require("bad-words");
 const filter = new Filter();
 
-const runAPISafely = coreFunction => {
+const runAPISafely = (coreFunction, res) => {
   try {
     coreFunction();
   } catch (err) {
@@ -12,7 +12,6 @@ const runAPISafely = coreFunction => {
     const errors = new APIerrors();
 
     if (err.kind == "ObjectId") {
-      //TODO why not pass res here?
       return errors.addErrAndSendResponse(res, "Invalid Object ID");
     }
 

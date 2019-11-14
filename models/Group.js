@@ -28,6 +28,11 @@ const GroupSchema = new mongoose.Schema({
     lat: { type: String },
     lng: { type: String }
   },
+  usedLock: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
   users: [
     {
       id: {

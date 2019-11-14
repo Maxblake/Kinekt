@@ -331,7 +331,6 @@ class socketHandler {
     }
   }
 
-  //TODO clean up everything having to do with this
   async getGroupAndUserNumbers(groupAndGroupTypeIds) {
     const groupAndUserNumbers = {};
 

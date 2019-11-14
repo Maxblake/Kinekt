@@ -90,7 +90,6 @@ export const deleteUser = () => async dispatch => {
       dispatch(logout());
       dispatch(setTextAlert(`User account deleted`, "is-warning"));
     } catch (err) {
-      //TODO should this dispatch a USER_ERROR action?
       dispatch(setTextAlert(`Unable to delete user`, "is-danger"));
     }
   }

@@ -8,7 +8,6 @@ import imgStepTwo from "../../resources/discover_step_two.jpg";
 import imgStepThree from "../../resources/discover_step_three.jpg";
 import elephant from "../../resources/elephant.png";
 
-// TODO use a level for this
 const DiscoverHeader = () => {
   return (
     <div className="discover-header k-scroll">

@@ -96,7 +96,6 @@ const Admin = ({
 
       processRequestedGroupTypes(requestDecisions);
 
-      //TODO make sure this works
       setAdminState({
         ...adminState,
         requestedGroupTypes: requestedGroupTypes.filter(

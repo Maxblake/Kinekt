@@ -43,8 +43,6 @@ export const adjustStateForKickedUser = () => dispatch => {
   });
 };
 
-//TODO shouldn't these actions be removed on unmount?
-
 const addSocketActions = socket => dispatch => {
   socket.on("updateGroupMembers", updatedMembers => {
     dispatch({

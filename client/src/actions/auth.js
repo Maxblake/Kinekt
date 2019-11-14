@@ -89,7 +89,6 @@ export const verifyUser = (token, JSWT, history) => async dispatch => {
       updateTheme(res.data.user.selectedTheme);
       return history.push("/");
     }
-    //TODO this should never occur..
     history.push("/login");
     console.error("Verification API returned 'OK' but user was not verified");
   } catch (err) {
@@ -193,8 +192,12 @@ export const sendResetInstructions = email => async dispatch => {
   try {
     await axios.post("/api/auth/sendResetInstructions", body, config);
   } catch (err) {
-    //TODO this should never occur
-    console.error(err);
+    dispatch(
+      setTextAlert(
+        "Our messenger falcon was lost in the night. We're terribly sorry, please email us at happenstackhelp@gmail.com from your login email address and we'll get your account sorted personally.",
+        "is-success"
+      )
+    );
   }
   dispatch({
     type: AUTH_LOADED

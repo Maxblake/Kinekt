@@ -24,7 +24,7 @@ router.post("/list", async (req, res) => {
     const groupTypes = await getGroupTypes(query);
 
     res.json(groupTypes);
-  });
+  }, res);
 });
 
 const buildQuery = req => {
@@ -65,7 +65,7 @@ router.get("/:id", async (req, res) => {
   runAPISafely(async () => {
     const groupType = await GroupType.findById(req.params.id);
     res.json(groupType);
-  });
+  }, res);
 });
 
 // @route   POST api/group-type/request
@@ -106,7 +106,7 @@ router.post(
 
       await requestedGroupType.save();
       res.sendStatus(200);
-    });
+    }, res);
   }
 );
 
@@ -195,7 +195,7 @@ router.put(
 
       await groupType.save();
       return res.json(groupType);
-    });
+    }, res);
   }
 );
 
@@ -268,7 +268,7 @@ router.delete("/:id", auth, async (req, res) => {
     await groupType.remove();
 
     return res.status(200).json({ msg: "Group type deleted" });
-  });
+  }, res);
 });
 
 const handleGroupTypeDeletionSideEffects = async (groupType, errors) => {

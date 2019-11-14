@@ -43,7 +43,7 @@ router.post("/list", (req, res) => {
     const response = { groupType, groups };
 
     res.json(response);
-  });
+  }, res);
 });
 
 const buildQuery = (req, groupIds) => {
@@ -177,7 +177,7 @@ router.post("/HRID", auth, (req, res) => {
     const response = { group, groupType };
 
     res.json(response);
-  });
+  }, res);
 });
 
 const isUserAllowedIn = async (req, group, errors) => {
@@ -192,7 +192,10 @@ const isUserAllowedIn = async (req, group, errors) => {
     return;
   }
 
-  if (group.bannedUsers && group.bannedUsers.includes(req.user.id)) {
+  if (
+    group.bannedUsers &&
+    group.bannedUsers.find(bannedUser => bannedUser.toString() === req.user.id)
+  ) {
     errors.addError(`You are banned from '${group.name}'`, "alert");
     return;
   }
@@ -293,7 +296,7 @@ const createOrUpdateGroup = async (req, res, updating) => {
     }
 
     return res.json({ group, groupType, groupLocks: user.groupLocks });
-  });
+  }, res);
 };
 
 const buildGroupFields = (req, updating) => {
@@ -354,7 +357,11 @@ const updateGroup = async (req, groupFields, errors) => {
   }
 
   const updatingUser = await User.findById(req.user.id);
-  if (group.accessLevel === "Public" && groupFields.accessLevel !== "Public") {
+  if (
+    !group.usedLock &&
+    group.accessLevel === "Public" &&
+    groupFields.accessLevel !== "Public"
+  ) {
     if (updatingUser.groupLocks < 1) {
       errors.addError(
         `You need at least 1 group lock in order to create a ${groupFields.accessLevel.toLowerCase()} group`,
@@ -363,6 +370,7 @@ const updateGroup = async (req, groupFields, errors) => {
       return [null, null];
     } else {
       updatingUser.groupLocks = updatingUser.groupLocks - 1;
+      group.usedLock = true;
       await updatingUser.save();
     }
   }
@@ -456,6 +464,7 @@ const handleGroupCreationSideEffects = async (
   creator.currentGroup = { HRID: group.HRID, name: group.name };
   if (groupFields.accessLevel !== "Public") {
     creator.groupLocks = creator.groupLocks - 1;
+    group.usedLock = true;
   }
   await creator.save();
 };
@@ -509,7 +518,7 @@ router.delete("/", auth, async (req, res) => {
     await group.remove();
 
     res.status(200).json({ msg: "Group deleted" });
-  });
+  }, res);
 });
 
 const handleGroupDeletionSideEffects = async (group, errors) => {
@@ -533,7 +542,6 @@ const handleGroupDeletionSideEffects = async (group, errors) => {
     }
   }
 
-  //TODO This will probably be taken care of by the socket event
   await User.findByIdAndUpdate(group.creator, {
     $set: {
       currentGroup: null
@@ -581,7 +589,7 @@ router.put(
       await group.save();
 
       res.json(group.notices);
-    });
+    }, res);
   }
 );
 
@@ -625,7 +633,7 @@ router.delete("/notice/:groupId/:noticeId", auth, async (req, res) => {
     await group.save();
 
     res.json(group.notices);
-  });
+  }, res);
 });
 
 // @route   PUT api/group/notice/:groupId/toggle-like/:noticeId
@@ -666,7 +674,7 @@ router.put("/notice/:groupId/toggle-like/:noticeId", auth, async (req, res) => {
     await group.save();
 
     res.json(group.notices);
-  });
+  }, res);
 });
 
 // @route   PUT api/group/notice/:groupId/unlike/:noticeId
@@ -707,11 +715,10 @@ router.put("/notice/:groupId/unlike/:noticeId", auth, async (req, res) => {
     await group.save();
 
     res.json(group.notices);
-  });
+  }, res);
 });
 
 const getNoticeIndex = (group, noticeId, errors) => {
-  //TODO rewrite the entire notice API
   const noticeIndex = group.notices.map(notice => notice._id).indexOf(noticeId);
 
   if (noticeIndex === -1) {

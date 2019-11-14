@@ -15,7 +15,7 @@ router.get("/get-requested-group-types", auth, (req, res) => {
     );
 
     res.json(requestedGroupTypes);
-  });
+  }, res);
 });
 
 // @route   POST api/admin/process-requested-group-types
@@ -41,7 +41,7 @@ router.post("/process-requested-group-types", auth, (req, res) => {
     }
 
     res.sendStatus(200);
-  });
+  }, res);
 });
 
 module.exports = router;

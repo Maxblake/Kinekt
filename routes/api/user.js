@@ -54,7 +54,7 @@ router.post(
       await user.save();
 
       signUserToken(res, user.id, false);
-    });
+    }, res);
   }
 );
 
@@ -116,7 +116,7 @@ router.put(
       await user.save();
 
       return res.json(user);
-    });
+    }), res;
   }
 );
 
@@ -196,7 +196,7 @@ router.delete("/", auth, async (req, res) => {
     await user.remove();
 
     res.status(200).json({ msg: "User account deleted" });
-  });
+  }, res);
 });
 
 const handleUserDeletionSideEffects = async (user, errors) => {
@@ -231,7 +231,7 @@ router.put("/is-rc-valid", auth, async (req, res) => {
     }
 
     res.status(200).json({ msg: "Referral code is valid" });
-  });
+  }, res);
 });
 
 module.exports = router;

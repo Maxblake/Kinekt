@@ -228,6 +228,9 @@ input:-internal-autofill-selected {
 
   .tab-right & {
     border-radius: 4px 0 0 4px;
+    .dropdown-item:hover {
+      background: initial;
+    }
   }
 }
 

@@ -135,20 +135,11 @@ const EditGroup = ({
     e.preventDefault();
 
     if (
+      !group.usedLock &&
       group.accessLevel === "Public" &&
       accessLevel !== "Public" &&
       !window.confirm(
         `Changing to a ${accessLevel.toLowerCase()} group will use 1 group lock. Are you sure would like to proceed?`
-      )
-    ) {
-      return;
-    }
-
-    if (
-      group.accessLevel !== "Public" &&
-      accessLevel === "Public" &&
-      !window.confirm(
-        `If you later decide to swap back to a private or protected group after going public, you will use 1 group lock. Are you sure would like to proceed?`
       )
     ) {
       return;

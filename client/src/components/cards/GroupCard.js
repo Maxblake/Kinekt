@@ -1,5 +1,9 @@
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+
+import { getGroup } from "../../actions/group";
 
 import OnlineStatus from "../common/subcomponents/OnlineStatus";
 import GroupDetails from "../common/subcomponents/GroupDetails";
@@ -11,8 +15,16 @@ const GroupCard = ({
   defaultImg,
   userNumbers,
   isBanned,
-  isMember
+  isMember,
+  getGroup
 }) => {
+  const clickedGroupCard = e => {
+    if (!isMember && group.accessLevel !== "Public") {
+      e.preventDefault();
+      getGroup({ HRID: group.HRID });
+    }
+  };
+
   const isFull =
     userNumbers &&
     userNumbers.maxSize &&
@@ -84,6 +96,7 @@ const GroupCard = ({
         </div>
       ) : (
         <Link
+          onClick={e => clickedGroupCard(e)}
           to={`/k/${groupTypeName}/group/${group.HRID}`}
           className={"columns is-gapless card group-card-container"}
         >
@@ -94,4 +107,8 @@ const GroupCard = ({
   );
 };
 
-export default GroupCard;
+GroupCard.propTypes = {
+  getGroup: PropTypes.func.isRequired
+};
+
+export default connect(null, { getGroup })(GroupCard);

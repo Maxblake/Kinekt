@@ -39,7 +39,11 @@ const NoticeBoard = ({
           Notice Board
         </div>
       </div>
-      <div className="notices is-vcentered">
+      <div
+        className={`notices is-vcentered ${
+          notices.length > 0 ? "has-notices" : ""
+        }`}
+      >
         {isCurrentUserAdmin && (
           <NewNotice
             user={user}

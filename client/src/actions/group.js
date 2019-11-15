@@ -57,14 +57,23 @@ export const getGroup = (
     }
     dispatch(handleResponseErrors(err));
     if (!!err.response) {
-      dispatch({
-        type: GROUP_ERROR,
-        payload: {
-          msg: err.response.statusText,
-          status: err.response.status,
-          HRID
-        }
-      });
+      if (
+        !!err.response.data &&
+        err.response.data.find(obj => obj.param === "alert-requestEntry")
+      ) {
+        dispatch({
+          type: GROUP_LOADED
+        });
+      } else {
+        dispatch({
+          type: GROUP_ERROR,
+          payload: {
+            msg: err.response.statusText,
+            status: err.response.status,
+            HRID
+          }
+        });
+      }
     }
   }
 };

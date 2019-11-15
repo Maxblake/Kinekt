@@ -203,8 +203,7 @@
   .group-chat {
     position: relative;
     align-self: flex-start;
-    padding: 1.25rem;
-    padding-right: 0;
+    padding: 1.25rem 0 2.25rem 2rem;
     background: $off-black;
     border-bottom-left-radius: 4px;
 
@@ -221,7 +220,7 @@
   }
 
   .group-details-and-nb {
-    padding: 1.25rem;
+    padding: 1.25rem 2rem 2.25rem 2rem;
     background: $off-black;
     border-radius: 0 0 4px 4px;
 
@@ -254,7 +253,7 @@
 @media (max-width: $desktop - 1) {
   #group-console {
     .group-details-and-nb {
-      padding: 1.5rem 0.5rem;
+      padding: 1.5rem 0.5rem 0.5rem 0.5rem;
     }
 
     .group-chat {
@@ -295,6 +294,7 @@
     .noticeboard {
       flex: 1 100%;
       order: 3;
+      padding-top: 3.25rem;
     }
   }
 }
@@ -318,6 +318,12 @@
       .notice .media-left {
         width: 45px;
         margin-right: 0.75rem;
+      }
+
+      .notice-from-chat-icon {
+        height: 45px;
+        width: 45px;
+        font-size: 1.5rem;
       }
     }
   }
@@ -345,7 +351,7 @@
 
   .messages-scroll-container {
     background-color: $off-black;
-    border: 2px solid var(--primary);
+    border: 1px solid var(--primary);
     overflow-y: auto;
     height: 280px;
     flex: 1 0 1;
@@ -468,7 +474,11 @@
 
   .notices {
     height: 100%;
-    background: #dbdbdb;
+    border-radius: 4px;
+
+    &.has-notices {
+      background: #dbdbdb;
+    }
 
     .notice {
       position: relative;
@@ -476,7 +486,7 @@
       //border-left: 4px solid var(--primary);
 
       &.hs-box {
-        padding: 0.5rem 0.75rem;
+        padding: 0.8rem 0.7rem;
         border-radius: 4px;
       }
       .media-left {
@@ -489,17 +499,11 @@
         }
       }
       &:not(:last-child) {
-        margin-bottom: 0.25rem;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-      }
-      &:not(:nth-child(2)) {
-        margin-bottom: 2px;
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
+        margin-bottom: 1px;
       }
       &:not(.new-notice) {
-        @extend %fade-in-bottom;
+        @extend %fade-in-top;
+        height: 100%;
       }
       .notice-header {
         margin-bottom: 0.25rem;

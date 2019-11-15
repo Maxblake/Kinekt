@@ -89,6 +89,7 @@
 
   .notification {
     @extend %has-shadow;
+    @extend %fade-in-top;
     padding: 0.75rem 2rem 0.75rem 1rem;
     pointer-events: all;
 
@@ -115,6 +116,31 @@
 .no-card-notice {
   text-align: center;
   margin-top: 1.5rem;
+}
+
+.group-type-card,
+.group-card-container {
+  @extend %fade-in-bottom;
+
+  -webkit-transition: box-shadow 0.03s ease, transform 0.03s ease;
+  -moz-transition: box-shadow 0.03s ease, transform 0.03s ease;
+  -o-transition: box-shadow 0.03s ease, transform 0.03s ease;
+  -ms-transition: box-shadow 0.03s ease, transform 0.03s ease;
+  transition: box-shadow 0.03s ease, transform 0.03s ease;
+}
+
+.group-type-card {
+  &:hover {
+    box-shadow: 0px 9px 16px -5px rgba(20, 20, 20, 0.4);
+    transform: scale(1.013);
+  }
+}
+
+.group-card-container {
+  &:hover {
+    box-shadow: 0px 9px 16px -5px rgba(20, 20, 20, 0.4);
+    transform: scale(1.003);
+  }
 }
 
 // Page nav
@@ -521,7 +547,7 @@
 
 .checkout-container {
   margin: 1.5rem 3.5rem;
-  border: 2px solid var(--primary);
+  border: 1px solid var(--primary);
   border-radius: 4px;
 
   ul {

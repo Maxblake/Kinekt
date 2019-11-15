@@ -93,10 +93,7 @@ const FAQ = () => {
           <div className="FAQ-question-header">
             <h3 className="sdfg">Still have questions?</h3>
           </div>
-          <p>
-            Questions and comments can be sent to happenstackhelp@gmail.com
-            (we're too broke to set up an email on our own domain).{" "}
-          </p>
+          <p>Questions and comments can be sent to happenstackhelp@gmail.com</p>
         </div>
       </div>
     </section>

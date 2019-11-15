@@ -434,6 +434,22 @@
 
   border-radius: 0 0 4px 4px;
 
+  .new-notice {
+    border-radius: 4px !important;
+    opacity: 1;
+    transform: translateY(0);
+
+    transition: opacity 0.1s ease-out, transform 0.1s ease-out;
+    &.is-hidden {
+      display: block !important;
+      position: absolute !important;
+      top: 2.75rem;
+      width: 100%;
+      opacity: 0;
+      transform: translateY(2rem) scale(1.05);
+    }
+  }
+
   .header-tab {
     box-shadow: inset 0px 11px 8px -10px $off-black;
 
@@ -452,6 +468,7 @@
 
   .notices {
     height: 100%;
+    background: #dbdbdb;
 
     .notice {
       position: relative;
@@ -472,7 +489,17 @@
         }
       }
       &:not(:last-child) {
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.25rem;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      &:not(:nth-child(2)) {
+        margin-bottom: 2px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+      }
+      &:not(.new-notice) {
+        @extend %fade-in-bottom;
       }
       .notice-header {
         margin-bottom: 0.25rem;

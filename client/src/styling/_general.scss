@@ -146,6 +146,12 @@ strong {
   font-size: 0.88rem;
 }
 
+.button {
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
 .centered-form {
   max-width: 500px;
   margin: auto;
@@ -186,8 +192,8 @@ input:-internal-autofill-selected {
     width: 100%;
   }
 
-  .is-dark.button {
-    border-color: ghostwhite !important;
+  .tab-right .is-dark.button:not(.tab-right-button) {
+    background: #505050;
   }
 }
 

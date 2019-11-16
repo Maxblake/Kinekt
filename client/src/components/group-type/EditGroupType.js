@@ -41,7 +41,7 @@ const EditGroupType = ({
     const groupTypeParamChanged =
       groupType && groupType.name !== groupTypeParamSpaced;
 
-    if (!groupType || groupTypeParamChanged) {
+    if ((!loading && !groupType) || groupTypeParamChanged) {
       getGroups(groupTypeParamSpaced);
     } else if (!!groupType && errors.length === 0) {
       setFormData({
@@ -53,7 +53,7 @@ const EditGroupType = ({
     return () => {
       clearErrors();
     };
-  }, [groupType, match.params.groupType, errors, formData]);
+  }, [loading, groupType, match.params.groupType, errors.length]);
 
   const hasUnsavedChanges = () => {
     if (!!groupType) {
@@ -205,7 +205,8 @@ const mapStateToProps = state => ({
   groupType: state.groupType
 });
 
-export default connect(
-  mapStateToProps,
-  { editGroupType, getGroups, clearErrors }
-)(withRouter(EditGroupType));
+export default connect(mapStateToProps, {
+  editGroupType,
+  getGroups,
+  clearErrors
+})(withRouter(EditGroupType));

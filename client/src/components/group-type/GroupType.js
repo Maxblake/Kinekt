@@ -20,6 +20,7 @@ import { useInfiniteScroll } from "../../utils/customHooks";
 import defaultGroupTypeImage from "../../resources/default_grouptype_image.png";
 
 const GroupType = ({
+  history,
   getGroups,
   setTextAlert,
   auth: { user },
@@ -397,6 +398,7 @@ const GroupType = ({
                   group.users &&
                   group.users.find(groupUser => groupUser.id === user._id)
                 }
+                history={history}
               />
             ))}
           </Fragment>

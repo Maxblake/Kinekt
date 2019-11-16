@@ -51,10 +51,14 @@ export const getGroup = (
       payload: res.data.group
     });
     dispatch(sendExpirationWarning(res.data.group));
-  } catch (err) {
     if (!!history) {
-      history.goBack();
+      history.push(
+        `/k/${res.data.groupType.name.split(" ").join("_")}/group/${
+          res.data.group.HRID
+        }`
+      );
     }
+  } catch (err) {
     dispatch(handleResponseErrors(err));
     if (!!err.response) {
       if (
@@ -65,6 +69,9 @@ export const getGroup = (
           type: GROUP_LOADED
         });
       } else {
+        if (!!history) {
+          history.goBack();
+        }
         dispatch({
           type: GROUP_ERROR,
           payload: {

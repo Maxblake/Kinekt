@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
@@ -10,6 +10,7 @@ import GroupDetails from "../common/subcomponents/GroupDetails";
 import Image from "../common/subcomponents/Image";
 
 const GroupCard = ({
+  history,
   group,
   groupTypeName,
   defaultImg,
@@ -21,7 +22,7 @@ const GroupCard = ({
   const clickedGroupCard = e => {
     if (!isMember && group.accessLevel !== "Public") {
       e.preventDefault();
-      getGroup({ HRID: group.HRID });
+      getGroup({ HRID: group.HRID }, history);
     }
   };
 

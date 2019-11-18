@@ -2,7 +2,7 @@
 .footer {
   @extend %is-dark;
   margin-top: 6rem;
-  padding: 4rem 1.5rem;
+  padding: 2.5rem 1.5rem;
   color: #555555;
 
   /*   background-image: url("../resources/footer_background.png");
@@ -13,8 +13,8 @@
   filter: grayscale(1); */
 
   .centered-logo {
-    opacity: 0.1;
-    max-width: 325px;
+    opacity: 0.9;
+    max-width: 200px;
   }
 
   a {
@@ -34,8 +34,6 @@
 
 @media (max-width: $tablet - 1) {
   .footer {
-    padding: 2.5rem 1.5rem;
-
     .column {
       padding: 0.25rem;
     }
@@ -116,6 +114,7 @@
 .no-card-notice {
   text-align: center;
   margin-top: 1.5rem;
+  border-radius: 4px;
 }
 
 .group-type-card,
@@ -478,7 +477,7 @@
   .input {
     background-color: transparent;
     color: ghostwhite;
-    border-bottom: 1px solid #808080;
+    border-bottom: 1px solid #707070;
   }
 }
 

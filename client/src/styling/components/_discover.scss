@@ -4,7 +4,7 @@
   color: #fafafa;
   position: fixed;
   z-index: 1;
-  top: 2.9rem;
+  top: 3rem;
   left: 0;
   right: 0;
   bottom: 0;
@@ -15,13 +15,16 @@
   padding: 0 20rem;
 
   .header-welcome {
-    margin: 12rem 0 12rem 0;
+    margin: 6rem 0 7.5rem 0;
     text-align: center;
+    max-width: 600px;
 
-    line-height: 1.75rem;
+    h3 {
+      line-height: 2rem;
+    }
 
-    & :first-child {
-      line-height: 3rem;
+    h2 {
+      line-height: 3.75rem;
     }
   }
 
@@ -67,7 +70,7 @@
       }
 
       .step-description {
-        padding: 3.5rem 3.5rem 3.5rem 125px;
+        padding: 3.4rem 3.4rem 3.4rem 125px;
         text-align: right;
       }
     }
@@ -85,7 +88,7 @@
       }
 
       .step-description {
-        padding: 3.5rem 125px 3.5rem 3.5rem;
+        padding: 3.4rem 125px 3.4rem 3.4rem;
         text-align: left;
       }
     }
@@ -99,6 +102,7 @@
   .call-to-elephant {
     margin-top: 6rem;
     position: relative;
+    max-width: 550px;
 
     .button {
       position: absolute;
@@ -114,20 +118,27 @@
     padding: 0 9%;
 
     .header-welcome {
-      margin: 7rem 0 14rem 0;
-      line-height: 1.5rem;
+      margin: 2.5rem 0 10rem 0;
+      max-width: 450px;
 
-      & :first-child {
+      h3 {
+        line-height: 1.5rem;
+        font-size: 1.1rem !important;
+      }
+
+      h2 {
         line-height: 2.75rem;
+        font-size: 2rem !important;
       }
     }
 
     .header-step {
       width: 100%;
-      margin-bottom: 12rem;
+      margin-bottom: 10rem;
+      max-width: 657px;
 
       &:nth-last-child(2) {
-        margin-bottom: 2rem;
+        margin-bottom: 0;
       }
 
       .step-description {

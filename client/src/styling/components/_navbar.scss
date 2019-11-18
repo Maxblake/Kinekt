@@ -1,10 +1,11 @@
 // Navbar
 .navbar,
+.navbar-item,
 .navbar.is-fixed-top,
 .navbar-brand,
 .navbar-burger {
-  height: 2.9rem;
-  min-height: 2.85rem;
+  height: 3rem;
+  min-height: 3rem;
 }
 .navbar.is-fixed-top {
   @extend %has-shadow;

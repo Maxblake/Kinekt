@@ -114,6 +114,7 @@ const EditUser = ({
   };
 
   const handleImageUpload = imageFile => {
+    console.log(formData);
     setFormData({
       ...formData,
       image: imageFile
@@ -371,7 +372,4 @@ const mapStateToProps = state => ({
   errors: state.error
 });
 
-export default connect(
-  mapStateToProps,
-  { editUser, deleteUser }
-)(EditUser);
+export default connect(mapStateToProps, { editUser, deleteUser })(EditUser);

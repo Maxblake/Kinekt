@@ -11,18 +11,17 @@ import elephant from "../../resources/elephant.png";
 const DiscoverHeader = () => {
   return (
     <div className="discover-header k-scroll">
-      <h2 className="header-welcome is-size-1 is-size-3-touch">
-        <span className="ws-nowrap">
+      <div className="header-welcome">
+        <h2 className="ws-nowrap is-size-1">
           <strong>New</strong> around here?
-        </span>
-        <br />{" "}
-        <span className="ws-nowrap is-size-4 is-size-5-touch">
-          Sweet, getting started
-        </span>{" "}
-        <span className="ws-nowrap is-size-4 is-size-5-touch">
-          is pretty dang easy.
-        </span>
-      </h2>
+        </h2>
+        <h3 className="is-size-4">
+          <span className="ws-nowrap">Awesome! Read this quick intro and</span>{" "}
+          <span className="ws-nowrap">
+            you'll be joining groups lickity split.
+          </span>{" "}
+        </h3>
+      </div>
       <div className="header-step">
         <div className="step-image">
           <Image
@@ -34,8 +33,8 @@ const DiscoverHeader = () => {
         <Link to="/register" className="step-description">
           <h2 className="is-size-3 is-size-4-touch">Create a free account</h2>
           <p>
-            Creating and joining public groups will always be free. HappenStack
-            is supported by those who create protected and private groups :)
+            Creating and joining public groups will always be free! HappenStack
+            is supported by those who create protected and private groups.
           </p>
         </Link>
       </div>

@@ -96,8 +96,7 @@ const SocketHandler = ({
 
   const onActive = () => {
     if (!!socket && !socket.connected) {
-      alert("reconnecting");
-      socket.open();
+      window.location.reload();
     }
     clearInterval(interval);
     getGroupAndUserNumbers();
@@ -153,13 +152,10 @@ const mapStateToProps = state => ({
   groupType: state.groupType
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    openSocket,
-    setTextAlert,
-    setCustomAlert,
-    adjustStateForKickedUser,
-    deleteGroup
-  }
-)(SocketHandler);
+export default connect(mapStateToProps, {
+  openSocket,
+  setTextAlert,
+  setCustomAlert,
+  adjustStateForKickedUser,
+  deleteGroup
+})(SocketHandler);

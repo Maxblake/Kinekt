@@ -22,22 +22,25 @@ const ImgUploadControl = ({ label, src, onChange, type }) => {
     };
   }, [imgSrc]);
 
-  const onDrop = useCallback(acceptedFiles => {
-    const imageFile = acceptedFiles[0];
+  const onDrop = useCallback(
+    acceptedFiles => {
+      const imageFile = acceptedFiles[0];
 
-    if (!imageFile) return;
+      if (!imageFile) return;
 
-    if (imageFile.size > maxSize) {
-      setImgData({ error: "Image file must be smaller than 2MB" });
-      return;
-    }
+      if (imageFile.size > maxSize) {
+        setImgData({ error: "Image file must be smaller than 2MB" });
+        return;
+      }
 
-    setImgData({
-      fileName: imageFile.name,
-      imgSrc: URL.createObjectURL(imageFile)
-    });
-    onChange(imageFile);
-  }, []);
+      setImgData({
+        fileName: imageFile.name,
+        imgSrc: URL.createObjectURL(imageFile)
+      });
+      onChange(imageFile);
+    },
+    [onChange]
+  );
 
   const {
     isDragActive,

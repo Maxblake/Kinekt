@@ -494,6 +494,18 @@ const handleImageUpload = async (group, req, errors, updating = false) => {
     } else {
       group.image = uploadResponse;
     }
+  } else if (
+    req.body.image === "REMOVE" &&
+    updating &&
+    group.image &&
+    !!group.image.deleteHash
+  ) {
+    const deleteResponse = await deleteImage(group.image.deleteHash);
+    if (deleteResponse.error) {
+      errors.addError(deleteResponse.error);
+    } else {
+      group.image = undefined;
+    }
   }
 };
 

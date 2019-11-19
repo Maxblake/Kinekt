@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, Fragment } from "react";
 import { useDropzone } from "react-dropzone";
 
 import CustomField from "./CustomField";
@@ -42,6 +42,14 @@ const ImgUploadControl = ({ label, src, onChange, type }) => {
     [onChange]
   );
 
+  const onClickRemove = () => {
+    setImgData({
+      fileName: "",
+      imgSrc: ""
+    });
+    onChange("REMOVE");
+  };
+
   const {
     isDragActive,
     getRootProps,
@@ -74,32 +82,49 @@ const ImgUploadControl = ({ label, src, onChange, type }) => {
     <CustomField
       label={label}
       children={
-        <div className="field">
-          <div className="file has-name is-primary is-fullwidth">
-            <div className="file-label" {...getRootProps()}>
-              <input
-                className="file-input"
-                type="file"
-                accept="image/png, image/jpg, image/jpeg"
-                {...getInputProps()}
-              />
-              <span className="file-cta">
-                <span className="icon">
-                  <i className="fas fa-upload" />
+        <Fragment>
+          <div className="field has-addons">
+            <div className="file has-name is-primary is-fullwidth">
+              <div className="file-label" {...getRootProps()}>
+                <input
+                  className="file-input"
+                  type="file"
+                  accept="image/png, image/jpg, image/jpeg"
+                  {...getInputProps()}
+                />
+                <span className="file-cta">
+                  <span className="icon">
+                    <i className="fas fa-upload" />
+                  </span>
                 </span>
-              </span>
-              <span className="file-name">
-                {isFileTooLarge
-                  ? "That one's too big for this ship!"
-                  : isDragActive
-                  ? "Drop 'er here, captain!"
-                  : rejectedFiles.length > 0
-                  ? "Wrong type of fish, throw 'er back!"
-                  : fileName
-                  ? fileName
-                  : "No image selected.."}
-              </span>
+                <span className="file-name">
+                  {isFileTooLarge
+                    ? "That one's too big for this ship!"
+                    : isDragActive
+                    ? "Drop 'er here, captain!"
+                    : rejectedFiles.length > 0
+                    ? "Wrong type of fish, throw 'er back!"
+                    : fileName
+                    ? fileName
+                    : "No image selected.."}
+                </span>
+              </div>
             </div>
+            {!!imgSrc && (
+              <div className="control">
+                <button
+                  type="button"
+                  onClick={() => onClickRemove()}
+                  className="button is-danger"
+                >
+                  <span>
+                    <i className="fas fa-minus is-hidden-desktop"></i>
+                    <span className="is-hidden-touch">Remove</span>
+                  </span>
+                </button>
+              </div>
+            )}
+            {error && <p className="help is-danger">{error}</p>}
           </div>
           {imgSrc && (
             <div className="image-preview">
@@ -110,8 +135,7 @@ const ImgUploadControl = ({ label, src, onChange, type }) => {
               />
             </div>
           )}
-          {error && <p className="help is-danger">{error}</p>}
-        </div>
+        </Fragment>
       }
     />
   );

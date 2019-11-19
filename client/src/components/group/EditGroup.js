@@ -94,7 +94,7 @@ const EditGroup = ({
         place.address !== initialState.place.address ||
         accessLevel !== initialState.accessLevel ||
         maxSize !== initialState.maxSize ||
-        image !== initialState.image
+        (image !== initialState.image && image !== "REMOVE")
       ) {
         return true;
       }

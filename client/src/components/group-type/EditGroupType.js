@@ -66,7 +66,7 @@ const EditGroupType = ({
       if (
         description !== initialState.description ||
         category !== initialState.category ||
-        image !== initialState.image
+        (image !== initialState.image && image !== "REMOVE")
       ) {
         return true;
       }

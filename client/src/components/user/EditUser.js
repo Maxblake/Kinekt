@@ -96,7 +96,7 @@ const EditUser = ({
         currentLocation.address !== initialState.currentLocation.address ||
         useUsersLocation !== initialState.useUsersLocation ||
         selectedTheme !== initialState.selectedTheme ||
-        image !== initialState.image
+        (image !== initialState.image && image !== "REMOVE")
       ) {
         return true;
       }
@@ -114,7 +114,6 @@ const EditUser = ({
   };
 
   const handleImageUpload = imageFile => {
-    console.log(formData);
     setFormData({
       ...formData,
       image: imageFile

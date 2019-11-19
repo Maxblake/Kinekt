@@ -116,7 +116,8 @@ router.put(
       await user.save();
 
       return res.json(user);
-    }), res;
+    }),
+      res;
   }
 );
 
@@ -170,6 +171,18 @@ const handleImageUpload = async (user, req, errors, updating = false) => {
       );
     } else {
       user.image = uploadResponse;
+    }
+  } else if (
+    req.body.image === "REMOVE" &&
+    updating &&
+    user.image &&
+    !!user.image.deleteHash
+  ) {
+    const deleteResponse = await deleteImage(user.image.deleteHash);
+    if (deleteResponse.error) {
+      errors.addError(deleteResponse.error);
+    } else {
+      user.image = undefined;
     }
   }
 };

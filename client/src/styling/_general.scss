@@ -8,8 +8,8 @@ body {
 }
 
 .image-preview {
-  margin-top: 0.75rem;
-  padding: 0 16%;
+  margin-bottom: 0.75rem;
+  padding: 0 21%;
   background: $off-black;
   border-radius: 4px;
 }
@@ -148,7 +148,7 @@ strong {
 
 .button {
   &:active {
-    transform: translateY(1px);
+    //transform: scale(0.991);
   }
 }
 
@@ -196,8 +196,12 @@ input:-internal-autofill-selected {
   }
 }
 
-.columns.is-fullwidth {
-  width: 100%;
+.columns,
+.file {
+  &.is-fullwidth {
+    width: 100%;
+    min-width: 125px;
+  }
 }
 
 .small-input {

@@ -27,7 +27,7 @@ const OnlineStatus = ({ users, maxSize, groups }) => {
           />
           <h4 className="online-status-text">{`${
             Number.isNaN(usersInt) ? "~" : usersInt
-          }${maxSize ? `/${maxSize}` : ""} user${
+          }${maxSize ? `/${maxSize}` : ""} member${
             maxSize > 1 || usersInt !== 1 ? "s" : ""
           }`}</h4>
         </Fragment>

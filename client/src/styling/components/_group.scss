@@ -120,20 +120,18 @@
 
 // Group page
 #group-members-container {
-  background: $off-black;
+  background: transparent;
   position: relative;
-  padding: 3rem 10px 1.25rem 10px;
-  margin-bottom: -1px;
+  padding: 2.5rem 0.75rem 0 0.75rem;
   border-radius: 4px 4px 0 0;
+  box-shadow: none;
 
   #group-members {
     max-height: 35vh;
     overflow-y: auto;
 
-    padding: 0 1.25rem;
-
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
     grid-gap: 10px;
 
     .group-member {
@@ -141,19 +139,25 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      border-width: 1px;
-      background-color: transparent;
+      //border-width: 1px;
+      //background-color: transparent;
+      border-color: transparent;
+      background-color: rgba(20, 20, 20, 0.8);
       color: #fafafa;
-    }
-  }
 
-  // Button classes for member types and statuses
-  .is-online {
-    border-color: limegreen;
-  }
-  .is-away {
-    border-color: #fafafa;
-    opacity: 0.6;
+      // Button classes for member types and statuses
+      &.is-online {
+        //color: limegreen;
+        //color: var(--primary);
+        border-left: 4px solid limegreen;
+        border-right: 4px solid limegreen;
+      }
+      &.is-away {
+        //color: #fafafa;
+        //border-color: #fafafa;
+        //opacity: 0.6;
+      }
+    }
   }
 }
 
@@ -168,6 +172,7 @@
   padding: 4px 16px;
   border-bottom-right-radius: 6px;
   border-bottom-left-radius: 6px;
+  //box-shadow: inset 0px 11px 8px -10px rgba(20, 20, 20, 0.8);
 
   white-space: nowrap;
 
@@ -199,26 +204,18 @@
   .group-chat {
     position: relative;
     align-self: flex-start;
-    padding: 1.25rem 0 2.25rem 2rem;
-    background: $off-black;
-    border-bottom-left-radius: 4px;
+    padding: 2rem;
+    margin-left: 1rem;
+    background: rgba(20, 20, 20, 0.8);
+    border-radius: 4px;
 
     flex: 2;
-
-    .corner-fill {
-      width: 14px;
-      height: 14px;
-      background: $off-black;
-      position: absolute;
-      right: -14px;
-      bottom: 0;
-    }
   }
 
-  .group-details-and-nb {
-    padding: 1.25rem 2rem 2.25rem 2rem;
-    background: $off-black;
-    border-radius: 0 0 4px 4px;
+  .console-card-and-nb {
+    display: flex;
+    flex-direction: column;
+    border-radius: 4px;
 
     flex: 5;
   }
@@ -242,16 +239,15 @@
   }
   .noticeboard {
     flex: 1 100%;
-    box-shadow: inset 0px 11px 8px -10px $off-black;
+  }
+  .console-card {
+    @extend %has-shadow;
+    flex: 1 100%;
   }
 }
 
 @media (max-width: $desktop - 1) {
   #group-console {
-    .group-details-and-nb {
-      padding: 1.5rem 0.5rem 0.5rem 0.5rem;
-    }
-
     .group-chat {
       background-color: transparent;
       padding: 0;
@@ -264,10 +260,6 @@
       max-width: 390px;
       width: 100%;
       padding: 0;
-
-      .corner-fill {
-        display: none;
-      }
 
       .show-chat-btn {
         display: block;
@@ -346,7 +338,7 @@
   }
 
   .messages-scroll-container {
-    background-color: $off-black;
+    background-color: transparent;
     border: 1px solid var(--primary);
     overflow-y: auto;
     height: 300px;
@@ -429,12 +421,9 @@
 
 // Noticeboard
 .noticeboard {
-  min-height: 100px;
   color: #fafafa;
   padding-top: 2rem;
   position: relative;
-
-  border-radius: 0 0 4px 4px;
 
   .new-notice-button {
     height: 100%;
@@ -457,25 +446,15 @@
     }
   }
 
-  .header-tab {
-    box-shadow: inset 0px 11px 8px -10px $off-black;
-  }
-
-  .has-text-centered {
-    color: #505050;
-  }
-
   .notices {
     height: 100%;
-    border-radius: 4px;
 
     &.has-notices {
-      background: #dbdbdb;
+      //background: #dbdbdb;
     }
 
     .notice {
       position: relative;
-      box-shadow: none;
       //border-left: 4px solid var(--primary);
 
       &.hs-box {
@@ -492,7 +471,7 @@
         }
       }
       &:not(:last-child) {
-        margin-bottom: 1px;
+        margin-bottom: 0.5rem;
       }
       &:not(.new-notice) {
         @extend %fade-in-top;

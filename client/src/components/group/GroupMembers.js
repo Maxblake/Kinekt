@@ -4,7 +4,6 @@ import GroupMember from "./GroupMember";
 import OnlineStatus from "../common/subcomponents/OnlineStatus";
 
 const GroupMembers = ({ users, creatorId, maxSize, adminOptions }) => {
-  console.log(users);
   const sortedUsers = [];
 
   if (!!users) {
@@ -28,7 +27,8 @@ const GroupMembers = ({ users, creatorId, maxSize, adminOptions }) => {
         <Fragment>
           <div className="header-tab">
             <OnlineStatus
-              users={`${users.length}${maxSize ? `/${maxSize}` : ""} users`}
+              users={users ? users.length : ""}
+              maxSize={maxSize ? maxSize : ""}
             />
           </div>
           <div id="group-members" className="k-scroll">

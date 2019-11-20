@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import { setTextAlert, setCustomAlert } from "../alert";
 
 import { SET_ERRORS, REQUEST_ENTRY } from "../types";
@@ -46,4 +48,14 @@ export const handleResponseErrors = err => dispatch => {
       payload: errors
     });
   }
+};
+
+export const getAddressFromCoords = async (lat, lng) => {
+  return new Promise(res => {
+    axios
+      .get(
+        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=10&lat=${lat}&lon=${lng}`
+      )
+      .then(response => res(response));
+  });
 };

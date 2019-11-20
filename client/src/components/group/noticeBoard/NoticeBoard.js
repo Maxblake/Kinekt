@@ -26,19 +26,6 @@ const NoticeBoard = ({
 
   return (
     <div className="noticeboard">
-      <div className="header-tab">
-        {isCurrentUserAdmin && (
-          <div
-            className="header-tab new-notice-tab"
-            onClick={() => showNotice()}
-          >
-            <i className="fas fa-plus"></i>
-          </div>
-        )}
-        <div className="subtitle is-size-6 has-text-weight-bold">
-          Notice Board
-        </div>
-      </div>
       <div
         className={`notices is-vcentered ${
           notices.length > 0 ? "has-notices" : ""
@@ -54,25 +41,35 @@ const NoticeBoard = ({
             groupId={groupId}
           />
         )}
-        {notices && notices.length > 0
-          ? notices
-              .slice(0)
-              .reverse()
-              .map(notice => (
-                <Notice
-                  notice={notice}
-                  key={notice._id}
-                  groupId={groupId}
-                  isCurrentUserAdmin={isCurrentUserAdmin}
-                  isLiked={notice.likes.includes(user._id)}
-                  numLikes={notice.likes.length}
-                />
-              ))
-          : newNoticeHidden && (
-              <div className="has-text-centered">
-                There's nothing to see here
-              </div>
-            )}
+        {notices && notices.length > 0 ? (
+          notices
+            .slice(0)
+            .reverse()
+            .map(notice => (
+              <Notice
+                notice={notice}
+                key={notice._id}
+                groupId={groupId}
+                isCurrentUserAdmin={isCurrentUserAdmin}
+                isLiked={notice.likes.includes(user._id)}
+                numLikes={notice.likes.length}
+              />
+            ))
+        ) : newNoticeHidden && isCurrentUserAdmin ? (
+          <button
+            className="button is-dark new-notice-button"
+            onClick={() => showNotice()}
+          >
+            <span className="icon">
+              <i className="fas fa-plus"></i>
+            </span>
+            <span>Add a Notice</span>
+          </button>
+        ) : (
+          newNoticeHidden && (
+            <div className="has-text-centered">There's nothing to see here</div>
+          )
+        )}
       </div>
     </div>
   );

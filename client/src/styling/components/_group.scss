@@ -116,10 +116,6 @@
       filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0d000000', endColorstr='#bf000000',GradientType=0 ); /* IE6-9 */
     }
   }
-
-  .group-details-and-nb .noticeboard .header-tab .new-notice-tab {
-    left: 10.25rem;
-  }
 }
 
 // Group page
@@ -294,7 +290,7 @@
     .noticeboard {
       flex: 1 100%;
       order: 3;
-      padding-top: 3.25rem;
+      padding-top: 2.25rem;
     }
   }
 }
@@ -353,7 +349,7 @@
     background-color: $off-black;
     border: 1px solid var(--primary);
     overflow-y: auto;
-    height: 280px;
+    height: 300px;
     flex: 1 0 1;
     display: flex;
     flex-direction: column-reverse;
@@ -435,10 +431,14 @@
 .noticeboard {
   min-height: 100px;
   color: #fafafa;
-  padding-top: 2.75rem;
+  padding-top: 2rem;
   position: relative;
 
   border-radius: 0 0 4px 4px;
+
+  .new-notice-button {
+    height: 100%;
+  }
 
   .new-notice {
     border-radius: 4px !important;
@@ -449,6 +449,7 @@
     &.is-hidden {
       display: block !important;
       position: absolute !important;
+      pointer-events: none;
       top: 2.75rem;
       width: 100%;
       opacity: 0;
@@ -458,14 +459,6 @@
 
   .header-tab {
     box-shadow: inset 0px 11px 8px -10px $off-black;
-
-    & .new-notice-tab {
-      cursor: pointer;
-      left: 11.5rem;
-      line-height: 1.25;
-      color: #fafafa;
-      background: var(--primary);
-    }
   }
 
   .has-text-centered {

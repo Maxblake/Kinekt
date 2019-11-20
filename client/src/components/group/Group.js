@@ -228,6 +228,7 @@ const Group = ({
       </nav>
       <GroupMembers
         users={group.users}
+        creatorId={group.creator}
         maxSize={group.maxSize}
         adminOptions={adminOptions}
       />

@@ -6,6 +6,7 @@ import Geosuggest from "react-geosuggest";
 
 import { register } from "../../actions/user";
 import { clearErrors } from "../../actions/auth";
+import { getAddressFromCoords } from "../../actions/helpers/helpers";
 
 import Spinner from "../common/Spinner";
 import PageTitle from "../layout/page/PageTitle";
@@ -31,7 +32,6 @@ const Register = ({
     about: "",
     image: undefined,
     currentLocation: { address: "" },
-    useUsersLocation: false,
     isSubmitDisabled: true
   });
 
@@ -42,7 +42,6 @@ const Register = ({
     about,
     image,
     currentLocation,
-    useUsersLocation,
     isSubmitDisabled
   } = formData;
 
@@ -84,33 +83,24 @@ const Register = ({
     setFormData({ ...formData, currentLocation });
   };
 
-  const currentLocationCBChanged = async e => {
-    const checked = e.target.checked;
-    let newCurrentLocation = currentLocation;
+  const useCurrentLocation = async () => {
+    const coords = await getCurrentPosition();
+    const place = await getAddressFromCoords(coords.latitude, coords.longitude);
 
-    if (checked) {
-      const coords = await getCurrentPosition();
-
-      if (!!coords && !!coords.latitude) {
-        newCurrentLocation = {
-          address: "",
+    if (!!coords && !!coords.latitude) {
+      setFormData({
+        ...formData,
+        currentLocation: {
+          address: place.data.display_name,
           lat: coords.latitude,
           lng: coords.longitude
-        };
-      } else {
-        alert(
-          "HappenStack is unable to determine your location, please check your browser settings or enter a location manually."
-        );
-      }
+        }
+      });
     } else {
-      newCurrentLocation = { address: "" };
+      alert(
+        "HappenStack is unable to determine your location, please check your browser settings or enter a location manually."
+      );
     }
-
-    setFormData({
-      ...formData,
-      useUsersLocation: checked,
-      currentLocation: newCurrentLocation
-    });
   };
 
   const getCurrentPosition = async () => {
@@ -259,12 +249,11 @@ const Register = ({
             </span>
           }
           children={
-            <div className="field is-grouped">
+            <div className="field has-addons">
               <div className="control is-expanded">
                 <div className="field">
                   <div className="control">
                     <Geosuggest
-                      disabled={useUsersLocation}
                       initialValue={currentLocation.address}
                       placeDetailFields={[]}
                       queryDelay={500}
@@ -279,10 +268,16 @@ const Register = ({
                 </div>
               </div>
               <div className="control">
-                <label className="checkbox">
-                  <input type="checkbox" onChange={currentLocationCBChanged} />
-                  &nbsp;Use Current
-                </label>
+                <button
+                  type="button"
+                  onClick={() => useCurrentLocation()}
+                  className="button is-info"
+                >
+                  <span className="icon">
+                    <i className="fas fa-map-marker-alt" />
+                  </span>
+                  <span>Use Current</span>
+                </button>
               </div>
             </div>
           }
@@ -338,7 +333,4 @@ const mapStateToProps = state => ({
   errors: state.error
 });
 
-export default connect(
-  mapStateToProps,
-  { register, clearErrors }
-)(Register);
+export default connect(mapStateToProps, { register, clearErrors })(Register);

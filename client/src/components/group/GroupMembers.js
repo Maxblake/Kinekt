@@ -3,10 +3,28 @@ import React, { Fragment } from "react";
 import GroupMember from "./GroupMember";
 import OnlineStatus from "../common/subcomponents/OnlineStatus";
 
-const GroupMembers = ({ users, maxSize, adminOptions }) => {
+const GroupMembers = ({ users, creatorId, maxSize, adminOptions }) => {
+  console.log(users);
+  const sortedUsers = [];
+
+  if (!!users) {
+    let creator = null;
+    users.forEach(user => {
+      if (user._id === creatorId) {
+        creator = user;
+      } else if (user.memberType === "admin") {
+        sortedUsers.unshift(user);
+      } else {
+        sortedUsers.push(user);
+      }
+    });
+
+    if (!!creator) sortedUsers.unshift(creator);
+  }
+
   return (
     <div className="hs-box" id="group-members-container">
-      {users && (
+      {sortedUsers.length > 0 && (
         <Fragment>
           <div className="header-tab">
             <OnlineStatus
@@ -14,7 +32,7 @@ const GroupMembers = ({ users, maxSize, adminOptions }) => {
             />
           </div>
           <div id="group-members" className="k-scroll">
-            {users.map((user, index) => {
+            {sortedUsers.map((user, index) => {
               return (
                 <GroupMember
                   key={index}

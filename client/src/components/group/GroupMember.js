@@ -8,11 +8,10 @@ const GroupMember = ({ user, adminOptions }) => {
 
     switch (memberType) {
       case "admin":
-        classList.push("is-rounded");
         break;
       case "user":
       default:
-        classList.push("is-user");
+        classList.push("is-user", "is-rounded");
         break;
     }
 

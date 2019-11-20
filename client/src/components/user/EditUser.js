@@ -5,6 +5,7 @@ import { Prompt } from "react-router-dom";
 import Geosuggest from "react-geosuggest";
 
 import { editUser, deleteUser } from "../../actions/user";
+import { getAddressFromCoords } from "../../actions/helpers/helpers";
 
 import Spinner from "../common/Spinner";
 import PageTitle from "../layout/page/PageTitle";
@@ -28,18 +29,10 @@ const EditUser = ({
     about: "",
     image: undefined,
     currentLocation: { address: "" },
-    useUsersLocation: false,
     selectedTheme: ""
   });
 
-  const {
-    name,
-    about,
-    image,
-    currentLocation,
-    useUsersLocation,
-    selectedTheme
-  } = formData;
+  const { name, about, image, currentLocation, selectedTheme } = formData;
 
   const errName = errors.find(error => error.param === "name");
   const errAbout = errors.find(error => error.param === "about");
@@ -57,13 +50,7 @@ const EditUser = ({
         selectedTheme: user.selectedTheme ? user.selectedTheme : "",
         currentLocation: user.currentLocation
           ? user.currentLocation
-          : currentLocation,
-        useUsersLocation:
-          user.currentLocation &&
-          !!user.currentLocation.lat &&
-          user.currentLocation.address === ""
-            ? true
-            : false
+          : currentLocation
       });
     }
 
@@ -81,12 +68,6 @@ const EditUser = ({
         currentLocation: user.currentLocation
           ? user.currentLocation
           : { address: "" },
-        useUsersLocation:
-          user.currentLocation &&
-          !!user.currentLocation.lat &&
-          user.currentLocation.address === ""
-            ? true
-            : false,
         image: undefined
       };
 
@@ -94,7 +75,6 @@ const EditUser = ({
         name !== initialState.name ||
         about !== initialState.about ||
         currentLocation.address !== initialState.currentLocation.address ||
-        useUsersLocation !== initialState.useUsersLocation ||
         selectedTheme !== initialState.selectedTheme ||
         (image !== initialState.image && image !== "REMOVE")
       ) {
@@ -134,33 +114,24 @@ const EditUser = ({
     setFormData({ ...formData, currentLocation });
   };
 
-  const currentLocationCBChanged = async e => {
-    const checked = e.target.checked;
-    let newCurrentLocation = currentLocation;
+  const useCurrentLocation = async () => {
+    const coords = await getCurrentPosition();
+    const place = await getAddressFromCoords(coords.latitude, coords.longitude);
 
-    if (checked) {
-      const coords = await getCurrentPosition();
-
-      if (!!coords && !!coords.latitude) {
-        newCurrentLocation = {
-          address: "",
+    if (!!coords && !!coords.latitude) {
+      setFormData({
+        ...formData,
+        currentLocation: {
+          address: place.data.display_name,
           lat: coords.latitude,
           lng: coords.longitude
-        };
-      } else {
-        alert(
-          "HappenStack is unable to determine your location, please check your browser settings or enter a location manually."
-        );
-      }
+        }
+      });
     } else {
-      newCurrentLocation = { address: "" };
+      alert(
+        "HappenStack is unable to determine your location, please check your browser settings or enter a location manually."
+      );
     }
-
-    setFormData({
-      ...formData,
-      useUsersLocation: checked,
-      currentLocation: newCurrentLocation
-    });
   };
 
   const getCurrentPosition = async () => {
@@ -188,7 +159,7 @@ const EditUser = ({
       currentLocationLng: currentLocation.lng ? currentLocation.lng : ""
     };
 
-    if (currentLocation.address === "" && !useUsersLocation) {
+    if (currentLocation.address === "") {
       userFields.currentLocationLat = "";
       userFields.currentLocationLng = "";
     }
@@ -276,12 +247,11 @@ const EditUser = ({
             </span>
           }
           children={
-            <div className="field is-grouped">
+            <div className="field has-addons">
               <div className="control is-expanded">
                 <div className="field">
                   <div className="control">
                     <Geosuggest
-                      disabled={useUsersLocation}
                       initialValue={currentLocation.address}
                       placeDetailFields={[]}
                       queryDelay={500}
@@ -296,14 +266,16 @@ const EditUser = ({
                 </div>
               </div>
               <div className="control">
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    checked={useUsersLocation}
-                    onChange={currentLocationCBChanged}
-                  />
-                  &nbsp;Use Current
-                </label>
+                <button
+                  type="button"
+                  onClick={() => useCurrentLocation()}
+                  className="button is-info"
+                >
+                  <span className="icon">
+                    <i className="fas fa-map-marker-alt" />
+                  </span>
+                  <span>Use Current</span>
+                </button>
               </div>
             </div>
           }

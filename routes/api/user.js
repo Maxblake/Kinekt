@@ -133,7 +133,7 @@ const buildUserFields = (req, updating = false) => {
   } = req.body;
   let userFields = {};
 
-  if (!updating) userFields.groupLocks = 3;
+  if (!updating) userFields.groupLocks = 8;
   if (!updating && email) userFields.email = email;
   if (name) userFields.name = name;
   if (about) userFields.about = about;

@@ -271,7 +271,7 @@ const Register = ({
                 <button
                   type="button"
                   onClick={() => useCurrentLocation()}
-                  className="button is-info"
+                  className="button is-primary"
                 >
                   <span className="icon">
                     <i className="fas fa-map-marker-alt" />

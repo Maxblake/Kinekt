@@ -224,7 +224,7 @@ export const createGroup = (groupFields, history) => async dispatch => {
   }
 };
 
-export const editGroup = (groupFields, groupId) => async dispatch => {
+export const editGroup = (groupFields, groupId, history) => async dispatch => {
   const formData = new FormData();
 
   for (const key of Object.keys(groupFields)) {
@@ -254,6 +254,7 @@ export const editGroup = (groupFields, groupId) => async dispatch => {
         "is-success"
       )
     );
+    history.push(`/k/k/group/${res.data.group.HRID}`);
   } catch (err) {
     dispatch(handleResponseErrors(err));
     dispatch({

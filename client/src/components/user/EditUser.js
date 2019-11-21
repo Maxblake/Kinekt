@@ -269,7 +269,7 @@ const EditUser = ({
                 <button
                   type="button"
                   onClick={() => useCurrentLocation()}
-                  className="button is-info"
+                  className="button is-primary"
                 >
                   <span className="icon">
                     <i className="fas fa-map-marker-alt" />
@@ -297,7 +297,7 @@ const EditUser = ({
                     <option>Flamingo</option>
                     <option>Deep Sea</option>
                     <option>Deep Earth</option>
-                    <option>Cafe Nouveau</option>
+                    <option>Cafe Verde</option>
                     <option>Clean Slate</option>
                   </select>
                 </div>

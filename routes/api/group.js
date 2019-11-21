@@ -554,11 +554,18 @@ const handleGroupDeletionSideEffects = async (group, errors) => {
     }
   }
 
-  await User.findByIdAndUpdate(group.creator, {
-    $set: {
-      currentGroup: null
+  console.log(group.users);
+
+  await User.updateMany(
+    {
+      _id: { $in: group.users.map(user => user._id) }
+    },
+    {
+      $set: {
+        currentGroup: null
+      }
     }
-  });
+  );
 };
 
 // @route   PUT api/group/notice/:groupId

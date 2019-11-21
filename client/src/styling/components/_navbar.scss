@@ -25,11 +25,11 @@
   }
 
   #logo-typewriter {
-    color: #fafafa;
+    color: #f8f8f8;
   }
 
   #logo-text {
-    color: #fafafa;
+    color: #f8f8f8;
     transition: color 0.2s;
 
     &:hover {
@@ -50,7 +50,7 @@
 }
 
 .button.is-primary.is-outlined.outlined-nav-button {
-  color: #fafafa;
+  color: #f8f8f8;
 }
 
 @media (max-width: $tablet - 1) {

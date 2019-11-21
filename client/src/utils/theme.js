@@ -3,36 +3,36 @@ const themes = [
     name: "Open Air",
     "--primary": "hsl(203.9, 85.8%, 52%)",
     "--primary-darker": "hsl(203.9, 85.8%, 48%)",
-    "--gradient-top": "#d4effa",
-    "--gradient-bottom": "#ecfaff"
+    "--gradient-top": "#e6f5ff",
+    "--gradient-bottom": "#d4effa"
   },
   {
     name: "Clean Slate",
-    "--primary": "hsl(41, 67%, 47%)",
-    "--primary-darker": "hsl(41, 67%, 43%)",
-    "--gradient-top": "#dfe9f3",
-    "--gradient-bottom": "#fafafa"
+    "--primary": "hsl(0 45% 52%)",
+    "--primary-darker": "hsl(0, 45%, 48%)",
+    "--gradient-top": "#f0ebeb",
+    "--gradient-bottom": "#f0ebeb"
   },
   {
     name: "Mint",
-    "--primary": "hsl(143.9, 85.7%, 41%)",
-    "--primary-darker": "hsl(143.9, 85.7%, 37%)",
-    "--gradient-top": "#80ffa1",
-    "--gradient-bottom": "#80ff97"
+    "--primary": "hsl(153, 94%, 42%)",
+    "--primary-darker": "hsl(153, 94%, 38%)",
+    "--gradient-top": "#c7ffe6",
+    "--gradient-bottom": "#c7ffe6"
   },
   {
     name: "Flamingo",
-    "--primary": "hsl(322.1, 100%, 74%)",
-    "--primary-darker": "hsl(322.1, 100%, 70%)",
-    "--gradient-top": "#e14fad",
-    "--gradient-bottom": "#f9d423"
+    "--primary": "hsl(322.1, 100%, 71%)",
+    "--primary-darker": "hsl(322.1, 100%, 67%)",
+    "--gradient-top": "#ff9ed8",
+    "--gradient-bottom": "#ff9ed8"
   },
   {
-    name: "Cafe Nouveau",
-    "--primary": "hsl(25, 30%, 55%)",
-    "--primary-darker": "hsl(25, 30%, 51%)",
-    "--gradient-top": "#bcc5ce",
-    "--gradient-bottom": "#7a8f99"
+    name: "Cafe Verde",
+    "--primary": "hsl(109, 14%, 45%)",
+    "--primary-darker": "hsl(109,14%, 41%)",
+    "--gradient-top": "#b5b5b5",
+    "--gradient-bottom": "#b5b5b5"
   },
   {
     name: "Deep Sea",
@@ -43,8 +43,8 @@ const themes = [
   },
   {
     name: "Deep Earth",
-    "--primary": "hsl(360 52% 44%)",
-    "--primary-darker": "hsl(360, 52%, 40%)",
+    "--primary": "hsl(26,26%, 51%)",
+    "--primary-darker": "hsl(26,26%, 49%)",
     "--gradient-top": "#334622",
     "--gradient-bottom": "#334622"
   }

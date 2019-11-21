@@ -17,7 +17,7 @@ body {
 // General page styles
 .hs-box {
   @extend %has-shadow;
-  background-color: #fafafa;
+  background-color: #f8f8f8;
   color: #404040;
   display: block;
   padding: 1.25rem;
@@ -29,7 +29,7 @@ body {
 
 .card {
   @extend %has-shadow;
-  background: #fafafa;
+  background: #f8f8f8;
 }
 
 .online-status-container {
@@ -133,7 +133,7 @@ strong {
 .textarea,
 .select select {
   background-color: rgb(240, 245, 252);
-  border-color: ghostwhite;
+  border-color: #f8f8f8;
 }
 
 .input,
@@ -228,7 +228,7 @@ input:-internal-autofill-selected {
   background-color: rgba(0, 0, 0, 0.8);
 
   .dropdown-item {
-    color: ghostwhite;
+    color: #f8f8f8;
 
     &:hover {
       background: #505050;
@@ -251,7 +251,7 @@ input:-internal-autofill-selected {
 
 .card-image {
   position: relative;
-  border: 8px solid #fafafa;
+  border: 8px solid #f8f8f8;
   border-radius: 4px;
 
   figure,

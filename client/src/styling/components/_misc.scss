@@ -13,7 +13,7 @@
   filter: grayscale(1); */
 
   .centered-logo {
-    opacity: 0.9;
+    opacity: 0.85;
     max-width: 200px;
   }
 
@@ -50,7 +50,7 @@
 
 // Spinner
 .spinner-container {
-  background-color: #fafafa;
+  background-color: #f8f8f8;
   border-radius: 14px;
   width: 70px;
   height: 70px;
@@ -115,6 +115,13 @@
   text-align: center;
   margin-top: 1.5rem;
   border-radius: 4px;
+
+  &.hs-box {
+    color: #f8f8f8;
+    background-color: var(--primary);
+    padding: 4.25rem 1.25rem;
+    font-size: 1.1rem;
+  }
 }
 
 .group-type-card,
@@ -205,7 +212,7 @@
   }
 
   .page-subtitle {
-    background: #fafafa;
+    background: #f8f8f8;
     padding: 0.2rem 0.75rem;
     display: flex;
 
@@ -262,13 +269,13 @@
     background: $off-black;
 
     .subtitle {
-      color: #fafafa;
+      color: #f8f8f8;
     }
   }
 
   img {
     @extend %has-shadow;
-    border: 8px solid ghostwhite;
+    border: 8px solid #f8f8f8;
   }
 
   .content {
@@ -294,7 +301,7 @@
 
     .button {
       flex: 1;
-      border-color: #fafafa;
+      border-color: #f8f8f8;
     }
   }
 }
@@ -432,7 +439,7 @@
   .login-form-message {
     color: #808080;
     h3 {
-      color: ghostwhite;
+      color: #f8f8f8;
       line-height: 2rem;
       margin-bottom: 0.25rem;
     }
@@ -468,7 +475,7 @@
   }
 
   .label {
-    color: ghostwhite;
+    color: #f8f8f8;
   }
 }
 
@@ -476,7 +483,7 @@
 .centered-form .hs-box .login-styled-input-container {
   .input {
     background-color: transparent;
-    color: ghostwhite;
+    color: #f8f8f8;
     border-bottom: 1px solid #707070;
   }
 }
@@ -499,7 +506,7 @@
   font-size: 0.8rem;
   padding: 0.25rem 0.75rem;
   border-radius: 14px;
-  color: #fafafa;
+  color: #f8f8f8;
   background-color: rgba(20, 20, 20, 0.8);
   visibility: hidden;
   opacity: 0;
@@ -521,7 +528,7 @@
   }
 
   .field.field.is-grouped {
-    margin-bottom: 1.75rem;
+    margin-bottom: 2.25rem;
   }
 
   .hs-radio-btn-control {
@@ -545,7 +552,7 @@
 }
 
 .checkout-container {
-  margin: 1.5rem 3.5rem;
+  margin: 2rem 3.5rem;
   border: 1px solid var(--primary);
   border-radius: 4px;
 
@@ -570,7 +577,7 @@
 
 @media (max-width: $tablet - 1) {
   .checkout-container {
-    margin: 1.25rem 0;
+    margin: 2rem 0;
   }
 }
 

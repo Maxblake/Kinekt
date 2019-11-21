@@ -9,14 +9,14 @@ export default function RadioButton({
   isFullwidth
 }) {
   const getClassName = (isSelected, isFullwidth) => {
-    const classList = ["button"];
+    const classList = ["button", "is-primary"];
 
     if (isFullwidth) {
       classList.push("is-fullwidth");
     }
 
-    if (isSelected) {
-      classList.push("is-primary");
+    if (!isSelected) {
+      classList.push("is-outlined");
     }
 
     return classList.join(" ");

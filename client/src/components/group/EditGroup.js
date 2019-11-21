@@ -26,7 +26,8 @@ const EditGroup = ({
   groupType: { groupType },
   auth: { user, isAuthenticated },
   errors,
-  editGroup
+  editGroup,
+  history
 }) => {
   const [formData, setFormData] = useState({
     description: "",
@@ -157,7 +158,7 @@ const EditGroup = ({
 
     if (Number.isInteger(maxSize)) groupFields.maxSize = maxSize;
 
-    editGroup(groupFields, group._id);
+    editGroup(groupFields, group._id, history);
   };
 
   if (loading) {

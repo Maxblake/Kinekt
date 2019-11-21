@@ -33,7 +33,7 @@
   align-items: center;
 
   h5 {
-    color: #fafafa;
+    color: #f8f8f8;
   }
 }
 
@@ -143,7 +143,7 @@
       background-color: transparent;
       //border-color: transparent;
       //background-color: rgba(20, 20, 20, 0.8);
-      color: #fafafa;
+      color: #f8f8f8;
 
       // Button classes for member types and statuses
       &.is-online {
@@ -152,8 +152,8 @@
         border-color: limegreen;
       }
       &.is-away {
-        //color: #fafafa;
-        border-color: #fafafa;
+        //color: #f8f8f8;
+        border-color: #f8f8f8;
         opacity: 0.7;
       }
     }
@@ -167,7 +167,7 @@
   left: 50%;
   transform: translateX(-50%);
 
-  background: #fafafa;
+  background: #f8f8f8;
   padding: 4px 16px;
   border-bottom-right-radius: 6px;
   border-bottom-left-radius: 6px;
@@ -188,7 +188,7 @@
   transform: translateX(-50%);
 
   background-color: var(--primary);
-  color: ghostwhite;
+  color: #f8f8f8;
   padding: 4px 16px;
   border-top-right-radius: 6px;
   border-top-left-radius: 6px;
@@ -232,7 +232,7 @@
 
   .group-details-container {
     flex: 2;
-    background: #fafafa;
+    background: #f8f8f8;
     padding: 1rem;
     border-radius: 4px 0 0 4px;
   }
@@ -240,8 +240,8 @@
     position: relative;
     flex: 1;
     border-radius: 0 4px 4px 0;
-    border: 8px solid ghostwhite;
-    background: ghostwhite;
+    border: 8px solid #f8f8f8;
+    background: #f8f8f8;
 
     img {
       border-radius: 4px;
@@ -259,7 +259,7 @@
 @media (max-width: $desktop - 1) {
   #group-console {
     .group-chat {
-      background-color: rgba(20, 20, 20, 0.8);
+      background: transparent;
       padding: 0;
 
       position: fixed;
@@ -298,6 +298,9 @@
 }
 
 @media (max-width: $tablet - 1) {
+  #group-members-container {
+    padding: 2.75rem 0.75rem 1.5rem 0.75rem;
+  }
   #group-console {
     .console-card-and-nb {
       padding: 0 0.75rem 0.75rem 0.75rem;
@@ -346,12 +349,12 @@
     background-color: var(--primary);
 
     text-align: center;
-    color: #fafafa;
+    color: #f8f8f8;
     font-weight: bold;
   }
 
   .messages-scroll-container {
-    background-color: transparent;
+    background: rgba(20, 20, 20, 0.8);
     border: 1px solid var(--primary);
     overflow-y: auto;
     height: 310px;
@@ -369,7 +372,7 @@
       max-width: 80%;
       .header {
         font-size: 0.8rem;
-        color: #fafafa;
+        color: #f8f8f8;
 
         .header-time {
           color: var(--primary);
@@ -385,8 +388,8 @@
         padding: 4px 9px;
         margin-bottom: 0.25rem;
         background-color: transparent;
-        border: 1px solid #fafafa;
-        color: #fafafa;
+        border: 1px solid #f8f8f8;
+        color: #f8f8f8;
 
         a {
           color: inherit;
@@ -399,7 +402,7 @@
       text-align: right;
 
       .body {
-        background-color: #fafafa;
+        background-color: #f8f8f8;
         border: none;
         color: $off-black;
         text-align: left;
@@ -434,7 +437,7 @@
 
 // Noticeboard
 .noticeboard {
-  color: #fafafa;
+  color: #f8f8f8;
   padding-top: 1.25rem;
   position: relative;
 
@@ -519,7 +522,7 @@
       width: 60px;
       font-size: 2rem;
       background: $off-black;
-      color: #fafafa;
+      color: #f8f8f8;
       border-radius: 4px;
     }
   }

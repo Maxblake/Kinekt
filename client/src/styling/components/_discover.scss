@@ -1,7 +1,7 @@
 // Discover header
 .discover-header {
   background: var(--primary);
-  color: #fafafa;
+  color: #f8f8f8;
   position: fixed;
   z-index: 1;
   top: 3rem;
@@ -34,7 +34,7 @@
     position: relative;
     width: 30rem;
     margin-bottom: 2rem;
-    background: ghostwhite;
+    background: #f8f8f8;
     color: $off-black;
     border-radius: 14px;
 
@@ -95,7 +95,7 @@
 
     img {
       // @extend %has-shadow;
-      border: 8px solid ghostwhite;
+      border: 8px solid #f8f8f8;
     }
   }
 

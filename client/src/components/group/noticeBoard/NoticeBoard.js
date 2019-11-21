@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import Notice from "./Notice";
 import NewNotice from "./NewNotice";
 
@@ -32,44 +32,48 @@ const NoticeBoard = ({
         }`}
       >
         {isCurrentUserAdmin && (
-          <NewNotice
-            user={user}
-            newNotice={newNotice}
-            setNewNotice={setNewNotice}
-            isHidden={newNoticeHidden}
-            hideNotice={hideNotice}
-            groupId={groupId}
-          />
+          <Fragment>
+            {newNoticeHidden && (
+              <button
+                className="button is-dark new-notice-button"
+                onClick={() => showNotice()}
+              >
+                <span className="icon">
+                  <i className="fas fa-plus"></i>
+                </span>
+                <span>Add a Notice</span>
+              </button>
+            )}
+            <NewNotice
+              user={user}
+              newNotice={newNotice}
+              setNewNotice={setNewNotice}
+              isHidden={newNoticeHidden}
+              hideNotice={hideNotice}
+              groupId={groupId}
+            />
+          </Fragment>
         )}
-        {notices && notices.length > 0 ? (
-          notices
-            .slice(0)
-            .reverse()
-            .map(notice => (
-              <Notice
-                notice={notice}
-                key={notice._id}
-                groupId={groupId}
-                isCurrentUserAdmin={isCurrentUserAdmin}
-                isLiked={notice.likes.includes(user._id)}
-                numLikes={notice.likes.length}
-              />
-            ))
-        ) : newNoticeHidden && isCurrentUserAdmin ? (
-          <button
-            className="button is-dark new-notice-button"
-            onClick={() => showNotice()}
-          >
-            <span className="icon">
-              <i className="fas fa-plus"></i>
-            </span>
-            <span>Add a Notice</span>
-          </button>
-        ) : (
-          newNoticeHidden && (
-            <div className="has-text-centered">There's nothing to see here</div>
-          )
-        )}
+        {notices && notices.length > 0
+          ? notices
+              .slice(0)
+              .reverse()
+              .map(notice => (
+                <Notice
+                  notice={notice}
+                  key={notice._id}
+                  groupId={groupId}
+                  isCurrentUserAdmin={isCurrentUserAdmin}
+                  isLiked={notice.likes.includes(user._id)}
+                  numLikes={notice.likes.length}
+                />
+              ))
+          : newNoticeHidden &&
+            !isCurrentUserAdmin && (
+              <div className="has-text-centered">
+                There's nothing to see here
+              </div>
+            )}
       </div>
     </div>
   );

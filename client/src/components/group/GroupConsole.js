@@ -3,16 +3,9 @@ import React, { useState } from "react";
 import Chat from "./chat/Chat";
 import NoticeBoard from "./noticeBoard/NoticeBoard";
 import GroupDetails from "../common/subcomponents/GroupDetails";
-import GroupMembers from "./GroupMembers";
 import Image from "../common/subcomponents/Image";
 
-const GroupConsole = ({
-  user,
-  adminOptions,
-  isCurrentUserAdmin,
-  group,
-  imgSrc
-}) => {
+const GroupConsole = ({ user, isCurrentUserAdmin, group, imgSrc }) => {
   const [groupConsoleState, setGroupConsoleState] = useState({
     newNotice: null
   });
@@ -53,12 +46,6 @@ const GroupConsole = ({
             <Image figureClass="is-2by1" src={imgSrc} alt="Placeholder image" />
           </div>
         </div>
-        <GroupMembers
-          users={group.users}
-          creatorId={group.creator}
-          maxSize={group.maxSize}
-          adminOptions={adminOptions}
-        />
         <NoticeBoard
           user={user}
           isCurrentUserAdmin={isCurrentUserAdmin}
@@ -74,6 +61,7 @@ const GroupConsole = ({
           isCurrentUserAdmin={isCurrentUserAdmin}
           chat={group.chat}
         />
+        <div className="corner-fill"></div>
       </div>
     </div>
   );

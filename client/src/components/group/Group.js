@@ -8,6 +8,7 @@ import { copyToClipboard } from "../../utils/utils";
 
 import IdleTimer from "react-idle-timer";
 import Spinner from "../common/Spinner";
+import GroupMembers from "./GroupMembers";
 import GroupConsole from "./GroupConsole";
 import NotFound from "../common/NotFound";
 import PageTitle from "../layout/page/PageTitle";
@@ -225,10 +226,15 @@ const Group = ({
         />
         <PageOptions options={pageOptions} />
       </nav>
+      <GroupMembers
+        users={group.users}
+        creatorId={group.creator}
+        maxSize={group.maxSize}
+        adminOptions={adminOptions}
+      />
       <GroupConsole
         user={user}
         isCurrentUserAdmin={isCurrentUserAdmin}
-        adminOptions={adminOptions}
         group={group}
         imgSrc={getGroupImage()}
       />

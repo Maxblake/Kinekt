@@ -120,9 +120,9 @@
 
 // Group page
 #group-members-container {
-  background: transparent;
+  background: #141414;
   position: relative;
-  padding: 2.5rem 0.75rem 0 0.75rem;
+  padding: 2.75rem 2.75rem 1.5rem 2.75rem;
   border-radius: 4px 4px 0 0;
   box-shadow: none;
 
@@ -139,23 +139,22 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      //border-width: 1px;
-      //background-color: transparent;
-      border-color: transparent;
-      background-color: rgba(20, 20, 20, 0.8);
+      border-width: 1px;
+      background-color: transparent;
+      //border-color: transparent;
+      //background-color: rgba(20, 20, 20, 0.8);
       color: #fafafa;
 
       // Button classes for member types and statuses
       &.is-online {
         //color: limegreen;
         //color: var(--primary);
-        border-left: 4px solid limegreen;
-        border-right: 4px solid limegreen;
+        border-color: limegreen;
       }
       &.is-away {
         //color: #fafafa;
-        //border-color: #fafafa;
-        //opacity: 0.6;
+        border-color: #fafafa;
+        opacity: 0.7;
       }
     }
   }
@@ -204,18 +203,29 @@
   .group-chat {
     position: relative;
     align-self: flex-start;
-    padding: 2rem;
-    margin-left: 1rem;
-    background: rgba(20, 20, 20, 0.8);
-    border-radius: 4px;
+    padding: 0 1.25rem 1.75rem 0;
+    //margin-left: 1.5rem;
+    background: #141414;
+    border-bottom-right-radius: 4px;
 
     flex: 2;
+
+    .corner-fill {
+      width: 4px;
+      height: 4px;
+      background: $off-black;
+      position: absolute;
+      left: -4px;
+      bottom: 0;
+    }
   }
 
   .console-card-and-nb {
     display: flex;
     flex-direction: column;
-    border-radius: 4px;
+    padding: 0 1.25rem 1.75rem 1.25rem;
+    background: #141414;
+    border-radius: 0 0 4px 4px;
 
     flex: 5;
   }
@@ -249,7 +259,7 @@
 @media (max-width: $desktop - 1) {
   #group-console {
     .group-chat {
-      background-color: transparent;
+      background-color: rgba(20, 20, 20, 0.8);
       padding: 0;
 
       position: fixed;
@@ -266,7 +276,7 @@
       }
 
       .messages-scroll-container {
-        height: 380px;
+        height: 330px;
       }
     }
 
@@ -282,13 +292,16 @@
     .noticeboard {
       flex: 1 100%;
       order: 3;
-      padding-top: 2.25rem;
+      //padding-top: 1.25rem;
     }
   }
 }
 
 @media (max-width: $tablet - 1) {
   #group-console {
+    .console-card-and-nb {
+      padding: 0 0.75rem 0.75rem 0.75rem;
+    }
     .group-details-container {
       flex: 1 auto;
       order: 2;
@@ -341,7 +354,7 @@
     background-color: transparent;
     border: 1px solid var(--primary);
     overflow-y: auto;
-    height: 300px;
+    height: 310px;
     flex: 1 0 1;
     display: flex;
     flex-direction: column-reverse;
@@ -422,7 +435,7 @@
 // Noticeboard
 .noticeboard {
   color: #fafafa;
-  padding-top: 2rem;
+  padding-top: 1.25rem;
   position: relative;
 
   .new-notice-button {
@@ -450,7 +463,10 @@
     height: 100%;
 
     &.has-notices {
-      //background: #dbdbdb;
+      .new-notice-button {
+        max-height: 28px;
+        margin-bottom: 0.25rem;
+      }
     }
 
     .notice {
@@ -471,7 +487,7 @@
         }
       }
       &:not(:last-child) {
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.25rem;
       }
       &:not(.new-notice) {
         @extend %fade-in-top;

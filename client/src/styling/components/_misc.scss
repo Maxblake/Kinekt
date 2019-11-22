@@ -30,6 +30,13 @@
   .content {
     font-size: 0.8rem;
   }
+
+  .clickable-text,
+  a {
+    &:hover {
+      color: #808080;
+    }
+  }
 }
 
 @media (max-width: $tablet - 1) {

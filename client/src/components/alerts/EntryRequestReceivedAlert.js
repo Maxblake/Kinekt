@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import Countdown from "../common/subcomponents/Countdown";
+//import Countdown from "../common/subcomponents/Countdown";
 import Modal from "../common/subcomponents/Modal";
 import UserInfo from "../user/UserInfo";
 
@@ -26,10 +26,10 @@ const EntryRequestReceivedAlert = ({
     };
   }, []);
 
-  const onTimeout = () => {
+  /*   const onTimeout = () => {
     setIsActive(false);
     showCloseButton();
-  };
+  }; */
 
   const answerEntryRequest = answer => {
     socket.emit("answerEntryRequest", {

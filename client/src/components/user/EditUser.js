@@ -258,6 +258,7 @@ const EditUser = ({
                       onChange={onChangeCurrentLocation}
                       onSuggestSelect={onSelectCurrentLocation}
                       inputClassName="input"
+                      suggestsClassName="k-scroll"
                     />
                   </div>
                   {errCurrentLocation && (

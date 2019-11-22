@@ -260,6 +260,7 @@ const Register = ({
                       onChange={onChangeCurrentLocation}
                       onSuggestSelect={onSelectCurrentLocation}
                       inputClassName="input"
+                      suggestsClassName="k-scroll"
                     />
                   </div>
                   {errCurrentLocation && (

@@ -29,7 +29,7 @@ import Group from "./components/group/Group";
 import Admin from "./components/auth/Admin";
 import FAQ from "./components/static-pages/FAQ/FAQ";
 
-import BetaEntry from "./components/auth/BetaEntry";
+//import BetaEntry from "./components/auth/BetaEntry";
 
 import "./styling/App.scss";
 
@@ -44,72 +44,63 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      {localStorage.getItem("entryToken") !== "KJYA6yuNClsfFdAHTiHC" && (
-        <BetaEntry />
-      )}
       <SocketHandler />
-      {localStorage.getItem("entryToken") === "KJYA6yuNClsfFdAHTiHC" && (
-        <Router>
-          <div className="App">
-            <div className="background">
-              {true && <div className="background-image"></div>}
-            </div>
-            <Navbar />
-            <div className="container site-content">
-              <Alert />
-              <Switch>
-                <Route exact path="/" component={Home} />
-                <Route exact path="/register" component={Register} />
-                <Route exact path="/login" component={Login} />
-                <Route
-                  exact
-                  path="/login/:verificationToken"
-                  component={Login}
-                />
-                <Route exact path="/reset-password" component={ResetPassword} />
-                <Route
-                  exact
-                  path="/reset-password/:resetToken"
-                  component={ResetPassword}
-                />
-                <Route exact path="/not-found" component={NotFound} />
-                <Route exact path="/FAQ" component={FAQ} />
-                <Route exact path="/k/:groupType" component={GroupType} />
-                <PrivateRoute exact path="/account" component={EditUser} />
-                <PrivateRoute exact path="/grouplocks" component={GroupLocks} />
-                <PrivateRoute
-                  exact
-                  path="/k/:groupType/create"
-                  component={NewGroup}
-                />
-                <PrivateRoute
-                  exact
-                  path="/k/:groupType/group/:groupCode/edit"
-                  component={EditGroup}
-                />
-                <PrivateRoute
-                  exact
-                  path="/k/:groupType/group/:groupCode"
-                  component={Group}
-                />
-                <PrivateRoute
-                  exact
-                  path="/request-grouptype"
-                  component={NewGroupType}
-                />
-                <PrivateRoute
-                  exact
-                  path="/k/:groupType/edit"
-                  component={EditGroupType}
-                />
-                <PrivateRoute exact path="/admin" component={Admin} />
-                <Route component={NotFound} />
-              </Switch>
-            </div>
-            <Footer />
+      <Router>
+        <div className="App">
+          <div className="background">
+            {true && <div className="background-image"></div>}
           </div>
-        </Router>
-      )}
+          <Navbar />
+          <div className="container site-content">
+            <Alert />
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/login/:verificationToken" component={Login} />
+              <Route exact path="/reset-password" component={ResetPassword} />
+              <Route
+                exact
+                path="/reset-password/:resetToken"
+                component={ResetPassword}
+              />
+              <Route exact path="/not-found" component={NotFound} />
+              <Route exact path="/FAQ" component={FAQ} />
+              <Route exact path="/k/:groupType" component={GroupType} />
+              <PrivateRoute exact path="/account" component={EditUser} />
+              <PrivateRoute exact path="/grouplocks" component={GroupLocks} />
+              <PrivateRoute
+                exact
+                path="/k/:groupType/create"
+                component={NewGroup}
+              />
+              <PrivateRoute
+                exact
+                path="/k/:groupType/group/:groupCode/edit"
+                component={EditGroup}
+              />
+              <PrivateRoute
+                exact
+                path="/k/:groupType/group/:groupCode"
+                component={Group}
+              />
+              <PrivateRoute
+                exact
+                path="/request-grouptype"
+                component={NewGroupType}
+              />
+              <PrivateRoute
+                exact
+                path="/k/:groupType/edit"
+                component={EditGroupType}
+              />
+              <PrivateRoute exact path="/admin" component={Admin} />
+              <Route component={NotFound} />
+            </Switch>
+          </div>
+          <Footer />
+        </div>
+      </Router>
     </Provider>
   );
 };

@@ -227,6 +227,7 @@ const EditGroup = ({
                   onChange={onChangePlace}
                   onSuggestSelect={onSelectPlace}
                   inputClassName="input"
+                  suggestsClassName="k-scroll"
                 />
               </div>
               {errPlace && <p className="help is-danger">{errPlace.msg}</p>}

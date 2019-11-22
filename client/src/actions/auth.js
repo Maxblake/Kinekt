@@ -204,7 +204,7 @@ export const sendResetInstructions = email => async dispatch => {
   });
   dispatch(
     setTextAlert(
-      "Our fastest email messenger falcon is on the way. Please check your email inbox (and spam folder) and follow the instructions we've sent to finish resetting your password",
+      "Our fastest messenger falcon is on the way. Please check your email inbox (and spam folder) and follow the instructions we've sent to finish resetting your password",
       "is-success"
     )
   );
@@ -222,7 +222,7 @@ export const sendEmailConfirmation = () => async dispatch => {
     });
     dispatch(
       setTextAlert(
-        "Our fastest email messenger falcon is on the way. Please check your email inbox (and spam folder) and follow the instructions we've sent to finish setting up your account",
+        "Our fastest messenger falcon is on the way. Please check your email inbox (and spam folder) and follow the instructions we've sent to finish setting up your account",
         "is-success"
       )
     );

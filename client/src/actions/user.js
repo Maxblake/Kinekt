@@ -11,7 +11,6 @@ import {
   UPDATE_USER,
   AUTH_SUCCESS,
   AUTH_ERROR,
-  SET_USER,
   SET_GROUPLOCKS
 } from "./types";
 

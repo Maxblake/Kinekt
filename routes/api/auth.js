@@ -124,7 +124,7 @@ router.post("/sendEmailConfirmation", auth, (req, res) => {
     if (!isEmailSent) {
       return errors.addErrAndSendResponse(
         res,
-        "Our email messenger falcon couldn't find you, did you sign up with a valid email?",
+        "Our messenger falcon couldn't find you, did you sign up with a valid email?",
         "alert"
       );
     }

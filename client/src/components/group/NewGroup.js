@@ -59,6 +59,9 @@ const NewGroup = ({
   const errPlace = errors.find(error => error.param === "placeAddress");
   const errMaxSize = errors.find(error => error.param === "maxSize");
 
+  let geosuggestInput = React.useRef(null);
+  let geosuggestComponent = React.useRef(null);
+
   useEffect(() => {
     const groupTypeParamSpaced = match.params.groupType.split("_").join(" ");
     const groupTypeParamChanged =
@@ -70,7 +73,9 @@ const NewGroup = ({
   }, [match.params.groupType, groupType]);
 
   useEffect(() => {
+    document.addEventListener("click", handleToggleGeosuggest);
     return () => {
+      document.removeEventListener("click", handleToggleGeosuggest);
       clearErrors();
     };
   }, []);
@@ -136,6 +141,14 @@ const NewGroup = ({
       ...formData,
       image: imageFile
     });
+  };
+
+  const handleToggleGeosuggest = e => {
+    if (!geosuggestComponent.current || !geosuggestInput.current) return;
+
+    if (!geosuggestInput.current.contains(e.target)) {
+      geosuggestComponent.current.onInputBlur();
+    }
   };
 
   const toggleTimekeeper = () => {
@@ -317,14 +330,16 @@ const NewGroup = ({
           label="Meeting Place"
           children={
             <div className="field">
-              <div className="control">
+              <div className="control" ref={geosuggestInput}>
                 <Geosuggest
+                  ref={el => (geosuggestComponent.current = el)}
                   initialValue={place.address}
                   placeDetailFields={[]}
                   queryDelay={500}
                   onChange={onChangePlace}
                   onSuggestSelect={onSelectPlace}
                   inputClassName="input"
+                  suggestsClassName="k-scroll"
                 />
               </div>
               {errPlace && <p className="help is-danger">{errPlace.msg}</p>}
@@ -431,7 +446,8 @@ const mapStateToProps = state => ({
   errors: state.error
 });
 
-export default connect(
-  mapStateToProps,
-  { createGroup, getGroups, clearErrors }
-)(withRouter(NewGroup));
+export default connect(mapStateToProps, {
+  createGroup,
+  getGroups,
+  clearErrors
+})(withRouter(NewGroup));

@@ -1,5 +1,6 @@
 .geosuggest__suggests {
   position: absolute;
+  margin-top: 1px;
   top: 100%;
   left: 0;
   right: 0;
@@ -7,6 +8,7 @@
   padding: 0;
   background: white;
   border: 1px solid #3273dc;
+  border-radius: 4px;
   overflow-x: hidden;
   overflow-y: auto;
   list-style: none;

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 import { getGroup, setBannedState } from "../../actions/group";
 
-import Countdown from "../common/subcomponents/Countdown";
+//import Countdown from "../common/subcomponents/Countdown";
 
 const RequestEntryAlert = ({
   getGroup,
@@ -40,10 +40,10 @@ const RequestEntryAlert = ({
     }
   }, [shouldResetAlert]);
 
-  const onTimeout = () => {
+  /*   const onTimeout = () => {
     setIsActive(false);
     showCloseButton();
-  };
+  }; */
 
   const onRequestAnswered = (answer, joinKey, answeredHRID) => {
     if (answeredHRID !== HRID) return;

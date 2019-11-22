@@ -14,7 +14,7 @@ const Notice = ({
   groupId,
   deleteNotice,
   toggleLikeNotice,
-  isCurrentUserAdmin,
+  canUserDelete,
   isLiked,
   numLikes
 }) => {
@@ -56,7 +56,7 @@ const Notice = ({
 
   return (
     <div className="notice hs-box">
-      {isCurrentUserAdmin && (
+      {canUserDelete && (
         <button className="delete" onClick={() => onClickDelete()}></button>
       )}
       <div className="media">
@@ -103,7 +103,4 @@ Notice.propTypes = {
   toggleLikeNotice: PropTypes.func.isRequired
 };
 
-export default connect(
-  null,
-  { deleteNotice, toggleLikeNotice }
-)(Notice);
+export default connect(null, { deleteNotice, toggleLikeNotice })(Notice);

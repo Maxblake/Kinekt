@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter, Link, Prompt } from "react-router-dom";
 import moment from "moment";
-import Geosuggest from "react-geosuggest";
 
 import { createGroup, getGroups } from "../../actions/group";
 import { clearErrors } from "../../actions/auth";
@@ -19,6 +18,7 @@ import SubmitButton from "../form/SubmitButton";
 import CustomField from "../form/CustomField";
 import ImgUploadControl from "../form/ImgUploadControl";
 import Modal from "../common/subcomponents/Modal";
+import GeoControl from "../common/subcomponents/GeoControl";
 
 const NewGroup = ({
   match,
@@ -59,9 +59,6 @@ const NewGroup = ({
   const errPlace = errors.find(error => error.param === "placeAddress");
   const errMaxSize = errors.find(error => error.param === "maxSize");
 
-  let geosuggestInput = React.useRef(null);
-  let geosuggestComponent = React.useRef(null);
-
   useEffect(() => {
     const groupTypeParamSpaced = match.params.groupType.split("_").join(" ");
     const groupTypeParamChanged =
@@ -73,9 +70,7 @@ const NewGroup = ({
   }, [match.params.groupType, groupType]);
 
   useEffect(() => {
-    document.addEventListener("click", handleToggleGeosuggest);
     return () => {
-      document.removeEventListener("click", handleToggleGeosuggest);
       clearErrors();
     };
   }, []);
@@ -141,14 +136,6 @@ const NewGroup = ({
       ...formData,
       image: imageFile
     });
-  };
-
-  const handleToggleGeosuggest = e => {
-    if (!geosuggestComponent.current || !geosuggestInput.current) return;
-
-    if (!geosuggestInput.current.contains(e.target)) {
-      geosuggestComponent.current.onInputBlur();
-    }
   };
 
   const toggleTimekeeper = () => {
@@ -330,18 +317,11 @@ const NewGroup = ({
           label="Meeting Place"
           children={
             <div className="field">
-              <div className="control" ref={geosuggestInput}>
-                <Geosuggest
-                  ref={el => (geosuggestComponent.current = el)}
-                  initialValue={place.address}
-                  placeDetailFields={[]}
-                  queryDelay={500}
-                  onChange={onChangePlace}
-                  onSuggestSelect={onSelectPlace}
-                  inputClassName="input"
-                  suggestsClassName="k-scroll"
-                />
-              </div>
+              <GeoControl
+                initialValue={place.address}
+                onChange={onChangePlace}
+                onSuggestSelect={onSelectPlace}
+              />
               {errPlace && <p className="help is-danger">{errPlace.msg}</p>}
             </div>
           }

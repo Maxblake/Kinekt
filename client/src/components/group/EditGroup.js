@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withRouter, Link, Prompt } from "react-router-dom";
-import Geosuggest from "react-geosuggest";
 
 import { editGroup, getGroup } from "../../actions/group";
 import { clearErrors } from "../../actions/auth";
@@ -17,6 +16,7 @@ import SubmitButton from "../form/SubmitButton";
 import CustomField from "../form/CustomField";
 import ImgUploadControl from "../form/ImgUploadControl";
 import Modal from "../common/subcomponents/Modal";
+import GeoControl from "../common/subcomponents/GeoControl";
 
 const EditGroup = ({
   match,
@@ -219,17 +219,11 @@ const EditGroup = ({
           label="Meeting Place"
           children={
             <div className="field">
-              <div className="control">
-                <Geosuggest
-                  initialValue={place.address}
-                  placeDetailFields={[]}
-                  queryDelay={500}
-                  onChange={onChangePlace}
-                  onSuggestSelect={onSelectPlace}
-                  inputClassName="input"
-                  suggestsClassName="k-scroll"
-                />
-              </div>
+              <GeoControl
+                initialValue={place.address}
+                onChange={onChangePlace}
+                onSuggestSelect={onSelectPlace}
+              />
               {errPlace && <p className="help is-danger">{errPlace.msg}</p>}
             </div>
           }

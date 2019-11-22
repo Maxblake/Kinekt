@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Prompt } from "react-router-dom";
-import Geosuggest from "react-geosuggest";
 
 import { editUser, deleteUser } from "../../actions/user";
 import { getAddressFromCoords } from "../../actions/helpers/helpers";
@@ -15,6 +14,7 @@ import SubmitButton from "../form/SubmitButton";
 import CustomField from "../form/CustomField";
 import ImgUploadControl from "../form/ImgUploadControl";
 import Modal from "../common/subcomponents/Modal";
+import GeoControl from "../common/subcomponents/GeoControl";
 
 import { updateTheme } from "../../utils/theme";
 
@@ -250,17 +250,11 @@ const EditUser = ({
             <div className="field has-addons">
               <div className="control is-expanded">
                 <div className="field">
-                  <div className="control">
-                    <Geosuggest
-                      initialValue={currentLocation.address}
-                      placeDetailFields={[]}
-                      queryDelay={500}
-                      onChange={onChangeCurrentLocation}
-                      onSuggestSelect={onSelectCurrentLocation}
-                      inputClassName="input"
-                      suggestsClassName="k-scroll"
-                    />
-                  </div>
+                  <GeoControl
+                    initialValue={currentLocation.address}
+                    onChange={onChangeCurrentLocation}
+                    onSuggestSelect={onSelectCurrentLocation}
+                  />
                   {errCurrentLocation && (
                     <p className="help is-danger">{errCurrentLocation.msg}</p>
                   )}

@@ -593,7 +593,7 @@ router.put(
         return groupUser.id.equals(req.user.id);
       })[0];
 
-      if (!currentUser || currentUser.memberType !== "admin") {
+      if (!currentUser) {
         errors.addError(
           "You do not have permission to add a notice to this group",
           "alert"
@@ -631,21 +631,25 @@ router.delete("/notice/:groupId/:noticeId", auth, async (req, res) => {
       return errors.addErrAndSendResponse(res, "Unable to find group");
     }
 
-    const currentUser = group.users.filter(groupUser => {
-      return groupUser.id.equals(req.user.id);
-    })[0];
-
-    if (!currentUser || currentUser.memberType !== "admin") {
-      errors.addError(
-        "You do not have permission to remove a notice from this group",
-        "alert"
-      );
-    }
-
     const noticeIndex = getNoticeIndex(group, noticeId, errors);
 
     if (errors.isNotEmpty()) {
       return errors.sendErrorResponse(res);
+    }
+
+    const currentUser = group.users.filter(groupUser => {
+      return groupUser.id.equals(req.user.id);
+    })[0];
+
+    if (
+      !currentUser ||
+      (currentUser.memberType !== "admin" &&
+        !currentUser.id.equals(group.notices[noticeIndex].authorId))
+    ) {
+      errors.addError(
+        "You do not have permission to remove a notice from this group",
+        "alert"
+      );
     }
 
     group.notices.splice(noticeIndex, 1);

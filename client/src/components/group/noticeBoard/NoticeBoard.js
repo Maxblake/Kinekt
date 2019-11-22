@@ -31,49 +31,42 @@ const NoticeBoard = ({
           notices.length > 0 ? "has-notices" : ""
         }`}
       >
-        {isCurrentUserAdmin && (
-          <Fragment>
-            {newNoticeHidden && (
-              <button
-                className="button is-dark new-notice-button"
-                onClick={() => showNotice()}
-              >
-                <span className="icon">
-                  <i className="fas fa-plus"></i>
-                </span>
-                <span>Add a Notice</span>
-              </button>
-            )}
-            <NewNotice
-              user={user}
-              newNotice={newNotice}
-              setNewNotice={setNewNotice}
-              isHidden={newNoticeHidden}
-              hideNotice={hideNotice}
-              groupId={groupId}
-            />
-          </Fragment>
+        {newNoticeHidden && (
+          <button
+            className="button is-dark new-notice-button"
+            onClick={() => showNotice()}
+          >
+            <span className="icon">
+              <i className="fas fa-plus"></i>
+            </span>
+            <span>Add a Notice</span>
+          </button>
         )}
-        {notices && notices.length > 0
-          ? notices
-              .slice(0)
-              .reverse()
-              .map(notice => (
-                <Notice
-                  notice={notice}
-                  key={notice._id}
-                  groupId={groupId}
-                  isCurrentUserAdmin={isCurrentUserAdmin}
-                  isLiked={notice.likes.includes(user._id)}
-                  numLikes={notice.likes.length}
-                />
-              ))
-          : newNoticeHidden &&
-            !isCurrentUserAdmin && (
-              <div className="has-text-centered">
-                There's nothing to see here
-              </div>
-            )}
+        <NewNotice
+          user={user}
+          newNotice={newNotice}
+          setNewNotice={setNewNotice}
+          isHidden={newNoticeHidden}
+          hideNotice={hideNotice}
+          groupId={groupId}
+        />
+        {notices &&
+          notices.length > 0 &&
+          notices
+            .slice(0)
+            .reverse()
+            .map(notice => (
+              <Notice
+                notice={notice}
+                key={notice._id}
+                groupId={groupId}
+                canUserDelete={
+                  isCurrentUserAdmin || notice.authorId === user._id
+                }
+                isLiked={notice.likes.includes(user._id)}
+                numLikes={notice.likes.length}
+              />
+            ))}
       </div>
     </div>
   );

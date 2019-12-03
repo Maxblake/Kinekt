@@ -130,15 +130,6 @@ const validateRequest = APImethod => {
     }
     case "updateGroup": {
       return [
-        check("name", "Name is too long")
-          .optional({ checkFalsy: true })
-          .not()
-          .isEmpty({ ignore_whitespace: true })
-          .isLength({ max: 256 })
-          .custom(name => !filter.isProfane(name))
-          .withMessage(
-            "Name may contain profanity, please remove it to proceed"
-          ),
         check("placeAddress", "Meeting place is required")
           .exists({ checkFalsy: true })
           .isLength({ max: 256 })
@@ -225,13 +216,13 @@ const validateRequest = APImethod => {
     }
     case "updateGroupType": {
       return [
-        check("name", "Name is too long")
-          .optional({ checkFalsy: true })
+        check("name", "Name is required")
           .not()
           .isEmpty({ ignore_whitespace: true })
           .matches(/^[a-z0-9 ]+$/i)
           .withMessage("Name may only include numbers, letters, and spaces")
           .isLength({ max: 256 })
+          .withMessage("Name is too long")
           .custom(name => !filter.isProfane(name))
           .withMessage(
             "Name may contain profanity, please remove it to proceed"
@@ -328,8 +319,7 @@ const validateRequest = APImethod => {
     }
     case "updateUser": {
       return [
-        check("name", "Name is too long")
-          .optional({ checkFalsy: true })
+        check("name", "Name is required")
           .not()
           .isEmpty({ ignore_whitespace: true })
           .isLength({ max: 64 })

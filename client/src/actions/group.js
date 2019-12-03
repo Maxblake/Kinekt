@@ -59,6 +59,7 @@ export const getGroup = (
       );
     }
   } catch (err) {
+    console.log(err.response.data);
     dispatch(handleResponseErrors(err));
     if (!!err.response) {
       if (
@@ -72,6 +73,20 @@ export const getGroup = (
         if (!!history) {
           history.goBack();
         }
+        if (
+          !!err.response.data &&
+          err.response.data.find(
+            obj =>
+              obj.msg ===
+              "Heads up! Your current group was removed or has expired"
+          )
+        ) {
+          dispatch({
+            type: SET_CURRENT_GROUP,
+            payload: null
+          });
+        }
+
         dispatch({
           type: GROUP_ERROR,
           payload: {

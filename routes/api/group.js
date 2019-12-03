@@ -154,6 +154,17 @@ router.post("/HRID", auth, (req, res) => {
     const group = await Group.findOne({ HRID: HRID }).lean();
 
     if (!group) {
+      const user = await User.findById(req.user.id).select("currentGroup");
+      if (user.currentGroup.HRID === HRID) {
+        user.currentGroup = null;
+        await user.save();
+        return errors.addErrAndSendResponse(
+          res,
+          "Heads up! Your current group was removed or has expired",
+          "alert-warning"
+        );
+      }
+
       return errors.addErrAndSendResponse(res, "Group does not exist", "alert");
     }
 
@@ -554,7 +565,7 @@ const handleGroupDeletionSideEffects = async (group, errors) => {
     }
   }
 
-  console.log(group.users);
+  console.log(22, group.users);
 
   await User.updateMany(
     {

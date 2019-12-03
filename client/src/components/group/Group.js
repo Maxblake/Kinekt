@@ -57,8 +57,8 @@ const Group = ({
 
   const onClickDelete = e => {
     if (window.confirm("Are you sure you would like to delete this group?")) {
-      socket.emit("preDeleteGroupActions");
       history.push(`/k/${groupType.name.split(" ").join("_")}`);
+      socket.emit("preDeleteGroupActions");
     }
   };
 

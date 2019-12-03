@@ -25,7 +25,7 @@ export default function Footer() {
             </ul>
           </nav>
         </div>
-        <div className="column">
+        <div className="column is-hidden-tablet-only">
           <div className="centered-logo">
             <img src={logo} alt="" />
           </div>

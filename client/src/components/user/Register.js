@@ -85,9 +85,12 @@ const Register = ({
 
   const useCurrentLocation = async () => {
     const coords = await getCurrentPosition();
-    const place = await getAddressFromCoords(coords.latitude, coords.longitude);
 
     if (!!coords && !!coords.latitude) {
+      const place = await getAddressFromCoords(
+        coords.latitude,
+        coords.longitude
+      );
       setFormData({
         ...formData,
         currentLocation: {
@@ -262,18 +265,20 @@ const Register = ({
                   )}
                 </div>
               </div>
-              <div className="control">
-                <button
-                  type="button"
-                  onClick={() => useCurrentLocation()}
-                  className="button is-primary"
-                >
-                  <span className="icon">
-                    <i className="fas fa-map-marker-alt" />
-                  </span>
-                  <span>Use Current</span>
-                </button>
-              </div>
+              {navigator.geolocation && (
+                <div className="control">
+                  <button
+                    type="button"
+                    onClick={() => useCurrentLocation()}
+                    className="button is-primary"
+                  >
+                    <span className="icon">
+                      <i className="fas fa-map-marker-alt" />
+                    </span>
+                    <span>Use Current</span>
+                  </button>
+                </div>
+              )}
             </div>
           }
         />

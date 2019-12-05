@@ -68,9 +68,6 @@ const EditGroup = ({
         maxSize: group.maxSize ? group.maxSize : maxSize
       });
     }
-    return () => {
-      clearErrors();
-    };
   }, [
     isAuthenticated,
     group,
@@ -79,6 +76,12 @@ const EditGroup = ({
     errors.length,
     loading
   ]);
+
+  useEffect(() => {
+    return () => {
+      clearErrors();
+    };
+  }, []);
 
   const hasUnsavedChanges = () => {
     if (!!group) {
@@ -156,7 +159,7 @@ const EditGroup = ({
       image
     };
 
-    if (Number.isInteger(maxSize)) groupFields.maxSize = maxSize;
+    //if (Number.isInteger(maxSize)) groupFields.maxSize = maxSize;
 
     editGroup(groupFields, group._id, history);
   };

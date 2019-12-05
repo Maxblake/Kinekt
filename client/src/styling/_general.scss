@@ -311,13 +311,17 @@ input:-internal-autofill-selected {
     color: #707070;
     opacity: 0.6;
   }
-  .input,
-  .textarea {
+  .input {
     &::placeholder {
       color: #707070;
       opacity: 0.8;
     }
   }
+}
+
+.textarea::placeholder {
+  color: #707070;
+  opacity: 0.8;
 }
 
 .is-smallish {
@@ -417,6 +421,6 @@ input:-internal-autofill-selected {
 
 @media (max-width: $tablet - 1) {
   .tab-right {
-    top: 5.25rem;
+    top: 3.75rem;
   }
 }

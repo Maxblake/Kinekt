@@ -122,9 +122,10 @@ const NewGroup = ({
 
   const handleTimeChange = newTime => {
     if (timeContext === "Now") {
-      setFormData({ ...formData, timeContext: "Today" });
+      setFormData({ ...formData, timeContext: "Today", time: newTime });
+    } else {
+      setFormData({ ...formData, time: newTime });
     }
-    setFormData({ ...formData, time: newTime });
   };
 
   const handleAccessLevelChange = accessLevel => {
@@ -175,10 +176,11 @@ const NewGroup = ({
       placeLat: place.lat ? place.lat : "",
       placeLng: place.lng ? place.lng : "",
       accessLevel,
+      maxSize,
       image
     };
 
-    if (Number.isInteger(maxSize)) groupFields.maxSize = maxSize;
+    //if (Number.isInteger(maxSize)) groupFields.maxSize = maxSize;
 
     const ISODate = moment();
     if (timeContext !== "Now") {

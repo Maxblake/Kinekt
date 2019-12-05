@@ -8,7 +8,7 @@ const themes = [
   },
   {
     name: "Clean Slate",
-    "--primary": "hsl(0 45% 52%)",
+    "--primary": "hsl(0, 45%, 52%)",
     "--primary-darker": "hsl(0, 45%, 48%)",
     "--gradient-top": "#f0ebeb",
     "--gradient-bottom": "#f0ebeb"

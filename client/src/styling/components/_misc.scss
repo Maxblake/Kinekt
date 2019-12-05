@@ -41,6 +41,8 @@
 
 @media (max-width: $tablet - 1) {
   .footer {
+    margin-top: 1.5rem;
+
     .column {
       padding: 0.25rem;
     }
@@ -176,7 +178,7 @@
 
 @media (max-width: $tablet - 1) {
   #page-nav {
-    margin-top: 2rem;
+    margin-top: 0.5rem;
 
     .level-right .level-item {
       justify-content: flex-end;
@@ -261,7 +263,7 @@
 
 // New Group Modal
 .time-keeper {
-  width: 270px;
+  width: 276px;
 }
 
 // User Info

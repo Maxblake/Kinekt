@@ -33,7 +33,7 @@
 .group-type-cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  grid-gap: 25px;
+  grid-gap: 1.5rem;
 }
 
 .group-type-card {

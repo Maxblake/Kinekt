@@ -216,17 +216,6 @@ const validateRequest = APImethod => {
     }
     case "updateGroupType": {
       return [
-        check("name", "Name is required")
-          .not()
-          .isEmpty({ ignore_whitespace: true })
-          .matches(/^[a-z0-9 ]+$/i)
-          .withMessage("Name may only include numbers, letters, and spaces")
-          .isLength({ max: 256 })
-          .withMessage("Name is too long")
-          .custom(name => !filter.isProfane(name))
-          .withMessage(
-            "Name may contain profanity, please remove it to proceed"
-          ),
         check("description", "Description is too long")
           .optional({ checkFalsy: true })
           .isLength({ max: 512 })

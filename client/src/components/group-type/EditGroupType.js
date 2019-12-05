@@ -43,17 +43,20 @@ const EditGroupType = ({
 
     if ((!loading && !groupType) || groupTypeParamChanged) {
       getGroups(groupTypeParamSpaced);
-    } else if (!!groupType && errors.length === 0) {
+    } else if (!loading && !!groupType && errors.length === 0) {
       setFormData({
         ...formData,
         description: groupType.description,
         category: groupType.category
       });
     }
+  }, [loading, groupType, match.params.groupType, errors.length]);
+
+  useEffect(() => {
     return () => {
       clearErrors();
     };
-  }, [loading, groupType, match.params.groupType, errors.length]);
+  }, []);
 
   const hasUnsavedChanges = () => {
     if (!!groupType) {

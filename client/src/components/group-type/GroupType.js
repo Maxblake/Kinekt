@@ -72,8 +72,6 @@ const GroupType = ({
           ? groups.map(group => group._id)
           : [];
 
-      console.log("getting groups!");
-
       getGroups(groupTypeParamSpaced, queryParams, seenGroups);
 
       setGroupData({
@@ -140,8 +138,6 @@ const GroupType = ({
       if (sortBy === "Nearby" && user && user.currentLocation) {
         queryParams.userLocation = user.currentLocation;
       }
-
-      console.log("getting more groups!");
 
       getGroups(
         groupType.name,

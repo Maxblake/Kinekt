@@ -96,8 +96,8 @@ const SocketHandler = ({
 
   const onActive = () => {
     if (!!socket && !socket.connected) {
-      console.log("reloading!");
-      window.location.reload();
+      console.log(socket);
+      //window.location.reload();
     }
     clearInterval(interval);
     getGroupAndUserNumbers();

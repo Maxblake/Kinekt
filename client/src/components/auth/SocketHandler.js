@@ -96,6 +96,7 @@ const SocketHandler = ({
 
   const onActive = () => {
     if (!!socket && !socket.connected) {
+      console.log("reloading!");
       window.location.reload();
     }
     clearInterval(interval);

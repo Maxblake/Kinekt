@@ -12,9 +12,9 @@ const DiscoverHeader = () => {
   return (
     <div className="discover-header k-scroll">
       <div className="header-welcome">
-        <h2 className="ws-nowrap is-size-1">
+        <h1 className="ws-nowrap is-size-1">
           <strong>New</strong> around here?
-        </h2>
+        </h1>
         <h3 className="is-size-4">
           <span className="ws-nowrap">Awesome! Read this quick intro and</span>{" "}
           <span className="ws-nowrap">

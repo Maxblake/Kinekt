@@ -95,11 +95,6 @@ const SocketHandler = ({
   };
 
   const onActive = () => {
-    if (!!socket && (!socket.connected || (socket.p && !socket.p.connected))) {
-      console.log(socket.connected);
-      console.log(socket.p.connected);
-      //window.location.reload();
-    }
     clearInterval(interval);
     getGroupAndUserNumbers();
     setIntervalState(setInterval(() => getGroupAndUserNumbers(), 6000));

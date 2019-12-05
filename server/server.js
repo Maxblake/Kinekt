@@ -1,4 +1,5 @@
 const express = require("express");
+const compression = require('compression')
 const enforce = require("express-sslify");
 const connectDB = require("../config/db");
 const ioServer = require("./ioServer");
@@ -14,6 +15,7 @@ connectDB();
 
 // Init Middleware
 app.use(express.json({ extended: false }));
+app.use(compression());
 
 // Define Routes
 app.use("/api/user", require("../routes/api/user"));
@@ -26,10 +28,8 @@ app.use("/api/admin", require("../routes/api/admin"));
 if (process.env.NODE_ENV === "production") {
   app.use(enforce.HTTPS({ trustProtoHeader: true }));
 
-  // Set static folder
-  app.use(express.static(path.resolve("client", "build")));
-
-  console.log(path.resolve("client", "build"));
+  // Set static folder, cache static files 3 days
+  app.use(express.static(path.resolve("client", "build"), { maxAge: 1000 * 60 * 60 * 24 * 3 }));
 
   app.get("/*", (req, res) => {
     res.sendFile(path.resolve("client", "build", "index.html"));

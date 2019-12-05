@@ -9,9 +9,9 @@ const PageTitle = ({ title, subtitle, hasPageOptions = false }) => {
             hasPageOptions ? "has-page-options" : ""
           }`}
         >
-          <h3 className="title is-spaced is-size-3 is-size-4-mobile page-title">
+          <h1 className="title is-spaced is-size-3 is-size-4-mobile page-title">
             {title}
-          </h3>
+          </h1>
           {subtitle && (
             <div className="subtitle is-size-6 page-subtitle">{subtitle}</div>
           )}

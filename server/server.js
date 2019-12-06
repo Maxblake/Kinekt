@@ -1,6 +1,6 @@
 const express = require("express");
-const compression = require('compression')
-const helmet = require('helmet')
+const compression = require("compression");
+const helmet = require("helmet");
 const enforce = require("express-sslify");
 const connectDB = require("../config/db");
 const ioServer = require("./ioServer");
@@ -17,8 +17,8 @@ connectDB();
 // Init Middleware
 app.use(express.json({ extended: false }));
 app.use(compression());
-app.use(helmet.frameguard())
-app.use(helmet.xssFilter())
+app.use(helmet.frameguard());
+app.use(helmet.xssFilter());
 
 // Define Routes
 app.use("/api/user", require("../routes/api/user"));
@@ -27,12 +27,17 @@ app.use("/api/group", require("../routes/api/group"));
 app.use("/api/group-type", require("../routes/api/groupType"));
 app.use("/api/admin", require("../routes/api/admin"));
 
+console.log("Node env:", process.env.NODE_ENV);
 // Serve static assets in prod
 if (process.env.NODE_ENV === "production") {
   app.use(enforce.HTTPS({ trustProtoHeader: true }));
 
   // Set static folder, cache static files 3 days
-  app.use(express.static(path.resolve("client", "build"), { maxAge: 1000 * 60 * 60 * 24 * 3 }));
+  app.use(
+    express.static(path.resolve("client", "build"), {
+      maxAge: 1000 * 60 * 60 * 24 * 3
+    })
+  );
 
   app.get("/*", (req, res) => {
     res.sendFile(path.resolve("client", "build", "index.html"));

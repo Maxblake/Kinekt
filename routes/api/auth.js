@@ -2,7 +2,9 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/auth");
 const config = require("config");
-const stripe = require("stripe")(process.env.stripeSecret || config.get("stripeSecret"));
+const stripe = require("stripe")(
+  process.env.stripeSecret || config.get("stripeSecret")
+);
 const bcrypt = require("bcryptjs");
 const nanoid = require("nanoid");
 const sgMail = require("@sendgrid/mail");
@@ -41,7 +43,7 @@ router.get("/:checkIfAdmin", auth, (req, res) => {
     const authResponse = { user };
 
     if (req.params.checkIfAdmin === "true") {
-      let admins = process.env.admins || config.get("admins");
+      let admins = (process.env.admins || config.get("admins")).split(" ");
       authResponse.isAdmin = admins.includes(req.user.id);
     }
 
@@ -180,7 +182,10 @@ router.post("/verifyUser/:token", (req, res) => {
 
   runAPISafely(async () => {
     const JSWT = req.body.JSWT ? req.body.JSWT : "yolo";
-    const decoded = jwt.verify(JSWT, process.env.jwtSecret || config.get("jwtSecret"));
+    const decoded = jwt.verify(
+      JSWT,
+      process.env.jwtSecret || config.get("jwtSecret")
+    );
     req.user = decoded.user;
 
     const user = await User.findById(req.user.id).select(

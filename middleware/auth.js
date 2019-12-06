@@ -18,9 +18,9 @@ module.exports = function(req, res, next) {
     );
 
     req.user = decoded.user;
-    req.isAdmin = (process.env.admins || config.get("admins")).includes(
-      decoded.user.id
-    );
+    req.isAdmin = (process.env.admins || config.get("admins"))
+      .split(" ")
+      .includes(decoded.user.id);
     next();
   } catch (err) {
     res.status(401).json({ msg: "Token is not valid" });

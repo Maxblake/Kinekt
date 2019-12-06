@@ -1,8 +1,8 @@
 // Footer
 .footer {
   @extend %is-dark;
-  margin-top: 6rem;
-  padding: 2.5rem 1.5rem;
+  margin-top: 3rem;
+  padding: 1.75rem 1.5rem;
   color: #555555;
 
   /*   background-image: url("../resources/footer_background.png");
@@ -637,7 +637,7 @@
     margin-bottom: 0.5rem;
 
     &:last-child {
-      margin-top: 2rem;
+      margin-top: 5rem;
     }
 
     .FAQ-question-header {

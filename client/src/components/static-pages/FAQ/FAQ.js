@@ -18,7 +18,8 @@ const FAQ = () => {
           <br />
           <br />
           Whatever you're up to, HappenStack is the real-time access-anywhere
-          group-finding venue that makes it simpler, faster, and easier.
+          group-finding venue that makes it simpler, faster, and easier to help
+          you connect more, do more, and live better.
         </Fragment>
       )
     },

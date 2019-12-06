@@ -1,7 +1,7 @@
 const request = require("request");
 const config = require("config");
 const sharp = require("sharp");
-const imgurClientId = config.get("imgurClientId");
+const imgurClientId = process.env.imgurClientId || config.get("imgurClientId");
 
 const updateImage = async (imageFile, deleteHash, cropWidth, cropHeight) => {
   const deletePromise = deleteImage(deleteHash);

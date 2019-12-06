@@ -26,7 +26,7 @@ const getTempUserToken = userId => {
     }
   };
 
-  return jwt.sign(payload, config.get("jwtSecret"), { expiresIn: 60 });
+  return jwt.sign(payload, process.env.jwtSecret || config.get("jwtSecret"), { expiresIn: 60 });
 };
 
 const signUserToken = (res, userId, isVerified) => {
@@ -39,7 +39,7 @@ const signUserToken = (res, userId, isVerified) => {
 
   jwt.sign(
     payload,
-    config.get("jwtSecret"),
+    process.env.jwtSecret || config.get("jwtSecret"),
     { expiresIn: 60 * 60 * 24 * 7 },
     (err, token) => {
       if (err) {

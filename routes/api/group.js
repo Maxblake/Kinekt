@@ -239,7 +239,7 @@ const isUserAllowedIn = async (req, group, errors) => {
       });
       return;
     } else {
-      const decoded = jwt.verify(joinKey, config.get("jwtSecret"));
+      const decoded = jwt.verify(joinKey, process.env.jwtSecret || config.get("jwtSecret"));
       if (decoded.userId !== req.user.id) {
         errors.addError("Cannot join group: invalid token", "alert", {
           groupName: group.name,

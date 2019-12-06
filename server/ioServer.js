@@ -71,7 +71,10 @@ class socketHandler {
   }
 
   async setUser(userToken) {
-    const decoded = jwt.verify(userToken, config.get("jwtSecret"));
+    const decoded = jwt.verify(
+      userToken,
+      process.env.jwtSecret || config.get("jwtSecret")
+    );
 
     const user = await User.findById(decoded.user.id).select("-password");
 
@@ -190,7 +193,10 @@ class socketHandler {
     let joinKey = undefined;
 
     if (answer === "Accepted") {
-      joinKey = jwt.sign({ userId }, config.get("jwtSecret"));
+      joinKey = jwt.sign(
+        { userId },
+        process.env.jwtSecret || config.get("jwtSecret")
+      );
     }
 
     this.socket

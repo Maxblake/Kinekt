@@ -341,7 +341,6 @@ const GroupType = ({
       <nav className="level" id="page-nav">
         <PageTitle
           title={
-            <div>
             <Modal trigger={match.params.groupType.split("_").join(" ")}>
               <div className="hs-box info-modal has-text-left">
                 <h3 className="title is-spaced is-size-3 is-size-4-mobile">
@@ -352,7 +351,6 @@ const GroupType = ({
                 </div>
               </div>
             </Modal>
-            </div>
           }
           subtitle={
             <div className="group-type-subtitle">

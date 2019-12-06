@@ -113,12 +113,12 @@ const RequestEntryAlert = ({
               </div>
             ) : (
               <div className="control">
-                <button
+                <div
                   onClick={() => cancelRequest()}
                   className="button is-light is-outlined"
                 >
                   Cancel
-                </button>
+                </div>
               </div>
             )}
           </div>

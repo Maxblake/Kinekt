@@ -267,7 +267,7 @@ const Register = ({
               </div>
               {navigator.geolocation && (
                 <div className="control">
-                  <button
+                  <div
                     type="button"
                     onClick={() => useCurrentLocation()}
                     className="button is-primary"
@@ -276,7 +276,7 @@ const Register = ({
                       <i className="fas fa-map-marker-alt" />
                     </span>
                     <span>Use Current</span>
-                  </button>
+                  </div>
                 </div>
               )}
             </div>

@@ -10,7 +10,7 @@ const SubmitButton = ({
   const submitButton = (
     <button
       disabled={isDisabled}
-      className={`button is-primary ${isFullwidth ? "is-fullwidth" : ""} ${
+      className={`button has-text-centered is-primary ${isFullwidth ? "is-fullwidth" : ""} ${
         buttonClasses !== undefined ? buttonClasses.join(" ") : ""
       }`}
       type="submit"

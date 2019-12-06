@@ -97,7 +97,7 @@ const GroupLocks = ({
   };
 
   const copyRefToClipboard = e => {
-    copyToClipboard("1234567");
+    copyToClipboard(user.referralCode);
     setFormData({ ...formData, showCopyRefTooltip: true });
   };
 

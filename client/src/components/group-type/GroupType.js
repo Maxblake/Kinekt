@@ -204,7 +204,7 @@ const GroupType = ({
         </div>
       </div>
       <div className="control">
-        <button
+        <div
           className="button is-smallish is-dark"
           type="button"
           onClick={() =>
@@ -222,7 +222,7 @@ const GroupType = ({
               }`}
             />
           </span>
-        </button>
+        </div>
       </div>
     </div>,
 
@@ -256,7 +256,7 @@ const GroupType = ({
           additionalClasses="is-hidden-touch"
           trigger={
             <Fragment>
-              <button
+              <div
                 className="button is-dark is-smallish is-hidden-touch is-hidden-widescreen"
                 aria-haspopup="true"
                 aria-controls="dropdown-menu"
@@ -264,9 +264,9 @@ const GroupType = ({
                 <span className="icon is-small">
                   <i className="fas fa-cog" aria-hidden="true" />
                 </span>
-              </button>
+              </div>
 
-              <button
+              <div
                 className="button is-dark is-smallish is-hidden-desktop-only"
                 aria-haspopup="true"
                 aria-controls="dropdown-menu"
@@ -275,7 +275,7 @@ const GroupType = ({
                 <span className="icon is-small">
                   <i className="fas fa-cog" aria-hidden="true" />
                 </span>
-              </button>
+              </div>
             </Fragment>
           }
         >
@@ -341,6 +341,7 @@ const GroupType = ({
       <nav className="level" id="page-nav">
         <PageTitle
           title={
+            <div>
             <Modal trigger={match.params.groupType.split("_").join(" ")}>
               <div className="hs-box info-modal has-text-left">
                 <h3 className="title is-spaced is-size-3 is-size-4-mobile">
@@ -351,6 +352,7 @@ const GroupType = ({
                 </div>
               </div>
             </Modal>
+            </div>
           }
           subtitle={
             <div className="group-type-subtitle">

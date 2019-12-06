@@ -76,7 +76,7 @@ const assignUniqueRefCode = async (user, errors) => {
     errors.addError("Unable to generate unique referral code");
   }
 
-  user.referralCode = referralCode;
+  user.referralCode = `@${referralCode}`;
 };
 
 // @route   PUT api/user

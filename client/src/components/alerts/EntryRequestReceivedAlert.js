@@ -77,24 +77,24 @@ const EntryRequestReceivedAlert = ({
         </h3>
         <div className="field is-grouped is-grouped-right">
           <div className="control">
-            <button
+            <div
               onClick={() => answerEntryRequest("Accepted")}
               disabled={!isActive}
               className="button is-light is-outlined"
               type="button"
             >
               Accept
-            </button>
+            </div>
           </div>
           <div className="control">
-            <button
+            <div
               onClick={() => answerEntryRequest("Rejected")}
               disabled={!isActive}
               className="button is-light is-outlined"
               type="button"
             >
               Reject
-            </button>
+            </div>
           </div>
         </div>
       </div>

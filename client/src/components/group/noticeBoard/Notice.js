@@ -57,7 +57,7 @@ const Notice = ({
   return (
     <div className="notice hs-box">
       {canUserDelete && (
-        <button className="delete" onClick={() => onClickDelete()}></button>
+        <div className="delete" onClick={() => onClickDelete()}></div>
       )}
       <div className="media">
         <div className="media-left">
@@ -80,7 +80,7 @@ const Notice = ({
           <div className="content">
             <p>{notice.body}</p>
           </div>
-          <button
+          <div
             className={`button is-small like-notice-button ${
               isNoticeLiked ? "is-primary" : "is-outlined is-dark"
             }`}
@@ -91,7 +91,7 @@ const Notice = ({
               <i className="fas fa-heart"></i>
             </span>
             {numLikes && numLikes > 0 ? <span>{numLikes}</span> : null}
-          </button>
+          </div>
         </div>
       </div>
     </div>

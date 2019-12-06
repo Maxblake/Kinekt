@@ -102,15 +102,15 @@ const NewNotice = ({
             <div className="level-left"></div>
             <div className="level-right">
               <div className="level-item">
-                <button
+                <div
                   className="button is-smallish is-light"
                   onClick={() => onCancel()}
                 >
                   Cancel
-                </button>
+                </div>
               </div>
               <div className="level-item">
-                <button
+                <div
                   className="button is-smallish is-primary"
                   onClick={() => onSubmit()}
                   disabled={
@@ -121,7 +121,7 @@ const NewNotice = ({
                   }
                 >
                   Add Notice
-                </button>
+                </div>
               </div>
             </div>
           </nav>

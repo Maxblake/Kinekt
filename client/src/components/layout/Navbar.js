@@ -101,7 +101,7 @@ const Navbar = ({
         {user && (
           <Fragment>
             {user.currentGroup && (
-              <button
+              <div
                 onClick={e => redirectToGroup(e, user.currentGroup.HRID)}
                 className="button is-fullwidth-touch outlined-nav-button is-primary is-outlined is-small"
               >
@@ -111,7 +111,7 @@ const Navbar = ({
                 <span className="icon is-small">
                   <i className="fas fa-chalkboard-teacher" />
                 </span>
-              </button>
+              </div>
             )}
             <Link
               to="/grouplocks"
@@ -139,7 +139,7 @@ const Navbar = ({
             <i className="fas fa-user-circle" />
           </span>
         </Link>
-        <button
+        <div
           onClick={() => onLogoutClicked()}
           className="button is-fullwidth-touch is-dark is-small"
         >
@@ -147,7 +147,7 @@ const Navbar = ({
           <span className="icon is-small">
             <i className="fas fa-sign-out-alt" />
           </span>
-        </button>
+        </div>
       </div>
     </div>
   );
@@ -174,7 +174,7 @@ const Navbar = ({
   const verifyingLinks = (
     <div className="navbar-item">
       <div className="buttons">
-        <button
+        <div
           onClick={() => onLogoutClicked()}
           className="button is-fullwidth-touch is-dark is-small"
         >
@@ -182,7 +182,7 @@ const Navbar = ({
           <span className="icon is-small">
             <i className="fas fa-sign-out-alt" />
           </span>
-        </button>
+        </div>
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ const UserInfo = ({ user, adminOptions }) => {
     adminOptionButtons = (
       <div className="buttons has-addons is-centered">
         {typeof adminOptions.kickFromGroup === "function" && (
-          <button
+          <div
             onClick={() => adminOptions.kickFromGroup(user._id)}
             className="button is-dark"
           >
@@ -23,10 +23,10 @@ const UserInfo = ({ user, adminOptions }) => {
               <i className="fas fa-sign-out-alt" />
             </span>
             <span>Kick</span>
-          </button>
+          </div>
         )}
         {typeof adminOptions.banFromGroup === "function" && (
-          <button
+          <div
             onClick={() => {
               adminOptions.banFromGroup(user._id);
             }}
@@ -36,10 +36,10 @@ const UserInfo = ({ user, adminOptions }) => {
               <i className="fas fa-user-slash" />
             </span>
             <span>Ban</span>
-          </button>
+          </div>
         )}{" "}
         {typeof adminOptions.toggleGroupAdmin === "function" && (
-          <button
+          <div
             onClick={() => adminOptions.toggleGroupAdmin(user._id)}
             className="button is-dark"
           >
@@ -49,7 +49,7 @@ const UserInfo = ({ user, adminOptions }) => {
             <span>
               {user.memberType === "admin" ? "Unadminify" : "Adminify"}
             </span>
-          </button>
+          </div>
         )}
       </div>
     );

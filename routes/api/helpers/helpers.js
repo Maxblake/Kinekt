@@ -40,7 +40,7 @@ const signUserToken = (res, userId, isVerified) => {
   jwt.sign(
     payload,
     config.get("jwtSecret"),
-    { expiresIn: 60 * 60 * 12 },
+    { expiresIn: 60 * 60 * 24 * 7 },
     (err, token) => {
       if (err) {
         return errors.addErrAndSendResponse(res, err, "console", 500);

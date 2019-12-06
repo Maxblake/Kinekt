@@ -100,7 +100,7 @@ const Alert = ({ alerts, errors, removeAlert, setAlertReset }) => {
             >
               {(alert.alertType === "text" ||
                 currentAlertSettings.showCloseButton) && (
-                <button
+                <div
                   className="delete"
                   onClick={() => closeAlertAndClearSettings(alert.id)}
                 />

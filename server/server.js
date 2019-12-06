@@ -1,5 +1,6 @@
 const express = require("express");
 const compression = require('compression')
+const helmet = require('helmet')
 const enforce = require("express-sslify");
 const connectDB = require("../config/db");
 const ioServer = require("./ioServer");
@@ -16,6 +17,8 @@ connectDB();
 // Init Middleware
 app.use(express.json({ extended: false }));
 app.use(compression());
+app.use(helmet.frameguard())
+app.use(helmet.xssFilter())
 
 // Define Routes
 app.use("/api/user", require("../routes/api/user"));

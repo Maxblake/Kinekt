@@ -32,7 +32,7 @@ const NoticeBoard = ({
         }`}
       >
         {newNoticeHidden && (
-          <button
+          <div
             className="button is-dark new-notice-button"
             onClick={() => showNotice()}
           >
@@ -40,7 +40,7 @@ const NoticeBoard = ({
               <i className="fas fa-plus"></i>
             </span>
             <span>Add a Notice</span>
-          </button>
+          </div>
         )}
         <NewNotice
           user={user}

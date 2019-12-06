@@ -23,7 +23,7 @@ export default function RadioButton({
   };
 
   return (
-    <button
+    <div
       type="button"
       className={getClassName(selectedValue === value, isFullwidth)}
       onClick={() =>
@@ -31,6 +31,6 @@ export default function RadioButton({
       }
     >
       {customLabel ? customLabel : value}
-    </button>
+    </div>
   );
 }

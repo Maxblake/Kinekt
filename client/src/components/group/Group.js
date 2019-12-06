@@ -166,7 +166,7 @@ const Group = ({
 
   if (user._id === group.creator) {
     pageOptions.unshift(
-      <button
+      <div
         className="button is-smallish is-danger is-fullwidth-touch"
         onClick={e => onClickDelete(e)}
       >
@@ -174,11 +174,11 @@ const Group = ({
         <span className="icon is-small">
           <i className="fas fa-trash-alt" aria-hidden="true" />
         </span>
-      </button>
+      </div>
     );
   } else {
     pageOptions.unshift(
-      <button
+      <div
         className="button is-smallish is-dark is-fullwidth-touch"
         onClick={() => leaveCurrentGroup()}
       >
@@ -186,13 +186,13 @@ const Group = ({
         <span className="icon is-small">
           <i className="fas fa-sign-out-alt" aria-hidden="true" />
         </span>
-      </button>
+      </div>
     );
   }
 
   if (document.queryCommandSupported("copy")) {
     pageOptions.push(
-      <button
+      <div
         className="button is-smallish is-dark is-fullwidth-touch"
         onClick={() => copyHRIDToClipboard()}
       >
@@ -210,7 +210,7 @@ const Group = ({
         <span className="icon">
           <i className="fas fa-link"></i>
         </span>
-      </button>
+      </div>
     );
   }
 

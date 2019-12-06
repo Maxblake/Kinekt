@@ -176,9 +176,9 @@ const Admin = ({
               className="control has-text-centered btn-admin-submit"
               onClick={() => onSubmitGroupTypes()}
             >
-              <button className="button is-primary" type="button">
+              <div className="button is-primary" type="button">
                 Submit
-              </button>
+              </div>
             </div>
           </Fragment>
         ) : (
@@ -208,12 +208,12 @@ const Admin = ({
                     <td>
                       <div className="field is-grouped">
                         <div className="control">
-                          <button
+                          <div
                             className="button"
                             onClick={() => deleteGroupType(groupType._id)}
                           >
                             <span>Delete</span>
-                          </button>
+                          </div>
                         </div>
                       </div>
                     </td>

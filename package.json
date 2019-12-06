@@ -24,6 +24,7 @@
     "express-sslify": "^1.2.0",
     "express-validator": "^6.1.1",
     "geolib": "^3.0.4",
+    "helmet": "^3.21.2",
     "human-readable-ids": "^1.0.4",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",

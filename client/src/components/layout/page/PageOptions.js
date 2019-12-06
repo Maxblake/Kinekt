@@ -18,7 +18,7 @@ const PageOptions = ({ options }) => {
       <div className="level-item is-hidden-desktop tab-right">
         <Dropdown
           trigger={
-            <button
+            <div
               className="button is-dark is-medium tab-right-button"
               aria-haspopup="true"
               aria-controls="dropdown-menu"
@@ -26,7 +26,7 @@ const PageOptions = ({ options }) => {
               <span className="icon is-large">
                 <i className="fas fa-cog" aria-hidden="true" />
               </span>
-            </button>
+            </div>
           }
         >
           {options.reverse().map((option, index) => (

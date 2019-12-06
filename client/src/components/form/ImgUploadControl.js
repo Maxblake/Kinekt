@@ -112,7 +112,7 @@ const ImgUploadControl = ({ label, src, onChange, type }) => {
             </div>
             {!!imgSrc && (
               <div className="control">
-                <button
+                <div
                   type="button"
                   onClick={() => onClickRemove()}
                   className="button is-danger"
@@ -121,7 +121,7 @@ const ImgUploadControl = ({ label, src, onChange, type }) => {
                     <i className="fas fa-minus is-hidden-desktop"></i>
                     <span className="is-hidden-touch">Remove</span>
                   </span>
-                </button>
+                </div>
               </div>
             )}
             {error && <p className="help is-danger">{error}</p>}

@@ -224,7 +224,7 @@ const handleImageUpload = async (groupType, req, errors, updating = false) => {
       );
       uploadResponse = updateImageResponse.uploadResponse;
     } else {
-      uploadResponse = await uploadImage(req.file, 353, 706);
+      uploadResponse = await uploadImage(req.file, 706, 353);
     }
 
     if (uploadResponse.error) {

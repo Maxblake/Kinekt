@@ -36,7 +36,7 @@ const NewGroup = ({
     place: { address: "" },
     timeContext: "Now",
     accessLevel: "Public",
-    time: { formatted: moment().format("h:mm A") },
+    time: { formatted12: moment().format("h:mm A") },
     displayTimepicker: false,
     maxSize: "",
     image: undefined
@@ -83,7 +83,7 @@ const NewGroup = ({
         place: { address: "" },
         timeContext: "Now",
         accessLevel: "Public",
-        time: { formatted: moment().format("h:mm A") },
+        time: { formatted12: moment().format("h:mm A") },
         displayTimepicker: false,
         maxSize: "",
         image: undefined
@@ -113,7 +113,7 @@ const NewGroup = ({
       setFormData({
         ...formData,
         timeContext,
-        time: { formatted: moment().format("h:mm A") }
+        time: { formatted12: moment().format("h:mm A") }
       });
       return;
     }
@@ -122,7 +122,11 @@ const NewGroup = ({
 
   const handleTimeChange = newTime => {
     if (timeContext === "Now") {
-      setFormData({ ...formData, timeContext: "Today", time: newTime });
+      setFormData({
+        ...formData,
+        timeContext: "Today",
+        time: newTime
+      });
     } else {
       setFormData({ ...formData, time: newTime });
     }
@@ -185,7 +189,7 @@ const NewGroup = ({
     const ISODate = moment();
     if (timeContext !== "Now") {
       ISODate.set({
-        hour: time.hour24,
+        hour: time.hour,
         minute: time.minute
       });
     }
@@ -282,13 +286,13 @@ const NewGroup = ({
                     <input
                       className="input small-input"
                       type="text"
-                      value={time.formatted}
+                      value={time.formatted12}
                       readOnly
                     />
                   }
                 >
                   <TimeKeeper
-                    time={time.formatted}
+                    time={time.formatted12}
                     onChange={handleTimeChange}
                     onDoneClick={() => toggleTimekeeper()}
                     switchToMinuteOnHourSelect={true}

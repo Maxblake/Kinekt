@@ -59,7 +59,6 @@ export const getGroup = (
       );
     }
   } catch (err) {
-    console.log(err.response.data);
     dispatch(handleResponseErrors(err));
     if (!!err.response) {
       if (

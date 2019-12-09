@@ -27,7 +27,6 @@ app.use("/api/group", require("../routes/api/group"));
 app.use("/api/group-type", require("../routes/api/groupType"));
 app.use("/api/admin", require("../routes/api/admin"));
 
-console.log("Node env:", process.env.NODE_ENV);
 // Serve static assets in prod
 if (process.env.NODE_ENV === "production") {
   app.use(enforce.HTTPS({ trustProtoHeader: true }));

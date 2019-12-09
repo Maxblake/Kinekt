@@ -239,7 +239,10 @@ const isUserAllowedIn = async (req, group, errors) => {
       });
       return;
     } else {
-      const decoded = jwt.verify(joinKey, process.env.jwtSecret || config.get("jwtSecret"));
+      const decoded = jwt.verify(
+        joinKey,
+        process.env.jwtSecret || config.get("jwtSecret")
+      );
       if (decoded.userId !== req.user.id) {
         errors.addError("Cannot join group: invalid token", "alert", {
           groupName: group.name,
@@ -564,8 +567,6 @@ const handleGroupDeletionSideEffects = async (group, errors) => {
       errors.addError(deleteResponse.error);
     }
   }
-
-  console.log(22, group.users);
 
   await User.updateMany(
     {

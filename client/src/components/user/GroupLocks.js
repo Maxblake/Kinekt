@@ -312,7 +312,7 @@ const GroupLocks = ({
                 </div>
 
                 <StripeCheckout
-                  stripeKey="pk_test_GigRsjhZ4K4ocwecpPvMDQ5Y000ozEPzR3"
+                  stripeKey="pk_live_UDqj8ZihHIlHFsnJ4QjzMme0006V39FqMW"
                   token={onToken}
                   name="HappenStack" // the pop-in header title
                   description="Groups on the fly" // the pop-in header subtitle

@@ -66,7 +66,7 @@ export const requestGroupType = (
     dispatch(clearErrorsAndAlerts());
     dispatch(
       setTextAlert(
-        "Your request for a new group type has been submitted. Please allow up to 48 hours for a response by email",
+        "Your request for a new group type has been submitted. Please allow up to 48 hours for a moderator to make sure it's good to go.",
         "is-success"
       )
     );
